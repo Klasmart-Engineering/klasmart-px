@@ -1,6 +1,7 @@
-import StyledFAB from "./lib/fabButton";
-import StyledButton from "./lib/styledButton";
+import DialogAppBar from "./lib/styled/dialogAppBar";
+import StyledFAB from "./lib/styled/fabButton";
+import StyledButton from "./lib/styled/styledButton";
 
-const components = { StyledButton, StyledFAB };
+const components = { DialogAppBar, StyledButton, StyledFAB };
 
 export default components;
