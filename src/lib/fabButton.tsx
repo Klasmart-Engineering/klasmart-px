@@ -5,7 +5,6 @@ import { Send as SendIcon } from "@styled-icons/material/Send";
 import React from "react";
 
 interface Props extends FabProps {
-    // children?: React.ReactNode;
     className?: string;
     extendedOnly?: boolean;
     flat?: boolean;
@@ -26,7 +25,9 @@ const StyledFab = withStyles({
     },
 })(Fab);
 
-export default function StyledFAB(props: Props) {
+export default function StyledFAB(
+    props: Props & { children?: React.ReactNode }
+) {
     const { children, extendedOnly, flat, ...other } = props;
 
     let sibling: React.ReactNode;
