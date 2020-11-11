@@ -19,15 +19,18 @@
     "dependencies": {
         "@material-ui/core": "^4.11.0",
         "@material-ui/icons": "^4.9.1",
+        "@material-ui/lab": "^4.0.0-alpha.56",
         "react": "^17.0.1",
         "react-device-detect": "^1.14.0",
         "react-dom": "^17.0.1",
         "react-intl": "^5.10.0",
+        "react-router-dom": "^5.2.0",
         "styled-components": "^5.2.1",
         "styled-icons": "^10.22.0"
     },
     "devDependencies": {
         "@types/react-dom": "^16.9.9",
+        "@types/react-router-dom": "^5.1.6",
         "@types/styled-components": "^5.1.4",
         "file-loader": "^6.2.0",
         "html-webpack-plugin": "^4.5.0",
