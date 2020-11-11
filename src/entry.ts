@@ -2,7 +2,6 @@ import CenterAlignChildren from "./lib/centerAlignChildren";
 import CircularStatic from "./lib/circularStatic";
 import Copyright from "./lib/copyright";
 import DialogAppBar from "./lib/styled/dialogAppBar";
-import FFT from "./lib/fft";
 import PolicyLink from "./lib/policyLink";
 import StyledButton from "./lib/styled/styledButton";
 import StyledButtonGroup from "./lib/styled/styledButtonGroup";
@@ -16,7 +15,6 @@ const components = {
     CircularStatic,
     Copyright,
     DialogAppBar,
-    FFT,
     PolicyLink,
     StyledButton,
     StyledButtonGroup,
