@@ -1,3 +1,4 @@
+import CenterAlignChildren from "./lib/centerAlignChildren";
 import DialogAppBar from "./lib/styled/dialogAppBar";
 import StyledButton from "./lib/styled/styledButton";
 import StyledButtonGroup from "./lib/styled/styledButtonGroup";
@@ -7,6 +8,7 @@ import StyledIcon from "./lib/styled/styledIcon";
 import StyledTextField from "./lib/styled/styledTextField";
 
 const components = {
+    CenterAlignChildren,
     DialogAppBar,
     StyledButton,
     StyledButtonGroup,
