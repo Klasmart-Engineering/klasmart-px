@@ -1,5 +1,6 @@
 import CenterAlignChildren from "./lib/centerAlignChildren";
 import circularStatic from "./lib/circularStatic";
+import copyright from "./lib/copyright";
 import DialogAppBar from "./lib/styled/dialogAppBar";
 import StyledButton from "./lib/styled/styledButton";
 import StyledButtonGroup from "./lib/styled/styledButtonGroup";
@@ -11,6 +12,7 @@ import StyledTextField from "./lib/styled/styledTextField";
 const components = {
     CenterAlignChildren,
     circularStatic,
+    copyright,
     DialogAppBar,
     StyledButton,
     StyledButtonGroup,
