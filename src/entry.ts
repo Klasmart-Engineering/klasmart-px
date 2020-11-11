@@ -9,6 +9,7 @@ import StyledComboBox from "./lib/styled/styledComboBox";
 import StyledFAB from "./lib/styled/fabButton";
 import StyledIcon from "./lib/styled/styledIcon";
 import StyledTextField from "./lib/styled/styledTextField";
+import ThemeProvider from "./lib/themeProvider";
 
 const components = {
     CenterAlignChildren,
@@ -22,6 +23,7 @@ const components = {
     StyledFAB,
     StyledIcon,
     StyledTextField,
+    ThemeProvider,
 };
 
 export default components;
