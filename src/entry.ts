@@ -1,8 +1,9 @@
 import CenterAlignChildren from "./lib/centerAlignChildren";
-import circularStatic from "./lib/circularStatic";
-import copyright from "./lib/copyright";
+import CircularStatic from "./lib/circularStatic";
+import Copyright from "./lib/copyright";
 import DialogAppBar from "./lib/styled/dialogAppBar";
 import FFT from "./lib/fft";
+import PolicyLink from "./lib/policyLink";
 import StyledButton from "./lib/styled/styledButton";
 import StyledButtonGroup from "./lib/styled/styledButtonGroup";
 import StyledComboBox from "./lib/styled/styledComboBox";
@@ -12,10 +13,11 @@ import StyledTextField from "./lib/styled/styledTextField";
 
 const components = {
     CenterAlignChildren,
-    circularStatic,
-    copyright,
+    CircularStatic,
+    Copyright,
     DialogAppBar,
     FFT,
+    PolicyLink,
     StyledButton,
     StyledButtonGroup,
     StyledComboBox,

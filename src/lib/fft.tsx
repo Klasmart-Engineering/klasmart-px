@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useMemo } from "react";
 import { useTheme } from "@material-ui/core/styles";
+import React, { useEffect, useMemo, useRef } from "react";
 
 interface Props {
     color?: string;

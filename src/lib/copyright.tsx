@@ -1,10 +1,10 @@
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
-import { createStyles, Theme } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 
-const styles = (theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         responsiveTypography: {
             color: "#000",
@@ -18,12 +18,18 @@ const styles = (theme: Theme) =>
                 textAlign: "left",
             },
         },
-    });
+    })
+);
 
 export default function Copyright() {
+    const classes = useStyles();
     return (
-        <Grid item>
-            <Typography variant="caption" color="textSecondary">
+        <Grid item className={classes.responsiveTypography}>
+            <Typography
+                variant="caption"
+                color="textSecondary"
+                className={classes.responsiveTypography}
+            >
                 Copyright
                 {" © "}
                 {new Date().getFullYear()}
@@ -38,7 +44,11 @@ export default function Copyright() {
                 The KidsLoop logo is a registered trademarks of Calm Island
                 Limited.{" "}
             </Typography>
-            {/* <Typography variant="caption" color="textSecondary">
+            {/* <Typography
+                variant="caption"
+                color="textSecondary"
+                className={classes.responsiveTypography}
+            >
                 <Link
                     color="inherit"
                     target="_blank"
