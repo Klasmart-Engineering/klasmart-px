@@ -18,7 +18,9 @@
     "homepage": "https://bitbucket.org/calmisland/kidsloop-px#readme",
     "dependencies": {
         "@material-ui/core": "^4.11.0",
+        "@material-ui/icons": "^4.9.1",
         "react": "^17.0.1",
+        "react-device-detect": "^1.14.0",
         "react-dom": "^17.0.1",
         "react-intl": "^5.10.0",
         "styled-components": "^5.2.1",
