@@ -3,6 +3,7 @@ import CircularStatic from "./lib/circularStatic";
 import Copyright from "./lib/copyright";
 import Loading from "./lib/loading";
 import MediaDeviceSelect from "./lib/mediaDeviceSelect";
+import NoCamera from "./lib/noCamera";
 import PolicyLink from "./lib/policyLink";
 import DialogAppBar from "./lib/styled/dialogAppBar";
 import StyledFAB from "./lib/styled/fabButton";
@@ -19,6 +20,7 @@ const components = {
     Copyright,
     Loading,
     MediaDeviceSelect,
+    NoCamera,
     PolicyLink,
     DialogAppBar,
     StyledButton,
