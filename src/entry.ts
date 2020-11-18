@@ -13,9 +13,10 @@ import StyledComboBox from "./lib/styled/styledComboBox";
 import StyledIcon from "./lib/styled/styledIcon";
 import StyledTextField from "./lib/styled/styledTextField";
 import ThemeProvider from "./lib/themeProvider";
-import StyledCard from './lib/styled/card';
 
-const components = {
+export { default as ContentCard } from './lib/ContentCard';
+
+export {
     CenterAlignChildren,
     CircularStatic,
     Copyright,
@@ -26,12 +27,9 @@ const components = {
     DialogAppBar,
     StyledButton,
     StyledButtonGroup,
-    StyledCard,
     StyledComboBox,
     StyledFAB,
     StyledIcon,
     StyledTextField,
     ThemeProvider,
 };
-
-export default components;
