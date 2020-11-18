@@ -6,7 +6,12 @@ import { FormattedMessage } from "react-intl";
 
 export default function Loading({ messageId }: { messageId?: string }) {
     return (
-        <Grid item xs={12} style={{ textAlign: "center" }}>
+        <Grid
+            item
+            xs={12}
+            style={{
+                textAlign: `center`
+            }}>
             <Grid
                 container
                 item
@@ -14,11 +19,15 @@ export default function Loading({ messageId }: { messageId?: string }) {
                 alignItems="center"
                 spacing={2}
             >
-                <Grid item xs={12}>
+                <Grid
+                    item
+                    xs={12}>
                     <CircularProgress />
                 </Grid>
                 {messageId ? (
-                    <Grid item xs={12}>
+                    <Grid
+                        item
+                        xs={12}>
                         <Typography variant="subtitle2">
                             <FormattedMessage id={messageId} />
                         </Typography>

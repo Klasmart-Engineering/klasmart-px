@@ -17,22 +17,24 @@ interface Props extends StandardTextFieldProps {
 const useStyles = makeStyles(() => ({
     root: {
         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#1896ea", // default
+            borderColor: `#1896ea`, // default
         },
         "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#1896ea", // hovered
+            borderColor: `#1896ea`, // hovered
         },
         "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#c9caca", // focused
+            borderColor: `#c9caca`, // focused
         },
     },
 }));
 
 export default function StyledComboBox(props: Props) {
-    const { type, label, options, value, onChange, disabled, ...other } = props;
+    const {
+        type, label, options, value, onChange, disabled, ...other
+    } = props;
     const classes = useStyles();
 
-    if (type === "single") {
+    if (type === `single`) {
         return (
             <Autocomplete
                 disabled={disabled ? disabled : false}
@@ -68,7 +70,7 @@ export default function StyledComboBox(props: Props) {
                 // getOptionLabel={option => option}
                 ListboxProps={{
                     classes: {
-                        color: "#1896ea",
+                        color: `#1896ea`,
                     },
                 }}
                 onChange={onChange}
@@ -78,7 +80,9 @@ export default function StyledComboBox(props: Props) {
                         <Chip
                             variant="outlined"
                             label={option}
-                            {...getTagProps({ index })}
+                            {...getTagProps({
+                                index
+                            })}
                         />
                     ))
                 }

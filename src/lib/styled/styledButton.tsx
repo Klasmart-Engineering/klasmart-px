@@ -14,40 +14,54 @@ interface Props extends ButtonProps {
 const StyledBtn = withStyles({
     root: {
         "&:hover": {
-            "-webkit-transition": "all .4s ease",
-            background: "#1B365D",
+            "-webkit-transition": `all .4s ease`,
+            background: `#1B365D`,
             "box-shadow":
-                "0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)",
-            transform: "translateY(-2px)",
-            transition: "all .4s ease",
+                `0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)`,
+            transform: `translateY(-2px)`,
+            transition: `all .4s ease`,
         },
-        background: "#0E78D5",
+        background: `#0E78D5`,
         borderRadius: 12,
-        color: "#FFF",
+        color: `#FFF`,
     },
 })(Button);
 
 export default function StyledButton(props: Props) {
-    const { children, extendedOnly, ...other } = props;
+    const {
+        children, extendedOnly, ...other
+    } = props;
 
     let sibling: React.ReactNode;
     React.Children.map(children, (child) =>
-        typeof child !== "string" ? (sibling = child) : {}
+        typeof child !== `string` ? (sibling = child) : {}
     );
 
     return extendedOnly ? (
-        <StyledBtn style={{ minWidth: 120 }} {...other}>
+        <StyledBtn
+            style={{
+                minWidth: 120
+            }}
+            {...other}>
             {children || <SendIcon />}
         </StyledBtn>
     ) : (
         <>
             <Hidden smDown>
-                <StyledBtn style={{ minWidth: 120 }} {...other}>
+                <StyledBtn
+                    style={{
+                        minWidth: 120
+                    }}
+                    {...other}>
                     {children || <SendIcon />}
                 </StyledBtn>
             </Hidden>
             <Hidden mdUp>
-                <StyledBtn style={{ minWidth: 80 }} {...other}>
+                <StyledBtn
+                    style={{
+                        minWidth: 80
+                    }}
+                    {...other}>
                     {sibling || <SendIcon />}
                 </StyledBtn>
             </Hidden>

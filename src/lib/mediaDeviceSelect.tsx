@@ -12,7 +12,7 @@ import StyledIcon from "./styled/styledIcon";
 const useStyles = makeStyles(() =>
     createStyles({
         formControl: {
-            width: "100%",
+            width: `100%`,
         },
     })
 );
@@ -34,7 +34,9 @@ interface Props {
 }
 
 export default function MediaDeviceSelect(props: Props) {
-    const { disabled, deviceType, deviceId, devices, onChange } = props;
+    const {
+        disabled, deviceType, deviceId, devices, onChange
+    } = props;
     const classes = useStyles();
 
     return (
@@ -46,7 +48,7 @@ export default function MediaDeviceSelect(props: Props) {
                     <FormattedMessage
                         id="select_device"
                         values={{
-                            device: deviceType === "video" ? "Camera" : "Audio",
+                            device: deviceType === `video` ? `Camera` : `Audio`,
                         }}
                     />
                 )}
@@ -54,34 +56,34 @@ export default function MediaDeviceSelect(props: Props) {
             <Select
                 disabled={disabled}
                 IconComponent={
-                    deviceType === "video"
+                    deviceType === `video`
                         ? () => (
-                              <StyledIcon
-                                  icon={<CameraIcon />}
-                                  size="xlarge"
-                                  color={disabled ? "disabled" : "primary"}
-                              />
-                          )
+                            <StyledIcon
+                                icon={<CameraIcon />}
+                                size="xlarge"
+                                color={disabled ? `disabled` : `primary`}
+                            />
+                        )
                         : // <CameraIcon size="2rem" color={disabled ? "disabled" : "primary"} />
-                          () => (
-                              <StyledIcon
-                                  icon={<MicIcon />}
-                                  size="xlarge"
-                                  color={disabled ? "disabled" : "primary"}
-                              />
-                          )
+                        () => (
+                            <StyledIcon
+                                icon={<MicIcon />}
+                                size="xlarge"
+                                color={disabled ? `disabled` : `primary`}
+                            />
+                        )
                     // <MicIcon size="2rem" color={disabled ? "disabled" : "primary"} />
                 }
                 onChange={onChange}
-                value={deviceId || ""}
+                value={deviceId || ``}
             >
                 {devices.map((device: MediaDeviceInfo) => (
                     <MenuItem
                         key={
                             device.kind +
-                            ":" +
+                            `:` +
                             device.label +
-                            ":" +
+                            `:` +
                             device.deviceId
                         }
                         value={device.deviceId}
@@ -90,7 +92,7 @@ export default function MediaDeviceSelect(props: Props) {
                             device.label
                                 ? device.label.charAt(0).toUpperCase() +
                                   device.label.slice(1)
-                                : "Unknown Device"
+                                : `Unknown Device`
                         }(${device.deviceId.slice(0, 4)})`}
                     </MenuItem>
                 ))}

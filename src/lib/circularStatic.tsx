@@ -1,7 +1,5 @@
 import Box from "@material-ui/core/Box";
-import CircularProgress, {
-    CircularProgressProps,
-} from "@material-ui/core/CircularProgress";
+import CircularProgress, { CircularProgressProps } from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import React, { useEffect } from "react";
 
@@ -9,8 +7,12 @@ function CircularProgressWithLabel(
     props: CircularProgressProps & { sec: number; value: number }
 ) {
     return (
-        <Box position="relative" display="inline-flex">
-            <CircularProgress variant="static" {...props} />
+        <Box
+            position="relative"
+            display="inline-flex">
+            <CircularProgress
+                variant="static"
+                {...props} />
             <Box
                 top={0}
                 left={0}
@@ -34,7 +36,7 @@ function CircularProgressWithLabel(
 }
 
 export default function CircularStatic() {
-    const [sec, setSec] = React.useState(3);
+    const [ sec, setSec ] = React.useState(3);
     const progress: number = sec * 33;
 
     useEffect(() => {
@@ -46,5 +48,7 @@ export default function CircularStatic() {
         };
     }, []);
 
-    return <CircularProgressWithLabel value={progress} sec={sec} />;
+    return <CircularProgressWithLabel
+        value={progress}
+        sec={sec} />;
 }

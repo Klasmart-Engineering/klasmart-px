@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         popover: {
             "& *": {
-                touchAction: "auto !important",
+                touchAction: `auto !important`,
             },
         },
     })
@@ -39,26 +39,28 @@ const useStyles = makeStyles((theme: Theme) =>
 const StyledBtnGroup = withStyles({
     root: {
         "&:hover": {
-            "-webkit-transition": "all .4s ease",
-            background: "#1B365D",
+            "-webkit-transition": `all .4s ease`,
+            background: `#1B365D`,
             "box-shadow":
-                "0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)",
-            transform: "translateY(-2px)",
-            transition: "all .4s ease",
+                `0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)`,
+            transform: `translateY(-2px)`,
+            transition: `all .4s ease`,
         },
-        background: "#0E78D5",
+        background: `#0E78D5`,
         borderRadius: 12,
-        color: "white",
+        color: `white`,
     },
 })(ButtonGroup);
 
 export default function StyledButtonGroup(props: Props) {
-    const { ariaLabel, children, extendedOnly, options, ...other } = props;
+    const {
+        ariaLabel, children, extendedOnly, options, ...other
+    } = props;
     const classes = useStyles();
 
-    const [open, setOpen] = useState(false);
+    const [ open, setOpen ] = useState(false);
     const anchorRef = useRef<HTMLDivElement>(null);
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [ selectedIndex, setSelectedIndex ] = useState(0);
 
     const handleMenuItemClick = (
         event: React.MouseEvent<HTMLLIElement, MouseEvent>,
@@ -83,8 +85,13 @@ export default function StyledButtonGroup(props: Props) {
     };
 
     return (
-        <Grid container direction="column" alignItems="center">
-            <Grid item xs={12}>
+        <Grid
+            container
+            direction="column"
+            alignItems="center">
+            <Grid
+                item
+                xs={12}>
                 {!isMobileSafari ? (
                     <>
                         <StyledBtnGroup
@@ -102,20 +109,22 @@ export default function StyledButtonGroup(props: Props) {
                                 {options[selectedIndex].disabled ? (
                                     <sub>(Coming Soon)</sub>
                                 ) : (
-                                    ""
+                                    ``
                                 )}
                             </StyledButton>
                             <StyledButton
                                 color="primary"
                                 size="small"
                                 aria-controls={
-                                    open ? "split-button-menu" : undefined
+                                    open ? `split-button-menu` : undefined
                                 }
-                                aria-expanded={open ? "true" : undefined}
+                                aria-expanded={open ? `true` : undefined}
                                 aria-label={ariaLabel}
                                 aria-haspopup="menu"
                                 onClick={handleToggle}
-                                style={{ minWidth: 0 }}
+                                style={{
+                                    minWidth: 0
+                                }}
                             >
                                 <ArrowDropDownIcon />
                             </StyledButton>
@@ -133,9 +142,9 @@ export default function StyledButtonGroup(props: Props) {
                                     {...TransitionProps}
                                     style={{
                                         transformOrigin:
-                                            placement === "bottom"
-                                                ? "center top"
-                                                : "center bottom",
+                                            placement === `bottom`
+                                                ? `center top`
+                                                : `center bottom`,
                                     }}
                                 >
                                     <Paper>
@@ -174,7 +183,9 @@ export default function StyledButtonGroup(props: Props) {
                         </Popper>
                     </>
                 ) : (
-                    <Grid container spacing={1}>
+                    <Grid
+                        container
+                        spacing={1}>
                         <Grid item>
                             <StyledButton
                                 disabled={options[0].disabled}
@@ -185,7 +196,7 @@ export default function StyledButtonGroup(props: Props) {
                                 {options[0].disabled ? (
                                     <sub>(Coming Soon)</sub>
                                 ) : (
-                                    ""
+                                    ``
                                 )}
                             </StyledButton>
                         </Grid>
@@ -199,7 +210,7 @@ export default function StyledButtonGroup(props: Props) {
                                 {options[1].disabled ? (
                                     <sub>(Coming Soon)</sub>
                                 ) : (
-                                    ""
+                                    ``
                                 )}
                             </StyledButton>
                         </Grid>
