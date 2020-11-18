@@ -24,13 +24,13 @@ import React, { useState } from "react";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles ({
         cardActions: {
-            display: `flex`,
+            display: `flex`
         },
         cardContent: {
-            padding: theme.spacing(1, 1),
+            padding: theme.spacing(1, 1)
         },
         iconExpand: {
-            marginLeft: `auto`,
+            marginLeft: `auto`
         },
         paragraphClamp: {
             WebkitBoxOrient: `vertical`,
@@ -38,11 +38,11 @@ const useStyles = makeStyles((theme: Theme) =>
             display: `-webkit-box`,
             overflow: `hidden`,
             [theme.breakpoints.down(`sm`)]: {
-                WebkitLineClamp: 4,
+                WebkitLineClamp: 4
             },
         },
         rotateIcon: {
-            transform: `rotate(180deg)`,
+            transform: `rotate(180deg)`
         },
     }),
 );
