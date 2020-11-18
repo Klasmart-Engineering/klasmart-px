@@ -75,19 +75,17 @@ export default function StyledTextField(props: Props) {
                             maxLength: 200
                         }
                 }
-                onInput={
-                    type === `number`
-                        ? (e) => {
-                            (e.target as HTMLTextAreaElement).value = Math.max(
-                                0,
-                                parseInt(
-                                    (e.target as HTMLTextAreaElement).value
-                                )
-                            )
-                                .toString()
-                                .slice(0, 4);
-                        }
-                        : () => {}
+                onInput={(e) => {
+                    if (type !== `number`) return;
+                    (e.target as HTMLTextAreaElement).value = Math.max(
+                        0,
+                        parseInt(
+                            (e.target as HTMLTextAreaElement).value
+                        )
+                    )
+                        .toString()
+                        .slice(0, 4);
+                }
                 }
                 InputLabelProps={{
                     classes: {
@@ -98,7 +96,7 @@ export default function StyledTextField(props: Props) {
                 type={type}
                 variant="outlined"
             />
-            {showForgotPassword ? (
+            {showForgotPassword && (
                 <Link
                     href="#"
                     variant="subtitle2"
@@ -109,8 +107,6 @@ export default function StyledTextField(props: Props) {
                 >
                     <FormattedMessage id="login_forgotPassword" />
                 </Link>
-            ) : (
-                ``
             )}
         </>
     );

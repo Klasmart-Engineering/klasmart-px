@@ -78,6 +78,7 @@ export default function StyledComboBox(props: Props) {
                 renderTags={(value: string[], getTagProps) =>
                     value.map((option: string, index: number) => (
                         <Chip
+                            key={`option-${index}`}
                             variant="outlined"
                             label={option}
                             {...getTagProps({
