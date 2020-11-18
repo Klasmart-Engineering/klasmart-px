@@ -1,6 +1,14 @@
-import { Theme, useTheme } from "@material-ui/core/styles";
-import Tooltip, { TooltipProps } from "@material-ui/core/Tooltip";
-import React, { useEffect, useState } from "react";
+import {
+    Theme,
+    Tooltip,
+    useTheme,
+} from "@material-ui/core";
+import { TooltipProps } from "@material-ui/core/Tooltip";
+import React,
+{
+    useEffect,
+    useState,
+} from "react";
 import styled from "styled-components";
 
 // How to use props in styled-component: https://styled-components.com/docs/advanced
@@ -33,7 +41,10 @@ interface Props {
 
 export default function StyledIcon(props: Props) {
     const {
-        color, icon, size, tooltip
+        color,
+        icon,
+        size,
+        tooltip,
     } = props;
     const theme = useTheme();
 

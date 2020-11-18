@@ -1,6 +1,9 @@
-import Grid from "@material-ui/core/Grid";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import {
+    createStyles,
+    Grid,
+    makeStyles,
+    Typography,
+} from "@material-ui/core";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 
@@ -20,7 +23,7 @@ const useStyles = makeStyles(() =>
             whiteSpace: `pre-line`,
             wordBreak: `break-word`,
         },
-    })
+    }),
 );
 
 export default function NoCamera({ messageId }: { messageId: string }) {
@@ -32,7 +35,7 @@ export default function NoCamera({ messageId }: { messageId: string }) {
             justify="space-between"
             alignItems="center"
             style={{
-                paddingTop: `75%`
+                paddingTop: `75%`,
             }}
         >
             <Typography

@@ -2,7 +2,7 @@ import {
     createMuiTheme,
     responsiveFontSizes,
     Theme,
-} from "@material-ui/core/styles";
+} from "@material-ui/core";
 import { PaletteOptions } from "@material-ui/core/styles/createPalette";
 import "node-source-han-sans-sc/SourceHanSansSC-Regular-all.css";
 import "typeface-nanum-square-round";
@@ -126,19 +126,19 @@ export default function ThemeProvider(languageCode: string, themeMode: string) {
     if (themeMode === `light`) {
         palette.type = `light`;
         palette.background = {
-            default: `#FFF`
+            default: `#FFF`,
         };
         theme = createMuiTheme({
             overrides,
             palette,
-            typography
+            typography,
         });
     } else {
         palette.type = `dark`;
         theme = createMuiTheme({
             overrides,
             palette,
-            typography
+            typography,
         });
     }
 

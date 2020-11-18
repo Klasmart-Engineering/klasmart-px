@@ -1,10 +1,15 @@
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import { Mic as MicIcon } from "@styled-icons/material/Mic";
-import { Videocam as CameraIcon } from "@styled-icons/material/Videocam";
+import {
+    createStyles,
+    FormControl,
+    InputLabel,
+    makeStyles,
+    MenuItem,
+    Select,
+} from "@material-ui/core";
+import {
+    Videocam as CameraIcon,
+    Mic as MicIcon,
+} from "@styled-icons/material";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import StyledIcon from "./styled/styledIcon";
@@ -14,7 +19,7 @@ const useStyles = makeStyles(() =>
         formControl: {
             width: `100%`,
         },
-    })
+    }),
 );
 
 interface Props {
@@ -35,7 +40,11 @@ interface Props {
 
 export default function MediaDeviceSelect(props: Props) {
     const {
-        disabled, deviceType, deviceId, devices, onChange
+        disabled,
+        deviceType,
+        deviceId,
+        devices,
+        onChange,
     } = props;
     const classes = useStyles();
 

@@ -1,7 +1,10 @@
-import Fab, { FabProps } from "@material-ui/core/Fab";
-import Hidden from "@material-ui/core/Hidden";
-import { withStyles } from "@material-ui/core/styles";
-import { Send as SendIcon } from "@styled-icons/material/Send";
+import { FabProps } from "@material-ui/core/Fab";
+import {
+    Fab,
+    Hidden,
+    withStyles,
+} from "@material-ui/core";
+import { Send as SendIcon } from "@styled-icons/material";
 import React from "react";
 
 interface Props extends FabProps {
@@ -26,15 +29,18 @@ const StyledFab = withStyles({
 })(Fab);
 
 export default function StyledFAB(
-    props: Props & { children?: React.ReactNode }
+    props: Props & { children?: React.ReactNode },
 ) {
     const {
-        children, extendedOnly, flat, ...other
+        children,
+        extendedOnly,
+        flat,
+        ...other
     } = props;
 
     let sibling: React.ReactNode;
     React.Children.map(children, (child) =>
-        typeof child !== `string` ? (sibling = child) : {}
+        typeof child !== `string` ? (sibling = child) : {},
     );
 
     return extendedOnly ? (

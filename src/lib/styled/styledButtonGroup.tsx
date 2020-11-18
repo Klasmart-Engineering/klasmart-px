@@ -1,20 +1,24 @@
 import { ButtonProps } from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Grid from "@material-ui/core/Grid";
-import Grow from "@material-ui/core/Grow";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
-import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
 import {
+    ButtonGroup,
+    ClickAwayListener,
     createStyles,
+    Grid,
+    Grow,
     makeStyles,
+    MenuItem,
+    MenuList,
+    Paper,
+    Popper,
     Theme,
     withStyles,
-} from "@material-ui/core/styles";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import React, { useRef, useState } from "react";
+} from "@material-ui/core";
+import { ArrowDropDown as ArrowDropDownIcon } from "@material-ui/icons";
+import React,
+{
+    useRef,
+    useState,
+} from "react";
 import { isMobileSafari } from "react-device-detect";
 import StyledButton from "./styledButton";
 
@@ -33,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 touchAction: `auto !important`,
             },
         },
-    })
+    }),
 );
 
 const StyledBtnGroup = withStyles({
@@ -54,7 +58,11 @@ const StyledBtnGroup = withStyles({
 
 export default function StyledButtonGroup(props: Props) {
     const {
-        ariaLabel, children, extendedOnly, options, ...other
+        ariaLabel,
+        children,
+        extendedOnly,
+        options,
+        ...other
     } = props;
     const classes = useStyles();
 
@@ -64,7 +72,7 @@ export default function StyledButtonGroup(props: Props) {
 
     const handleMenuItemClick = (
         event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-        index: number
+        index: number,
     ) => {
         setSelectedIndex(index);
         setOpen(false);
@@ -123,7 +131,7 @@ export default function StyledButtonGroup(props: Props) {
                                 aria-haspopup="menu"
                                 onClick={handleToggle}
                                 style={{
-                                    minWidth: 0
+                                    minWidth: 0,
                                 }}
                             >
                                 <ArrowDropDownIcon />
@@ -167,13 +175,13 @@ export default function StyledButtonGroup(props: Props) {
                                                             onClick={(event) =>
                                                                 handleMenuItemClick(
                                                                     event,
-                                                                    index
+                                                                    index,
                                                                 )
                                                             }
                                                         >
                                                             {option.label}
                                                         </MenuItem>
-                                                    )
+                                                    ),
                                                 )}
                                             </MenuList>
                                         </ClickAwayListener>

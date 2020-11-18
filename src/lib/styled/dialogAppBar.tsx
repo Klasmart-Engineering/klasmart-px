@@ -1,13 +1,15 @@
-import AppBar from "@material-ui/core/AppBar";
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import Paper from "@material-ui/core/Paper";
 import {
-    createStyles, makeStyles, Theme
-} from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { Close as CloseIcon } from "@styled-icons/material/Close";
+    AppBar,
+    createStyles,
+    Grid,
+    IconButton,
+    makeStyles,
+    Paper,
+    Theme,
+    Toolbar,
+    Typography,
+} from "@material-ui/core";
+import { Close as CloseIcon } from "@styled-icons/material";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import KidsloopLogo from "../../assets/img/kidsloop.svg";
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: theme.spacing(2),
             marginRight: theme.spacing(1),
         },
-    })
+    }),
 );
 
 interface Props {
@@ -33,7 +35,9 @@ interface Props {
 export default function DialogAppBar(props: Props) {
     const classes = useStyles();
     const {
-        handleClose, subtitleID, toolbarBtn
+        handleClose,
+        subtitleID,
+        toolbarBtn,
     } = props;
 
     return (
@@ -76,7 +80,7 @@ export default function DialogAppBar(props: Props) {
                     square
                     style={{
                         flex: 1,
-                        height: `100%`
+                        height: `100%`,
                     }}>
                     <Toolbar variant="dense">
                         <Typography

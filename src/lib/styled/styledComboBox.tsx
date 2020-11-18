@@ -30,7 +30,13 @@ const useStyles = makeStyles(() => ({
 
 export default function StyledComboBox(props: Props) {
     const {
-        type, label, options, value, onChange, disabled, ...other
+        type,
+        label,
+        options,
+        value,
+        onChange,
+        disabled,
+        ...other
     } = props;
     const classes = useStyles();
 
@@ -82,7 +88,7 @@ export default function StyledComboBox(props: Props) {
                             variant="outlined"
                             label={option}
                             {...getTagProps({
-                                index
+                                index,
                             })}
                         />
                     ))

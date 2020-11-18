@@ -1,8 +1,10 @@
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
 import {
-    createStyles, makeStyles, Theme
-} from "@material-ui/core/styles";
+    createStyles,
+    Grid,
+    Link,
+    makeStyles,
+    Theme,
+} from "@material-ui/core";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 
@@ -15,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 textAlign: `center`,
             },
         },
-    })
+    }),
 );
 
 export default function PolicyLink() {

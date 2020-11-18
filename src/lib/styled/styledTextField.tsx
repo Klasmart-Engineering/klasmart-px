@@ -1,8 +1,11 @@
 import Link from "@material-ui/core/Link";
 import {
-    createStyles, makeStyles, Theme
+    createStyles,
+    makeStyles,
+    Theme,
 } from "@material-ui/core/styles";
-import TextField, { StandardTextFieldProps } from "@material-ui/core/TextField";
+import TextField,
+{ StandardTextFieldProps } from "@material-ui/core/TextField";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router-dom";
@@ -45,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
             borderColor: `black`,
             paddingBottom: theme.spacing(1),
         },
-    })
+    }),
 );
 
 export default function StyledTextField(props: Props) {
@@ -69,10 +72,10 @@ export default function StyledTextField(props: Props) {
                     type === `number`
                         ? {
                             min: 0,
-                            max: 9999
+                            max: 9999,
                         }
                         : {
-                            maxLength: 200
+                            maxLength: 200,
                         }
                 }
                 onInput={(e) => {
@@ -80,8 +83,8 @@ export default function StyledTextField(props: Props) {
                     (e.target as HTMLTextAreaElement).value = Math.max(
                         0,
                         parseInt(
-                            (e.target as HTMLTextAreaElement).value
-                        )
+                            (e.target as HTMLTextAreaElement).value,
+                        ),
                     )
                         .toString()
                         .slice(0, 4);

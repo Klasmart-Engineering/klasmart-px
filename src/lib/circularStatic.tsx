@@ -1,10 +1,14 @@
-import Box from "@material-ui/core/Box";
-import CircularProgress, { CircularProgressProps } from "@material-ui/core/CircularProgress";
-import Typography from "@material-ui/core/Typography";
-import React, { useEffect } from "react";
+import {
+    Box,
+    CircularProgress,
+    Typography,
+} from "@material-ui/core";
+import { CircularProgressProps } from "@material-ui/core/CircularProgress";
+import React,
+{ useEffect } from "react";
 
 function CircularProgressWithLabel(
-    props: CircularProgressProps & { sec: number; value: number }
+    props: CircularProgressProps & { sec: number; value: number },
 ) {
     return (
         <Box

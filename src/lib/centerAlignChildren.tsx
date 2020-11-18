@@ -10,7 +10,11 @@ interface Props {
 
 export default function CenterAlignChildren(props: Props) {
     const {
-        center, children, className, verticalCenter, ...other
+        center,
+        children,
+        className,
+        verticalCenter,
+        ...other
     } = props;
 
     return (
