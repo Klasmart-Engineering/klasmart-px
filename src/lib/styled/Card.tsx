@@ -64,7 +64,7 @@ interface Props {
     type: LibraryContentType;
 }
 
-export default function LibraryContentCard(props: Props) {
+export default function StyledCard(props: Props) {
     const classes = useStyles();
     const { content, type } = props;
     const [ moreInfo, toggleMoreInfo ] = useState(false);

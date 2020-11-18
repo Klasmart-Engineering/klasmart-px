@@ -13,6 +13,7 @@ import StyledComboBox from "./lib/styled/styledComboBox";
 import StyledIcon from "./lib/styled/styledIcon";
 import StyledTextField from "./lib/styled/styledTextField";
 import ThemeProvider from "./lib/themeProvider";
+import StyledCard from './lib/styled/card';
 
 const components = {
     CenterAlignChildren,
@@ -25,6 +26,7 @@ const components = {
     DialogAppBar,
     StyledButton,
     StyledButtonGroup,
+    StyledCard,
     StyledComboBox,
     StyledFAB,
     StyledIcon,
