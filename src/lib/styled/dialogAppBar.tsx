@@ -49,8 +49,8 @@ export default function DialogAppBar(props: Props) {
                     <IconButton
                         edge="start"
                         color="inherit"
-                        onClick={handleClose}
                         aria-label="close"
+                        onClick={handleClose}
                     >
                         <CloseIcon />
                     </IconButton>

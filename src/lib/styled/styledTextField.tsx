@@ -78,6 +78,14 @@ export default function StyledTextField(props: Props) {
                             maxLength: 200,
                         }
                 }
+                InputLabelProps={{
+                    classes: {
+                        focused: classes.cssFocused,
+                        root: classes.cssLabel,
+                    },
+                }}
+                type={type}
+                variant="outlined"
                 onInput={(e) => {
                     if (type !== `number`) return;
                     (e.target as HTMLTextAreaElement).value = Math.max(
@@ -90,14 +98,6 @@ export default function StyledTextField(props: Props) {
                         .slice(0, 4);
                 }
                 }
-                InputLabelProps={{
-                    classes: {
-                        focused: classes.cssFocused,
-                        root: classes.cssLabel,
-                    },
-                }}
-                type={type}
-                variant="outlined"
             />
             {showForgotPassword && (
                 <Link

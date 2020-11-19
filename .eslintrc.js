@@ -30,6 +30,16 @@ module.exports = {
         'react/jsx-max-props-per-line': 2,
         'react/jsx-first-prop-new-line': 2,
         'react/display-name': `off`,
+        "react/jsx-sort-props": [
+            2,
+            {
+                callbacksLast: true,
+                shorthandFirst: true,
+                ignoreCase: true,
+                noSortAlphabetically: true,
+                reservedFirst: [ `key`, `ref` ],
+            },
+        ],
         '@typescript-eslint/comma-spacing': [ `error` ], // turned on b/c 'comma-spacing' is disabled
         '@typescript-eslint/explicit-module-boundary-types': `off`,
         '@typescript-eslint/no-unused-vars': 1,

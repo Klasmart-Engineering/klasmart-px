@@ -14,8 +14,7 @@ import {
     withStyles,
 } from "@material-ui/core";
 import { ArrowDropDown as ArrowDropDownIcon } from "@material-ui/icons";
-import React,
-{
+import React, {
     useRef,
     useState,
 } from "react";
@@ -103,14 +102,14 @@ export default function StyledButtonGroup(props: Props) {
                 {!isMobileSafari ? (
                     <>
                         <StyledBtnGroup
+                            ref={anchorRef}
                             variant="contained"
                             color="primary"
-                            ref={anchorRef}
                             aria-label="split button"
                         >
                             <StyledButton
-                                disabled={options[selectedIndex].disabled}
                                 extendedOnly
+                                disabled={options[selectedIndex].disabled}
                                 onClick={options[selectedIndex].action}
                             >
                                 {options[selectedIndex].label}&nbsp;
@@ -129,21 +128,21 @@ export default function StyledButtonGroup(props: Props) {
                                 aria-expanded={open ? `true` : undefined}
                                 aria-label={ariaLabel}
                                 aria-haspopup="menu"
-                                onClick={handleToggle}
                                 style={{
                                     minWidth: 0,
                                 }}
+                                onClick={handleToggle}
                             >
                                 <ArrowDropDownIcon />
                             </StyledButton>
                         </StyledBtnGroup>
                         <Popper
+                            transition
+                            disablePortal
                             open={open}
                             anchorEl={anchorRef.current}
                             className={classes.popover}
                             role={undefined}
-                            transition
-                            disablePortal
                         >
                             {({ TransitionProps, placement }) => (
                                 <Grow
@@ -196,8 +195,8 @@ export default function StyledButtonGroup(props: Props) {
                         spacing={1}>
                         <Grid item>
                             <StyledButton
-                                disabled={options[0].disabled}
                                 extendedOnly
+                                disabled={options[0].disabled}
                                 onClick={options[0].action}
                             >
                                 {options[0].label}&nbsp;
@@ -210,8 +209,8 @@ export default function StyledButtonGroup(props: Props) {
                         </Grid>
                         <Grid item>
                             <StyledButton
-                                disabled={options[1].disabled}
                                 extendedOnly
+                                disabled={options[1].disabled}
                                 onClick={options[1].action}
                             >
                                 {options[1].label}&nbsp;

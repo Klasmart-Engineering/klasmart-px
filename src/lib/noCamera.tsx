@@ -30,8 +30,8 @@ export default function NoCamera({ messageId }: { messageId: string }) {
     const classes = useStyles();
     return (
         <Grid
-            className={classes.root}
             container
+            className={classes.root}
             justify="space-between"
             alignItems="center"
             style={{

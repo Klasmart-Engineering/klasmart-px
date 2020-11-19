@@ -75,8 +75,8 @@ export default function StyledIcon(props: Props) {
 
     return tooltip ? (
         <Tooltip
-            aria-label={tooltip[`aria-label`]}
             arrow
+            aria-label={tooltip[`aria-label`]}
             placement={tooltip.placement || `left`}
             title={tooltip.title || ``}
         >

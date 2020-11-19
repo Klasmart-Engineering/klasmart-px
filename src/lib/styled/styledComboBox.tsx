@@ -48,8 +48,7 @@ export default function StyledComboBox(props: Props) {
                 options={options}
                 filterOptions={(options, state) => options} // Always list all option
                 getOptionLabel={(option) => option}
-                onChange={onChange}
-                inputValue={value} // If it already have value, value will be autofilled by inputValue
+                inputValue={value}
                 renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                         <StyledTextField
@@ -62,15 +61,16 @@ export default function StyledComboBox(props: Props) {
                             value={value}
                         />
                     </div>
-                )}
+                )} // If it already have value, value will be autofilled by inputValue
+                onChange={onChange}
             />
         );
     } else {
         return (
             <Autocomplete
-                className={classes.root}
                 multiple
                 freeSolo
+                className={classes.root}
                 limitTags={2}
                 options={options}
                 // getOptionLabel={option => option}
@@ -79,8 +79,6 @@ export default function StyledComboBox(props: Props) {
                         color: `#1896ea`,
                     },
                 }}
-                onChange={onChange}
-                // defaultValue={["a", "b", "c"]} // If it already have value, value will be autofilled by inputValue
                 renderTags={(value: string[], getTagProps) =>
                     value.map((option: string, index: number) => (
                         <Chip
@@ -93,6 +91,7 @@ export default function StyledComboBox(props: Props) {
                         />
                     ))
                 }
+                // defaultValue={["a", "b", "c"]} // If it already have value, value will be autofilled by inputValue
                 renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                         <StyledTextField
@@ -105,6 +104,7 @@ export default function StyledComboBox(props: Props) {
                         />
                     </div>
                 )}
+                onChange={onChange}
             />
         );
     }

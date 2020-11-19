@@ -83,8 +83,8 @@ export default function MediaDeviceSelect(props: Props) {
                         )
                     // <MicIcon size="2rem" color={disabled ? "disabled" : "primary"} />
                 }
-                onChange={onChange}
                 value={deviceId || ``}
+                onChange={onChange}
             >
                 {devices.map((device: MediaDeviceInfo) => (
                     <MenuItem
