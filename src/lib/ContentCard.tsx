@@ -4,6 +4,7 @@ import {
     CardActions,
     CardContent,
     CardMedia,
+    CardProps,
     Collapse,
     createStyles,
     Grid,
@@ -47,37 +48,32 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface ContentItem {
-    published: boolean;
-    contentId: string;
-    description: string;
-    link: string;
-    image: string;
-    title: string;
-    type?: "lesson-plan" | "lesson-material" | undefined;
-}
-
 type LibraryContentType = "OwnedContent" | "Marketplace";
 
-interface Props {
-    content: ContentItem;
-    type: LibraryContentType;
+interface Props extends Omit<CardProps, "onClick"> {
+    title: string;
+    description: string;
+    imageUrl: string;
+    price: string;
+    contentType: LibraryContentType;
+    lessonType?: "lesson-plan" | "lesson-material";
+    onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined;
 }
 
 export default function StyledCard(props: Props) {
     const classes = useStyles();
-    const { content, type } = props;
+    const { title, description, imageUrl, price, contentType, lessonType, onClick, ...other } = props;
     const [ moreInfo, toggleMoreInfo ] = useState(false);
 
     return (
-        <Card>
-            <CardActionArea onClick={() => window.open(content.link)}>
+        <Card {...other}>
+            <CardActionArea onClick={onClick}>
                 <CardMedia
                     component="img"
-                    alt={`${content.title} Image`}
+                    alt={`${title} Image`}
                     height="140"
-                    image={content.image}
-                    title={`${content.title} Image`}
+                    image={imageUrl}
+                    title={`${title} Image`}
                 />
             </CardActionArea>
             <CardContent className={classes.cardContent}>
@@ -91,7 +87,7 @@ export default function StyledCard(props: Props) {
                             gutterBottom
                             variant="body1"
                             align="left">
-                            { content.title }
+                            { title }
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -106,9 +102,7 @@ export default function StyledCard(props: Props) {
                         </IconButton>
                     </Grid>
                 </Grid>
-                <Collapse
-                    in={moreInfo}
-                >
+                <Collapse in={moreInfo}>
                     <Typography
                         variant="caption"
                         color="textSecondary"
@@ -116,11 +110,11 @@ export default function StyledCard(props: Props) {
                         align="left"
                         className={classes.paragraphClamp}
                     >
-                        { content.description }
+                        { description }
                     </Typography>
                 </Collapse>
             </CardContent>
-            { type === `OwnedContent` ?
+            { contentType === `OwnedContent` &&
                 <CardActions className={classes.cardActions}>
                     <IconButton
                         size="small"
@@ -138,7 +132,9 @@ export default function StyledCard(props: Props) {
                         color="primary">
                         <ArchiveTwoToneIcon />
                     </IconButton>
-                </CardActions> :
+                </CardActions>
+            }
+            { contentType === `Marketplace` &&
                 <CardActions className={classes.cardActions}>
                     <Grid
                         container
@@ -146,7 +142,7 @@ export default function StyledCard(props: Props) {
                         alignItems="center">
                         <Grid item>
                             <Typography variant="caption">
-                                ₩29,000
+                                { price }
                             </Typography>
                         </Grid>
                         <Grid item>
