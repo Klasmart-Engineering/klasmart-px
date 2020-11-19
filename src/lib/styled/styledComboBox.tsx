@@ -1,7 +1,9 @@
-import Chip from "@material-ui/core/Chip";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+    Chip,
+    makeStyles,
+} from "@material-ui/core";
 import { StandardTextFieldProps } from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Autocomplete } from "@material-ui/lab";
 import React from "react";
 import StyledTextField from "./styledTextField";
 
@@ -48,7 +50,7 @@ export default function StyledComboBox(props: Props) {
                 options={options}
                 filterOptions={(options, state) => options} // Always list all option
                 getOptionLabel={(option) => option}
-                inputValue={value}
+                inputValue={value} // If it already have value, value will be autofilled by inputValue
                 renderInput={(params) => (
                     <div ref={params.InputProps.ref}>
                         <StyledTextField
@@ -61,7 +63,7 @@ export default function StyledComboBox(props: Props) {
                             value={value}
                         />
                     </div>
-                )} // If it already have value, value will be autofilled by inputValue
+                )}
                 onChange={onChange}
             />
         );

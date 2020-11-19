@@ -1,11 +1,11 @@
-import Link from "@material-ui/core/Link";
 import {
     createStyles,
+    Link,
     makeStyles,
+    TextField,
     Theme,
-} from "@material-ui/core/styles";
-import TextField,
-{ StandardTextFieldProps } from "@material-ui/core/TextField";
+} from "@material-ui/core";
+import { StandardTextFieldProps } from "@material-ui/core/TextField";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router-dom";
@@ -99,7 +99,7 @@ export default function StyledTextField(props: Props) {
                 }
                 }
             />
-            {showForgotPassword && (
+            {showForgotPassword ? (
                 <Link
                     href="#"
                     variant="subtitle2"
@@ -110,6 +110,8 @@ export default function StyledTextField(props: Props) {
                 >
                     <FormattedMessage id="login_forgotPassword" />
                 </Link>
+            ) : (
+                ``
             )}
         </>
     );
