@@ -63,7 +63,7 @@ interface Props extends Omit<CardProps, "onClick"> {
     onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
 }
 
-export default function StyledCard(props: Props) {
+export default function ContentCard(props: Props) {
     const classes = useStyles();
     const {
         title,
