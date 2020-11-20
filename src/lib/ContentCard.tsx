@@ -247,9 +247,15 @@ export default function ContentCard(props: Props) {
                         title={action.label}
                     >
                         <IconButton
+<<<<<<< HEAD
                             size="small"
                             className={classes.actionButton}
                             onClick={action.onClick}
+=======
+                            aria-label={moreInfo ? `hide content info` : `show content info`}
+                            size="small"
+                            onClick={() => toggleMoreInfo(!moreInfo)}
+>>>>>>> 8a561fe... new lock file and applied eslint changes
                         >
                             {cloneElement(
                                 action.icon,
