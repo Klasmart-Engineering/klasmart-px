@@ -1,4 +1,5 @@
 import {
+    Box,
     Card,
     CardActionArea,
     CardActions,
@@ -48,21 +49,24 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-type LibraryContentType = "OwnedContent" | "Marketplace";
+type LibraryContentType = "ownedContent" | "marketplace";
+type LibraryAssetType = "lessonPlan" | "lessonMaterial";
 
 interface Props extends Omit<CardProps, "onClick"> {
     title: string;
     description: string;
     imageUrl: string;
     price: string;
-    contentType: LibraryContentType;
-    lessonType?: "lesson-plan" | "lesson-material";
-    onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined;
+    contentType?: LibraryContentType;
+    lessonType?: LibraryAssetType;
+    onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
 }
 
 export default function StyledCard(props: Props) {
     const classes = useStyles();
-    const { title, description, imageUrl, price, contentType, lessonType, onClick, ...other } = props;
+    const {
+        title, description, imageUrl, price, contentType, lessonType, onClick, ...other
+    } = props;
     const [ moreInfo, toggleMoreInfo ] = useState(false);
 
     return (
@@ -77,10 +81,11 @@ export default function StyledCard(props: Props) {
                 />
             </CardActionArea>
             <CardContent className={classes.cardContent}>
-                <Grid
-                    container
-                    justify="space-between"
-                    alignItems="center"
+                <Box
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    display="flex"
+                    flexDirection="row"
                 >
                     <Grid item>
                         <Typography
@@ -101,7 +106,7 @@ export default function StyledCard(props: Props) {
                                 className={moreInfo ? classes.rotateIcon : ``} />
                         </IconButton>
                     </Grid>
-                </Grid>
+                </Box>
                 <Collapse in={moreInfo}>
                     <Typography
                         variant="caption"
@@ -114,7 +119,7 @@ export default function StyledCard(props: Props) {
                     </Typography>
                 </Collapse>
             </CardContent>
-            { contentType === `OwnedContent` &&
+            { contentType === `ownedContent` &&
                 <CardActions className={classes.cardActions}>
                     <IconButton
                         size="small"
@@ -134,7 +139,7 @@ export default function StyledCard(props: Props) {
                     </IconButton>
                 </CardActions>
             }
-            { contentType === `Marketplace` &&
+            { contentType === `marketplace` &&
                 <CardActions className={classes.cardActions}>
                     <Grid
                         container
