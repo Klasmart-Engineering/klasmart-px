@@ -58,14 +58,14 @@ interface Props extends Omit<CardProps, "onClick"> {
     imageUrl: string;
     price: string;
     contentType?: LibraryContentType;
-    lessonType?: LibraryAssetType;
+    assetType?: LibraryAssetType;
     onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
 }
 
 export default function StyledCard(props: Props) {
     const classes = useStyles();
     const {
-        title, description, imageUrl, price, contentType, lessonType, onClick, ...other
+        title, description, imageUrl, price, contentType, assetType, onClick, ...other
     } = props;
     const [ moreInfo, toggleMoreInfo ] = useState(false);
 
