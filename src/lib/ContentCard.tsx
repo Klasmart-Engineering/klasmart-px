@@ -12,7 +12,7 @@ import {
     IconButton,
     makeStyles,
     Theme,
-    Typography
+    Typography,
 } from "@material-ui/core";
 import {
     AddShoppingCartTwoTone as AddShoppingCartTwoToneIcon,
@@ -21,18 +21,19 @@ import {
     ExpandMore as ExpandMoreIcon,
     ShareTwoTone as ShareTwoToneIcon,
 } from "@material-ui/icons";
-import React, { useState } from "react";
+import React,
+{ useState } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles ({
         cardActions: {
-            display: `flex`
+            display: `flex`,
         },
         cardContent: {
-            padding: theme.spacing(1, 1)
+            padding: theme.spacing(1, 1),
         },
         iconExpand: {
-            marginLeft: `auto`
+            marginLeft: `auto`,
         },
         paragraphClamp: {
             WebkitBoxOrient: `vertical`,
@@ -40,11 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
             display: `-webkit-box`,
             overflow: `hidden`,
             [theme.breakpoints.down(`sm`)]: {
-                WebkitLineClamp: 4
+                WebkitLineClamp: 4,
             },
         },
         rotateIcon: {
-            transform: `rotate(180deg)`
+            transform: `rotate(180deg)`,
         },
     }),
 );
@@ -65,7 +66,14 @@ interface Props extends Omit<CardProps, "onClick"> {
 export default function StyledCard(props: Props) {
     const classes = useStyles();
     const {
-        title, description, imageUrl, price, contentType, assetType, onClick, ...other
+        title,
+        description,
+        imageUrl,
+        price,
+        contentType,
+        assetType,
+        onClick,
+        ...other
     } = props;
     const [ moreInfo, toggleMoreInfo ] = useState(false);
 
@@ -98,8 +106,8 @@ export default function StyledCard(props: Props) {
                     <Grid item>
                         <IconButton
                             aria-label={moreInfo ? `hide content info` : `show content info`}
-                            onClick={() => toggleMoreInfo(!moreInfo)}
                             size="small"
+                            onClick={() => toggleMoreInfo(!moreInfo)}
                         >
                             <ExpandMoreIcon
                                 fontSize="inherit"
