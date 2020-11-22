@@ -1,14 +1,17 @@
 const path = require(`path`);
+const glob = require(`glob`);
+const { CleanWebpackPlugin } = require(`clean-webpack-plugin`);
 
 module.exports = {
     mode: `development`,
-    entry: {
-        main: `./src/entry.ts`,
-        utils: `./src/utils/index.ts`,
-    },
+    target: `node`,
+    entry: glob.sync(`./src/**/*.{ts,tsx}`).reduce((acc, file) => {
+        acc[file.replace(/^\.\/src\//, ``)] = file;
+        return acc;
+    }, {}),
     output: {
         filename: `[name].js`,
-        path: path.resolve(__dirname, `dist`),
+        path: __dirname + `/dist`,
     },
     module: {
         rules: [
@@ -17,6 +20,13 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: `babel-loader`,
+                },
+            },
+            {
+                test: /\.(j|t)sx?$/i,
+                exclude: /node_modules/,
+                use: {
+                    loader: `ts-loader`,
                 },
             },
             {
@@ -54,6 +64,7 @@ module.exports = {
             `.ttf`,
         ],
     },
+    plugins: [ new CleanWebpackPlugin() ],
     devServer: {
         contentBase: path.resolve(__dirname, `dist`),
         publicPath: `/assets`, //should provide the path of the served js , img , etc...
