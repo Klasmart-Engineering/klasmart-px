@@ -3,3 +3,5 @@ example/
 .eslint.js
 .gitignore
 .gitattributes
+.webpack.config.js
+.babelrc
