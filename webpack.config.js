@@ -5,13 +5,17 @@ module.exports = {
     entry: {
         index: `./src/entry.ts`,
     },
+    output: {
+        filename: `[name].js`,
+        path: path.resolve(__dirname, `dist`),
+    },
     module: {
         rules: [
             {
-                test: /\.tsx?$/i,
+                test: /\.(j|t)sx?$/i,
                 exclude: /node_modules/,
                 use: {
-                    loader: `babel-loader`,
+                    loader: `ts-loader`,
                 },
             },
             {
@@ -32,6 +36,10 @@ module.exports = {
             {
                 test: /\.(woff(2)?|ttf|otf|eot|gif|svg|jpg|png)$/,
                 loader: `file-loader`,
+                options: {
+                    name: `[path][name].[ext]`,
+                    context: `src`,
+                },
             },
         ],
     },
@@ -44,10 +52,6 @@ module.exports = {
             `.css`,
             `.ttf`,
         ],
-    },
-    output: {
-        filename: `[name].js`,
-        path: path.resolve(__dirname, `dist`),
     },
     devServer: {
         contentBase: path.resolve(__dirname, `dist`),
