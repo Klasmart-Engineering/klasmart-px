@@ -42,10 +42,9 @@ export default function MoreMenu(props: Props) {
         setAnchorEl(null);
     };
 
-    console.log(actions?.length);
-
     return <>
         <IconButton
+            aria-label="More menu button"
             size="small"
             aria-haspopup="true"
             disabled={!actions?.length}
