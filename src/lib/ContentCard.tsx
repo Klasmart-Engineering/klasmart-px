@@ -7,6 +7,7 @@ import {
     CardContent,
     CardMedia,
     CardProps,
+    Checkbox,
     createStyles,
     makeStyles,
     SvgIconProps,
@@ -19,7 +20,8 @@ import {
     Help as HelpIcon,
     Subscriptions as SubscriptionsIcon,
 } from "@material-ui/icons";
-import React from "react";
+import React,
+{ ChangeEvent } from "react";
 import {
     nameToInitials,
     stringToHslColor,
@@ -28,23 +30,59 @@ import MoreMenu from "./Common/MoreMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles ({
+        card: {
+            position: `relative`,
+        },
+        cardActionArea: {
+            '&::before': {
+                backgroundColor: `#FFF`,
+                borderRadius: `inherit`,
+                bottom: 0,
+                content: `""`,
+                left: 0,
+                opacity: .0,
+                position: `absolute`,
+                pointerEvents: `none`,
+                right: 0,
+                top: 0,
+                transition: `opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms`,
+            },
+            '&.selected::before': {
+                opacity: .66,
+            },
+        },
         cardActions: {
             paddingTop: 0,
+        },
+        cardMedia: {},
+        checkbox: {
+            position: `absolute`,
+            top: 0,
+            margin: theme.spacing(1),
+        },
+        checkboxBackground: {
+            position: `absolute`,
+            margin: theme.spacing(1),
+            backgroundColor: `#fff`,
+            width: 16,
+            height: 16,
+            top: 13,
+            left: 13,
         },
         smallAvatar: {
             width: theme.spacing(3),
             height: theme.spacing(3),
             fontSize: 10,
         },
-        avatar: {
-            marginRight: theme.spacing(1),
+        authorName: {
+            marginLeft: `${theme.spacing(2.5)}px !important`,
         },
         cardContent: {
             padding: theme.spacing(1, 1),
             height: 90,
         },
         assetTypeIcon: {
-            marginRight: theme.spacing(1),
+            marginRight: theme.spacing(3),
         },
         descripton: {
             WebkitBoxOrient: `vertical`,
@@ -62,7 +100,7 @@ type FontSize = "small" | "inherit" | "default" | "large"
 
 interface CheckboxItem {
     checked: boolean;
-    onClick: React.Dispatch<React.SetStateAction<boolean>>;
+    onChange: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void;
 }
 
 export interface ActionItem {
@@ -87,11 +125,13 @@ export default function ContentCard(props: Props) {
     const {
         actions,
         author,
-        title,
+        assetType,
+        checkbox,
         description,
         imageUrl,
-        assetType,
+        title,
         onClick,
+        className,
         ...other
     } = props;
 
@@ -116,19 +156,34 @@ export default function ContentCard(props: Props) {
         }
     }
 
-    const assetTypeIcon = getAssetTypeIcon(assetType);
-
     return (
-        <Card {...other}>
-            <CardActionArea onClick={onClick}>
+        <Card
+            className={[ className, classes.card ].join(` `)}
+            {...other}
+        >
+            <CardActionArea
+                className={`${classes.cardActionArea} ${checkbox?.checked ? `selected` : ``}`}
+                onClick={onClick}>
                 <CardMedia
                     component="img"
                     alt={`${title} Image`}
                     height="150"
                     image={imageUrl}
                     title={`${title} Image`}
+                    className={classes.cardMedia}
                 />
             </CardActionArea>
+            {checkbox && <>
+                <div className={classes.checkboxBackground} />
+                <Checkbox
+                    checked={checkbox.checked}
+                    inputProps={{
+                        'aria-label': `${title} checkbox ${checkbox.checked ? `selected` : `deselected`}`,
+                    }}
+                    className={classes.checkbox}
+                    onChange={checkbox.onChange}
+                />
+            </>}
             <CardContent className={classes.cardContent}>
                 <Box
                     justifyContent="space-between"
@@ -138,7 +193,7 @@ export default function ContentCard(props: Props) {
                 >
                     <Box>
                         <Tooltip title={getAssetTypeLabel(assetType)}>
-                            { assetTypeIcon }
+                            { getAssetTypeIcon(assetType) }
                         </Tooltip>
                     </Box>
                     <Box flex="1">
@@ -177,6 +232,7 @@ export default function ContentCard(props: Props) {
                     variant="caption"
                     color="textSecondary"
                     component="p"
+                    className={classes.authorName}
                 >
                     { author }
                 </Typography>
