@@ -50,15 +50,26 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-type LibraryContentType = "ownedContent" | "marketplace";
 type LibraryAssetType = "lessonPlan" | "lessonMaterial";
 
+interface CheckboxItem {
+    checked: boolean;
+    onClick: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface ActionItem {
+    color: string;
+    icon: string;
+    onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
+}
+
 interface Props extends Omit<CardProps, "onClick"> {
+    actions: ActionItem[];
+    checkbox?: CheckboxItem;
+    author: string;
     title: string;
     description: string;
     imageUrl: string;
-    price: string;
-    contentType?: LibraryContentType;
     assetType?: LibraryAssetType;
     onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
 }
@@ -66,11 +77,11 @@ interface Props extends Omit<CardProps, "onClick"> {
 export default function ContentCard(props: Props) {
     const classes = useStyles();
     const {
+        actions,
+        author,
         title,
         description,
         imageUrl,
-        price,
-        contentType,
         assetType,
         onClick,
         ...other
@@ -127,45 +138,18 @@ export default function ContentCard(props: Props) {
                     </Typography>
                 </Collapse>
             </CardContent>
-            { contentType === `ownedContent` &&
+            { actions &&
                 <CardActions className={classes.cardActions}>
-                    <IconButton
-                        size="small"
-                        color="primary"
-                        className={classes.iconExpand}>
-                        <ShareTwoToneIcon />
-                    </IconButton>
-                    <IconButton
-                        size="small"
-                        color="primary">
-                        <EditTwoToneIcon />
-                    </IconButton>
-                    <IconButton
-                        size="small"
-                        color="primary">
-                        <ArchiveTwoToneIcon />
-                    </IconButton>
-                </CardActions>
-            }
-            { contentType === `marketplace` &&
-                <CardActions className={classes.cardActions}>
-                    <Grid
-                        container
-                        justify="space-between"
-                        alignItems="center">
-                        <Grid item>
-                            <Typography variant="caption">
-                                { price }
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <IconButton
-                                size="small"
-                                color="primary">
-                                <AddShoppingCartTwoToneIcon />
-                            </IconButton>
-                        </Grid>
-                    </Grid>
+                    { actions.map((action) => {
+                        <IconButton
+                            color="primary"
+                            size="small"
+                            className={classes.iconExpand}
+                            onClick={() => action.onClick }
+                        >
+                            action.icon
+                        </IconButton>
+                    })}
                 </CardActions>
             }
         </Card>
