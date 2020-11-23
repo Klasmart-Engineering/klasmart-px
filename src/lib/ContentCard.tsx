@@ -1,4 +1,5 @@
 import {
+    Avatar,
     Box,
     Card,
     CardActionArea,
@@ -6,65 +7,72 @@ import {
     CardContent,
     CardMedia,
     CardProps,
-    Collapse,
     createStyles,
-    Grid,
-    IconButton,
     makeStyles,
+    SvgIconProps,
     Theme,
+    Tooltip,
     Typography,
 } from "@material-ui/core";
 import {
-    AddShoppingCartTwoTone as AddShoppingCartTwoToneIcon,
-    ArchiveTwoTone as ArchiveTwoToneIcon,
-    EditTwoTone as EditTwoToneIcon,
-    ExpandMore as ExpandMoreIcon,
-    ShareTwoTone as ShareTwoToneIcon,
+    Category as CategoryIcon,
+    Help as HelpIcon,
+    Subscriptions as SubscriptionsIcon,
 } from "@material-ui/icons";
-import React,
-{ useState } from "react";
+import React from "react";
+import {
+    nameToInitials,
+    stringToHslColor,
+} from "../utils";
+import MoreMenu from "./Common/MoreMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles ({
         cardActions: {
-            display: `flex`,
+            paddingTop: 0,
+        },
+        smallAvatar: {
+            width: theme.spacing(3),
+            height: theme.spacing(3),
+            fontSize: 10,
+        },
+        avatar: {
+            marginRight: theme.spacing(1),
         },
         cardContent: {
             padding: theme.spacing(1, 1),
+            height: 90,
         },
-        iconExpand: {
-            marginLeft: `auto`,
+        assetTypeIcon: {
+            marginRight: theme.spacing(1),
         },
-        paragraphClamp: {
+        descripton: {
             WebkitBoxOrient: `vertical`,
             WebkitLineClamp: 2,
             display: `-webkit-box`,
             overflow: `hidden`,
-            [theme.breakpoints.down(`sm`)]: {
-                WebkitLineClamp: 4,
-            },
-        },
-        rotateIcon: {
-            transform: `rotate(180deg)`,
         },
     }),
 );
 
 type LibraryAssetType = "lessonPlan" | "lessonMaterial";
+type ThemeColor = "inherit" | "default" | "primary" | "secondary"
+type IconThemeColor = Exclude<ThemeColor, "default"> & "disabled" | "action" | "error"
+type FontSize = "small" | "inherit" | "default" | "large"
 
 interface CheckboxItem {
     checked: boolean;
     onClick: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface ActionItem {
-    color: string;
-    icon: string;
-    onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
+export interface ActionItem {
+    label: string;
+    icon: React.ReactElement<SvgIconProps>;
+    onClick?: ((event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void);
 }
 
 interface Props extends Omit<CardProps, "onClick"> {
-    actions: ActionItem[];
+    actions?: ActionItem[];
     checkbox?: CheckboxItem;
     author: string;
     title: string;
@@ -86,7 +94,29 @@ export default function ContentCard(props: Props) {
         onClick,
         ...other
     } = props;
-    const [ moreInfo, toggleMoreInfo ] = useState(false);
+
+    function getAssetTypeIcon (type?: LibraryAssetType): React.ReactElement<SvgIconProps> {
+        const iconProps = {
+            color: `primary` as IconThemeColor,
+            className: classes.assetTypeIcon,
+            fontSize: `small` as FontSize,
+        };
+        switch (type) {
+        case `lessonMaterial`: return <CategoryIcon {...iconProps }/>;
+        case `lessonPlan`: return <SubscriptionsIcon {... iconProps } />;
+        default: return <HelpIcon {... iconProps } />;
+        }
+    }
+
+    function getAssetTypeLabel (type?: LibraryAssetType): string {
+        switch (type) {
+        case `lessonMaterial`: return `Material`;
+        case `lessonPlan`: return `Plan`;
+        default: return `Unknown`;
+        }
+    }
+
+    const assetTypeIcon = getAssetTypeIcon(assetType);
 
     return (
         <Card {...other}>
@@ -94,7 +124,7 @@ export default function ContentCard(props: Props) {
                 <CardMedia
                     component="img"
                     alt={`${title} Image`}
-                    height="140"
+                    height="150"
                     image={imageUrl}
                     title={`${title} Image`}
                 />
@@ -102,56 +132,55 @@ export default function ContentCard(props: Props) {
             <CardContent className={classes.cardContent}>
                 <Box
                     justifyContent="space-between"
-                    alignItems="flex-start"
+                    alignItems="center"
                     display="flex"
                     flexDirection="row"
                 >
-                    <Grid item>
+                    <Box>
+                        <Tooltip title={getAssetTypeLabel(assetType)}>
+                            { assetTypeIcon }
+                        </Tooltip>
+                    </Box>
+                    <Box flex="1">
                         <Typography
                             gutterBottom
+                            noWrap
                             variant="body1"
-                            align="left">
+                            align="left"
+                        >
                             { title }
                         </Typography>
-                    </Grid>
-                    <Grid item>
-                        <IconButton
-                            aria-label={moreInfo ? `hide content info` : `show content info`}
-                            size="small"
-                            onClick={() => toggleMoreInfo(!moreInfo)}
-                        >
-                            <ExpandMoreIcon
-                                fontSize="inherit"
-                                className={moreInfo ? classes.rotateIcon : ``} />
-                        </IconButton>
-                    </Grid>
+                    </Box>
+                    {<MoreMenu actions={actions} />}
                 </Box>
-                <Collapse in={moreInfo}>
-                    <Typography
-                        variant="caption"
-                        color="textSecondary"
-                        component="p"
-                        align="left"
-                        className={classes.paragraphClamp}
-                    >
-                        { description }
-                    </Typography>
-                </Collapse>
+                <Typography
+                    variant="caption"
+                    color="textSecondary"
+                    component="p"
+                    className={classes.descripton}
+                >
+                    { description }
+                </Typography>
             </CardContent>
-            { actions &&
-                <CardActions className={classes.cardActions}>
-                    { actions.map((action) => {
-                        <IconButton
-                            color="primary"
-                            size="small"
-                            className={classes.iconExpand}
-                            onClick={() => action.onClick }
-                        >
-                            action.icon
-                        </IconButton>
-                    })}
-                </CardActions>
-            }
+            <CardActions className={classes.cardActions}>
+                <Avatar
+                    style={{
+                        color: `white`,
+                        backgroundColor: stringToHslColor(author),
+                    }}
+                    className={classes.smallAvatar}
+                >
+                    {nameToInitials(author)}
+                </Avatar>
+                <Typography
+                    noWrap
+                    variant="caption"
+                    color="textSecondary"
+                    component="p"
+                >
+                    { author }
+                </Typography>
+            </CardActions>
         </Card>
     );
 }
