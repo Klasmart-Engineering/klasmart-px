@@ -107,7 +107,7 @@ export interface ActionItem {
     label: string;
     color?: `inherit` | `disabled` | `primary` | `secondary` | `action` | `error`;
     icon: React.ReactElement<SvgIconProps>;
-    onClick?: ((event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void);
+    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 interface Props extends Omit<CardProps, "onClick"> {
@@ -249,6 +249,7 @@ export default function ContentCard(props: Props) {
                         <IconButton
                             size="small"
                             className={classes.actionButton}
+                            onClick={action.onClick}
                         >
                             {cloneElement(
                                 action.icon,
