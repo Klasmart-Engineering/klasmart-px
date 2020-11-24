@@ -9,6 +9,7 @@ import {
     CardProps,
     Checkbox,
     createStyles,
+    IconButton,
     makeStyles,
     SvgIconProps,
     Theme,
@@ -21,12 +22,14 @@ import {
     Subscriptions as SubscriptionsIcon,
 } from "@material-ui/icons";
 import React,
-{ ChangeEvent } from "react";
+{
+    ChangeEvent,
+    cloneElement,
+} from "react";
 import {
     nameToInitials,
     stringToHslColor,
 } from "../utils";
-import MoreMenu from "./Common/MoreMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles ({
@@ -51,9 +54,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 opacity: .66,
             },
         },
-        cardActions: {
-            paddingTop: 0,
-        },
         cardMedia: {},
         checkbox: {
             position: `absolute`,
@@ -75,14 +75,14 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 10,
         },
         authorName: {
-            marginLeft: `${theme.spacing(2.5)}px !important`,
+            marginLeft: `${theme.spacing(1.5)}px !important`,
         },
         cardContent: {
             padding: theme.spacing(1, 1),
-            height: 90,
+            height: 82,
         },
         assetTypeIcon: {
-            marginRight: theme.spacing(3),
+            marginRight: theme.spacing(2),
         },
         descripton: {
             WebkitBoxOrient: `vertical`,
@@ -90,13 +90,13 @@ const useStyles = makeStyles((theme: Theme) =>
             display: `-webkit-box`,
             overflow: `hidden`,
         },
+        actionButton: {
+            marginLeft: `${theme.spacing(0.5)}px !important`,
+        },
     }),
 );
 
 type LibraryAssetType = "lessonPlan" | "lessonMaterial";
-type ThemeColor = "inherit" | "default" | "primary" | "secondary"
-type IconThemeColor = Exclude<ThemeColor, "default"> & "disabled" | "action" | "error"
-type FontSize = "small" | "inherit" | "default" | "large"
 
 interface CheckboxItem {
     checked: boolean;
@@ -105,6 +105,7 @@ interface CheckboxItem {
 
 export interface ActionItem {
     label: string;
+    color?: `inherit` | `disabled` | `primary` | `secondary` | `action` | `error`;
     icon: React.ReactElement<SvgIconProps>;
     onClick?: ((event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void);
 }
@@ -136,15 +137,10 @@ export default function ContentCard(props: Props) {
     } = props;
 
     function getAssetTypeIcon (type?: LibraryAssetType): React.ReactElement<SvgIconProps> {
-        const iconProps = {
-            color: `primary` as IconThemeColor,
-            className: classes.assetTypeIcon,
-            fontSize: `small` as FontSize,
-        };
         switch (type) {
-        case `lessonMaterial`: return <CategoryIcon {...iconProps }/>;
-        case `lessonPlan`: return <SubscriptionsIcon {... iconProps } />;
-        default: return <HelpIcon {... iconProps } />;
+        case `lessonMaterial`: return <CategoryIcon />;
+        case `lessonPlan`: return <SubscriptionsIcon />;
+        default: return <HelpIcon />;
         }
     }
 
@@ -158,9 +154,8 @@ export default function ContentCard(props: Props) {
 
     return (
         <Card
-            className={[ className, classes.card ].join(` `)}
             {...other}
-        >
+            className={[ className, classes.card ].join(` `)}>
             <CardActionArea
                 className={`${classes.cardActionArea} ${checkbox?.checked ? `selected` : ``}`}
                 onClick={onClick}>
@@ -193,10 +188,20 @@ export default function ContentCard(props: Props) {
                 >
                     <Box>
                         <Tooltip title={getAssetTypeLabel(assetType)}>
-                            { getAssetTypeIcon(assetType) }
+                            {cloneElement(
+                                getAssetTypeIcon(assetType),
+                                {
+                                    color: `primary`,
+                                    className: classes.assetTypeIcon,
+                                    fontSize: `small`,
+                                },
+                            )}
                         </Tooltip>
                     </Box>
-                    <Box flex="1">
+                    <Box
+                        flex="1"
+                        minWidth="0"
+                    >
                         <Typography
                             gutterBottom
                             noWrap
@@ -206,7 +211,6 @@ export default function ContentCard(props: Props) {
                             { title }
                         </Typography>
                     </Box>
-                    {<MoreMenu actions={actions} />}
                 </Box>
                 <Typography
                     variant="caption"
@@ -217,7 +221,7 @@ export default function ContentCard(props: Props) {
                     { description }
                 </Typography>
             </CardContent>
-            <CardActions className={classes.cardActions}>
+            <CardActions>
                 <Avatar
                     style={{
                         color: `white`,
@@ -225,7 +229,7 @@ export default function ContentCard(props: Props) {
                     }}
                     className={classes.smallAvatar}
                 >
-                    {nameToInitials(author)}
+                    {nameToInitials(author, 3)}
                 </Avatar>
                 <Typography
                     noWrap
@@ -236,6 +240,22 @@ export default function ContentCard(props: Props) {
                 >
                     { author }
                 </Typography>
+                <Box flex="1" />
+                {actions?.length && actions.map((action, i) =>
+                    <IconButton
+                        key={`action-button-${i}`}
+                        size="small"
+                        className={classes.actionButton}
+                    >
+                        {cloneElement(
+                            action.icon,
+                            {
+                                color: action.color ?? `primary`,
+                                fontSize: `small`,
+                            },
+                        )}
+                    </IconButton>,
+                )}
             </CardActions>
         </Card>
     );
