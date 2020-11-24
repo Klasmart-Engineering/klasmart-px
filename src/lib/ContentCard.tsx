@@ -242,19 +242,23 @@ export default function ContentCard(props: Props) {
                 </Typography>
                 <Box flex="1" />
                 {actions?.length && actions.map((action, i) =>
-                    <IconButton
+                    <Tooltip
                         key={`action-button-${i}`}
-                        size="small"
-                        className={classes.actionButton}
+                        title={action.label}
                     >
-                        {cloneElement(
-                            action.icon,
-                            {
-                                color: action.color ?? `primary`,
-                                fontSize: `small`,
-                            },
-                        )}
-                    </IconButton>,
+                        <IconButton
+                            size="small"
+                            className={classes.actionButton}
+                        >
+                            {cloneElement(
+                                action.icon,
+                                {
+                                    color: action.color ?? `primary`,
+                                    fontSize: `small`,
+                                },
+                            )}
+                        </IconButton>
+                    </Tooltip>,
                 )}
             </CardActions>
         </Card>
