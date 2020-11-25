@@ -1,17 +1,17 @@
 const path = require(`path`);
-const glob = require(`glob`);
+const ForkTsCheckerWebpackPlugin = require(`fork-ts-checker-webpack-plugin`);
 const { CleanWebpackPlugin } = require(`clean-webpack-plugin`);
+const nodeExternals = require(`webpack-node-externals`);
 
 module.exports = {
-    mode: `development`,
+    mode: `production`,
     target: `node`,
-    entry: glob.sync(`./src/**/*.{ts,tsx}`).reduce((acc, file) => {
-        acc[file.replace(/^\.\/src\//, ``)] = file;
-        return acc;
-    }, {}),
+    entry: `./src/index.ts`,
     output: {
-        filename: `[name].js`,
-        path: __dirname + `/dist`,
+        filename: `main.js`,
+        path: path.resolve(__dirname, `dist`),
+        libraryTarget: `umd`,
+        library: `kidsloop-px`,
     },
     module: {
         rules: [
@@ -20,15 +20,18 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: `babel-loader`,
+                    // options: {
+                    //     babelrc: true,
+                    // },
                 },
             },
-            {
-                test: /\.(j|t)sx?$/i,
-                exclude: /node_modules/,
-                use: {
-                    loader: `ts-loader`,
-                },
-            },
+            // {
+            //     test: /\.(j|t)sx?$/i,
+            //     exclude: /node_modules/,
+            //     use: {
+            //         loader: `ts-loader`,
+            //     },
+            // },
             {
                 test: /\.css$/i,
                 use: [
@@ -45,7 +48,7 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(woff(2)?|ttf|otf|eot|gif|svg|jpg|png)$/,
+                test: /\.(woff(2)?|ttf|otf|eot|gif|svg|jpg|png|mp3|mp4)$/,
                 loader: `file-loader`,
                 options: {
                     name: `[path][name].[ext]`,
@@ -64,9 +67,10 @@ module.exports = {
             `.ttf`,
         ],
     },
-    plugins: [ new CleanWebpackPlugin() ],
-    devServer: {
-        contentBase: path.resolve(__dirname, `dist`),
-        publicPath: `/assets`, //should provide the path of the served js , img , etc...
-    },
+    plugins: [ new CleanWebpackPlugin(), new ForkTsCheckerWebpackPlugin() ],
+    externals: [
+        nodeExternals({
+            allowlist: [ `node-source-han-sans-sc`, `typeface-nanum-square-round` ],
+        }),
+    ],
 };

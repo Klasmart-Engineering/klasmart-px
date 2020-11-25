@@ -1,26 +1,29 @@
 {
     "compilerOptions": {
-        "target": "ES2015",
-        "module": "commonjs",
-        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
         "declaration": true,
-        "declarationDir": "dist",
-        "outDir": "dist",
-        "rootDir": "./src",
-        "removeComments": true,
-        "noEmit": false,
-        "strict": true,
-        "noImplicitAny": true,
-        "types": ["react"],
+        "declarationDir": "dist/types",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true
+        "jsx": "react",
+        "module": "commonjs",
+        "noEmit": false,
+        "noImplicitAny": true,
+        "outDir": "./dist/",
+        "removeComments": true,
+        "rootDir": "./src",
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ES6",
+        "types": [
+            "react"
+        ]
     },
-    "include": ["src/**/*.ts"],
+    "include": [
+        "src/**/*"
+    ],
     "exclude": [
         "node_modules",
-        "./dist/**/*",
-        "./webpack.config.js"
+        "dist"
     ]
 }
