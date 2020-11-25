@@ -107,7 +107,7 @@ export interface ActionItem {
     label: string;
     color?: `inherit` | `disabled` | `primary` | `secondary` | `action` | `error`;
     icon: React.ReactElement<SvgIconProps>;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 }
 
 interface Props extends Omit<CardProps, "onClick"> {

@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-actions?: ActionItem[];
+    actions?: ActionItem[];
 }
 
 export default function MoreMenu(props: Props) {
