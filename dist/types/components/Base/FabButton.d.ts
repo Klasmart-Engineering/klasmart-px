@@ -5,7 +5,7 @@ interface Props extends FabProps {
     extendedOnly?: boolean;
     flat?: boolean;
 }
-export default function StyledFAB(props: Props & {
+export default function BaseB(props: Props & {
     children?: React.ReactNode;
 }): JSX.Element;
 export {};

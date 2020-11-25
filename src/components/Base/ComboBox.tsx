@@ -5,7 +5,7 @@ import {
 import { StandardTextFieldProps } from "@material-ui/core/TextField";
 import { Autocomplete } from "@material-ui/lab";
 import React from "react";
-import StyledTextField from "./styledTextField";
+import StyledTextField from "./TextField";
 
 interface Props extends StandardTextFieldProps {
     type: "single" | "multiple";

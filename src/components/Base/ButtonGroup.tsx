@@ -19,7 +19,7 @@ import React, {
     useState,
 } from "react";
 import { isMobileSafari } from "react-device-detect";
-import StyledButton from "./styledButton";
+import BaseButton from "./Button";
 
 interface Props extends ButtonProps {
     ariaLabel?: string;
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const StyledBtnGroup = withStyles({
+const BaseBtnGroup = withStyles({
     root: {
         "&:hover": {
             "-webkit-transition": `all .4s ease`,
@@ -55,7 +55,7 @@ const StyledBtnGroup = withStyles({
     },
 })(ButtonGroup);
 
-export default function StyledButtonGroup(props: Props) {
+export default function BaseButtonGroup(props: Props) {
     const {
         ariaLabel,
         children,
@@ -101,13 +101,13 @@ export default function StyledButtonGroup(props: Props) {
                 xs={12}>
                 {!isMobileSafari ? (
                     <>
-                        <StyledBtnGroup
+                        <BaseBtnGroup
                             ref={anchorRef}
                             variant="contained"
                             color="primary"
                             aria-label="split button"
                         >
-                            <StyledButton
+                            <BaseButton
                                 extendedOnly
                                 disabled={options[selectedIndex].disabled}
                                 onClick={options[selectedIndex].action}
@@ -118,8 +118,8 @@ export default function StyledButtonGroup(props: Props) {
                                 ) : (
                                     ``
                                 )}
-                            </StyledButton>
-                            <StyledButton
+                            </BaseButton>
+                            <BaseButton
                                 color="primary"
                                 size="small"
                                 aria-controls={
@@ -134,8 +134,8 @@ export default function StyledButtonGroup(props: Props) {
                                 onClick={handleToggle}
                             >
                                 <ArrowDropDownIcon />
-                            </StyledButton>
-                        </StyledBtnGroup>
+                            </BaseButton>
+                        </BaseBtnGroup>
                         <Popper
                             transition
                             disablePortal
@@ -194,7 +194,7 @@ export default function StyledButtonGroup(props: Props) {
                         container
                         spacing={1}>
                         <Grid item>
-                            <StyledButton
+                            <BaseButton
                                 extendedOnly
                                 disabled={options[0].disabled}
                                 onClick={options[0].action}
@@ -205,10 +205,10 @@ export default function StyledButtonGroup(props: Props) {
                                 ) : (
                                     ``
                                 )}
-                            </StyledButton>
+                            </BaseButton>
                         </Grid>
                         <Grid item>
-                            <StyledButton
+                            <BaseButton
                                 extendedOnly
                                 disabled={options[1].disabled}
                                 onClick={options[1].action}
@@ -219,7 +219,7 @@ export default function StyledButtonGroup(props: Props) {
                                 ) : (
                                     ``
                                 )}
-                            </StyledButton>
+                            </BaseButton>
                         </Grid>
                     </Grid>
                 )}

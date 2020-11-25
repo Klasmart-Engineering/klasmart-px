@@ -13,7 +13,7 @@ interface Props extends FabProps {
     flat?: boolean;
 }
 
-const StyledFab = withStyles({
+const Baseb = withStyles({
     root: {
         "&:hover": {
             "-webkit-transition": `all .4s ease`,
@@ -28,7 +28,7 @@ const StyledFab = withStyles({
     },
 })(Fab);
 
-export default function StyledFAB(
+export default function BaseB(
     props: Props & { children?: React.ReactNode },
 ) {
     const {
@@ -44,7 +44,7 @@ export default function StyledFAB(
     );
 
     return extendedOnly ? (
-        <StyledFab
+        <Baseb
             variant="extended"
             style={{
                 minWidth: 120,
@@ -55,11 +55,11 @@ export default function StyledFAB(
             {...other}
         >
             {children || <SendIcon />}
-        </StyledFab>
+        </Baseb>
     ) : (
         <>
             <Hidden smDown>
-                <StyledFab
+                <Baseb
                     variant="extended"
                     style={{
                         minWidth: 120,
@@ -70,15 +70,15 @@ export default function StyledFAB(
                     {...other}
                 >
                     {children || <SendIcon />}
-                </StyledFab>
+                </Baseb>
             </Hidden>
             <Hidden mdUp>
-                <StyledFab
+                <Baseb
                     variant="round"
                     size="small"
                     {...other}>
                     {sibling || <SendIcon fontSize="small" />}
-                </StyledFab>
+                </Baseb>
             </Hidden>
         </>
     );

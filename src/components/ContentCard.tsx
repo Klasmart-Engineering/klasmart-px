@@ -121,7 +121,11 @@ interface Props extends Omit<CardProps, "onClick"> {
     onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
 }
 
+<<<<<<< HEAD:src/lib/ContentCard.tsx
 export default function ContentCard(props: Props) {
+=======
+export default function BaseCard(props: Props) {
+>>>>>>> 56d3f90... added utils and restructured files:src/components/ContentCard.tsx
     const classes = useStyles();
     const {
         actions,

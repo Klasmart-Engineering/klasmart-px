@@ -18,7 +18,7 @@ interface BaseIconProps {
     color?: string;
 }
 
-const BaseIcon = styled.span`
+const BaseIconStyle = styled.span`
     color: ${(props: BaseIconProps) => props.color || `#000`};
     width: ${(props: BaseIconProps) => props.size || `1rem`};
     height: ${(props: BaseIconProps) => props.size || `1rem`};
@@ -39,7 +39,7 @@ interface Props {
     tooltip?: TooltipProps;
 }
 
-export default function StyledIcon(props: Props) {
+export default function BaseIcon(props: Props) {
     const {
         color,
         icon,
@@ -80,19 +80,19 @@ export default function StyledIcon(props: Props) {
             placement={tooltip.placement || `left`}
             title={tooltip.title || ``}
         >
-            <BaseIcon
+            <BaseIconStyle
                 theme={theme}
                 color={color}
                 size={determinedSize}>
                 {icon}
-            </BaseIcon>
+            </BaseIconStyle>
         </Tooltip>
     ) : (
-        <BaseIcon
+        <BaseIconStyle
             theme={theme}
             color={color}
             size={determinedSize}>
             {icon}
-        </BaseIcon>
+        </BaseIconStyle>
     );
 }

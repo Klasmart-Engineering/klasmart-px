@@ -7,5 +7,5 @@ interface Props {
     size?: "small" | "medium" | "large" | "xlarge" | string;
     tooltip?: TooltipProps;
 }
-export default function StyledIcon(props: Props): JSX.Element;
+export default function BaseIcon(props: Props): JSX.Element;
 export {};

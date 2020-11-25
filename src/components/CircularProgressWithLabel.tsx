@@ -7,7 +7,7 @@ import { CircularProgressProps } from "@material-ui/core/CircularProgress";
 import React,
 { useEffect } from "react";
 
-function CircularProgressWithLabel(
+function CircularProgressWithLabelComponent(
     props: CircularProgressProps & { sec: number; value: number },
 ) {
     return (
@@ -39,7 +39,7 @@ function CircularProgressWithLabel(
     );
 }
 
-export default function CircularStatic() {
+export default function CircularProgressWithLabel() {
     const [ sec, setSec ] = React.useState(3);
     const progress: number = sec * 33;
 
@@ -52,7 +52,7 @@ export default function CircularStatic() {
         };
     }, []);
 
-    return <CircularProgressWithLabel
+    return <CircularProgressWithLabelComponent
         value={progress}
         sec={sec} />;
 }

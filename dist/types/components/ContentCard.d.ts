@@ -13,5 +13,5 @@ interface Props {
     content: ContentItem;
     type: LibraryContentType;
 }
-export default function StyledCard(props: Props): JSX.Element;
+export default function BaseCard(props: Props): JSX.Element;
 export {};

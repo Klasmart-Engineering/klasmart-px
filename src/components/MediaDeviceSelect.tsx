@@ -12,7 +12,7 @@ import {
 } from "@styled-icons/material";
 import React from "react";
 import { FormattedMessage } from "react-intl";
-import StyledIcon from "./styled/styledIcon";
+import BaseIcon from "./Base/Icon";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -67,7 +67,7 @@ export default function MediaDeviceSelect(props: Props) {
                 IconComponent={
                     deviceType === `video`
                         ? () => (
-                            <StyledIcon
+                            <BaseIcon
                                 icon={<CameraIcon />}
                                 size="xlarge"
                                 color={disabled ? `disabled` : `primary`}
@@ -75,7 +75,7 @@ export default function MediaDeviceSelect(props: Props) {
                         )
                         : // <CameraIcon size="2rem" color={disabled ? "disabled" : "primary"} />
                         () => (
-                            <StyledIcon
+                            <BaseIcon
                                 icon={<MicIcon />}
                                 size="xlarge"
                                 color={disabled ? `disabled` : `primary`}

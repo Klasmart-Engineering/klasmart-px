@@ -6,9 +6,12 @@ const nodeExternals = require(`webpack-node-externals`);
 module.exports = {
     mode: `production`,
     target: `node`,
-    entry: `./src/index.ts`,
+    entry: {
+        main: `./src/index.ts`,
+        utils: `./src/utils/index.ts`,
+    },
     output: {
-        filename: `main.js`,
+        filename: `[name].js`,
         path: path.resolve(__dirname, `dist`),
         libraryTarget: `umd`,
         library: `kidsloop-px`,
@@ -68,9 +71,5 @@ module.exports = {
         ],
     },
     plugins: [ new CleanWebpackPlugin(), new ForkTsCheckerWebpackPlugin() ],
-    externals: [
-        nodeExternals({
-            allowlist: [ `node-source-han-sans-sc`, `typeface-nanum-square-round` ],
-        }),
-    ],
+    externals: [ nodeExternals() ],
 };

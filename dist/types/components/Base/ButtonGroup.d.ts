@@ -11,5 +11,5 @@ interface Props extends ButtonProps {
         label: string;
     }>;
 }
-export default function StyledButtonGroup(props: Props): JSX.Element;
+export default function BaseButtonGroup(props: Props): JSX.Element;
 export {};
