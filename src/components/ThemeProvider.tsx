@@ -4,9 +4,9 @@ import {
     Theme,
 } from "@material-ui/core";
 import { PaletteOptions } from "@material-ui/core/styles/createPalette";
-import "node-source-han-sans-sc/SourceHanSansSC-Regular-all.css";
-import "typeface-nanum-square-round";
-import "../assets/styles/index.min.css";
+// import "node-source-han-sans-sc/SourceHanSansSC-Regular-all.css";
+// import "typeface-nanum-square-round";
+// import "../assets/styles/index.min.css";
 
 export default function ThemeProvider(languageCode: string, themeMode: string) {
     function setTypography(languageCode: string) {

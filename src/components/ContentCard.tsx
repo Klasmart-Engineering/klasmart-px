@@ -154,8 +154,9 @@ export default function ContentCard(props: Props) {
 
     return (
         <Card
+            className={[ className, classes.card ].join(` `)}
             {...other}
-            className={[ className, classes.card ].join(` `)}>
+        >
             <CardActionArea
                 className={`${classes.cardActionArea} ${checkbox?.checked ? `selected` : ``}`}
                 onClick={onClick}>

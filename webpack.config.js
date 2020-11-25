@@ -1,6 +1,7 @@
 const path = require(`path`);
-const ForkTsCheckerWebpackPlugin = require(`fork-ts-checker-webpack-plugin`);
 const { CleanWebpackPlugin } = require(`clean-webpack-plugin`);
+const CopyPlugin = require(`copy-webpack-plugin`);
+const ForkTsCheckerWebpackPlugin = require(`fork-ts-checker-webpack-plugin`);
 const nodeExternals = require(`webpack-node-externals`);
 
 module.exports = {
@@ -65,13 +66,21 @@ module.exports = {
     resolve: {
         extensions: [
             `.js`,
+            `.ts`,
             `.jsx`,
             `.tsx`,
-            `.ts`,
-            `.css`,
-            `.ttf`,
         ],
     },
-    plugins: [ new CleanWebpackPlugin(), new ForkTsCheckerWebpackPlugin() ],
+    plugins: [
+        new CleanWebpackPlugin(), new ForkTsCheckerWebpackPlugin(),
+        // new CopyPlugin({
+        //     patterns: [
+        //         {
+        //             from: `src/assets`,
+        //             to: `assets`,
+        //         },
+        //     ],
+        // }),
+    ],
     externals: [ nodeExternals() ],
 };

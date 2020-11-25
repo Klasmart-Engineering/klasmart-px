@@ -1,17 +1,25 @@
-/// <reference types="react" />
-interface ContentItem {
-    published: boolean;
-    contentId: string;
-    description: string;
-    link: string;
-    image: string;
+import { CardProps, SvgIconProps } from "@material-ui/core";
+import React, { ChangeEvent } from "react";
+declare type LibraryAssetType = "lessonPlan" | "lessonMaterial";
+interface CheckboxItem {
+    checked: boolean;
+    onChange: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+}
+export interface ActionItem {
+    label: string;
+    color?: `inherit` | `disabled` | `primary` | `secondary` | `action` | `error`;
+    icon: React.ReactElement<SvgIconProps>;
+    onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+}
+interface Props extends Omit<CardProps, "onClick"> {
+    actions?: ActionItem[];
+    checkbox?: CheckboxItem;
+    author: string;
     title: string;
-    type?: "lesson-plan" | "lesson-material" | undefined;
+    description: string;
+    imageUrl: string;
+    assetType?: LibraryAssetType;
+    onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
 }
-declare type LibraryContentType = "OwnedContent" | "Marketplace";
-interface Props {
-    content: ContentItem;
-    type: LibraryContentType;
-}
-export default function BaseCard(props: Props): JSX.Element;
+export default function ContentCard(props: Props): JSX.Element;
 export {};
