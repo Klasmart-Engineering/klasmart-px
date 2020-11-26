@@ -12,5 +12,6 @@ export { default as StyledDialogAppBar } from "./components/Base/DialogAppBar";
 export { default as StyledFAB } from "./components/Base/FabButton";
 export { default as StyledIcon } from "./components/Base/Icon";
 export { default as StyledTextField } from "./components/Base/TextField";
-export { default as ThemeProvider } from "./components/ThemeProvider";
 export { default as ContentCard } from "./components/ContentCard";
+export { default as themeBuilder } from "./theme/builder";
+export { default as utils } from "./utils";

@@ -9,7 +9,7 @@
         "module": "commonjs",
         "noEmit": false,
         "noImplicitAny": true,
-        "outDir": "./dist/",
+        "outDir": "./dist",
         "removeComments": true,
         "rootDir": "./src",
         "skipLibCheck": true,

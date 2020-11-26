@@ -1,3 +1,10 @@
-export { default as nameToInitials } from './nameToInitials';
-export { default as stringToHslColor } from './stringToHslColor';
-export { default as sleep } from './sleep';
+import nameToInitials from './nameToInitials';
+import stringToHslColor from './stringToHslColor';
+import sleep from './sleep';
+declare const utils: {
+    nameToInitials: (name: string, maxLength?: number) => string;
+    stringToHslColor: (str: string, saturation?: number, light?: number) => string;
+    sleep: (ms: number) => Promise<void>;
+};
+export default utils;
+export { nameToInitials, stringToHslColor, sleep, };

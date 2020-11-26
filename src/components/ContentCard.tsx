@@ -30,9 +30,10 @@ import {
     nameToInitials,
     stringToHslColor,
 } from "../utils";
+// import MoreMenu from './Common/MoreMenu';
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles ({
+    createStyles({
         card: {
             position: `relative`,
         },
