@@ -24,18 +24,8 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: `babel-loader`,
-                    // options: {
-                    //     babelrc: true,
-                    // },
                 },
             },
-            // {
-            //     test: /\.(j|t)sx?$/i,
-            //     exclude: /node_modules/,
-            //     use: {
-            //         loader: `ts-loader`,
-            //     },
-            // },
             {
                 test: /\.css$/i,
                 use: [

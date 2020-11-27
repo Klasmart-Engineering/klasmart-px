@@ -4,12 +4,14 @@ module.exports = {
         commonjs: true,
         es6: true,
         node: true,
+        jest: true,
     },
     plugins: [
         `react`,
         `@typescript-eslint`,
         `putout`,
         `modules-newline`,
+        `jest`,
     ],
     extends: [
         `eslint:recommended`,
