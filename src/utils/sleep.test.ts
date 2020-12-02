@@ -8,7 +8,7 @@ const msArr = [
 ];
 describe(`sleep`, () => {
     for (const ms of msArr) {
-        test(`sleep for ${ms}ms`, async () => {
+        test(`sleep for ${ms} ms`, async () => {
             const start = Date.now();
             await sleep(ms);
             const diff = Date.now() - start;

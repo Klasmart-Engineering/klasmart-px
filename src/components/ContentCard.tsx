@@ -160,7 +160,9 @@ export default function ContentCard(props: Props) {
         >
             <CardActionArea
                 className={`${classes.cardActionArea} ${checkbox?.checked ? `selected` : ``}`}
-                onClick={onClick}>
+                data-testid="card-action-area"
+                onClick={onClick}
+            >
                 <CardMedia
                     component="img"
                     alt={`${title} Image`}
@@ -168,6 +170,7 @@ export default function ContentCard(props: Props) {
                     image={imageUrl}
                     title={`${title} Image`}
                     className={classes.cardMedia}
+                    data-testid="card-media"
                 />
             </CardActionArea>
             {checkbox && <>
@@ -175,7 +178,8 @@ export default function ContentCard(props: Props) {
                 <Checkbox
                     checked={checkbox.checked}
                     inputProps={{
-                        'aria-label': `${title} checkbox ${checkbox.checked ? `selected` : `deselected`}`,
+                        'aria-label': `checkbox ${checkbox.checked ? `selected` : `deselected`} ${title}`,
+                        role: `checkbox`,
                     }}
                     className={classes.checkbox}
                     onChange={checkbox.onChange}
@@ -249,8 +253,10 @@ export default function ContentCard(props: Props) {
                         title={action.label}
                     >
                         <IconButton
+                            aria-label={action.label}
                             size="small"
                             className={classes.actionButton}
+                            data-testid={`${i}-action-button`}
                             onClick={action.onClick}
                         >
                             {cloneElement(
