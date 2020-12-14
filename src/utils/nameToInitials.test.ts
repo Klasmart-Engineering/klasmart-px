@@ -17,5 +17,6 @@ describe(`nameToInitials`, () => {
         expect(nameToInitials(`OK Nice`, 2)).toBe(`OK`);
         expect(nameToInitials(`Sven Göran Eriksson`)).toBe(`SGE`);
         expect(nameToInitials(`SVEN GÖRAN ERIKSSON`)).toBe(`SGE`);
+        expect(nameToInitials(`Super-man's Home Kitchen`)).toBe(`SHK`);
     });
 });
