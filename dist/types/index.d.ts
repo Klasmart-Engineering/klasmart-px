@@ -11,6 +11,7 @@ export { default as BaseComboBox } from "./components/Base/ComboBox";
 export { default as BaseDialogAppBar } from "./components/Base/DialogAppBar";
 export { default as BaseFabButton } from "./components/Base/FabButton";
 export { default as BaseIcon } from "./components/Base/Icon";
+export { default as BaseTable } from "./components/Base/Table/Base";
 export { default as BaseTextField } from "./components/Base/TextField";
 export { default as ContentCard } from "./components/ContentCard";
 export { default as themeBuilder } from "./theme/builder";
