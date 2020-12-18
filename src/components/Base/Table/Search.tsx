@@ -2,6 +2,7 @@ import React from "react";
 import {
     Box,
     createStyles,
+    Divider,
     IconButton,
     makeStyles,
     TextField,
@@ -15,10 +16,8 @@ import {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            height: 53,
+            height: 52,
             position: `relative`,
-            borderBottom: `1px solid rgba(224, 224, 224, 1)`,
-            borderTop: `1px solid rgba(224, 224, 224, 1)`,
         },
         textField: {
             height: `100%`,
@@ -64,38 +63,40 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
     value: string;
     setValue: React.Dispatch<React.SetStateAction<string>>;
+    placeholder?: string;
 }
 
 export default function BaseTableSearch (props: Props) {
     const {
         value,
         setValue,
+        placeholder,
     } = props;
     const classes = useStyles();
-    // const debouncedSetValue = debounce((value) => setValue(value), debounceThreshold);
 
     return (
         <div className={classes.root}>
             <TextField
                 fullWidth
                 className={classes.textField}
-                placeholder="Search"
+                placeholder={placeholder ?? `Search`}
                 value={value}
                 onChange={(e) => setValue(e.currentTarget.value)}
             />
             <Box className={classes.iconRowContainer}>
                 <div className={classes.iconContainer}>
-                    <SearchIcon  />
+                    <SearchIcon color="action" />
                 </div>
                 {value &&
                     <IconButton
                         className={classes.actionIcon}
                         onClick={() => setValue(``)}
                     >
-                        <ClearIcon />
+                        <ClearIcon color="action" />
                     </IconButton>
                 }
             </Box>
+            <Divider />
         </div>
     );
 }

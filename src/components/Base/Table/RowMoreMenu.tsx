@@ -21,12 +21,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface RowAction<T> {
     label: string;
     icon?: React.ReactElement<SvgIconProps>;
-    onClick: ((event: React.MouseEvent<HTMLElement>, item: T) => void);
+    onClick: ((item: T) => void);
 }
 
 interface Props<T> {
-  actions: RowAction<T>[];
-  item: T;
+    actions: RowAction<T>[];
+    item: T;
 }
 
 export default function BaseTableRowMoreMenu<T>(props: Props<T>) {
@@ -68,11 +68,11 @@ export default function BaseTableRowMoreMenu<T>(props: Props<T>) {
             onClose={handleClose}
         >
             <MenuList>
-                { actions?.length && actions.map((action, i) =>
+                {actions?.length && actions.map((action, i) =>
                     <MenuItem
                         key={`menu-item-${i}`}
-                        onClick={(e) => {
-                            action.onClick(e, item);
+                        onClick={() => {
+                            action.onClick(item);
                             handleClose();
                         }}
                     >

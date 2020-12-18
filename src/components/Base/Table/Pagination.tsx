@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    rowsPerPageOptions?: Array<number | { value: number; label: string }>;
+    rowsPerPageOptions: Array<number | { value: number; label: string }>;
     count: number;
     page: number;
     rowsPerPage: number;
@@ -44,6 +44,8 @@ export default function BaseTablePagination (props: Props) {
         onChangeRowsPerPage,
     } = props;
 
+    const lastPage = Math.ceil(count / rowsPerPage) - 1;
+
     const actions = () => {
         const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
             onChangePage(event, 0);
@@ -58,7 +60,7 @@ export default function BaseTablePagination (props: Props) {
         };
 
         const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-            onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+            onChangePage(event, Math.max(0, lastPage));
         };
         return (
             <div className={classes.root}>
@@ -76,14 +78,14 @@ export default function BaseTablePagination (props: Props) {
                     {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
                 </IconButton>
                 <IconButton
-                    disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                    disabled={page >= lastPage}
                     aria-label="next page"
                     onClick={handleNextButtonClick}
                 >
                     {theme.direction === `rtl` ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
                 </IconButton>
                 <IconButton
-                    disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                    disabled={page >= lastPage}
                     aria-label="last page"
                     onClick={handleLastPageButtonClick}
                 >
@@ -95,15 +97,11 @@ export default function BaseTablePagination (props: Props) {
 
     return (
         <TablePagination
-            rowsPerPageOptions={rowsPerPageOptions ?? [
-                5,
-                10,
-                25,
-            ]}
+            rowsPerPageOptions={rowsPerPageOptions}
             component="div"
             count={count}
             rowsPerPage={rowsPerPage}
-            page={page}
+            page={Math.min(page, lastPage)}
             ActionsComponent={actions}
             onChangePage={onChangePage}
             onChangeRowsPerPage={onChangeRowsPerPage}

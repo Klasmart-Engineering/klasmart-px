@@ -5,8 +5,8 @@ import {
 } from "@material-ui/icons";
 import {
     Box,
-    Checkbox,
     createStyles,
+    fade,
     IconButton,
     makeStyles,
     TableCell,
@@ -17,11 +17,13 @@ import {
     Theme,
 } from "@material-ui/core";
 import BaseTableColumnSelector from "./ColumnSelector";
+import BaseTableCheckboxDropdown,
+{ CheckboxDropdownValue } from "./CheckboxDropdown";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
         },
         hoverHeader: {
             height: 53,
@@ -41,30 +43,33 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export type Order = "asc" | "desc";
+export type Align = TableCellProps["align"]
 
 export interface HeadCell<T> {
     id: Extract<keyof T, string>;
     label: string;
-    align: TableCellProps["align"];
+    align: Align;
     persistent?: boolean;
 }
 
 interface Props<T> {
     numSelected: number;
     onRequestSort: (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => void;
-    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
+    onSelectAllPageClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
     rowCount: number;
     selected: (keyof T)[];
     headCells: HeadCell<T>[];
     onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
+    hasSelectActions: boolean;
 }
 
 export default function BaseTableHead<T>(props: Props<T>) {
-    const classes = useStyles();
     const {
         onSelectAllClick,
+        onSelectAllPageClick,
         order,
         orderBy,
         numSelected,
@@ -73,7 +78,9 @@ export default function BaseTableHead<T>(props: Props<T>) {
         headCells,
         selected,
         onColumnChange,
+        hasSelectActions,
     } = props;
+    const classes = useStyles();
     const createSortHandler = (property: Extract<keyof T, string>) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
@@ -83,16 +90,16 @@ export default function BaseTableHead<T>(props: Props<T>) {
     return (
         <TableHead>
             <TableRow className={classes.container}>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        inputProps={{
-                            "aria-label": `select all desserts`,
-                        }}
-                        onChange={onSelectAllClick}
-                    />
-                </TableCell>
+                {hasSelectActions &&
+                    <TableCell padding="checkbox">
+                        <BaseTableCheckboxDropdown
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={rowCount > 0 && numSelected === rowCount}
+                            onSelectAllPageClick={onSelectAllPageClick}
+                            onSelectAllClick={onSelectAllClick}
+                        />
+                    </TableCell>
+                }
                 {headCells
                     .filter((headCell) => isSelected(headCell.id))
                     .map((headCell: HeadCell<T>) => {
@@ -101,6 +108,8 @@ export default function BaseTableHead<T>(props: Props<T>) {
                         } : {
                             paddingRight: 0,
                         };
+                        const flexDirection = headCell.align === `right` ? `row-reverse` : `row`;
+                        const isAlignCenter = headCell.align === `center`;
                         return <TableCell
                             key={headCell.id}
                             align={headCell.align}
@@ -111,18 +120,20 @@ export default function BaseTableHead<T>(props: Props<T>) {
                             <Box
                                 display="flex"
                                 justifyContent="space-between"
-                                flexDirection={headCell.align === `right` ? `row-reverse` : `row`}
+                                flexDirection={flexDirection}
                             >
+                                {isAlignCenter && <Box flex="1" />}
                                 <TableSortLabel
                                     active={orderBy === headCell.id}
-                                    direction={orderBy === headCell.id ? order : `asc`}
+                                    direction={order}
                                     style={{
-                                        flexDirection: headCell.align === `right` ? `row-reverse` : `row`,
+                                        flexDirection,
                                     }}
                                     onClick={createSortHandler(headCell.id)}
                                 >
                                     {headCell.label}
                                 </TableSortLabel>
+                                {isAlignCenter && <Box flex="1" />}
                                 <IconButton
                                     className={classes.removeButton}
                                     disabled={headCell.persistent}

@@ -2,6 +2,7 @@ import {
     Checkbox,
     createStyles,
     Divider,
+    fade,
     IconButton,
     List,
     ListItem,
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingTop: 0,
             paddingBottom: 0,
             minHeight: 56,
-            backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
         },
         title: {
             fontWeight: 600,

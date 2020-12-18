@@ -1,6 +1,7 @@
 import React,
 { cloneElement } from "react";
 import {
+    Button,
     createStyles,
     IconButton,
     lighten,
@@ -12,9 +13,14 @@ import {
     Typography,
 } from "@material-ui/core";
 import clsx from "clsx";
-import { Delete as DeleteIcon } from "@material-ui/icons";
 import { TableData } from "./Base";
 import BaseFabButton from "../FabButton";
+
+export interface ToolbarAction<T>{
+    label: string;
+    icon?: React.ReactElement<SvgIconProps>;
+    onClick: (data?: TableData<T>) => void;
+}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,13 +56,8 @@ interface Props<T> {
     title: string;
     primaryAction?: ToolbarAction<T>;
     secondaryActions?: ToolbarAction<T>[];
+    selectActions?: ToolbarAction<T>[];
     tableData: TableData<T>;
-}
-
-export interface ToolbarAction<T>{
-    label: string;
-    icon?: React.ReactElement<SvgIconProps>;
-    onClick: (event: React.MouseEvent<unknown>, data?: TableData<T>) => void;
 }
 
 export default function BaseTableToolbar<T>(props: Props<T>) {
@@ -66,6 +67,7 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
         title,
         primaryAction,
         secondaryActions,
+        selectActions,
         tableData,
     } = props;
 
@@ -85,11 +87,19 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                     >
                         {numSelected} selected
                     </Typography>
-                    <Tooltip title="Delete">
-                        <IconButton aria-label="delete">
-                            <DeleteIcon />
-                        </IconButton>
-                    </Tooltip>
+                    {selectActions?.map((action, i) =>
+                        <Tooltip
+                            key={`select-action-${i}`}
+                            title={action.label}
+                        >
+                            <IconButton
+                                color="primary"
+                                onClick={() => action.onClick(tableData)}
+                            >
+                                {action.icon}
+                            </IconButton>
+                        </Tooltip>,
+                    )}
                 </> :
                 <>
                     <Typography
@@ -101,20 +111,28 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                         {title}
                     </Typography>
                     {secondaryActions?.map((action, i) =>
-                        <Tooltip
-                            key={`secondary-action-${i}`}
-                            title={action.label}
-                        >
-                            <IconButton
-                                color="primary"
-                                onClick={(e) => action.onClick(e, tableData)}
+                        action.icon
+                            ? <Tooltip
+                                key={`secondary-action-${i}`}
+                                title={action.label}
                             >
-                                {action.icon}
-                            </IconButton>
-                        </Tooltip>,
+                                <IconButton
+                                    color="primary"
+                                    onClick={() => action.onClick(tableData)}
+                                >
+                                    {action.icon}
+                                </IconButton>
+                            </Tooltip>
+                            : <Button
+                                key={`secondary-action-${i}`}
+                                color="primary"
+                                onClick={() => action.onClick(tableData)}
+                            >
+                                {action.label}
+                            </Button>,
                     )}
                     {primaryAction &&
-                        <BaseFabButton onClick={(e) => primaryAction.onClick(e, tableData)}>
+                        <BaseFabButton onClick={() => primaryAction.onClick(tableData)}>
                             {primaryAction.icon && cloneElement(
                                 primaryAction.icon,
                                 {
