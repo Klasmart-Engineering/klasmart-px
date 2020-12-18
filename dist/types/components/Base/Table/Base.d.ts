@@ -23,6 +23,7 @@ interface Props<T> {
     order?: Order;
     groupBy?: keyof T;
     groups?: GroupSelectMenuItem<T>[];
+    subgroupBy?: T[keyof T];
     rowActions?: RowAction<T>[];
     rowBuilder: (data: T) => Record<keyof T, any>;
     rows: T[];

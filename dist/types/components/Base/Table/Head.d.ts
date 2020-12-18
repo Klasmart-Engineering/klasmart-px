@@ -21,6 +21,7 @@ interface Props<T> {
     headCells: HeadCell<T>[];
     onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
     hasSelectActions: boolean;
+    hasGroups: boolean;
 }
 export default function BaseTableHead<T>(props: Props<T>): JSX.Element;
 export {};
