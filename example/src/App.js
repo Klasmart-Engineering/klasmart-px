@@ -4,6 +4,7 @@ import { CenterAlignChildren, CircularProgressWithLabel, ContentCard, Copyright,
 import { Grid } from '@material-ui/core';
 import { Close as CloseIcon, Edit as EditIcon, Send as SendIcon } from '@material-ui/icons';
 import { useState } from 'react';
+import TableExample from './TableExample'
 
 function App() {
   const [ checkedA, setCheckedA ] = useState(false)
@@ -80,6 +81,9 @@ function App() {
                 onChange: () => setCheckedC(!checkedC),
               }}
             />
+          </Grid>
+          <Grid item xs={12}>
+            <TableExample />
           </Grid>
         </Grid>
       </main>
