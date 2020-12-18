@@ -64,6 +64,7 @@ interface Props<T> {
     headCells: HeadCell<T>[];
     onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
     hasSelectActions: boolean;
+    hasGroups: boolean;
 }
 
 export default function BaseTableHead<T>(props: Props<T>) {
@@ -79,6 +80,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
         selected,
         onColumnChange,
         hasSelectActions,
+        hasGroups,
     } = props;
     const classes = useStyles();
     const createSortHandler = (property: Extract<keyof T, string>) => (event: React.MouseEvent<unknown>) => {
@@ -93,6 +95,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
                 {hasSelectActions &&
                     <TableCell padding="checkbox">
                         <BaseTableCheckboxDropdown
+                            hasGroups={hasGroups}
                             indeterminate={numSelected > 0 && numSelected < rowCount}
                             checked={rowCount > 0 && numSelected === rowCount}
                             onSelectAllPageClick={onSelectAllPageClick}

@@ -83,6 +83,10 @@ const buildCellElement = (element: any) => {
 
 const getDistinct = (items: any[]) => [ ...Array.from(new Set(items)) ];
 
+const isValidGroup = <T,>(group: keyof T, groups?: GroupSelectMenuItem<T>[]) => !!(group && groups?.find((g) => g.id === group) ? group : undefined);
+
+const isValidSubgroup = <T,>(subgroup: T[keyof T], subgroups?: SubgroupTab<T>[]) => !!(subgroup && subgroups?.find((s) => s.id === subgroup) ? subgroup : undefined);
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -119,6 +123,7 @@ interface Props<T> {
     order?: Order;
     groupBy?: keyof T;
     groups?: GroupSelectMenuItem<T>[];
+    subgroupBy?: T[keyof T];
     rowActions?: RowAction<T>[];
     rowBuilder: (data: T) => Record<keyof T, any>;
     rows: T[];
@@ -142,6 +147,7 @@ export default function BaseTable<T>(props: Props<T>) {
         order,
         orderBy,
         groupBy,
+        subgroupBy,
         groups,
         rowBuilder,
         rows,
@@ -169,7 +175,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ orderBy_, setOrderBy ] = useState(orderBy ?? idField);
     const [ groupBy_, setGroupBy ] = useState(groupBy);
     const [ subgroups_, setSubgroups ] = useState<SubgroupTab<T>[]>();
-    const [ subgroupBy_, setSubgroupBy ] = useState<T[keyof T]>();
+    const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
     const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>([]);
     const [ selectedColumns_, setSelectedColumns ] = useState(getDistinct(selectedColumns.concat(persistentFields)));
     const [ page_, setPage ] = useState(0);
@@ -185,7 +191,7 @@ export default function BaseTable<T>(props: Props<T>) {
     ]);
 
     useEffect(() => {
-        const subgroupIds = groupBy_ ? [ ...new Set(filteredSortedRows.map(row => row[groupBy_])) ] : [];
+        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groups) ? [ ...new Set(rows.map(row => row[groupBy_])) ] : [];
         const subgroups = subgroupIds.map((id) => ({
             id,
             count: filteredSortedRows.filter(filterRowsBySubgroup(id, false)).length,
@@ -206,12 +212,17 @@ export default function BaseTable<T>(props: Props<T>) {
             setSelectedRows(newSelecteds);
             return;
         }
+        case `allPages`: {
+            const newSelecteds = filteredSortedGroupedRows.map((n) => n[idField]);
+            setSelectedRows(selectedRows_.concat(newSelecteds));
+            return;
+        }
         case `none`: {
             setSelectedRows([]);
             return;
         }
         case `page`: {
-            const selecteds = filteredSortedSlicedRows.map((n) => n[idField]);
+            const selecteds = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
             setSelectedRows(getDistinct(selectedRows_.concat(selecteds)));
             return;
         }
@@ -219,7 +230,7 @@ export default function BaseTable<T>(props: Props<T>) {
     };
 
     const handleSelectAllRowsPageClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selecteds = filteredSortedSlicedRows.map((n) => n[idField]);
+        const selecteds = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
         if (!event.target.checked) {
             setSelectedRows(selectedRows_.filter((rowId) => !(selecteds).includes(rowId)));
             return;
@@ -263,17 +274,18 @@ export default function BaseTable<T>(props: Props<T>) {
 
     const filterRowsBySearch = (row: T) => search_ ? rowIncludesSearch(search_, searchFields, row) : true;
     const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
-    const filterRowsBySubgroup = (subgroup?: T[keyof T], inclusive = true) => (row: T) => (subgroup && groupBy_) ? subgroup === row[groupBy_] : inclusive;
+    const filterRowsBySubgroup = (subgroup?: T[keyof T], inclusive = true) => (row: T) => (subgroup && groupBy_ && (!inclusive || isValidSubgroup(subgroup, subgroups_))) ? subgroup === row[groupBy_] : inclusive;
 
     const filteredColumns = columns.filter((headCell) => isColumnSelected(headCell.id));
     const filteredColumnIds = filteredColumns.map(({ id }) => id);
 
     const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_))
-        .filter(filterRowsBySearch)
-        .filter(filterRowsBySubgroup(subgroupBy_));
+        .filter(filterRowsBySearch);
+    const filteredSortedGroupedRows = filteredSortedRows.filter(filterRowsBySubgroup(subgroupBy_));
     const filteredSortedSelectedRows = filteredSortedRows.filter(filterRowsBySelected);
-    const filteredSortedSlicedRows = filteredSortedRows.slice(page_ * rowsPerPage_, page_ * rowsPerPage_ + rowsPerPage_);
-    const filteredSortedSlicedSelectedRows = filteredSortedSlicedRows.filter(filterRowsBySelected);
+    const filteredSortedGroupedSelectedRows = filteredSortedGroupedRows.filter(filterRowsBySelected);
+    const filteredSortedGroupedSlicedRows = filteredSortedGroupedRows.slice(page_ * rowsPerPage_, page_ * rowsPerPage_ + rowsPerPage_);
+    const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
     const hasSearchFields = !!searchFields?.length;
     const hasRowActions = !!rowActions?.length;
@@ -283,7 +295,7 @@ export default function BaseTable<T>(props: Props<T>) {
 
     const tableData: TableData<T> = {
         columns: filteredColumnIds,
-        rows: (filteredSortedSelectedRows.length === 0 ? filteredSortedRows : filteredSortedSelectedRows).map((row) => pick(row, filteredColumnIds)),
+        rows: (filteredSortedGroupedSelectedRows.length === 0 ? filteredSortedGroupedRows : filteredSortedGroupedSelectedRows).map((row) => pick(row, filteredColumnIds)),
         search: search_,
         order: order_,
         orderBy: orderBy_,
@@ -330,13 +342,14 @@ export default function BaseTable<T>(props: Props<T>) {
                 <TableContainer>
                     <Table>
                         <BaseTableHead
-                            numSelected={filteredSortedSlicedSelectedRows.length}
+                            numSelected={filteredSortedGroupedSlicedSelectedRows.length}
                             order={order_}
                             orderBy={orderBy_}
-                            rowCount={filteredSortedSlicedRows.length}
+                            rowCount={filteredSortedGroupedSlicedRows.length}
                             headCells={columns}
                             selected={selectedColumns_}
                             hasSelectActions={hasSelectActions}
+                            hasGroups={hasGroups}
                             onSelectAllClick={handleSelectAllRowsClick}
                             onSelectAllPageClick={handleSelectAllRowsPageClick}
                             onRequestSort={handleRequestSort}
@@ -357,7 +370,7 @@ export default function BaseTable<T>(props: Props<T>) {
                                     </TableCell>
                                 </TableRow>
                             }
-                            {filteredSortedSlicedRows.map((row, i) => {
+                            {filteredSortedGroupedSlicedRows.map((row, i) => {
                                 const isSelected = isRowSelected(row[idField]);
                                 const labelId = `enhanced-table-checkbox-${i}`;
                                 return (

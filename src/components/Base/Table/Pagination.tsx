@@ -101,7 +101,7 @@ export default function BaseTablePagination (props: Props) {
             component="div"
             count={count}
             rowsPerPage={rowsPerPage}
-            page={Math.min(page, lastPage)}
+            page={Math.max(0, Math.min(page, lastPage))}
             ActionsComponent={actions}
             onChangePage={onChangePage}
             onChangeRowsPerPage={onChangeRowsPerPage}

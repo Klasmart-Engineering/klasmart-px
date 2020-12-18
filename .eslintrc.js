@@ -94,6 +94,7 @@ module.exports = {
             },
         ],
         'comma-spacing': `off`, // turned off b/c '@typescript-eslint/comma-spacing' is enabled
+        'eol-last': [ `error`, `always` ],
         indent: [ `error`, 4 ],
         'linebreak-style': [ `error`, `unix` ],
         'no-trailing-spaces': `error`,

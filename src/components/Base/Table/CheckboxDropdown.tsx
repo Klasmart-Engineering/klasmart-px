@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export type CheckboxDropdownValue = "all" | "none" | "page"
+export type CheckboxDropdownValue = "all" | "allPages" | "none" | "page"
 
 export interface CheckboxDropdownAction {
     label: string;
@@ -34,24 +34,26 @@ export interface CheckboxDropdownAction {
 interface Props {
     indeterminate: boolean;
     checked: boolean;
+    hasGroups: boolean;
     onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
     onSelectAllPageClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function BaseTableCheckboxDropdown(props: Props) {
     const {
-        onSelectAllClick,
-        onSelectAllPageClick,
         indeterminate,
         checked,
+        hasGroups,
+        onSelectAllClick,
+        onSelectAllPageClick,
     } = props;
     const classes = useStyles();
     const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const actions: CheckboxDropdownAction[] = [
+    const standardActions: CheckboxDropdownAction[] = [
         {
             label: `All pages`,
-            value: `all`,
+            value: `allPages`,
         },
         {
             label: `This page`,
@@ -62,6 +64,13 @@ export default function BaseTableCheckboxDropdown(props: Props) {
             value: `none`,
         },
     ];
+    const actions: CheckboxDropdownAction[] = hasGroups ? [
+        {
+            label: `All groups & pages`,
+            value: `all`,
+        },
+        ...standardActions,
+    ] : standardActions;
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
