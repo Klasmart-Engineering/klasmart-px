@@ -360,7 +360,7 @@ export default function BaseTable<T>(props: Props<T>) {
                             columnCount={columnCount}
                         />
                         <TableBody>
-                            {filteredSortedRows.length === 0 &&
+                            {filteredSortedGroupedRows.length === 0 &&
                                 <TableRow tabIndex={-1}>
                                     <TableCell
                                         colSpan={columnCount}
