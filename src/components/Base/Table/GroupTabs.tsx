@@ -89,10 +89,6 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
     const [ groupBy_, setGroupBy ] = useState<"" | keyof T>(groupBy && groups.find((group) => group.id === groupBy) ? groupBy : ``);
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
 
-    console.log(`groupBy`, groupBy);
-    console.log(`subgroupBy`, subgroupBy);
-    console.log(`subgroups`, subgroups.length);
-
     // adjusting index+1 b/c "all"-tab is always index 0
     const subgroupIndex = 1 + subgroups.findIndex((subgroup) => subgroup.id === subgroupBy_) ?? 0;
 
