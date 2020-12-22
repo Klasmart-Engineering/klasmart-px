@@ -1,12 +1,10 @@
-import React,
-{ cloneElement } from "react";
+import React from "react";
 import {
     Button,
     createStyles,
     IconButton,
     lighten,
     makeStyles,
-    SvgIconProps,
     Theme,
     Toolbar,
     Tooltip,
@@ -14,13 +12,8 @@ import {
 } from "@material-ui/core";
 import clsx from "clsx";
 import { TableData } from "./Base";
-import BaseFabButton from "../FabButton";
-
-export interface ToolbarAction<T>{
-    label: string;
-    icon?: React.ReactElement<SvgIconProps>;
-    onClick: (data?: TableData<T>) => void;
-}
+import { SvgIconComponent } from "@material-ui/icons";
+import { BaseFabButton } from "../../../";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,27 +41,41 @@ const useStyles = makeStyles((theme: Theme) =>
         primaryActionIcon: {
             marginRight: theme.spacing(1),
         },
+        textButton: {
+            minWidth: `inherit`,
+        },
     }),
 );
 
+export interface ToolbarLocalization {
+    title?: string;
+    numSelected?: (num: number) => string;
+}
+
+export interface ToolbarAction<T>{
+    label: string;
+    icon?: SvgIconComponent;
+    onClick: (data: TableData<T>) => void;
+}
+
 interface Props<T> {
     numSelected: number;
-    title: string;
     primaryAction?: ToolbarAction<T>;
     secondaryActions?: ToolbarAction<T>[];
     selectActions?: ToolbarAction<T>[];
     tableData: TableData<T>;
+    localization?: ToolbarLocalization;
 }
 
 export default function BaseTableToolbar<T>(props: Props<T>) {
     const classes = useStyles();
     const {
         numSelected,
-        title,
         primaryAction,
         secondaryActions,
         selectActions,
         tableData,
+        localization,
     } = props;
 
     return (
@@ -85,20 +92,34 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                         variant="subtitle1"
                         component="div"
                     >
-                        {numSelected} selected
+                        {localization?.numSelected?.(numSelected) ?? `${numSelected} selected`}
                     </Typography>
                     {selectActions?.map((action, i) =>
-                        <Tooltip
-                            key={`select-action-${i}`}
-                            title={action.label}
-                        >
-                            <IconButton
+                        action.icon
+                            ? <Tooltip
+                                key={`select-action-${i}`}
+                                title={action.label}
+                            >
+                                <IconButton
+                                    color="primary"
+                                    onClick={() => action.onClick(tableData)}
+                                >
+                                    {action.icon && <action.icon />}
+                                </IconButton>
+                            </Tooltip>
+                            : <Button
+                                key={`select-action-${i}`}
                                 color="primary"
+                                className={classes.textButton}
                                 onClick={() => action.onClick(tableData)}
                             >
-                                {action.icon}
-                            </IconButton>
-                        </Tooltip>,
+                                <Typography
+                                    noWrap
+                                    variant="button"
+                                >
+                                    {action.label}
+                                </Typography>
+                            </Button>,
                     )}
                 </> :
                 <>
@@ -108,7 +129,7 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                         component="div"
                         className={classes.title}
                     >
-                        {title}
+                        {localization?.title ?? `Table`}
                     </Typography>
                     {secondaryActions?.map((action, i) =>
                         action.icon
@@ -120,12 +141,13 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                                     color="primary"
                                     onClick={() => action.onClick(tableData)}
                                 >
-                                    {action.icon}
+                                    {action.icon && <action.icon />}
                                 </IconButton>
                             </Tooltip>
                             : <Button
                                 key={`secondary-action-${i}`}
                                 color="primary"
+                                className={classes.textButton}
                                 onClick={() => action.onClick(tableData)}
                             >
                                 {action.label}
@@ -133,12 +155,7 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                     )}
                     {primaryAction &&
                         <BaseFabButton onClick={() => primaryAction.onClick(tableData)}>
-                            {primaryAction.icon && cloneElement(
-                                primaryAction.icon,
-                                {
-                                    className: classes.primaryActionIcon,
-                                },
-                            )}
+                            {primaryAction.icon && <primaryAction.icon className={classes.primaryActionIcon} />}
                             {primaryAction.label}
                         </BaseFabButton>
                     }

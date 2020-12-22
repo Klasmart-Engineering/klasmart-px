@@ -1,13 +1,21 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { TableCellProps } from "@material-ui/core";
-import { CheckboxDropdownValue } from "./CheckboxDropdown";
+import { ColumnSelectorLocalization } from "./ColumnSelector";
+import { CheckboxDropdownLocalization, CheckboxDropdownValue } from "./CheckboxDropdown";
 export declare type Order = "asc" | "desc";
 export declare type Align = TableCellProps["align"];
 export interface HeadCell<T> {
     id: Extract<keyof T, string>;
     label: string;
-    align: Align;
+    align?: Align;
     persistent?: boolean;
+    searchable?: boolean;
+    disableSort?: boolean;
+    hidden?: boolean;
+    render?: (row: T) => ReactElement | ReactElement[];
+}
+export interface HeadLocalization {
+    hideColumnButton?: string;
 }
 interface Props<T> {
     numSelected: number;
@@ -19,9 +27,12 @@ interface Props<T> {
     rowCount: number;
     selected: (keyof T)[];
     headCells: HeadCell<T>[];
-    onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
     hasSelectActions: boolean;
     hasGroups: boolean;
+    checkboxDropdownLocalization?: CheckboxDropdownLocalization;
+    columnSelectorLocalization?: ColumnSelectorLocalization;
+    localization?: HeadLocalization;
+    onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
 }
 export default function BaseTableHead<T>(props: Props<T>): JSX.Element;
 export {};

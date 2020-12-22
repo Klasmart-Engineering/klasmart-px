@@ -6,11 +6,14 @@ import {
     MenuItem,
     MenuList,
     Popover,
-    SvgIconProps,
     Theme,
+    Tooltip,
     Typography,
 } from "@material-ui/core";
-import { MoreVert as MoreVertIcon } from "@material-ui/icons";
+import {
+    MoreVert as MoreVertIcon,
+    SvgIconComponent,
+} from "@material-ui/icons";
 import React,
 { useState } from "react";
 
@@ -20,19 +23,25 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface RowAction<T> {
     label: string;
-    icon?: React.ReactElement<SvgIconProps>;
+    icon?: SvgIconComponent;
     onClick: ((item: T) => void);
+}
+
+export interface RowMoreMenuLocalization {
+    moreMenuButton?: string;
 }
 
 interface Props<T> {
     actions: RowAction<T>[];
     item: T;
+    localization?: RowMoreMenuLocalization;
 }
 
 export default function BaseTableRowMoreMenu<T>(props: Props<T>) {
     const {
         actions,
         item,
+        localization,
     } = props;
     const classes = useStyles();
     const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
@@ -47,12 +56,15 @@ export default function BaseTableRowMoreMenu<T>(props: Props<T>) {
     };
 
     return <>
-        <IconButton
-            aria-label="More menu button"
-            aria-haspopup="true"
-            onClick={handleClick}>
-            <MoreVertIcon />
-        </IconButton>
+        <Tooltip title={localization?.moreMenuButton ?? `More actions`}>
+            <IconButton
+                aria-label={localization?.moreMenuButton ?? `More actions`}
+                aria-haspopup="true"
+                onClick={handleClick}
+            >
+                <MoreVertIcon />
+            </IconButton>
+        </Tooltip>
         <Popover
             keepMounted
             anchorEl={anchorEl}
@@ -78,7 +90,7 @@ export default function BaseTableRowMoreMenu<T>(props: Props<T>) {
                     >
                         {action.icon &&
                             <ListItemIcon>
-                                {action.icon}
+                                <action.icon />
                             </ListItemIcon>
                         }
                         <Typography variant="body2">{action.label}</Typography>

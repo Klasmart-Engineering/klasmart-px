@@ -4,10 +4,17 @@ export interface CheckboxDropdownAction {
     label: string;
     value: CheckboxDropdownValue;
 }
+export interface CheckboxDropdownLocalization {
+    allGroupsPages?: string;
+    allPages?: string;
+    thisPage?: string;
+    none?: string;
+}
 interface Props {
     indeterminate: boolean;
     checked: boolean;
     hasGroups: boolean;
+    localization?: CheckboxDropdownLocalization;
     onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
     onSelectAllPageClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }

@@ -31,10 +31,18 @@ export interface CheckboxDropdownAction {
     value: CheckboxDropdownValue;
 }
 
+export interface CheckboxDropdownLocalization {
+    allGroupsPages?: string;
+    allPages?: string;
+    thisPage?: string;
+    none?: string;
+}
+
 interface Props {
     indeterminate: boolean;
     checked: boolean;
     hasGroups: boolean;
+    localization?: CheckboxDropdownLocalization;
     onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
     onSelectAllPageClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -44,6 +52,7 @@ export default function BaseTableCheckboxDropdown(props: Props) {
         indeterminate,
         checked,
         hasGroups,
+        localization,
         onSelectAllClick,
         onSelectAllPageClick,
     } = props;
@@ -52,21 +61,21 @@ export default function BaseTableCheckboxDropdown(props: Props) {
     const open = Boolean(anchorEl);
     const standardActions: CheckboxDropdownAction[] = [
         {
-            label: `All pages`,
+            label: localization?.allPages ?? `All pages`,
             value: `allPages`,
         },
         {
-            label: `This page`,
+            label: localization?.thisPage ?? `This page`,
             value: `page`,
         },
         {
-            label: `None`,
+            label: localization?.none ?? `None`,
             value: `none`,
         },
     ];
     const actions: CheckboxDropdownAction[] = hasGroups ? [
         {
-            label: `All groups & pages`,
+            label: localization?.allGroupsPages ?? `All groups & pages`,
             value: `all`,
         },
         ...standardActions,

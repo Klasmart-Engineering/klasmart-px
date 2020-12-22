@@ -65,12 +65,19 @@ export interface SubgroupTab<T> {
     count: number;
 }
 
+export interface GroupTabsLocalization {
+    selectLabel?: string;
+    selectNone?: string;
+    tabAll?: string;
+}
+
 interface Props<T> {
     allCount: number;
     groupBy?: keyof T;
     groups?: GroupSelectMenuItem<T>[];
     subgroupBy?: T[keyof T];
     subgroups?: SubgroupTab<T>[];
+    localization?: GroupTabsLocalization;
     onSelectGroup: (value: keyof T | undefined) => void;
     onSelectSubgroup: (value: T[keyof T] | undefined) => void;
 }
@@ -82,6 +89,7 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
         groups = [],
         subgroupBy,
         subgroups = [],
+        localization,
         onSelectGroup,
         onSelectSubgroup,
     } = props;
@@ -96,7 +104,7 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
 
     const handleSubgroupChange = (event: React.ChangeEvent<unknown>, value: number) => {
         const newSubgroupIndex = value - 1; // "all"-tab is always index 0 so need to subtract by 1
-        const newSubgroup = subgroups?.length ? subgroups[newSubgroupIndex] : undefined;
+        const newSubgroup = subgroups[newSubgroupIndex];
         setSubgroupBy(newSubgroup?.id);
         onSelectSubgroup(newSubgroup?.id);
     };
@@ -134,10 +142,10 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
                     onChange={handleSubgroupChange}
                 >
                     <Tab
-                        label={`All (${groupBy_ ? allSubgroupCount : allCount})`}
+                        label={`${localization?.tabAll ?? `All`} (${groupBy_ ? allSubgroupCount : allCount})`}
                         className={classes.tabRoot}
                     />
-                    {subgroups?.map((subgroup, i) =>
+                    {subgroups.map((subgroup, i) =>
                         <Tab
                             key={`subgroup-${i}`}
                             className={classes.tabRoot}
@@ -156,12 +164,12 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
                                 variant="body1"
                                 className={classes.selectPlaceholderText}
                             >
-                                Group by
+                                {localization?.selectLabel ?? `Group by`}
                             </Typography>
                     }
                     onChange={handleGroupChange}
                 >
-                    <MenuItem value="">No group</MenuItem>
+                    <MenuItem value="">{localization?.selectNone ?? `No group`}</MenuItem>
                     {groups?.map((group, i) =>
                         <MenuItem
                             key={`group-${i}`}

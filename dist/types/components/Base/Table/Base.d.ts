@@ -1,10 +1,28 @@
 /// <reference types="react" />
-import { ToolbarAction } from "./Toolbar";
-import { HeadCell, Order } from "./Head";
-import { RowAction } from "./RowMoreMenu";
-import { GroupSelectMenuItem } from "./GroupTabs";
+import { ToolbarAction, ToolbarLocalization } from "./Toolbar";
+import { HeadCell, HeadLocalization, Order } from "./Head";
+import { RowAction, RowMoreMenuLocalization } from "./RowMoreMenu";
+import { PaginationLocalization } from "./Pagination";
+import { GroupSelectMenuItem, GroupTabsLocalization } from "./GroupTabs";
+import { CheckboxDropdownLocalization } from "./CheckboxDropdown";
+import { SearchLocalization } from "./Search";
+import { ColumnSelectorLocalization } from "./ColumnSelector";
+export interface TableLocalization {
+    toolbar?: ToolbarLocalization;
+    search?: SearchLocalization;
+    groupTabs?: GroupTabsLocalization;
+    head?: HeadLocalization;
+    columnSelector?: ColumnSelectorLocalization;
+    checkboxDropdown?: CheckboxDropdownLocalization;
+    body?: TableBodyLocalization;
+    rowMoreMenu?: RowMoreMenuLocalization;
+    pagination?: PaginationLocalization;
+}
+export interface TableBodyLocalization {
+    noData?: string;
+}
 export interface TableData<T> {
-    columns: (keyof T)[];
+    columns: string[];
     rows: Partial<T>[];
     search: string;
     orderBy: keyof T;
@@ -15,9 +33,7 @@ export interface TableData<T> {
     rowsPerPage: number;
 }
 interface Props<T> {
-    title: string;
     columns: HeadCell<T>[];
-    selectedColumns?: (keyof T)[];
     idField: Extract<keyof T, string>;
     orderBy?: Extract<keyof T, string>;
     order?: Order;
@@ -25,7 +41,6 @@ interface Props<T> {
     groups?: GroupSelectMenuItem<T>[];
     subgroupBy?: T[keyof T];
     rowActions?: RowAction<T>[];
-    rowBuilder: (data: T) => Record<keyof T, any>;
     rows: T[];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | {
@@ -33,11 +48,11 @@ interface Props<T> {
         label: string;
     }>;
     search?: string;
-    searchFields?: (keyof T)[];
     primaryAction?: ToolbarAction<T>;
     secondaryActions?: ToolbarAction<T>[];
     selectActions?: ToolbarAction<T>[];
     loading?: boolean;
+    localization?: TableLocalization;
     onChange?: (data: TableData<T>) => void;
 }
 export default function BaseTable<T>(props: Props<T>): JSX.Element;

@@ -5,6 +5,7 @@ import {
     makeStyles,
     TablePagination,
     Theme,
+    Tooltip,
     useTheme,
 } from "@material-ui/core";
 import {
@@ -23,11 +24,21 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+export interface PaginationLocalization {
+    rowsPerPage?: string;
+    fromToMax?: (from: number, to: number, max: number) => string;
+    prevPage?: string;
+    nextPage?: string;
+    firstPage?: string;
+    lastPage?: string;
+}
+
 interface Props {
     rowsPerPageOptions: Array<number | { value: number; label: string }>;
     count: number;
     page: number;
     rowsPerPage: number;
+    localization?: PaginationLocalization;
     onChangePage: (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
     onChangeRowsPerPage?: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 }
@@ -40,6 +51,7 @@ export default function BaseTablePagination (props: Props) {
         count,
         page,
         rowsPerPage,
+        localization,
         onChangePage,
         onChangeRowsPerPage,
     } = props;
@@ -64,33 +76,49 @@ export default function BaseTablePagination (props: Props) {
         };
         return (
             <div className={classes.root}>
-                <IconButton
-                    disabled={page === 0}
-                    aria-label="first page"
-                    onClick={handleFirstPageButtonClick}
-                >
-                    {theme.direction === `rtl` ? <LastPageIcon /> : <FirstPageIcon />}
-                </IconButton>
-                <IconButton
-                    disabled={page === 0}
-                    aria-label="previous page"
-                    onClick={handleBackButtonClick}>
-                    {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
-                </IconButton>
-                <IconButton
-                    disabled={page >= lastPage}
-                    aria-label="next page"
-                    onClick={handleNextButtonClick}
-                >
-                    {theme.direction === `rtl` ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
-                </IconButton>
-                <IconButton
-                    disabled={page >= lastPage}
-                    aria-label="last page"
-                    onClick={handleLastPageButtonClick}
-                >
-                    {theme.direction === `rtl` ? <FirstPageIcon /> : <LastPageIcon />}
-                </IconButton>
+                <Tooltip title={localization?.firstPage ?? `First page`}>
+                    <span>
+                        <IconButton
+                            disabled={page === 0}
+                            aria-label="first page"
+                            onClick={handleFirstPageButtonClick}
+                        >
+                            {theme.direction === `rtl` ? <LastPageIcon /> : <FirstPageIcon />}
+                        </IconButton>
+                    </span>
+                </Tooltip>
+                <Tooltip title={localization?.prevPage ?? `Previous page`}>
+                    <span>
+                        <IconButton
+                            disabled={page === 0}
+                            aria-label="previous page"
+                            onClick={handleBackButtonClick}>
+                            {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
+                        </IconButton>
+                    </span>
+                </Tooltip>
+                <Tooltip title={localization?.nextPage ?? `Next page`}>
+                    <span>
+                        <IconButton
+                            disabled={page >= lastPage}
+                            aria-label="next page"
+                            onClick={handleNextButtonClick}
+                        >
+                            {theme.direction === `rtl` ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
+                        </IconButton>
+                    </span>
+                </Tooltip>
+                <Tooltip title={localization?.lastPage ?? `Last page`}>
+                    <span>
+                        <IconButton
+                            disabled={page >= lastPage}
+                            aria-label="last page"
+                            onClick={handleLastPageButtonClick}
+                        >
+                            {theme.direction === `rtl` ? <FirstPageIcon /> : <LastPageIcon />}
+                        </IconButton>
+                    </span>
+                </Tooltip>
             </div>
         );
     };
@@ -98,6 +126,10 @@ export default function BaseTablePagination (props: Props) {
     return (
         <TablePagination
             rowsPerPageOptions={rowsPerPageOptions}
+            labelRowsPerPage={localization?.rowsPerPage}
+            labelDisplayedRows={localization?.fromToMax ? (({
+                from, to, count,
+            }) => localization?.fromToMax?.(from, to, count)) : undefined}
             component="div"
             count={count}
             rowsPerPage={rowsPerPage}

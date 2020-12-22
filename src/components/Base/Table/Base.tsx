@@ -17,24 +17,38 @@ import {
     Theme,
 } from "@material-ui/core";
 import BaseTableToolbar,
-{ ToolbarAction } from "./Toolbar";
+{
+    ToolbarAction,
+    ToolbarLocalization,
+} from "./Toolbar";
 import BaseTableSearch from "./Search";
 import BaseTableHead,
 {
     HeadCell,
+    HeadLocalization,
     Order,
 } from "./Head";
 import BaseTableLoading from "./Loading";
 import BaseTableRowMoreMenu,
-{ RowAction } from "./RowMoreMenu";
-import BaseTablePagination from "./Pagination";
+{
+    RowAction,
+    RowMoreMenuLocalization,
+} from "./RowMoreMenu";
+import BaseTablePagination,
+{ PaginationLocalization } from "./Pagination";
 import BaseTableGroupTabs,
 {
     GroupSelectMenuItem,
+    GroupTabsLocalization,
     SubgroupTab,
 } from "./GroupTabs";
 import { pick } from "lodash";
-import { CheckboxDropdownValue } from "./CheckboxDropdown";
+import {
+    CheckboxDropdownLocalization,
+    CheckboxDropdownValue,
+} from "./CheckboxDropdown";
+import { SearchLocalization } from "./Search";
+import { ColumnSelectorLocalization } from "./ColumnSelector";
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -68,19 +82,6 @@ function rowIncludesSearch <T>(searchValue: string, searchFieldValues: (keyof T)
     });
 }
 
-const buildCell = (element: any) => {
-    const isArray = Array.isArray(element);
-    if (isArray) return (element as any[]).map((data) => buildCellElement(data)).join(`, `);
-    return buildCellElement(element);
-};
-
-const buildCellElement = (element: any) => {
-    const isElement = !!element.$$typeof; // react element
-    const isString = typeof element === `string`;
-    if (isElement || isString) return element;
-    return JSON.stringify(element);
-};
-
 const getDistinct = (items: any[]) => [ ...Array.from(new Set(items)) ];
 
 const isValidGroup = <T,>(group: keyof T, groups?: GroupSelectMenuItem<T>[]) => !!(group && groups?.find((g) => g.id === group) ? group : undefined);
@@ -102,8 +103,24 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+export interface TableLocalization {
+    toolbar?: ToolbarLocalization;
+    search?: SearchLocalization;
+    groupTabs?: GroupTabsLocalization;
+    head?: HeadLocalization;
+    columnSelector?: ColumnSelectorLocalization;
+    checkboxDropdown?: CheckboxDropdownLocalization;
+    body?: TableBodyLocalization;
+    rowMoreMenu?: RowMoreMenuLocalization;
+    pagination?: PaginationLocalization;
+}
+
+export interface TableBodyLocalization {
+    noData?: string;
+}
+
 export interface TableData<T> {
-    columns: (keyof T)[];
+    columns: string[];
     rows: Partial<T>[];
     search: string;
     orderBy: keyof T;
@@ -115,9 +132,7 @@ export interface TableData<T> {
 }
 
 interface Props<T> {
-    title: string;
     columns: HeadCell<T>[];
-    selectedColumns?: (keyof T)[];
     idField: Extract<keyof T, string>;
     orderBy?: Extract<keyof T, string>;
     order?: Order;
@@ -125,31 +140,27 @@ interface Props<T> {
     groups?: GroupSelectMenuItem<T>[];
     subgroupBy?: T[keyof T];
     rowActions?: RowAction<T>[];
-    rowBuilder: (data: T) => Record<keyof T, any>;
     rows: T[];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | { value: number; label: string }>;
     search?: string;
-    searchFields?: (keyof T)[];
     primaryAction?: ToolbarAction<T>;
     secondaryActions?: ToolbarAction<T>[];
     selectActions?: ToolbarAction<T>[];
     loading?: boolean;
+    localization?: TableLocalization;
     onChange?: (data: TableData<T>) => void;
 }
 
 export default function BaseTable<T>(props: Props<T>) {
     const {
-        title,
         columns,
         idField,
-        selectedColumns = columns.map(({ id }) => id),
         order,
         orderBy,
         groupBy,
         subgroupBy,
         groups,
-        rowBuilder,
         rows,
         rowsPerPage,
         rowsPerPageOptions = [
@@ -158,18 +169,20 @@ export default function BaseTable<T>(props: Props<T>) {
             50,
         ],
         search = ``,
-        searchFields = [],
         primaryAction,
         rowActions,
         secondaryActions,
         selectActions,
         loading,
+        localization,
         onChange,
     } = props;
 
     const classes = useStyles();
 
-    const persistentFields = columns.filter(({ persistent }) => persistent).map(({ id }) => id);
+    const persistentColumnIds = columns.filter(({ persistent }) => persistent).map(({ id }) => id);
+    const searchableColumnIds = columns.filter(({ searchable }) => searchable).map(({ id }) => id);
+    const selectedColumnIds = columns.filter(({ hidden }) => !hidden).map(({ id }) => id);
 
     const [ order_, setOrder ] = useState(order ?? `asc`);
     const [ orderBy_, setOrderBy ] = useState(orderBy ?? idField);
@@ -177,7 +190,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ subgroups_, setSubgroups ] = useState<SubgroupTab<T>[]>();
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
     const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>([]);
-    const [ selectedColumns_, setSelectedColumns ] = useState(getDistinct(selectedColumns.concat(persistentFields)));
+    const [ selectedColumns_, setSelectedColumns ] = useState(getDistinct(selectedColumnIds.concat(persistentColumnIds)));
     const [ page_, setPage ] = useState(0);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage ?? 10);
     const [ search_, setSearch ] = useState(search);
@@ -197,7 +210,11 @@ export default function BaseTable<T>(props: Props<T>) {
             count: filteredSortedRows.filter(filterRowsBySubgroup(id, false)).length,
         }));
         setSubgroups(subgroups);
-    }, [ search_, groupBy_ ]);
+    }, [
+        rows,
+        groupBy_,
+        search_,
+    ]);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => {
         const isAsc = orderBy_ === property && order_ === `asc`;
@@ -272,7 +289,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const isRowSelected = (idFieldValue: T[Extract<keyof T, string>]) => selectedRows_.indexOf(idFieldValue) !== -1;
     const isColumnSelected = (column: keyof T) => selectedColumns_.indexOf(column) !== -1;
 
-    const filterRowsBySearch = (row: T) => search_ ? rowIncludesSearch(search_, searchFields, row) : true;
+    const filterRowsBySearch = (row: T) => search_ ? rowIncludesSearch(search_, searchableColumnIds, row) : true;
     const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
     const filterRowsBySubgroup = (subgroup?: T[keyof T], inclusive = true) => (row: T) => (subgroup && groupBy_ && (!inclusive || isValidSubgroup(subgroup, subgroups_))) ? subgroup === row[groupBy_] : inclusive;
 
@@ -287,7 +304,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const filteredSortedGroupedSlicedRows = filteredSortedGroupedRows.slice(page_ * rowsPerPage_, page_ * rowsPerPage_ + rowsPerPage_);
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
-    const hasSearchFields = !!searchFields?.length;
+    const hasSearchColumns = !!searchableColumnIds?.length;
     const hasRowActions = !!rowActions?.length;
     const hasSelectActions = !!selectActions?.length;
     const hasGroups = !!groups?.length;
@@ -314,18 +331,19 @@ export default function BaseTable<T>(props: Props<T>) {
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <BaseTableToolbar
-                    title={title}
                     primaryAction={primaryAction}
                     secondaryActions={secondaryActions}
                     selectActions={selectActions}
                     numSelected={filteredSortedSelectedRows.length}
                     tableData={tableData}
+                    localization={localization?.toolbar}
                 />
                 <Divider />
-                {hasSearchFields &&
+                {hasSearchColumns &&
                     <BaseTableSearch
                         value={search_}
                         setValue={setSearch}
+                        localization={localization?.search}
                     />
                 }
                 {hasGroups &&
@@ -335,6 +353,7 @@ export default function BaseTable<T>(props: Props<T>) {
                         groups={groups}
                         subgroupBy={subgroupBy_}
                         subgroups={subgroups_}
+                        localization={localization?.groupTabs}
                         onSelectGroup={setGroupBy}
                         onSelectSubgroup={setSubgroupBy}
                     />
@@ -350,6 +369,9 @@ export default function BaseTable<T>(props: Props<T>) {
                             selected={selectedColumns_}
                             hasSelectActions={hasSelectActions}
                             hasGroups={hasGroups}
+                            localization={localization?.head}
+                            checkboxDropdownLocalization={localization?.checkboxDropdown}
+                            columnSelectorLocalization={localization?.columnSelector}
                             onSelectAllClick={handleSelectAllRowsClick}
                             onSelectAllPageClick={handleSelectAllRowsPageClick}
                             onRequestSort={handleRequestSort}
@@ -366,7 +388,7 @@ export default function BaseTable<T>(props: Props<T>) {
                                         colSpan={columnCount}
                                         align="center"
                                     >
-                                        No results found.
+                                        {localization?.body?.noData ?? `No results found`}
                                     </TableCell>
                                 </TableRow>
                             }
@@ -393,26 +415,25 @@ export default function BaseTable<T>(props: Props<T>) {
                                                 </TableCell>
                                         }
                                         {filteredColumns.map((headCell, j) => {
-                                            const cellLayout = rowBuilder(row)[headCell.id];
-                                            const isElement = !!cellLayout.$$typeof;
+                                            const render = headCell.render?.(row);
+                                            const element = render ?? row[headCell.id];
                                             return <TableCell
                                                 key={`rowCell-${i}-${j}`}
                                                 id={labelId}
                                                 scope="row"
                                                 align={headCell.align}
-                                                style={{
-                                                    paddingTop: isElement ? 0 : undefined,
-                                                    paddingBottom: isElement ? 0 : undefined,
-                                                }}
                                             >
-                                                {buildCell(cellLayout)}
+                                                {element}
                                             </TableCell>;
                                         })}
                                         <TableCell padding="checkbox">
-                                            {rowActions && rowActions.length > 0 && <BaseTableRowMoreMenu
-                                                item={row}
-                                                actions={rowActions}
-                                            />}
+                                            {rowActions && rowActions.length > 0 &&
+                                                <BaseTableRowMoreMenu
+                                                    item={row}
+                                                    actions={rowActions}
+                                                    localization={localization?.rowMoreMenu}
+                                                />
+                                            }
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -425,6 +446,7 @@ export default function BaseTable<T>(props: Props<T>) {
                     count={filteredSortedRows.length}
                     rowsPerPage={rowsPerPage_}
                     page={page_}
+                    localization={localization?.pagination}
                     onChangePage={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />

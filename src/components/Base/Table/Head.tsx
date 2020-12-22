@@ -1,4 +1,5 @@
-import React from "react";
+import React,
+{ ReactElement } from "react";
 import {
     Close as CloseIcon,
     Lock as LockIcon,
@@ -15,10 +16,15 @@ import {
     TableRow,
     TableSortLabel,
     Theme,
+    Tooltip,
 } from "@material-ui/core";
-import BaseTableColumnSelector from "./ColumnSelector";
+import BaseTableColumnSelector,
+{ ColumnSelectorLocalization } from "./ColumnSelector";
 import BaseTableCheckboxDropdown,
-{ CheckboxDropdownValue } from "./CheckboxDropdown";
+{
+    CheckboxDropdownLocalization,
+    CheckboxDropdownValue,
+} from "./CheckboxDropdown";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,8 +54,16 @@ export type Align = TableCellProps["align"]
 export interface HeadCell<T> {
     id: Extract<keyof T, string>;
     label: string;
-    align: Align;
+    align?: Align;
     persistent?: boolean;
+    searchable?: boolean;
+    disableSort?: boolean;
+    hidden?: boolean;
+    render?: (row: T) => ReactElement | ReactElement[];
+}
+
+export interface HeadLocalization {
+    hideColumnButton?: string;
 }
 
 interface Props<T> {
@@ -62,9 +76,12 @@ interface Props<T> {
     rowCount: number;
     selected: (keyof T)[];
     headCells: HeadCell<T>[];
-    onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
     hasSelectActions: boolean;
     hasGroups: boolean;
+    checkboxDropdownLocalization?: CheckboxDropdownLocalization;
+    columnSelectorLocalization?: ColumnSelectorLocalization;
+    localization?: HeadLocalization;
+    onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
 }
 
 export default function BaseTableHead<T>(props: Props<T>) {
@@ -78,9 +95,12 @@ export default function BaseTableHead<T>(props: Props<T>) {
         onRequestSort,
         headCells,
         selected,
-        onColumnChange,
         hasSelectActions,
         hasGroups,
+        checkboxDropdownLocalization,
+        columnSelectorLocalization,
+        localization,
+        onColumnChange,
     } = props;
     const classes = useStyles();
     const createSortHandler = (property: Extract<keyof T, string>) => (event: React.MouseEvent<unknown>) => {
@@ -98,6 +118,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
                             hasGroups={hasGroups}
                             indeterminate={numSelected > 0 && numSelected < rowCount}
                             checked={rowCount > 0 && numSelected === rowCount}
+                            localization={checkboxDropdownLocalization}
                             onSelectAllPageClick={onSelectAllPageClick}
                             onSelectAllClick={onSelectAllClick}
                         />
@@ -106,6 +127,16 @@ export default function BaseTableHead<T>(props: Props<T>) {
                 {headCells
                     .filter((headCell) => isSelected(headCell.id))
                     .map((headCell: HeadCell<T>) => {
+                        const hideButton = <IconButton
+                            disabled={headCell.persistent}
+                            className={classes.removeButton}
+                            onClick={(e) => onColumnChange(e, headCell.id)}
+                        >
+                            {headCell.persistent
+                                ? <LockIcon fontSize="small" />
+                                : <CloseIcon fontSize="small" />
+                            }
+                        </IconButton>;
                         const paddingStyle = headCell.align === `right` ? {
                             paddingLeft: 0,
                         } : {
@@ -127,6 +158,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
                             >
                                 {isAlignCenter && <Box flex="1" />}
                                 <TableSortLabel
+                                    disabled={headCell.disableSort}
                                     active={orderBy === headCell.id}
                                     direction={order}
                                     style={{
@@ -137,16 +169,12 @@ export default function BaseTableHead<T>(props: Props<T>) {
                                     {headCell.label}
                                 </TableSortLabel>
                                 {isAlignCenter && <Box flex="1" />}
-                                <IconButton
-                                    className={classes.removeButton}
-                                    disabled={headCell.persistent}
-                                    onClick={(e) => onColumnChange(e, headCell.id)}
-                                >
-                                    {headCell.persistent
-                                        ? <LockIcon fontSize="small" />
-                                        : <CloseIcon fontSize="small" />
-                                    }
-                                </IconButton>
+                                {headCell.persistent
+                                    ? hideButton
+                                    : <Tooltip title={localization?.hideColumnButton ?? `Hide column`}>
+                                        {hideButton}
+                                    </Tooltip>
+                                }
                             </Box>
                         </TableCell>;
                     })
@@ -155,6 +183,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
                     <BaseTableColumnSelector
                         headCells={headCells}
                         selected={selected}
+                        localization={columnSelectorLocalization}
                         onColumnChange={onColumnChange}
                     />
                 </TableCell>

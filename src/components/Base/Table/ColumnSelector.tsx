@@ -11,6 +11,7 @@ import {
     Popover,
     Theme,
     Toolbar,
+    Tooltip,
     Typography,
 } from "@material-ui/core";
 import {
@@ -51,9 +52,15 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+export interface ColumnSelectorLocalization {
+    addButton?: string;
+    listTitle?: string;
+}
+
 interface Props<T> {
     headCells: HeadCell<T>[];
     selected: (keyof T)[];
+    localization?: ColumnSelectorLocalization;
     onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
 }
 
@@ -61,6 +68,7 @@ export default function BaseTableColumnSelector<T>(props: Props<T>) {
     const {
         headCells,
         selected,
+        localization,
         onColumnChange,
     } = props;
     const classes = useStyles();
@@ -78,12 +86,15 @@ export default function BaseTableColumnSelector<T>(props: Props<T>) {
     const isSelected = (column: keyof T) => selected.indexOf(column) !== -1;
 
     return <>
-        <IconButton
-            aria-label="Column select button"
-            aria-haspopup="true"
-            onClick={handleClick}>
-            <AddIcon />
-        </IconButton>
+        <Tooltip title={localization?.addButton ?? `Add columns`}>
+            <IconButton
+                aria-label={localization?.addButton ?? `Add columns`}
+                aria-haspopup="true"
+                onClick={handleClick}
+            >
+                <AddIcon />
+            </IconButton>
+        </Tooltip>
         <Popover
             keepMounted
             anchorEl={anchorEl}
@@ -103,7 +114,7 @@ export default function BaseTableColumnSelector<T>(props: Props<T>) {
                     variant="body2"
                     className={classes.title}
                 >
-                    Select columns
+                    {localization?.listTitle ?? `Select columns`}
                 </Typography>
             </Toolbar>
             <List className={classes.list}>
@@ -132,7 +143,8 @@ export default function BaseTableColumnSelector<T>(props: Props<T>) {
                                 <ListItemSecondaryAction>
                                     <LockIcon
                                         className={classes.persistentIcon}
-                                        fontSize="small" />
+                                        fontSize="small"
+                                    />
                                 </ListItemSecondaryAction>
                             }
                         </ListItem>

@@ -7,6 +7,7 @@ import {
     makeStyles,
     TextField,
     Theme,
+    Tooltip,
 } from "@material-ui/core";
 import {
     Clear as ClearIcon,
@@ -60,17 +61,22 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+export interface SearchLocalization {
+    placeholder?: string;
+    clear?: string;
+}
+
 interface Props {
     value: string;
     setValue: React.Dispatch<React.SetStateAction<string>>;
-    placeholder?: string;
+    localization?: SearchLocalization;
 }
 
 export default function BaseTableSearch (props: Props) {
     const {
         value,
         setValue,
-        placeholder,
+        localization,
     } = props;
     const classes = useStyles();
 
@@ -79,7 +85,7 @@ export default function BaseTableSearch (props: Props) {
             <TextField
                 fullWidth
                 className={classes.textField}
-                placeholder={placeholder ?? `Search`}
+                placeholder={localization?.placeholder ?? `Search`}
                 value={value}
                 onChange={(e) => setValue(e.currentTarget.value)}
             />
@@ -88,12 +94,14 @@ export default function BaseTableSearch (props: Props) {
                     <SearchIcon color="action" />
                 </div>
                 {value &&
-                    <IconButton
-                        className={classes.actionIcon}
-                        onClick={() => setValue(``)}
-                    >
-                        <ClearIcon color="action" />
-                    </IconButton>
+                    <Tooltip title={localization?.clear ?? `Clear search`}>
+                        <IconButton
+                            className={classes.actionIcon}
+                            onClick={() => setValue(``)}
+                        >
+                            <ClearIcon color="action" />
+                        </IconButton>
+                    </Tooltip>
                 }
             </Box>
             <Divider />
