@@ -120,7 +120,7 @@ export interface TableBodyLocalization {
 }
 
 export interface TableData<T> {
-    columns: string[];
+    columns: (keyof T)[];
     rows: Partial<T>[];
     search: string;
     orderBy: keyof T;
