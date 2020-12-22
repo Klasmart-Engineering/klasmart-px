@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
         select: {
             minWidth: 150,
             "& .MuiSelect-root": {
-                padding: theme.spacing(2 + 1/8, 2),
+                padding: theme.spacing(2 + 1/8, 6, 2 + 1/8, 2),
             },
             "& .MuiSelect-icon": {
                 marginRight: theme.spacing(2),

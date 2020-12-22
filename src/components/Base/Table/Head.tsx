@@ -57,6 +57,7 @@ export interface HeadCell<T> {
     align?: Align;
     persistent?: boolean;
     searchable?: boolean;
+    groupable?: boolean;
     disableSort?: boolean;
     hidden?: boolean;
     render?: (row: T) => ReactElement | ReactElement[];

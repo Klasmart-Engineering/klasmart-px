@@ -137,7 +137,6 @@ interface Props<T> {
     orderBy?: Extract<keyof T, string>;
     order?: Order;
     groupBy?: keyof T;
-    groups?: GroupSelectMenuItem<T>[];
     subgroupBy?: T[keyof T];
     rowActions?: RowAction<T>[];
     rows: T[];
@@ -160,7 +159,6 @@ export default function BaseTable<T>(props: Props<T>) {
         orderBy,
         groupBy,
         subgroupBy,
-        groups,
         rows,
         rowsPerPage,
         rowsPerPageOptions = [
@@ -183,6 +181,10 @@ export default function BaseTable<T>(props: Props<T>) {
     const persistentColumnIds = columns.filter(({ persistent }) => persistent).map(({ id }) => id);
     const searchableColumnIds = columns.filter(({ searchable }) => searchable).map(({ id }) => id);
     const selectedColumnIds = columns.filter(({ hidden }) => !hidden).map(({ id }) => id);
+    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter(({ groupable }) => groupable).map(({ id, label }) => ({
+        id,
+        label,
+    }));
 
     const [ order_, setOrder ] = useState(order ?? `asc`);
     const [ orderBy_, setOrderBy ] = useState(orderBy ?? idField);
@@ -204,7 +206,7 @@ export default function BaseTable<T>(props: Props<T>) {
     ]);
 
     useEffect(() => {
-        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groups) ? [ ...new Set(rows.map(row => row[groupBy_])) ] : [];
+        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? [ ...new Set(rows.map(row => row[groupBy_])) ] : [];
         const subgroups = subgroupIds.map((id) => ({
             id,
             count: filteredSortedRows.filter(filterRowsBySubgroup(id, false)).length,
@@ -307,7 +309,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const hasSearchColumns = !!searchableColumnIds?.length;
     const hasRowActions = !!rowActions?.length;
     const hasSelectActions = !!selectActions?.length;
-    const hasGroups = !!groups?.length;
+    const hasGroups = !!groupableColumns?.length;
     const columnCount = columns.length + (hasRowActions ? 1 : 0) + (hasSelectActions ? 1 : 0);
 
     const tableData: TableData<T> = {
@@ -350,7 +352,7 @@ export default function BaseTable<T>(props: Props<T>) {
                     <BaseTableGroupTabs
                         allCount={filteredSortedRows.length}
                         groupBy={groupBy_}
-                        groups={groups}
+                        groups={groupableColumns}
                         subgroupBy={subgroupBy_}
                         subgroups={subgroups_}
                         localization={localization?.groupTabs}

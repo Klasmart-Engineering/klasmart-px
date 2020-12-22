@@ -3,7 +3,7 @@ import { ToolbarAction, ToolbarLocalization } from "./Toolbar";
 import { HeadCell, HeadLocalization, Order } from "./Head";
 import { RowAction, RowMoreMenuLocalization } from "./RowMoreMenu";
 import { PaginationLocalization } from "./Pagination";
-import { GroupSelectMenuItem, GroupTabsLocalization } from "./GroupTabs";
+import { GroupTabsLocalization } from "./GroupTabs";
 import { CheckboxDropdownLocalization } from "./CheckboxDropdown";
 import { SearchLocalization } from "./Search";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
@@ -38,7 +38,6 @@ interface Props<T> {
     orderBy?: Extract<keyof T, string>;
     order?: Order;
     groupBy?: keyof T;
-    groups?: GroupSelectMenuItem<T>[];
     subgroupBy?: T[keyof T];
     rowActions?: RowAction<T>[];
     rows: T[];
