@@ -7,6 +7,7 @@ import {
     createStyles,
     makeStyles,
     Theme,
+    Typography,
 } from "@material-ui/core";
 import { BaseTable } from 'kidsloop-px'
 
@@ -42,9 +43,9 @@ interface NutritionData {
     fat: number;
     name: string;
     protein: number;
-    metaData: MetaData;
-    schools: School[];
-    date: Date;
+    metaData: string;
+    schools: string;
+    date: string;
     role: string;
 }
 
@@ -64,7 +65,7 @@ const schools = [
     },
 ];
 
-const today = new Date();
+const today = new Intl.DateTimeFormat(`en-US`).format(new Date());
 
 const student = `Student`;
 const teacher = `Teacher`;
@@ -79,8 +80,8 @@ const rows: NutritionData[] = [
         fat: 3.7,
         carbs: 67,
         protein: 4.3,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: student,
     },
@@ -90,8 +91,8 @@ const rows: NutritionData[] = [
         fat: 25.0,
         carbs: 51,
         protein: 4.9,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: teacher,
     },
@@ -101,8 +102,8 @@ const rows: NutritionData[] = [
         fat: 16.0,
         carbs: 24,
         protein: 6.0,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: parent,
     },
@@ -112,8 +113,8 @@ const rows: NutritionData[] = [
         fat: 6.0,
         carbs: 24,
         protein: 4.0,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: orgAdmin,
     },
@@ -123,8 +124,8 @@ const rows: NutritionData[] = [
         fat: 16.0,
         carbs: 49,
         protein: 3.9,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: schoolAdmin,
     },
@@ -134,8 +135,8 @@ const rows: NutritionData[] = [
         fat: 3.2,
         carbs: 87,
         protein: 6.5,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: student,
     },
@@ -145,8 +146,8 @@ const rows: NutritionData[] = [
         fat: 9.0,
         carbs: 37,
         protein: 4.3,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: teacher,
     },
@@ -156,8 +157,8 @@ const rows: NutritionData[] = [
         fat: 0.0,
         carbs: 94,
         protein: 0.0,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: orgAdmin,
     },
@@ -167,8 +168,8 @@ const rows: NutritionData[] = [
         fat: 26.0,
         carbs: 65,
         protein: 7.0,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: schoolAdmin,
     },
@@ -178,8 +179,8 @@ const rows: NutritionData[] = [
         fat: 0.2,
         carbs: 98,
         protein: 0.0,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: parent,
     },
@@ -189,8 +190,8 @@ const rows: NutritionData[] = [
         fat: 0,
         carbs: 81,
         protein: 2.0,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: schoolAdmin,
     },
@@ -200,8 +201,8 @@ const rows: NutritionData[] = [
         fat: 19.0,
         carbs: 9,
         protein: 37.0,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: student,
     },
@@ -211,8 +212,8 @@ const rows: NutritionData[] = [
         fat: 18.0,
         carbs: 63,
         protein: 4.0,
-        metaData,
-        schools,
+        metaData: JSON.stringify(metaData),
+        schools: JSON.stringify(schools),
         date: today,
         role: student,
     },
@@ -224,57 +225,74 @@ const columns: HeadCell<NutritionData>[] = [
         align: `left`,
         label: `Dessert (100g serving)`,
         persistent: true,
+        searchable: true,
+        groupable: true,
+        render: (row) => <Box
+            flexDirection="row"
+            display="flex"
+            alignItems="center"
+        >
+            <Avatar
+                component="span"
+                style={{
+                    width: 24,
+                    height: 24,
+                }}
+            />
+            <span style={{
+                marginLeft: 8,
+            }}>{row.name}</span>
+        </Box>,
     },
     {
         id: `calories`,
         align: `right`,
         label: `Calories`,
+        hidden: true,
     },
     {
         id: `fat`,
         align: `center`,
         label: `Fat (g)`,
+        hidden: true,
     },
     {
         id: `carbs`,
         align: `center`,
         label: `Carbs (g)`,
+        hidden: true,
     },
     {
         id: `protein`,
         align: `center`,
         label: `Protein (g)`,
+        groupable: true,
     },
     {
         id: `metaData`,
         align: `left`,
         label: `Meta data`,
+        disableSort: true,
     },
     {
         id: `schools`,
         align: `center`,
         label: `Schools`,
+        disableSort: true,
     },
     {
         id: `date`,
         align: `left`,
         label: `Date`,
+        searchable: true,
     },
     {
         id: `role`,
         align: `left`,
         label: `Role`,
-    },
-];
-
-const groups: GroupSelectMenuItem<NutritionData>[] = [
-    {
-        id: `role`,
-        label: `Role`,
-    },
-    {
-        id: `name`,
-        label: `Name`,
+        searchable: true,
+        groupable: true,
+        render: (row) => <Typography variant="overline">{row.role}</Typography>
     },
 ];
 
@@ -306,7 +324,7 @@ const createCellLayouts = (data: NutritionData) => ({
     //         <div>{metaData.nice}</div>
     //     </Box>,
     // schools: data.schools.join("\n")
-    date: new Intl.DateTimeFormat(`en-US`).format(data.date),
+    // date: new Intl.DateTimeFormat(`en-US`).format(data.date),
 });
 
 export default function TableExample () {
@@ -317,58 +335,53 @@ export default function TableExample () {
         <>
             <Button onClick={() => setLoading(!loading)}>Toggle loading</Button>
             <BaseTable
-                groups={groups}
                 columns={columns}
                 rows={rows}
-                rowBuilder={createCellLayouts}
                 idField={`name`}
-                title="Nutrition"
                 loading={loading}
                 primaryAction={{
                     label: `Create`,
-                    icon: <AddIcon />,
+                    icon: AddIcon,
                     onClick: (tableData) => { console.log(`create`, tableData); },
                 }}
                 secondaryActions={[
                     {
                         label: `Import`,
-                        icon: <CloudUploadIcon />,
+                        icon: CloudUploadIcon,
                         onClick: (tableData) => { console.log(`import`, tableData); },
                     },
                     {
                         label: `Export`,
-                        icon: <CloudDownloadIcon />,
+                        icon: CloudDownloadIcon,
                         onClick: (tableData) => { console.log(`export`, tableData); },
                     },
                 ]}
-                searchFields={[ `name` ]}
                 selectActions={[
                     {
                         label: `Export`,
-                        icon: <CloudDownloadIcon />,
+                        icon: CloudDownloadIcon,
                         onClick: (tableData) => { console.log(`export`, tableData); },
                     },
                 ]}
-                selectedColumns={[ `name`, `calories` ]}
                 rowActions={[
                     {
                         label: `View`,
-                        icon: <OpenInNewIcon />,
+                        icon: OpenInNewIcon,
                         onClick: (item) => { console.log(`view`, item); },
                     },
                     {
                         label: `Edit`,
-                        icon: <EditIcon />,
+                        icon: EditIcon,
                         onClick: (item) => { console.log(`edit`, item); },
                     },
                     {
                         label: `Copy`,
-                        icon: <FileCopyIcon />,
+                        icon: FileCopyIcon,
                         onClick: (item) => { console.log(`copy`, item); },
                     },
                     {
                         label: `Delete`,
-                        icon: <DeleteIcon />,
+                        icon: DeleteIcon,
                         onClick: (item) => { console.log(`delete`, item); },
                     },
                 ]}

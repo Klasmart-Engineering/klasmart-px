@@ -10,7 +10,7 @@
     "@testing-library/jest-dom": "5.11.6",
     "@testing-library/react": "11.2.2",
     "@testing-library/user-event": "12.2.2",
-    "kidsloop-px": "git+https://bitbucket.org/calmisland/kidsloop-px.git#e3f0a4ac74f549da2106843e6945a66a23de768f",
+    "kidsloop-px": "git+https://bitbucket.org/calmisland/kidsloop-px.git#fb530a19a33b171c50222e189ca0695efc6f1afc",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-scripts": "4.0.1",
