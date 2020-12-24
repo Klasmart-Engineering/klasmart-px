@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface RowAction<T> {
     label: string;
     icon?: SvgIconComponent;
+    disabled?: boolean;
     onClick: ((item: T) => void);
 }
 
@@ -83,6 +84,7 @@ export default function BaseTableRowMoreMenu<T>(props: Props<T>) {
                 {actions?.length && actions.map((action, i) =>
                     <MenuItem
                         key={`menu-item-${i}`}
+                        disabled={action.disabled}
                         onClick={() => {
                             action.onClick(item);
                             handleClose();

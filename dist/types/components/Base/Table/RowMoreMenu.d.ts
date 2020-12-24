@@ -3,6 +3,7 @@ import { SvgIconComponent } from "@material-ui/icons";
 export interface RowAction<T> {
     label: string;
     icon?: SvgIconComponent;
+    disabled?: boolean;
     onClick: ((item: T) => void);
 }
 export interface RowMoreMenuLocalization {

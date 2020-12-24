@@ -138,7 +138,7 @@ interface Props<T> {
     order?: Order;
     groupBy?: keyof T;
     subgroupBy?: T[keyof T];
-    rowActions?: RowAction<T>[];
+    rowActions?: (row: T) => RowAction<T>[];
     rows: T[];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | { value: number; label: string }>;
@@ -432,7 +432,7 @@ export default function BaseTable<T>(props: Props<T>) {
                                             {rowActions && rowActions.length > 0 &&
                                                 <BaseTableRowMoreMenu
                                                     item={row}
-                                                    actions={rowActions}
+                                                    actions={rowActions(row)}
                                                     localization={localization?.rowMoreMenu}
                                                 />
                                             }

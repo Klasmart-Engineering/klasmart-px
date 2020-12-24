@@ -39,7 +39,7 @@ interface Props<T> {
     order?: Order;
     groupBy?: keyof T;
     subgroupBy?: T[keyof T];
-    rowActions?: RowAction<T>[];
+    rowActions?: (row: T) => RowAction<T>[];
     rows: T[];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | {
