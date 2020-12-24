@@ -296,37 +296,6 @@ const columns: HeadCell<NutritionData>[] = [
     },
 ];
 
-const createCellLayouts = (data: NutritionData) => ({
-    ...data,
-    name:
-        <Box
-            flexDirection="row"
-            display="flex"
-            alignItems="center"
-        >
-            <Avatar
-                component="span"
-                style={{
-                    width: 24,
-                    height: 24,
-                }}
-            />
-            <span style={{
-                marginLeft: 8,
-            }}>{data.name}</span>
-        </Box>,
-    // metaData:
-    //     <Box
-    //         flexDirection="column"
-    //         display="flex"
-    //     >
-    //         <div>{metaData.hello}</div>
-    //         <div>{metaData.nice}</div>
-    //     </Box>,
-    // schools: data.schools.join("\n")
-    // date: new Intl.DateTimeFormat(`en-US`).format(data.date),
-});
-
 export default function TableExample () {
     const classes = useStyles();
     const [ loading, setLoading ] = useState(false);
@@ -342,12 +311,14 @@ export default function TableExample () {
                 primaryAction={{
                     label: `Create`,
                     icon: AddIcon,
+                    disabled: true,
                     onClick: (tableData) => { console.log(`create`, tableData); },
                 }}
                 secondaryActions={[
                     {
                         label: `Import`,
                         icon: CloudUploadIcon,
+                        disabled: true,
                         onClick: (tableData) => { console.log(`import`, tableData); },
                     },
                     {
@@ -360,29 +331,34 @@ export default function TableExample () {
                     {
                         label: `Export`,
                         icon: CloudDownloadIcon,
+                        disabled: true,
                         onClick: (tableData) => { console.log(`export`, tableData); },
                     },
                 ]}
-                rowActions={[
+                rowActions={(row) => [
                     {
                         label: `View`,
                         icon: OpenInNewIcon,
-                        onClick: (item) => { console.log(`view`, item); },
+                        disabled: row.name === "Frozen yoghurt",
+                        onClick: (row) => { console.log(`view`, row); },
                     },
                     {
                         label: `Edit`,
                         icon: EditIcon,
-                        onClick: (item) => { console.log(`edit`, item); },
+                        disabled: row.name === "Donut",
+                        onClick: (row) => { console.log(`edit`, row); },
                     },
                     {
                         label: `Copy`,
                         icon: FileCopyIcon,
-                        onClick: (item) => { console.log(`copy`, item); },
+                        disabled: row.name === "Eclair",
+                        onClick: (row) => { console.log(`copy`, row); },
                     },
                     {
                         label: `Delete`,
                         icon: DeleteIcon,
-                        onClick: (item) => { console.log(`delete`, item); },
+                        disabled: row.name === "Ice cream sandwich",
+                        onClick: (row) => { console.log(`delete`, row); },
                     },
                 ]}
                 onChange={(data) => {console.log(data);}}
