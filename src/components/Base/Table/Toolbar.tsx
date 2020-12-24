@@ -55,6 +55,7 @@ export interface ToolbarLocalization {
 export interface ToolbarAction<T>{
     label: string;
     icon?: SvgIconComponent;
+    disabled?: boolean;
     onClick: (data: TableData<T>) => void;
 }
 
@@ -100,16 +101,20 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                                 key={`select-action-${i}`}
                                 title={action.label}
                             >
-                                <IconButton
-                                    color="primary"
-                                    onClick={() => action.onClick(tableData)}
-                                >
-                                    {action.icon && <action.icon />}
-                                </IconButton>
+                                <span>
+                                    <IconButton
+                                        color="primary"
+                                        disabled={action.disabled}
+                                        onClick={() => action.onClick(tableData)}
+                                    >
+                                        {action.icon && <action.icon />}
+                                    </IconButton>
+                                </span>
                             </Tooltip>
                             : <Button
                                 key={`select-action-${i}`}
                                 color="primary"
+                                disabled={action.disabled}
                                 className={classes.textButton}
                                 onClick={() => action.onClick(tableData)}
                             >
@@ -137,16 +142,20 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                                 key={`secondary-action-${i}`}
                                 title={action.label}
                             >
-                                <IconButton
-                                    color="primary"
-                                    onClick={() => action.onClick(tableData)}
-                                >
-                                    {action.icon && <action.icon />}
-                                </IconButton>
+                                <span>
+                                    <IconButton
+                                        color="primary"
+                                        disabled={action.disabled}
+                                        onClick={() => action.onClick(tableData)}
+                                    >
+                                        {action.icon && <action.icon />}
+                                    </IconButton>
+                                </span>
                             </Tooltip>
                             : <Button
                                 key={`secondary-action-${i}`}
                                 color="primary"
+                                disabled={action.disabled}
                                 className={classes.textButton}
                                 onClick={() => action.onClick(tableData)}
                             >
@@ -154,7 +163,10 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                             </Button>,
                     )}
                     {primaryAction &&
-                        <BaseFabButton onClick={() => primaryAction.onClick(tableData)}>
+                        <BaseFabButton
+                            disabled={primaryAction.disabled}
+                            onClick={() => primaryAction.onClick(tableData)}
+                        >
                             {primaryAction.icon && <primaryAction.icon className={classes.primaryActionIcon} />}
                             {primaryAction.label}
                         </BaseFabButton>

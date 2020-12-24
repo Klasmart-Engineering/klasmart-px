@@ -8,6 +8,7 @@ export interface ToolbarLocalization {
 export interface ToolbarAction<T> {
     label: string;
     icon?: SvgIconComponent;
+    disabled?: boolean;
     onClick: (data: TableData<T>) => void;
 }
 interface Props<T> {
