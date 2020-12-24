@@ -206,7 +206,7 @@ export default function BaseTable<T>(props: Props<T>) {
     ]);
 
     useEffect(() => {
-        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? [ ...new Set(rows.map(row => row[groupBy_])) ] : [];
+        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? getDistinct(rows.map(row => row[groupBy_])) : [];
         const subgroups = subgroupIds.map((id) => ({
             id,
             count: filteredSortedRows.filter(filterRowsBySubgroup(id, false)).length,
