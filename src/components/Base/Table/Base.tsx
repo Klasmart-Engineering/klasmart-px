@@ -24,9 +24,9 @@ import BaseTableToolbar,
 import BaseTableSearch from "./Search";
 import BaseTableHead,
 {
-    HeadCell,
     HeadLocalization,
     Order,
+    TableColumn,
 } from "./Head";
 import BaseTableLoading from "./Loading";
 import BaseTableRowMoreMenu,
@@ -76,9 +76,12 @@ function rowIncludesSearch <T>(searchValue: string, searchFieldValues: (keyof T)
     if (searchFieldValues.length === 0) return true;
     return searchFieldValues.some((fieldValue) => {
         const value = row[fieldValue];
+        const values = Array.isArray(value) ? value : [ value ];
         const regexp = new RegExp(searchValue, `gi`);
-        const result = String(value).match(regexp);
-        return !!result;
+        return values.some((value) => {
+            const result = String(value).match(regexp);
+            return !!result;
+        });
     });
 }
 
@@ -132,7 +135,7 @@ export interface TableData<T> {
 }
 
 interface Props<T> {
-    columns: HeadCell<T>[];
+    columns: TableColumn<T>[];
     idField: Extract<keyof T, string>;
     orderBy?: Extract<keyof T, string>;
     order?: Order;
@@ -295,7 +298,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
     const filterRowsBySubgroup = (subgroup?: T[keyof T], inclusive = true) => (row: T) => (subgroup && groupBy_ && (!inclusive || isValidSubgroup(subgroup, subgroups_))) ? subgroup === row[groupBy_] : inclusive;
 
-    const filteredColumns = columns.filter((headCell) => isColumnSelected(headCell.id));
+    const filteredColumns = columns.filter(({ id }) => isColumnSelected(id));
     const filteredColumnIds = filteredColumns.map(({ id }) => id);
 
     const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_))
@@ -367,7 +370,7 @@ export default function BaseTable<T>(props: Props<T>) {
                             order={order_}
                             orderBy={orderBy_}
                             rowCount={filteredSortedGroupedSlicedRows.length}
-                            headCells={columns}
+                            columns={columns}
                             selected={selectedColumns_}
                             hasSelectActions={hasSelectActions}
                             hasGroups={hasGroups}
@@ -416,14 +419,14 @@ export default function BaseTable<T>(props: Props<T>) {
                                                     />
                                                 </TableCell>
                                         }
-                                        {filteredColumns.map((headCell, j) => {
-                                            const render = headCell.render?.(row);
-                                            const element = render ?? row[headCell.id];
+                                        {filteredColumns.map((column, j) => {
+                                            const render = column.render?.(row);
+                                            const element = render ?? row[column.id];
                                             return <TableCell
                                                 key={`rowCell-${i}-${j}`}
                                                 id={labelId}
                                                 scope="row"
-                                                align={headCell.align}
+                                                align={column.align}
                                             >
                                                 {element}
                                             </TableCell>;

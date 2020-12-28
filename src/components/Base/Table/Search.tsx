@@ -17,7 +17,7 @@ import {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            height: 52,
+            height: 53,
             position: `relative`,
         },
         textField: {

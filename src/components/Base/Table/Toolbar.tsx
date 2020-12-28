@@ -134,7 +134,7 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                         component="div"
                         className={classes.title}
                     >
-                        {localization?.title ?? `Table`}
+                        {localization?.title ?? ``}
                     </Typography>
                     {secondaryActions?.map((action, i) =>
                         action.icon

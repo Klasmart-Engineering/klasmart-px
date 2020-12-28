@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export type Order = "asc" | "desc";
 export type Align = TableCellProps["align"]
 
-export interface HeadCell<T> {
+export interface TableColumn<T> {
     id: Extract<keyof T, string>;
     label: string;
     align?: Align;
@@ -76,7 +76,7 @@ interface Props<T> {
     orderBy: string;
     rowCount: number;
     selected: (keyof T)[];
-    headCells: HeadCell<T>[];
+    columns: TableColumn<T>[];
     hasSelectActions: boolean;
     hasGroups: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
@@ -94,7 +94,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
         numSelected,
         rowCount,
         onRequestSort,
-        headCells,
+        columns,
         selected,
         hasSelectActions,
         hasGroups,
@@ -125,30 +125,30 @@ export default function BaseTableHead<T>(props: Props<T>) {
                         />
                     </TableCell>
                 }
-                {headCells
-                    .filter((headCell) => isSelected(headCell.id))
-                    .map((headCell: HeadCell<T>) => {
+                {columns
+                    .filter((column) => isSelected(column.id))
+                    .map((column: TableColumn<T>) => {
                         const hideButton = <IconButton
-                            disabled={headCell.persistent}
+                            disabled={column.persistent}
                             className={classes.removeButton}
-                            onClick={(e) => onColumnChange(e, headCell.id)}
+                            onClick={(e) => onColumnChange(e, column.id)}
                         >
-                            {headCell.persistent
+                            {column.persistent
                                 ? <LockIcon fontSize="small" />
                                 : <CloseIcon fontSize="small" />
                             }
                         </IconButton>;
-                        const paddingStyle = headCell.align === `right` ? {
+                        const paddingStyle = column.align === `right` ? {
                             paddingLeft: 0,
                         } : {
                             paddingRight: 0,
                         };
-                        const flexDirection = headCell.align === `right` ? `row-reverse` : `row`;
-                        const isAlignCenter = headCell.align === `center`;
+                        const flexDirection = column.align === `right` ? `row-reverse` : `row`;
+                        const isAlignCenter = column.align === `center`;
                         return <TableCell
-                            key={headCell.id}
-                            align={headCell.align}
-                            sortDirection={orderBy === headCell.id ? order : false}
+                            key={column.id}
+                            align={column.align}
+                            sortDirection={orderBy === column.id ? order : false}
                             className={classes.hoverHeader}
                             style={paddingStyle}
                         >
@@ -159,18 +159,18 @@ export default function BaseTableHead<T>(props: Props<T>) {
                             >
                                 {isAlignCenter && <Box flex="1" />}
                                 <TableSortLabel
-                                    disabled={headCell.disableSort}
-                                    active={orderBy === headCell.id}
+                                    disabled={column.disableSort}
+                                    active={orderBy === column.id}
                                     direction={order}
                                     style={{
                                         flexDirection,
                                     }}
-                                    onClick={createSortHandler(headCell.id)}
+                                    onClick={createSortHandler(column.id)}
                                 >
-                                    {headCell.label}
+                                    {column.label}
                                 </TableSortLabel>
                                 {isAlignCenter && <Box flex="1" />}
-                                {headCell.persistent
+                                {column.persistent
                                     ? hideButton
                                     : <Tooltip title={localization?.hideColumnButton ?? `Hide column`}>
                                         {hideButton}
@@ -182,7 +182,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
                 }
                 <TableCell padding="checkbox">
                     <BaseTableColumnSelector
-                        headCells={headCells}
+                        columns={columns}
                         selected={selected}
                         localization={columnSelectorLocalization}
                         onColumnChange={onColumnChange}

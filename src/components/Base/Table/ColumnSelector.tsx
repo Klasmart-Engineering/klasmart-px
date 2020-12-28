@@ -23,7 +23,7 @@ import React, {
     Fragment,
     useState,
 } from "react";
-import { HeadCell } from "./Head";
+import { TableColumn } from "./Head";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles ({
@@ -58,7 +58,7 @@ export interface ColumnSelectorLocalization {
 }
 
 interface Props<T> {
-    headCells: HeadCell<T>[];
+    columns: TableColumn<T>[];
     selected: (keyof T)[];
     localization?: ColumnSelectorLocalization;
     onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
@@ -66,7 +66,7 @@ interface Props<T> {
 
 export default function BaseTableColumnSelector<T>(props: Props<T>) {
     const {
-        headCells,
+        columns,
         selected,
         localization,
         onColumnChange,
@@ -119,27 +119,27 @@ export default function BaseTableColumnSelector<T>(props: Props<T>) {
             </Toolbar>
             <List className={classes.list}>
                 <Divider />
-                {headCells.map((headCell, i) =>
+                {columns.map((column, i) =>
                     <Fragment key={`list-item-${i}`}>
                         {i !== 0 && <Divider />}
                         <ListItem
                             className={classes.columnItemContainer}
-                            onClick={!headCell.persistent ? (e) => onColumnChange(e, headCell.id) : undefined}
+                            onClick={!column.persistent ? (e) => onColumnChange(e, column.id) : undefined}
                         >
                             <Checkbox
                                 role="checkbox"
-                                checked={isSelected(headCell.id)}
-                                disabled={headCell.persistent}
+                                checked={isSelected(column.id)}
+                                disabled={column.persistent}
                             />
                             <Typography
                                 variant="body2"
                                 className={clsx({
-                                    [classes.persistentText]: headCell.persistent,
+                                    [classes.persistentText]: column.persistent,
                                 })}
                             >
-                                {headCell.label}
+                                {column.label}
                             </Typography>
-                            {headCell.persistent &&
+                            {column.persistent &&
                                 <ListItemSecondaryAction>
                                     <LockIcon
                                         className={classes.persistentIcon}
