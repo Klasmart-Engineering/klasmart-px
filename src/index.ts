@@ -1,6 +1,7 @@
 export { default as CenterAlignChildren } from "./components/CenterAlignChildren";
 export { default as CircularProgressWithLabel } from "./components/CircularProgressWithLabel";
 export { default as Copyright } from "./components/Copyright";
+export { default as Dialog } from "./components/Dialog";
 export { default as Loading } from "./components/Loading";
 export { default as MediaDeviceSelect } from "./components/MediaDeviceSelect";
 export { default as NoCamera } from "./components/NoCamera";
