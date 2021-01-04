@@ -4,7 +4,7 @@ import { ColumnSelectorLocalization } from "./ColumnSelector";
 import { CheckboxDropdownLocalization, CheckboxDropdownValue } from "./CheckboxDropdown";
 export declare type Order = "asc" | "desc";
 export declare type Align = TableCellProps["align"];
-export interface HeadCell<T> {
+export interface TableColumn<T> {
     id: Extract<keyof T, string>;
     label: string;
     align?: Align;
@@ -27,7 +27,7 @@ interface Props<T> {
     orderBy: string;
     rowCount: number;
     selected: (keyof T)[];
-    headCells: HeadCell<T>[];
+    columns: TableColumn<T>[];
     hasSelectActions: boolean;
     hasGroups: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;

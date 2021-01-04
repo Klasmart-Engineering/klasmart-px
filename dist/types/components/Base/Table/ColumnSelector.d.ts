@@ -1,11 +1,11 @@
 import React from "react";
-import { HeadCell } from "./Head";
+import { TableColumn } from "./Head";
 export interface ColumnSelectorLocalization {
     addButton?: string;
     listTitle?: string;
 }
 interface Props<T> {
-    headCells: HeadCell<T>[];
+    columns: TableColumn<T>[];
     selected: (keyof T)[];
     localization?: ColumnSelectorLocalization;
     onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;

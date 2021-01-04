@@ -1,6 +1,6 @@
 /// <reference types="react" />
 import { ToolbarAction, ToolbarLocalization } from "./Toolbar";
-import { HeadCell, HeadLocalization, Order } from "./Head";
+import { HeadLocalization, Order, TableColumn } from "./Head";
 import { RowAction, RowMoreMenuLocalization } from "./RowMoreMenu";
 import { PaginationLocalization } from "./Pagination";
 import { GroupTabsLocalization } from "./GroupTabs";
@@ -33,7 +33,7 @@ export interface TableData<T> {
     rowsPerPage: number;
 }
 interface Props<T> {
-    columns: HeadCell<T>[];
+    columns: TableColumn<T>[];
     idField: Extract<keyof T, string>;
     orderBy?: Extract<keyof T, string>;
     order?: Order;
