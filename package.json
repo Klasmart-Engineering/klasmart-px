@@ -35,7 +35,8 @@
         "react-router-dom": "^5.2.0",
         "styled-components": "^5.2.1",
         "styled-icons": "^10.22.0",
-        "typeface-nanum-square-round": "^1.0.2"
+        "typeface-nanum-square-round": "^1.0.2",
+        "react-cookie": "^4.0.3"
     },
     "devDependencies": {
         "@babel/core": "7.12.9",
@@ -79,6 +80,7 @@
         "webpack-node-externals": "2.5.2"
     },
     "dependencies": {
-        "notistack": "1.0.3"
+        "notistack": "1.0.3",
+        "react-cookie": "^4.0.3"
     }
 }
