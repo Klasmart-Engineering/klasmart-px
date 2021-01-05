@@ -1,4 +1,5 @@
-import React from "react";
+import React,
+{ ReactText } from "react";
 import { Button } from "@material-ui/core";
 import {
     SnackbarProvider,
@@ -6,8 +7,29 @@ import {
     useSnackbar,
 } from 'notistack';
 
+interface CloseButtonProps {
+    actionKey: ReactText;
+    label?: string;
+}
+
+function CloseButton (props: CloseButtonProps) {
+    const {
+        actionKey,
+        label,
+    } = props;
+
+    const { closeSnackbar } = useSnackbar();
+
+    return <Button
+        color="inherit"
+        onClick={() => closeSnackbar(actionKey)}
+    >
+        {label ?? `Close`}
+    </Button>;
+}
+
 interface Props extends SnackbarProviderProps {
-    closeButtonText?: string;
+    closeButtonLabel?: string;
 }
 
 /**
@@ -17,12 +39,10 @@ interface Props extends SnackbarProviderProps {
  */
 export default function BaseSnackbarProvider (props: Props) {
     const {
-        closeButtonText,
+        closeButtonLabel,
         children,
         ...others
     } = props;
-
-    const { closeSnackbar } = useSnackbar();
 
     return (
         <SnackbarProvider
@@ -33,12 +53,10 @@ export default function BaseSnackbarProvider (props: Props) {
                 horizontal: `center`,
             }}
             action={
-                (key) => <Button
-                    color="inherit"
-                    onClick={() => closeSnackbar(key)}
-                >
-                    {closeButtonText ?? `Dismiss`}
-                </Button>
+                (key) => <CloseButton
+                    actionKey={key}
+                    label={closeButtonLabel}
+                />
             }
             {...others}
         >
