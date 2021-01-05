@@ -77,5 +77,8 @@
         "webpack-cli": "4.2.0",
         "webpack-dev-server": "3.11.0",
         "webpack-node-externals": "2.5.2"
+    },
+    "dependencies": {
+        "notistack": "1.0.3"
     }
 }

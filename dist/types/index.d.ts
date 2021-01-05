@@ -17,3 +17,5 @@ export { default as BaseTextField } from "./components/Base/TextField";
 export { default as ContentCard } from "./components/ContentCard";
 export { default as themeBuilder } from "./theme/builder";
 export { default as utils } from "./utils";
+export { default as SnackbarProvider } from './components/SnackbarProvider';
+export { useSnackbar } from 'notistack';

@@ -61,6 +61,7 @@ module.exports = {
                 },
             },
         ],
+        "@typescript-eslint/no-empty-interface": `warn`,
         '@typescript-eslint/no-explicit-any': [
             `off`,
             {
