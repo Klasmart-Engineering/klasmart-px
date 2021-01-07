@@ -16,6 +16,7 @@ export { default as BaseTable } from "./components/Base/Table/Base";
 export { default as BaseTextField } from "./components/Base/TextField";
 export { default as ContentCard } from "./components/ContentCard";
 export { default as LanguageSelect } from "./components/LanguageSelect";
+export { default as MultiSelect } from "./components/MultiSelect";
 export { default as themeBuilder } from "./theme/builder";
 export { default as utils } from "./utils";
 export { default as SnackbarProvider } from './components/SnackbarProvider';

@@ -29,14 +29,14 @@
         "lodash.pick": "4.4.0",
         "node-source-han-sans-sc": "^1.1.0-2.001R",
         "react": "^16.0.0",
+        "react-cookie": "^4.0.3",
         "react-device-detect": "^1.14.0",
         "react-dom": "^16.0.0",
         "react-intl": "^5.10.6",
         "react-router-dom": "^5.2.0",
         "styled-components": "^5.2.1",
         "styled-icons": "^10.22.0",
-        "typeface-nanum-square-round": "^1.0.2",
-        "react-cookie": "^4.0.3"
+        "typeface-nanum-square-round": "^1.0.2"
     },
     "devDependencies": {
         "@babel/core": "7.12.9",
