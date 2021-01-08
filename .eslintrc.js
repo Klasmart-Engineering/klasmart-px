@@ -6,6 +6,21 @@ module.exports = {
         node: true,
         jest: true,
     },
+    extends: [
+        `eslint:recommended`,
+        `plugin:react/recommended`,
+        `plugin:@typescript-eslint/eslint-recommended`,
+        `plugin:@typescript-eslint/recommended`,
+    ],
+    parser: `@typescript-eslint/parser`,
+    parserOptions: {
+        ecmaFeatures: {
+            jsx: true,
+        },
+        ecmaVersion: 2018,
+        sourceType: `module`,
+        project: `tsconfig.json`,
+    },
     plugins: [
         `react`,
         `@typescript-eslint`,
@@ -13,62 +28,10 @@ module.exports = {
         `modules-newline`,
         `jest`,
     ],
-    extends: [
-        `eslint:recommended`,
-        `plugin:react/recommended`,
-        `plugin:@typescript-eslint/eslint-recommended`,
-        `plugin:@typescript-eslint/recommended`,
-    ],
-    parserOptions: {
-        ecmaFeatures: {
-            jsx: true,
-        },
-        ecmaVersion: 2018,
-        sourceType: `module`,
-    },
-    parser: `@typescript-eslint/parser`,
     rules: {
-        'no-console': process.env.NODE_ENV === `production` ? `error` : `off`,
-        'react/react-in-jsx-scope': `off`,
-        'react/jsx-max-props-per-line': 2,
-        'react/jsx-first-prop-new-line': 2,
-        'react/display-name': `off`,
-        "react/jsx-sort-props": [
-            2,
-            {
-                callbacksLast: true,
-                shorthandFirst: true,
-                ignoreCase: true,
-                noSortAlphabetically: true,
-                reservedFirst: [ `key`, `ref` ],
-            },
-        ],
-        '@typescript-eslint/comma-spacing': [ `error` ], // turned on b/c 'comma-spacing' is disabled
-        '@typescript-eslint/explicit-module-boundary-types': `off`,
-        '@typescript-eslint/no-unused-vars': 1,
-        '@typescript-eslint/no-var-requires': `off`,
-        '@typescript-eslint/quotes': [ `error`, `backtick` ],
-        '@typescript-eslint/member-delimiter-style': [
-            2,
-            {
-                multiline: {
-                    delimiter: `semi`,
-                    requireLast: true,
-                },
-                singleline: {
-                    delimiter: `semi`,
-                    requireLast: false,
-                },
-            },
-        ],
-        "@typescript-eslint/no-empty-interface": `warn`,
-        '@typescript-eslint/no-explicit-any': [
-            `off`,
-            {
-                fixToUnknown: false,
-                ignoreRestArgs: false,
-            },
-        ],
+        indent: [ `error`, 4 ],
+        'linebreak-style': [ `error`, `unix` ],
+        semi: [ `error`, `always` ],
         'array-bracket-newline': [
             `error`,
             {
@@ -96,8 +59,6 @@ module.exports = {
         ],
         'comma-spacing': `off`, // turned off b/c '@typescript-eslint/comma-spacing' is enabled
         'eol-last': [ `error`, `always` ],
-        indent: [ `error`, 4 ],
-        'linebreak-style': [ `error`, `unix` ],
         'no-trailing-spaces': `error`,
         'no-multiple-empty-lines': [
             `error`,
@@ -110,19 +71,19 @@ module.exports = {
         'object-curly-newline': [
             `error`,
             {
-                ObjectExpression: {
+                ObjectExpression: { // eslint-disable-line @typescript-eslint/naming-convention
                     multiline: true,
                     minProperties: 1,
                 },
-                ObjectPattern: {
+                ObjectPattern: { // eslint-disable-line @typescript-eslint/naming-convention
                     multiline: true,
                     minProperties: 3,
                 },
-                ImportDeclaration: {
+                ImportDeclaration: { // eslint-disable-line @typescript-eslint/naming-convention
                     multiline: true,
                     minProperties: 3,
                 },
-                ExportDeclaration: {
+                ExportDeclaration: { // eslint-disable-line @typescript-eslint/naming-convention
                     multiline: true,
                     minProperties: 3,
                 },
@@ -137,7 +98,107 @@ module.exports = {
                 ignoreDeclarationSort: true,
             },
         ],
-        semi: [ `error`, `always` ],
+        'no-warning-comments': 1,
+        'no-console': process.env.NODE_ENV === `production` ? `error` : `off`,
+        'react/react-in-jsx-scope': `off`,
+        'react/jsx-max-props-per-line': 2,
+        'react/jsx-first-prop-new-line': 2,
+        'react/display-name': `off`,
+        'react/jsx-sort-props': [
+            2,
+            {
+                callbacksLast: true,
+                shorthandFirst: true,
+                ignoreCase: true,
+                noSortAlphabetically: true,
+                reservedFirst: [ `key`, `ref` ],
+            },
+        ],
+        '@typescript-eslint/explicit-module-boundary-types': `off`,
+        '@typescript-eslint/comma-spacing': [ `error` ], // turned on b/c 'comma-spacing' is disabled
+        '@typescript-eslint/naming-convention': [
+            `error`,
+            {
+                selector: `default`,
+                format: [ `camelCase` ],
+            },
+            {
+                selector: `variable`,
+                format: [ `camelCase` ],
+                trailingUnderscore: `allow`,
+            },
+            {
+                selector: `typeLike`,
+                format: [ `PascalCase` ],
+            },
+            {
+                selector: `function`,
+                format: [ `camelCase`, `PascalCase` ],
+            },
+            {
+                selector: `variable`,
+                types: [ `boolean` ],
+                format: [ `PascalCase` ],
+                prefix: [
+                    `open`,
+                    `error`,
+                    `valid`,
+                    `loading`,
+                    `is`,
+                    `should`,
+                    `has`,
+                    `can`,
+                    `did`,
+                    `will`,
+                ],
+                trailingUnderscore: `allow`,
+            },
+            {
+                selector: `variable`,
+                modifiers: [ `destructured` ],
+                format: [ `camelCase`, `snake_case` ],
+            },
+            {
+                selector: `enumMember`,
+                format: [ `UPPER_CASE` ],
+            },
+            {
+                selector: `property`,
+                format: [
+                    `camelCase`,
+                    `snake_case`,
+                    `UPPER_CASE`,
+                ],
+            },
+            {
+                selector: `memberLike`,
+                format: [ `camelCase` ],
+            },
+        ],
+        '@typescript-eslint/no-empty-interface': `warn`,
+        '@typescript-eslint/no-unused-vars': 1,
+        '@typescript-eslint/no-var-requires': `off`,
+        '@typescript-eslint/quotes': [ `error`, `backtick` ],
+        '@typescript-eslint/member-delimiter-style': [
+            2,
+            {
+                multiline: {
+                    delimiter: `semi`,
+                    requireLast: true,
+                },
+                singleline: {
+                    delimiter: `semi`,
+                    requireLast: false,
+                },
+            },
+        ],
+        '@typescript-eslint/no-explicit-any': [
+            `off`,
+            {
+                fixToUnknown: false,
+                ignoreRestArgs: false,
+            },
+        ],
         'putout/multiple-properties-destructuring': [
             `error`,
             {
