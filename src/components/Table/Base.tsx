@@ -314,6 +314,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const hasSelectActions = !!selectActions?.length;
     const hasGroups = !!groupableColumns?.length;
     const columnCount = columns.length + (hasRowActions ? 1 : 0) + (hasSelectActions ? 1 : 0);
+    const showToolbar = !!localization?.toolbar?.title || !!primaryAction || !!secondaryActions?.length || !!selectActions?.length;
 
     const tableData: TableData<T> = {
         columns: filteredColumnIds,
@@ -335,15 +336,17 @@ export default function BaseTable<T>(props: Props<T>) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <BaseTableToolbar
-                    primaryAction={primaryAction}
-                    secondaryActions={secondaryActions}
-                    selectActions={selectActions}
-                    numSelected={filteredSortedSelectedRows.length}
-                    tableData={tableData}
-                    localization={localization?.toolbar}
-                />
-                <Divider />
+                {showToolbar && <>
+                    <BaseTableToolbar
+                        primaryAction={primaryAction}
+                        secondaryActions={secondaryActions}
+                        selectActions={selectActions}
+                        numSelected={filteredSortedSelectedRows.length}
+                        tableData={tableData}
+                        localization={localization?.toolbar}
+                    />
+                    <Divider />
+                </>}
                 {hasSearchColumns &&
                     <BaseTableSearch
                         value={search_}

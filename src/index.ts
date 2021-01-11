@@ -1,7 +1,6 @@
 export { default as CenterAlignChildren } from "./components/CenterAlignChildren";
 export { default as CircularProgressWithLabel } from "./components/CircularProgressWithLabel";
 export { default as Copyright } from "./components/Copyright";
-export { default as Dialog } from "./components/Dialog";
 export { default as Loading } from "./components/Loading";
 export { default as MediaDeviceSelect } from "./components/MediaDeviceSelect";
 export { default as NoCamera } from "./components/NoCamera";
@@ -12,8 +11,9 @@ export { default as BaseComboBox } from "./components/Base/ComboBox";
 export { default as BaseDialogAppBar } from "./components/Base/DialogAppBar";
 export { default as BaseFabButton } from "./components/Base/FabButton";
 export { default as BaseIcon } from "./components/Base/Icon";
-export { default as BaseTable } from "./components/Base/Table/Base";
 export { default as BaseTextField } from "./components/Base/TextField";
+export { default as Dialog } from "./components/Dialog";
+export { default as Table } from "./components/Table/Base";
 export { default as ContentCard } from "./components/ContentCard";
 export { default as LanguageSelect } from "./components/LanguageSelect";
 export { default as MultiSelect } from "./components/MultiSelect";

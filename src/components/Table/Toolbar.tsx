@@ -13,7 +13,7 @@ import {
 import clsx from "clsx";
 import { TableData } from "./Base";
 import { SvgIconComponent } from "@material-ui/icons";
-import { BaseFabButton } from "../../../";
+import { BaseFabButton } from "../..";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
