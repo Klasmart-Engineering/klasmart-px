@@ -42,7 +42,10 @@ import BaseTableGroupTabs,
     GroupTabsLocalization,
     SubgroupTab,
 } from "./GroupTabs";
-import { pick } from "lodash";
+import {
+    escapeRegExp,
+    pick,
+} from "lodash";
 import {
     CheckboxDropdownLocalization,
     CheckboxDropdownValue,
@@ -72,12 +75,12 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-function rowIncludesSearch <T>(searchValue: string, searchFieldValues: (keyof T)[], row: T) {
+function rowSearch <T>(searchValue: string, searchFieldValues: (keyof T)[], row: T) {
     if (searchFieldValues.length === 0) return true;
     return searchFieldValues.some((fieldValue) => {
         const value = row[fieldValue];
         const values = Array.isArray(value) ? value : [ value ];
-        const regexp = new RegExp(searchValue, `gi`);
+        const regexp = new RegExp(escapeRegExp(searchValue), `gi`);
         return values.some((value) => {
             const result = String(value).match(regexp);
             return !!result;
@@ -294,7 +297,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const isRowSelected = (idFieldValue: T[Extract<keyof T, string>]) => selectedRows_.indexOf(idFieldValue) !== -1;
     const isColumnSelected = (column: keyof T) => selectedColumns_.indexOf(column) !== -1;
 
-    const filterRowsBySearch = (row: T) => search_ ? rowIncludesSearch(search_, searchableColumnIds, row) : true;
+    const filterRowsBySearch = (row: T) => search_ ? rowSearch(search_, searchableColumnIds, row) : true;
     const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
     const filterRowsBySubgroup = (subgroup?: T[keyof T], inclusive = true) => (row: T) => (subgroup && groupBy_ && (!inclusive || isValidSubgroup(subgroup, subgroups_))) ? subgroup === row[groupBy_] : inclusive;
 
