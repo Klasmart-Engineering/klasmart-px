@@ -124,7 +124,7 @@ module.exports = {
             },
             {
                 selector: `variable`,
-                format: [ `camelCase` ],
+                format: [ `camelCase`, `UPPER_CASE` ],
                 trailingUnderscore: `allow`,
             },
             {

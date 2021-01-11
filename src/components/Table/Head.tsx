@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export type Order = "asc" | "desc";
 export type Align = TableCellProps["align"]
+export type CustomSort<T> = (a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) => number
 
 export interface TableColumn<T> {
     id: Extract<keyof T, string>;
@@ -62,6 +63,7 @@ export interface TableColumn<T> {
     hidden?: boolean;
     search?: (rowValue: T[Extract<keyof T, string>], searchValue: string) => boolean;
     searchValue?: (row: T) => any;
+    sort?: CustomSort<T>;
     render?: (row: T) => ReactElement | ReactElement[];
 }
 

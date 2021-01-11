@@ -24,6 +24,7 @@ import BaseTableToolbar,
 import BaseTableSearch from "./Search";
 import BaseTableHead,
 {
+    CustomSort,
     HeadLocalization,
     Order,
     TableColumn,
@@ -53,26 +54,34 @@ import {
 import { SearchLocalization } from "./Search";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) return -1;
-    if (b[orderBy] > a[orderBy]) return 1;
+function descendingComparator<T>(a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) {
+    if ((typeof a === `string` && typeof b === `string`) || (a instanceof String && b instanceof String)) {
+        const aValue = a as unknown as string;
+        const bValue = b as unknown as string;
+        return bValue.localeCompare(aValue, locale, collatorOptions);
+    } else {
+        if (b < a) return -1;
+        if (b > a) return 1;
+    }
     return 0;
 }
 
-function getComparator<T>(order: Order, orderBy: keyof T): (a: T, b: T) => number {
-    return order === `desc`
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
+function getComparator<T>(order: Order, orderBy: keyof T, customSort?: CustomSort<T>, locale?: string, collatorOptions?: Intl.CollatorOptions): (a: T, b: T) => number {
+    const reverseOrder = order === `desc` ? 1 : -1;
+    const sort = customSort ?? descendingComparator;
+    return (a, b) => reverseOrder * sort(a[orderBy], b[orderBy], locale, collatorOptions);
 }
 
 function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [ el, index ] as [T, number]);
+    const stabilizedThis = array.map((row, index) => [ row, index ] as [T, number]);
+    const ROW = 0;
+    const INDEX = 1;
     stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
+        const order = comparator(a[ROW], b[ROW]);
         if (order !== 0) return order;
-        return a[1] - b[1];
+        return a[INDEX] - b[INDEX];
     });
-    return stabilizedThis.map((el) => el[0]);
+    return stabilizedThis.map((el) => el[ROW]);
 }
 
 function defaultSearch <T>(value: T[Extract<keyof T, string>], searchValue: string) {
@@ -155,6 +164,8 @@ interface Props<T> {
     selectActions?: ToolbarAction<T>[];
     loading?: boolean;
     localization?: TableLocalization;
+    locale?: string;
+    collatorOptions?: Intl.CollatorOptions;
     onChange?: (data: TableData<T>) => void;
 }
 
@@ -180,6 +191,8 @@ export default function BaseTable<T>(props: Props<T>) {
         selectActions,
         loading,
         localization,
+        locale,
+        collatorOptions,
         onChange,
     } = props;
 
@@ -302,10 +315,12 @@ export default function BaseTable<T>(props: Props<T>) {
     const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
     const filterRowsBySubgroup = (subgroup?: T[keyof T], inclusive = true) => (row: T) => (subgroup && groupBy_ && (!inclusive || isValidSubgroup(subgroup, subgroups_))) ? subgroup === row[groupBy_] : inclusive;
 
+    const customSort = columns[columns.findIndex((c) => c.id === orderBy_)].sort;
+
     const filteredColumns = columns.filter(({ id }) => isColumnSelected(id));
     const filteredColumnIds = filteredColumns.map(({ id }) => id);
 
-    const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_))
+    const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions))
         .filter(filterRowsBySearch);
     const filteredSortedGroupedRows = filteredSortedRows.filter(filterRowsBySubgroup(subgroupBy_));
     const filteredSortedSelectedRows = filteredSortedRows.filter(filterRowsBySelected);
