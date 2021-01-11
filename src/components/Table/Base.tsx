@@ -75,17 +75,18 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-function rowSearch <T>(searchValue: string, searchFieldValues: (keyof T)[], row: T) {
-    if (searchFieldValues.length === 0) return true;
-    return searchFieldValues.some((fieldValue) => {
-        const value = row[fieldValue];
-        const values = Array.isArray(value) ? value : [ value ];
-        const regexp = new RegExp(escapeRegExp(searchValue), `gi`);
-        return values.some((value) => {
-            const result = String(value).match(regexp);
-            return !!result;
-        });
+function defaultSearch <T>(value: T[Extract<keyof T, string>], searchValue: string) {
+    const values = Array.isArray(value) ? value : [ value ];
+    const regexp = new RegExp(escapeRegExp(searchValue.trim()), `gi`);
+    return values.some((value) => {
+        const result = String(value).match(regexp);
+        return !!result;
     });
+}
+
+function rowSearch <T>(searchableColumns: TableColumn<T>[], row: T, searchValue: string) {
+    if (searchValue.length === 0 || searchableColumns.length === 0) return true;
+    return searchableColumns.some((column) => column.search?.(row[column.id], searchValue) ?? defaultSearch(row[column.id], searchValue));
 }
 
 const getDistinct = (items: any[]) => [ ...Array.from(new Set(items)) ];
@@ -184,10 +185,10 @@ export default function BaseTable<T>(props: Props<T>) {
 
     const classes = useStyles();
 
-    const persistentColumnIds = columns.filter(({ persistent }) => persistent).map(({ id }) => id);
-    const searchableColumnIds = columns.filter(({ searchable }) => searchable).map(({ id }) => id);
+    const persistentColumnIds = columns.filter((c) => c.persistent).map(({ id }) => id);
     const selectedColumnIds = columns.filter(({ hidden }) => !hidden).map(({ id }) => id);
-    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter(({ groupable }) => groupable).map(({ id, label }) => ({
+    const searchableColumns = columns.filter((c) => !c.disableSearch);
+    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter((c) => c.groupable).map(({ id, label }) => ({
         id,
         label,
     }));
@@ -297,7 +298,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const isRowSelected = (idFieldValue: T[Extract<keyof T, string>]) => selectedRows_.indexOf(idFieldValue) !== -1;
     const isColumnSelected = (column: keyof T) => selectedColumns_.indexOf(column) !== -1;
 
-    const filterRowsBySearch = (row: T) => search_ ? rowSearch(search_, searchableColumnIds, row) : true;
+    const filterRowsBySearch = (row: T) => search_ ? rowSearch(searchableColumns, row, search_) : true;
     const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
     const filterRowsBySubgroup = (subgroup?: T[keyof T], inclusive = true) => (row: T) => (subgroup && groupBy_ && (!inclusive || isValidSubgroup(subgroup, subgroups_))) ? subgroup === row[groupBy_] : inclusive;
 
@@ -312,7 +313,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const filteredSortedGroupedSlicedRows = filteredSortedGroupedRows.slice(page_ * rowsPerPage_, page_ * rowsPerPage_ + rowsPerPage_);
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
-    const hasSearchColumns = !!searchableColumnIds?.length;
+    const hasSearchColumns = !!searchableColumns?.length;
     const hasRowActions = !!rowActions?.length;
     const hasSelectActions = !!selectActions?.length;
     const hasGroups = !!groupableColumns?.length;

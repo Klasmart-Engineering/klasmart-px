@@ -56,10 +56,12 @@ export interface TableColumn<T> {
     label: string;
     align?: Align;
     persistent?: boolean;
-    searchable?: boolean;
     groupable?: boolean;
+    disableSearch?: boolean;
     disableSort?: boolean;
     hidden?: boolean;
+    search?: (rowValue: T[Extract<keyof T, string>], searchValue: string) => boolean;
+    searchValue?: (row: T) => any;
     render?: (row: T) => ReactElement | ReactElement[];
 }
 
