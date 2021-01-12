@@ -114,8 +114,17 @@ module.exports = {
                 reservedFirst: [ `key`, `ref` ],
             },
         ],
-        '@typescript-eslint/explicit-module-boundary-types': `off`,
+        "@typescript-eslint/ban-types": [
+            `error`,
+            {
+                extendDefaults: true,
+                types: {
+                    "{}": false,
+                },
+            },
+        ],
         '@typescript-eslint/comma-spacing': [ `error` ], // turned on b/c 'comma-spacing' is disabled
+        '@typescript-eslint/explicit-module-boundary-types': `off`,
         '@typescript-eslint/naming-convention': [
             `error`,
             {

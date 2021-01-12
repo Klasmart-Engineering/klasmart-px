@@ -61,7 +61,7 @@ export interface GroupSelectMenuItem<T> {
 }
 
 export interface SubgroupTab<T> {
-    id: T[keyof T];
+    id: Extract<T[keyof T], string>;
     count: number;
 }
 

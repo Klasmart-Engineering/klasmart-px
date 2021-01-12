@@ -23,6 +23,7 @@ import BaseTableToolbar,
 import BaseTableSearch from "./Search";
 import BaseTableHead,
 {
+    CustomGroup,
     CustomSort,
     HeadLocalization,
     Order,
@@ -102,7 +103,7 @@ function rowSearch <T>(searchableColumns: TableColumn<T>[], row: T, searchValue:
 
 const isValidGroup = <T,>(group: keyof T, groups?: GroupSelectMenuItem<T>[]) => !!(group && groups?.find((g) => g.id === group) ? group : undefined);
 
-const isValidSubgroup = <T,>(subgroup: T[keyof T], subgroups?: SubgroupTab<T>[]) => !!(subgroup && subgroups?.find((s) => s.id === subgroup) ? subgroup : undefined);
+const isValidSubgroup = <T,>(subgroup: T[keyof T], subgroups?: SubgroupTab<T>[]) => (subgroup !== undefined && subgroups?.find((s) => s.id === subgroup) ? subgroup : undefined) !== undefined;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -199,7 +200,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const persistentColumnIds = columns.filter((c) => c.persistent).map(({ id }) => id);
     const selectedColumnIds = columns.filter(({ hidden }) => !hidden).map(({ id }) => id);
     const searchableColumns = columns.filter((c) => !c.disableSearch);
-    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter((c) => c.groupable).map(({ id, label }) => ({
+    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter((c) => c.groupable || c.group).map(({ id, label }) => ({
         id,
         label,
     }));
@@ -220,12 +221,18 @@ export default function BaseTable<T>(props: Props<T>) {
     }, [ search_, subgroupBy_ ]);
 
     useEffect(() => {
-        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? uniq(rows.flatMap((row) => Array.isArray(row[groupBy_]) ? row[groupBy_] : [ row[groupBy_] ])) : [];
-        const subgroups = subgroupIds.map((id) => ({
+        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? uniq(rows.flatMap((row) => {
+            const value = customGroup?.(row[groupBy_]) ?? row[groupBy_];
+            return Array.isArray(value) ? value : [ value ];
+        })) : [];
+        const subgroups: SubgroupTab<T>[] = subgroupIds.map((id) => ({
             id,
-            count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, id)).length,
+            count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, id, customGroup)).length,
         }));
-        setSubgroups(subgroups);
+        const customSort = columns[columns.findIndex((c) => c.id === groupBy)]?.groupSort;
+        const sort = customSort ?? ((a, b, locale, collatorOptions) => a.id.localeCompare(b.id, locale, collatorOptions));
+        const sortedSubgroups = subgroups.sort((a, b) => sort(a, b, locale, collatorOptions));
+        setSubgroups(sortedSubgroups);
     }, [
         rows,
         groupBy_,
@@ -307,20 +314,22 @@ export default function BaseTable<T>(props: Props<T>) {
 
     const filterRowsBySearch = (row: T) => search_ ? rowSearch(searchableColumns, row, search_) : true;
     const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
-    const filterRowsBySubgroup = (group?: keyof T, subgroup?: T[keyof T]) => (row: T) => {
-        if (!group || !subgroup) return false;
-        const subgroupValues = Array.isArray(row[group]) ? row[group] as unknown as any[] : [ row[group] ];
-        return subgroupValues.some((value) => value === subgroup);
+    const filterRowsBySubgroup = (group?: keyof T, subgroup?: T[keyof T], customGroup?: CustomGroup<T>) => (row: T) => {
+        if (!group || subgroup === undefined) return false;
+        const value = customGroup?.(row[group]) ?? row[group];
+        const groupedValues = Array.isArray(value) ? value as unknown as any[] : [ value ];
+        return groupedValues.some((value) => value === subgroup);
     };
 
     const customSort = columns[columns.findIndex((c) => c.id === orderBy_)].sort;
+    const customGroup = columns[columns.findIndex((c) => c.id === groupBy_)]?.group;
 
     const filteredColumns = columns.filter(({ id }) => isColumnSelected(id));
     const filteredColumnIds = filteredColumns.map(({ id }) => id);
 
     const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions))
         .filter(filterRowsBySearch);
-    const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ && isValidSubgroup(subgroupBy_, subgroups_)) ? filterRowsBySubgroup(groupBy_, subgroupBy_) : () => true);
+    const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && isValidSubgroup(subgroupBy_, subgroups_)) ? filterRowsBySubgroup(groupBy_, subgroupBy_, customGroup) : () => true);
     const filteredSortedSelectedRows = filteredSortedRows.filter(filterRowsBySelected);
     const filteredSortedGroupedSelectedRows = filteredSortedGroupedRows.filter(filterRowsBySelected);
     const filteredSortedGroupedSlicedRows = filteredSortedGroupedRows.slice(page_ * rowsPerPage_, page_ * rowsPerPage_ + rowsPerPage_);
@@ -348,7 +357,7 @@ export default function BaseTable<T>(props: Props<T>) {
     useEffect(() => {
         // set correct page when loading of data finishes
         if (loading) return;
-        const lastPage = Math.ceil(filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, subgroupBy_)).length / rowsPerPage_) - 1;
+        const lastPage = Math.ceil(filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, subgroupBy_, customGroup)).length / rowsPerPage_) - 1;
         setPage(clamp(page ?? 0, 0, lastPage));
     }, [ rows ]);
 

@@ -25,6 +25,7 @@ import BaseTableCheckboxDropdown,
     CheckboxDropdownLocalization,
     CheckboxDropdownValue,
 } from "./CheckboxDropdown";
+import { SubgroupTab } from "./GroupTabs";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,7 +51,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export type Order = "asc" | "desc";
 export type Align = TableCellProps["align"]
+export type CustomGroup<T> = (rowValue: T[keyof T]) => {}
+export type CustomSearch<T> = (rowValue: T[Extract<keyof T, string>], searchValue: string) => boolean
 export type CustomSort<T> = (a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) => number
+export type CustomGroupSort<T> = (a: SubgroupTab<T>, b: SubgroupTab<T>, locale?: string, collatorOptions?: Intl.CollatorOptions) => number
 
 export interface TableColumn<T> {
     id: Extract<keyof T, string>;
@@ -61,8 +65,10 @@ export interface TableColumn<T> {
     disableSearch?: boolean;
     disableSort?: boolean;
     hidden?: boolean;
-    search?: (rowValue: T[Extract<keyof T, string>], searchValue: string) => boolean;
+    group?: CustomGroup<T>;
+    search?: CustomSearch<T>;
     sort?: CustomSort<T>;
+    groupSort?: CustomGroupSort<T>;
     render?: (row: T) => ReactElement | ReactElement[];
 }
 
