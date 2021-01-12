@@ -470,7 +470,7 @@ export default function BaseTable<T>(props: Props<T>) {
                 </TableContainer>
                 <BaseTablePagination
                     rowsPerPageOptions={rowsPerPageOptions}
-                    count={filteredSortedRows.length}
+                    count={filteredSortedGroupedRows.length}
                     rowsPerPage={rowsPerPage_}
                     page={page_}
                     localization={localization?.pagination}
