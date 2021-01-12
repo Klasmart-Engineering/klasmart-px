@@ -8,7 +8,6 @@ import {
     createStyles,
     Divider,
     makeStyles,
-    Paper,
     Table,
     TableBody,
     TableCell,
@@ -46,6 +45,8 @@ import BaseTableGroupTabs,
 import {
     escapeRegExp,
     pick,
+    union,
+    uniq,
 } from "lodash";
 import {
     CheckboxDropdownLocalization,
@@ -98,8 +99,6 @@ function rowSearch <T>(searchableColumns: TableColumn<T>[], row: T, searchValue:
     return searchableColumns.some((column) => column.search?.(row[column.id], searchValue) ?? defaultSearch(row[column.id], searchValue));
 }
 
-const getDistinct = (items: any[]) => [ ...Array.from(new Set(items)) ];
-
 const isValidGroup = <T,>(group: keyof T, groups?: GroupSelectMenuItem<T>[]) => !!(group && groups?.find((g) => g.id === group) ? group : undefined);
 
 const isValidSubgroup = <T,>(subgroup: T[keyof T], subgroups?: SubgroupTab<T>[]) => !!(subgroup && subgroups?.find((s) => s.id === subgroup) ? subgroup : undefined);
@@ -108,10 +107,6 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: `100%`,
-        },
-        paper: {
-            width: `100%`,
-            marginBottom: theme.spacing(2),
         },
         row: {
             height: 53,
@@ -212,7 +207,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ subgroups_, setSubgroups ] = useState<SubgroupTab<T>[]>();
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
     const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>([]);
-    const [ selectedColumns_, setSelectedColumns ] = useState(getDistinct(selectedColumnIds.concat(persistentColumnIds)));
+    const [ selectedColumns_, setSelectedColumns ] = useState(union(selectedColumnIds, persistentColumnIds));
     const [ page_, setPage ] = useState(0);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage ?? 10);
     const [ search_, setSearch ] = useState(search);
@@ -226,10 +221,10 @@ export default function BaseTable<T>(props: Props<T>) {
     ]);
 
     useEffect(() => {
-        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? getDistinct(rows.map(row => row[groupBy_])) : [];
+        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? uniq(rows.flatMap((row) => Array.isArray(row[groupBy_]) ? row[groupBy_] : [ row[groupBy_] ])) : [];
         const subgroups = subgroupIds.map((id) => ({
             id,
-            count: filteredSortedRows.filter(filterRowsBySubgroup(id, false)).length,
+            count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, id)).length,
         }));
         setSubgroups(subgroups);
     }, [
@@ -261,20 +256,20 @@ export default function BaseTable<T>(props: Props<T>) {
             return;
         }
         case `page`: {
-            const selecteds = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
-            setSelectedRows(getDistinct(selectedRows_.concat(selecteds)));
+            const pageRows = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
+            setSelectedRows(union(selectedRows_, pageRows));
             return;
         }
         }
     };
 
     const handleSelectAllRowsPageClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selecteds = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
+        const pageRows = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
         if (!event.target.checked) {
-            setSelectedRows(selectedRows_.filter((rowId) => !(selecteds).includes(rowId)));
+            setSelectedRows(selectedRows_.filter((rowId) => !(pageRows).includes(rowId)));
             return;
         }
-        setSelectedRows(getDistinct(selectedRows_.concat(selecteds)));
+        setSelectedRows(union(selectedRows_, pageRows));
     };
 
     const handleRowSelectClick = (event: React.MouseEvent<unknown>, rowId: T[Extract<keyof T, string>]) => {
@@ -288,9 +283,9 @@ export default function BaseTable<T>(props: Props<T>) {
         setSelectedRows(newSelected);
     };
 
-    const handleColumnSelectClick = (event: React.MouseEvent<unknown>, columnId: keyof T) => {
+    const handleColumnSelectClick = (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => {
         const selectedIndex = selectedColumns_.indexOf(columnId);
-        let newSelected: (keyof T)[] = [];
+        let newSelected: Extract<keyof T, string>[] = [];
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selectedColumns_, columnId);
         } else {
@@ -309,11 +304,15 @@ export default function BaseTable<T>(props: Props<T>) {
     };
 
     const isRowSelected = (idFieldValue: T[Extract<keyof T, string>]) => selectedRows_.indexOf(idFieldValue) !== -1;
-    const isColumnSelected = (column: keyof T) => selectedColumns_.indexOf(column) !== -1;
+    const isColumnSelected = (column: Extract<keyof T, string>) => selectedColumns_.indexOf(column) !== -1;
 
     const filterRowsBySearch = (row: T) => search_ ? rowSearch(searchableColumns, row, search_) : true;
     const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
-    const filterRowsBySubgroup = (subgroup?: T[keyof T], inclusive = true) => (row: T) => (subgroup && groupBy_ && (!inclusive || isValidSubgroup(subgroup, subgroups_))) ? subgroup === row[groupBy_] : inclusive;
+    const filterRowsBySubgroup = (group?: keyof T, subgroup?: T[keyof T]) => (row: T) => {
+        if (!group || !subgroup) return false;
+        const subgroupValues = Array.isArray(row[group]) ? row[group] as unknown as any[] : [ row[group] ];
+        return subgroupValues.some((value) => value === subgroup);
+    };
 
     const customSort = columns[columns.findIndex((c) => c.id === orderBy_)].sort;
 
@@ -322,7 +321,7 @@ export default function BaseTable<T>(props: Props<T>) {
 
     const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions))
         .filter(filterRowsBySearch);
-    const filteredSortedGroupedRows = filteredSortedRows.filter(filterRowsBySubgroup(subgroupBy_));
+    const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ && isValidSubgroup(subgroupBy_, subgroups_)) ? filterRowsBySubgroup(groupBy_, subgroupBy_) : () => true);
     const filteredSortedSelectedRows = filteredSortedRows.filter(filterRowsBySelected);
     const filteredSortedGroupedSelectedRows = filteredSortedGroupedRows.filter(filterRowsBySelected);
     const filteredSortedGroupedSlicedRows = filteredSortedGroupedRows.slice(page_ * rowsPerPage_, page_ * rowsPerPage_ + rowsPerPage_);
@@ -354,130 +353,128 @@ export default function BaseTable<T>(props: Props<T>) {
 
     return (
         <div className={classes.root}>
-            <Paper className={classes.paper}>
-                {showToolbar && <>
-                    <BaseTableToolbar
-                        primaryAction={primaryAction}
-                        secondaryActions={secondaryActions}
-                        selectActions={selectActions}
-                        numSelected={filteredSortedSelectedRows.length}
-                        tableData={tableData}
-                        localization={localization?.toolbar}
+            {showToolbar && <>
+                <BaseTableToolbar
+                    primaryAction={primaryAction}
+                    secondaryActions={secondaryActions}
+                    selectActions={selectActions}
+                    numSelected={filteredSortedSelectedRows.length}
+                    tableData={tableData}
+                    localization={localization?.toolbar}
+                />
+                <Divider />
+            </>}
+            {hasSearchColumns &&
+                <BaseTableSearch
+                    value={search_}
+                    setValue={setSearch}
+                    localization={localization?.search}
+                />
+            }
+            {hasGroups &&
+                <BaseTableGroupTabs
+                    allCount={filteredSortedRows.length}
+                    groupBy={groupBy_}
+                    groups={groupableColumns}
+                    subgroupBy={subgroupBy_}
+                    subgroups={subgroups_}
+                    localization={localization?.groupTabs}
+                    onSelectGroup={setGroupBy}
+                    onSelectSubgroup={setSubgroupBy}
+                />
+            }
+            <TableContainer>
+                <Table>
+                    <BaseTableHead
+                        numSelected={filteredSortedGroupedSlicedSelectedRows.length}
+                        order={order_}
+                        orderBy={orderBy_}
+                        rowCount={filteredSortedGroupedSlicedRows.length}
+                        columns={columns}
+                        selected={selectedColumns_}
+                        hasSelectActions={hasSelectActions}
+                        hasGroups={hasGroups}
+                        localization={localization?.head}
+                        checkboxDropdownLocalization={localization?.checkboxDropdown}
+                        columnSelectorLocalization={localization?.columnSelector}
+                        onSelectAllClick={handleSelectAllRowsClick}
+                        onSelectAllPageClick={handleSelectAllRowsPageClick}
+                        onRequestSort={handleRequestSort}
+                        onColumnChange={handleColumnSelectClick}
                     />
-                    <Divider />
-                </>}
-                {hasSearchColumns &&
-                    <BaseTableSearch
-                        value={search_}
-                        setValue={setSearch}
-                        localization={localization?.search}
+                    <BaseTableLoading
+                        loading={loading}
+                        columnCount={columnCount}
                     />
-                }
-                {hasGroups &&
-                    <BaseTableGroupTabs
-                        allCount={filteredSortedRows.length}
-                        groupBy={groupBy_}
-                        groups={groupableColumns}
-                        subgroupBy={subgroupBy_}
-                        subgroups={subgroups_}
-                        localization={localization?.groupTabs}
-                        onSelectGroup={setGroupBy}
-                        onSelectSubgroup={setSubgroupBy}
-                    />
-                }
-                <TableContainer>
-                    <Table>
-                        <BaseTableHead
-                            numSelected={filteredSortedGroupedSlicedSelectedRows.length}
-                            order={order_}
-                            orderBy={orderBy_}
-                            rowCount={filteredSortedGroupedSlicedRows.length}
-                            columns={columns}
-                            selected={selectedColumns_}
-                            hasSelectActions={hasSelectActions}
-                            hasGroups={hasGroups}
-                            localization={localization?.head}
-                            checkboxDropdownLocalization={localization?.checkboxDropdown}
-                            columnSelectorLocalization={localization?.columnSelector}
-                            onSelectAllClick={handleSelectAllRowsClick}
-                            onSelectAllPageClick={handleSelectAllRowsPageClick}
-                            onRequestSort={handleRequestSort}
-                            onColumnChange={handleColumnSelectClick}
-                        />
-                        <BaseTableLoading
-                            loading={loading}
-                            columnCount={columnCount}
-                        />
-                        <TableBody>
-                            {filteredSortedGroupedRows.length === 0 &&
-                                <TableRow tabIndex={-1}>
-                                    <TableCell
-                                        colSpan={columnCount}
-                                        align="center"
-                                    >
-                                        {localization?.body?.noData ?? `No results found`}
+                    <TableBody>
+                        {filteredSortedGroupedRows.length === 0 &&
+                            <TableRow tabIndex={-1}>
+                                <TableCell
+                                    colSpan={columnCount}
+                                    align="center"
+                                >
+                                    {localization?.body?.noData ?? `No results found`}
+                                </TableCell>
+                            </TableRow>
+                        }
+                        {filteredSortedGroupedSlicedRows.map((row, i) => {
+                            const isSelected = isRowSelected(row[idField]);
+                            const labelId = `enhanced-table-checkbox-${i}`;
+                            return (
+                                <TableRow
+                                    key={row[idField] as Extract<T[Extract<keyof T, string>], string>}
+                                    hover
+                                    tabIndex={-1}
+                                    className={classes.row}
+                                >
+                                    {hasSelectActions &&
+                                            <TableCell padding="checkbox">
+                                                <Checkbox
+                                                    role="checkbox"
+                                                    checked={isSelected}
+                                                    inputProps={{
+                                                        "aria-labelledby": labelId,
+                                                    }}
+                                                    onClick={(event) => handleRowSelectClick(event, row[idField])}
+                                                />
+                                            </TableCell>
+                                    }
+                                    {filteredColumns.map((column, j) => {
+                                        const render = column.render?.(row);
+                                        const element = render ?? row[column.id];
+                                        return <TableCell
+                                            key={`rowCell-${i}-${j}`}
+                                            id={labelId}
+                                            scope="row"
+                                            align={column.align}
+                                        >
+                                            {element}
+                                        </TableCell>;
+                                    })}
+                                    <TableCell padding="checkbox">
+                                        {rowActions && rowActions.length > 0 &&
+                                            <BaseTableRowMoreMenu
+                                                item={row}
+                                                actions={rowActions(row)}
+                                                localization={localization?.rowMoreMenu}
+                                            />
+                                        }
                                     </TableCell>
                                 </TableRow>
-                            }
-                            {filteredSortedGroupedSlicedRows.map((row, i) => {
-                                const isSelected = isRowSelected(row[idField]);
-                                const labelId = `enhanced-table-checkbox-${i}`;
-                                return (
-                                    <TableRow
-                                        key={row[idField] as Extract<T[Extract<keyof T, string>], string>}
-                                        hover
-                                        tabIndex={-1}
-                                        className={classes.row}
-                                    >
-                                        {hasSelectActions &&
-                                                <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                        role="checkbox"
-                                                        checked={isSelected}
-                                                        inputProps={{
-                                                            "aria-labelledby": labelId,
-                                                        }}
-                                                        onClick={(event) => handleRowSelectClick(event, row[idField])}
-                                                    />
-                                                </TableCell>
-                                        }
-                                        {filteredColumns.map((column, j) => {
-                                            const render = column.render?.(row);
-                                            const element = render ?? row[column.id];
-                                            return <TableCell
-                                                key={`rowCell-${i}-${j}`}
-                                                id={labelId}
-                                                scope="row"
-                                                align={column.align}
-                                            >
-                                                {element}
-                                            </TableCell>;
-                                        })}
-                                        <TableCell padding="checkbox">
-                                            {rowActions && rowActions.length > 0 &&
-                                                <BaseTableRowMoreMenu
-                                                    item={row}
-                                                    actions={rowActions(row)}
-                                                    localization={localization?.rowMoreMenu}
-                                                />
-                                            }
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <BaseTablePagination
-                    rowsPerPageOptions={rowsPerPageOptions}
-                    count={filteredSortedGroupedRows.length}
-                    rowsPerPage={rowsPerPage_}
-                    page={page_}
-                    localization={localization?.pagination}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-            </Paper>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <BaseTablePagination
+                rowsPerPageOptions={rowsPerPageOptions}
+                count={filteredSortedGroupedRows.length}
+                rowsPerPage={rowsPerPage_}
+                page={page_}
+                localization={localization?.pagination}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
         </div>
     );
 }

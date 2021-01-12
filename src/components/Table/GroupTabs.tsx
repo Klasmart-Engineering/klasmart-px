@@ -98,9 +98,7 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
 
     // adjusting index+1 b/c "all"-tab is always index 0
-    const subgroupIndex = 1 + subgroups.findIndex((subgroup) => subgroup.id === subgroupBy_) ?? 0;
-
-    const allSubgroupCount = subgroups.reduce((sum, subgroup) => sum + subgroup.count, 0);
+    const subgroupIndex = 1 + subgroups.findIndex((subgroup) => subgroup.id === subgroupBy_);
 
     const handleSubgroupChange = (event: React.ChangeEvent<unknown>, value: number) => {
         const newSubgroupIndex = value - 1; // "all"-tab is always index 0 so need to subtract by 1
@@ -142,7 +140,7 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
                     onChange={handleSubgroupChange}
                 >
                     <Tab
-                        label={`${localization?.tabAll ?? `All`} (${groupBy_ ? allSubgroupCount : allCount})`}
+                        label={`${localization?.tabAll ?? `All`} (${allCount})`}
                         className={classes.tabRoot}
                     />
                     {subgroups.map((subgroup, i) =>

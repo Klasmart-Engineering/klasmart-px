@@ -62,7 +62,6 @@ export interface TableColumn<T> {
     disableSort?: boolean;
     hidden?: boolean;
     search?: (rowValue: T[Extract<keyof T, string>], searchValue: string) => boolean;
-    searchValue?: (row: T) => any;
     sort?: CustomSort<T>;
     render?: (row: T) => ReactElement | ReactElement[];
 }
@@ -86,7 +85,7 @@ interface Props<T> {
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;
     localization?: HeadLocalization;
-    onColumnChange: (event: React.MouseEvent<unknown>, columnId: keyof T) => void;
+    onColumnChange: (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => void;
 }
 
 export default function BaseTableHead<T>(props: Props<T>) {
