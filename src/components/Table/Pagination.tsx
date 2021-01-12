@@ -14,6 +14,7 @@ import {
     KeyboardArrowRight as KeyboardArrowRightIcon,
     LastPage as LastPageIcon,
 } from "@material-ui/icons";
+import { clamp } from "lodash";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -133,7 +134,7 @@ export default function BaseTablePagination (props: Props) {
             component="div"
             count={count}
             rowsPerPage={rowsPerPage}
-            page={Math.max(0, Math.min(page, lastPage))}
+            page={clamp(page, 0, lastPage)}
             ActionsComponent={actions}
             onChangePage={onChangePage}
             onChangeRowsPerPage={onChangeRowsPerPage}

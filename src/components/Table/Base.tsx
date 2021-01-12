@@ -43,6 +43,7 @@ import BaseTableGroupTabs,
     SubgroupTab,
 } from "./GroupTabs";
 import {
+    clamp,
     escapeRegExp,
     pick,
     union,
@@ -153,6 +154,7 @@ interface Props<T> {
     rows: T[];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | { value: number; label: string }>;
+    page?: number;
     search?: string;
     primaryAction?: ToolbarAction<T>;
     secondaryActions?: ToolbarAction<T>[];
@@ -179,6 +181,7 @@ export default function BaseTable<T>(props: Props<T>) {
             25,
             50,
         ],
+        page,
         search = ``,
         primaryAction,
         rowActions,
@@ -208,17 +211,13 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
     const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>([]);
     const [ selectedColumns_, setSelectedColumns ] = useState(union(selectedColumnIds, persistentColumnIds));
-    const [ page_, setPage ] = useState(0);
+    const [ page_, setPage ] = useState(page ?? 0);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage ?? 10);
     const [ search_, setSearch ] = useState(search);
 
     useEffect(() => {
         setPage(0);
-    }, [
-        search_,
-        groupBy_,
-        subgroupBy_,
-    ]);
+    }, [ search_, subgroupBy_ ]);
 
     useEffect(() => {
         const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? uniq(rows.flatMap((row) => Array.isArray(row[groupBy_]) ? row[groupBy_] : [ row[groupBy_] ])) : [];
@@ -347,8 +346,14 @@ export default function BaseTable<T>(props: Props<T>) {
     };
 
     useEffect(() => {
-        if (!onChange) return;
-        onChange(tableData);
+        // set correct page when loading of data finishes
+        if (loading) return;
+        const lastPage = Math.ceil(filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, subgroupBy_)).length / rowsPerPage_) - 1;
+        setPage(clamp(page ?? 0, 0, lastPage));
+    }, [ rows ]);
+
+    useEffect(() => {
+        onChange?.(tableData);
     }, [ tableData ]);
 
     return (
