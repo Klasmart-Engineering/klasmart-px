@@ -1,6 +1,7 @@
 import React,
 {
     useEffect,
+    useMemo,
     useState,
 } from "react";
 import {
@@ -198,32 +199,12 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ order_, setOrder ] = useState(order ?? `asc`);
     const [ orderBy_, setOrderBy ] = useState(orderBy ?? idField);
     const [ groupBy_, setGroupBy ] = useState(groupBy);
-    const [ subgroups_, setSubgroups ] = useState<SubgroupTab<T>[]>();
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
     const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>([]);
     const [ selectedColumns_, setSelectedColumns ] = useState(union(selectedColumnIds, persistentColumnIds));
     const [ page_, setPage ] = useState(page ?? 0);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage ?? 10);
     const [ search_, setSearch ] = useState(search ?? ``);
-
-    useEffect(() => {
-        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? uniq(rows.flatMap((row) => {
-            const value = customGroup?.(row[groupBy_]) ?? row[groupBy_];
-            return Array.isArray(value) ? value : [ value ];
-        })) : [];
-        const subgroups: SubgroupTab<T>[] = subgroupIds.map((id) => ({
-            id,
-            count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, id, customGroup)).length,
-        }));
-        const customSort = columns[columns.findIndex((c) => c.id === groupBy)]?.groupSort;
-        const sort = customSort ?? ((a, b, locale, collatorOptions) => a.id.localeCompare(b.id, locale, collatorOptions));
-        const sortedSubgroups = subgroups.sort((a, b) => sort(a, b, locale, collatorOptions));
-        setSubgroups(sortedSubgroups);
-    }, [
-        rows,
-        groupBy_,
-        search_,
-    ]);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => {
         const isAsc = orderBy_ === property && order_ === `asc`;
@@ -328,6 +309,24 @@ export default function BaseTable<T>(props: Props<T>) {
 
     const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions))
         .filter(filterRowsBySearch);
+    const subgroups_ = useMemo<SubgroupTab<T>[]>(() => {
+        const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? uniq(rows.flatMap((row) => {
+            const value = customGroup?.(row[groupBy_]) ?? row[groupBy_];
+            return Array.isArray(value) ? value : [ value ];
+        })) : [];
+        const subgroups: SubgroupTab<T>[] = subgroupIds.map((id) => ({
+            id,
+            count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, id, customGroup)).length,
+        }));
+        const customSort = columns[columns.findIndex((c) => c.id === groupBy)]?.groupSort;
+        const sort = customSort ?? ((a, b, locale, collatorOptions) => a.id.localeCompare(b.id, locale, collatorOptions));
+        const sortedSubgroups = subgroups.sort((a, b) => sort(a, b, locale, collatorOptions));
+        return sortedSubgroups;
+    }, [
+        rows,
+        groupBy_,
+        search_,
+    ]);
     const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && isValidSubgroup(subgroupBy_, subgroups_)) ? filterRowsBySubgroup(groupBy_, subgroupBy_, customGroup) : () => true);
     const filteredSortedSelectedRows = filteredSortedRows.filter(filterRowsBySelected);
     const filteredSortedGroupedSelectedRows = filteredSortedGroupedRows.filter(filterRowsBySelected);
@@ -340,6 +339,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const hasGroups = !!groupableColumns?.length;
     const columnCount = columns.length + (hasRowActions ? 1 : 0) + (hasSelectActions ? 1 : 0);
     const showToolbar = !!localization?.toolbar?.title || !!primaryAction || !!secondaryActions?.length || !!selectActions?.length;
+    const lastPage = Math.ceil(filteredSortedGroupedRows.length / rowsPerPage_) - 1;
 
     const tableData: TableData<T> = {
         columns: filteredColumnIds,
@@ -354,25 +354,23 @@ export default function BaseTable<T>(props: Props<T>) {
     };
 
     useEffect(() => {
-        onChange?.(tableData);
-    }, [ tableData ]);
-
-    useEffect(() => {
+        // set start page when loading finishes
         if (loading) return;
-        const count = filteredSortedGroupedRows.length;
-        const lastPage = Math.ceil(count / rowsPerPage_) - 1;
         const newPage = clamp(page ?? page_, 0, lastPage);
         if (newPage === page_) return;
         setPage(clamp(page ?? page_, 0, lastPage));
     }, [ rows ]);
 
     useEffect(() => {
-        const count = filteredSortedGroupedRows.length;
-        const lastPage = Math.ceil(count / rowsPerPage_) - 1;
+        // clamp page
         const newPage = clamp(page_, 0, lastPage);
         if (newPage === page_) return;
         setPage(clamp(page_, 0, lastPage));
     }, [ page_ ]);
+
+    useEffect(() => {
+        onChange?.(tableData);
+    }, [ tableData ]);
 
     return (
         <div className={classes.root}>

@@ -1,4 +1,5 @@
-import React from "react";
+import React,
+{ useState } from "react";
 import {
     Box,
     createStyles,
@@ -13,6 +14,7 @@ import {
     Clear as ClearIcon,
     Search as SearchIcon,
 } from "@material-ui/icons";
+import { debounce } from "lodash";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -61,6 +63,8 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+const debouncedOnChange = debounce((value, onChange) => onChange(value), 100);
+
 export interface SearchLocalization {
     placeholder?: string;
     clear?: string;
@@ -79,6 +83,12 @@ export default function BaseTableSearch (props: Props) {
         onChange,
     } = props;
     const classes = useStyles();
+    const [ value_, setValue ] = useState(value);
+
+    const handleOnChange = (value: string) => {
+        setValue(value);
+        debouncedOnChange(value, onChange);
+    };
 
     return (
         <div className={classes.root}>
@@ -86,18 +96,18 @@ export default function BaseTableSearch (props: Props) {
                 fullWidth
                 className={classes.textField}
                 placeholder={localization?.placeholder ?? `Search`}
-                value={value}
-                onChange={(e) => onChange(e.currentTarget.value)}
+                value={value_}
+                onChange={(e) => handleOnChange(e.currentTarget.value)}
             />
             <Box className={classes.iconRowContainer}>
                 <div className={classes.iconContainer}>
                     <SearchIcon color="action" />
                 </div>
-                {value &&
+                {value_ &&
                     <Tooltip title={localization?.clear ?? `Clear search`}>
                         <IconButton
                             className={classes.actionIcon}
-                            onClick={() => onChange(``)}
+                            onClick={() => handleOnChange(``)}
                         >
                             <ClearIcon color="action" />
                         </IconButton>
