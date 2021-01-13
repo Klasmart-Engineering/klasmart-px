@@ -6,6 +6,13 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "jsx": "react",
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext",
+            "ES6",
+            "ScriptHost"
+        ],
         "module": "commonjs",
         "noEmit": false,
         "noImplicitAny": true,

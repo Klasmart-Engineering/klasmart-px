@@ -7,6 +7,7 @@ import { GroupTabsLocalization } from "./GroupTabs";
 import { CheckboxDropdownLocalization } from "./CheckboxDropdown";
 import { SearchLocalization } from "./Search";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
+import { BodyLocalization } from "./Body";
 export interface TableLocalization {
     toolbar?: ToolbarLocalization;
     search?: SearchLocalization;
@@ -14,12 +15,9 @@ export interface TableLocalization {
     head?: HeadLocalization;
     columnSelector?: ColumnSelectorLocalization;
     checkboxDropdown?: CheckboxDropdownLocalization;
-    body?: TableBodyLocalization;
+    body?: BodyLocalization;
     rowMoreMenu?: RowMoreMenuLocalization;
     pagination?: PaginationLocalization;
-}
-export interface TableBodyLocalization {
-    noData?: string;
 }
 export interface TableData<T> {
     columns: (keyof T)[];
@@ -46,12 +44,15 @@ interface Props<T> {
         value: number;
         label: string;
     }>;
+    page?: number;
     search?: string;
     primaryAction?: ToolbarAction<T>;
     secondaryActions?: ToolbarAction<T>[];
     selectActions?: ToolbarAction<T>[];
     loading?: boolean;
     localization?: TableLocalization;
+    locale?: string;
+    collatorOptions?: Intl.CollatorOptions;
     onChange?: (data: TableData<T>) => void;
 }
 export default function BaseTable<T>(props: Props<T>): JSX.Element;

@@ -4,7 +4,7 @@ export interface GroupSelectMenuItem<T> {
     id: keyof T;
 }
 export interface SubgroupTab<T> {
-    id: T[keyof T];
+    id: Extract<T[keyof T], string>;
     count: number;
 }
 export interface GroupTabsLocalization {
