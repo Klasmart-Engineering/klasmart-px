@@ -4,15 +4,11 @@ import React,
     useState,
 } from "react";
 import {
-    Checkbox,
     createStyles,
     Divider,
     makeStyles,
     Table,
-    TableBody,
-    TableCell,
     TableContainer,
-    TableRow,
     Theme,
 } from "@material-ui/core";
 import BaseTableToolbar,
@@ -30,8 +26,7 @@ import BaseTableHead,
     TableColumn,
 } from "./Head";
 import BaseTableLoading from "./Loading";
-import BaseTableRowMoreMenu,
-{
+import {
     RowAction,
     RowMoreMenuLocalization,
 } from "./RowMoreMenu";
@@ -56,6 +51,8 @@ import {
 } from "./CheckboxDropdown";
 import { SearchLocalization } from "./Search";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
+import BaseTableBody,
+{ BodyLocalization } from "./Body";
 
 function descendingComparator<T>(a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) {
     if ((typeof a === `string` && typeof b === `string`) || (a instanceof String && b instanceof String)) {
@@ -110,9 +107,6 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             width: `100%`,
         },
-        row: {
-            height: 53,
-        },
     }),
 );
 
@@ -123,13 +117,9 @@ export interface TableLocalization {
     head?: HeadLocalization;
     columnSelector?: ColumnSelectorLocalization;
     checkboxDropdown?: CheckboxDropdownLocalization;
-    body?: TableBodyLocalization;
+    body?: BodyLocalization;
     rowMoreMenu?: RowMoreMenuLocalization;
     pagination?: PaginationLocalization;
-}
-
-export interface TableBodyLocalization {
-    noData?: string;
 }
 
 export interface TableData<T> {
@@ -175,7 +165,7 @@ export default function BaseTable<T>(props: Props<T>) {
         orderBy,
         groupBy,
         subgroupBy,
-        rows,
+        rows = [],
         rowsPerPage,
         rowsPerPageOptions = [
             10,
@@ -215,13 +205,6 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ page_, setPage ] = useState(page ?? 0);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage ?? 10);
     const [ search_, setSearch ] = useState(search ?? ``);
-
-    useEffect(() => {
-        if (loading) return;
-        const count = filteredSortedGroupedRows.length;
-        const lastPage = Math.ceil(count / rowsPerPage_) - 1;
-        setPage(clamp(page_, 0, lastPage));
-    }, [ rows ]);
 
     useEffect(() => {
         const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? uniq(rows.flatMap((row) => {
@@ -326,7 +309,6 @@ export default function BaseTable<T>(props: Props<T>) {
         setPage(0);
     };
 
-    const isRowSelected = (idFieldValue: T[Extract<keyof T, string>]) => selectedRows_.indexOf(idFieldValue) !== -1;
     const isColumnSelected = (column: Extract<keyof T, string>) => selectedColumns_.indexOf(column) !== -1;
 
     const filterRowsBySearch = (row: T) => search_ ? rowSearch(searchableColumns, row, search_) : true;
@@ -374,6 +356,23 @@ export default function BaseTable<T>(props: Props<T>) {
     useEffect(() => {
         onChange?.(tableData);
     }, [ tableData ]);
+
+    useEffect(() => {
+        if (loading) return;
+        const count = filteredSortedGroupedRows.length;
+        const lastPage = Math.ceil(count / rowsPerPage_) - 1;
+        const newPage = clamp(page ?? page_, 0, lastPage);
+        if (newPage === page_) return;
+        setPage(clamp(page ?? page_, 0, lastPage));
+    }, [ rows ]);
+
+    useEffect(() => {
+        const count = filteredSortedGroupedRows.length;
+        const lastPage = Math.ceil(count / rowsPerPage_) - 1;
+        const newPage = clamp(page_, 0, lastPage);
+        if (newPage === page_) return;
+        setPage(clamp(page_, 0, lastPage));
+    }, [ page_ ]);
 
     return (
         <div className={classes.root}>
@@ -430,64 +429,18 @@ export default function BaseTable<T>(props: Props<T>) {
                         loading={loading}
                         columnCount={columnCount}
                     />
-                    <TableBody>
-                        {filteredSortedGroupedRows.length === 0 &&
-                            <TableRow tabIndex={-1}>
-                                <TableCell
-                                    colSpan={columnCount}
-                                    align="center"
-                                >
-                                    {localization?.body?.noData ?? `No results found`}
-                                </TableCell>
-                            </TableRow>
-                        }
-                        {filteredSortedGroupedSlicedRows.map((row, i) => {
-                            const isSelected = isRowSelected(row[idField]);
-                            const labelId = `enhanced-table-checkbox-${i}`;
-                            return (
-                                <TableRow
-                                    key={row[idField] as Extract<T[Extract<keyof T, string>], string>}
-                                    hover
-                                    tabIndex={-1}
-                                    className={classes.row}
-                                >
-                                    {hasSelectActions &&
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    role="checkbox"
-                                                    checked={isSelected}
-                                                    inputProps={{
-                                                        "aria-labelledby": labelId,
-                                                    }}
-                                                    onClick={(event) => handleRowSelectClick(event, row[idField])}
-                                                />
-                                            </TableCell>
-                                    }
-                                    {filteredColumns.map((column, j) => {
-                                        const render = column.render?.(row);
-                                        const element = render ?? row[column.id];
-                                        return <TableCell
-                                            key={`rowCell-${i}-${j}`}
-                                            id={labelId}
-                                            scope="row"
-                                            align={column.align}
-                                        >
-                                            {element}
-                                        </TableCell>;
-                                    })}
-                                    <TableCell padding="checkbox">
-                                        {rowActions && rowActions.length > 0 &&
-                                            <BaseTableRowMoreMenu
-                                                item={row}
-                                                actions={rowActions(row)}
-                                                localization={localization?.rowMoreMenu}
-                                            />
-                                        }
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
+                    <BaseTableBody
+                        columns={filteredColumns}
+                        columnCount={columnCount}
+                        hasSelectActions={hasSelectActions}
+                        idField={idField}
+                        rows={filteredSortedGroupedSlicedRows}
+                        rowActions={rowActions}
+                        selectedRows={selectedRows_}
+                        localization={localization?.body}
+                        rowMoreMenuLocalization={localization?.rowMoreMenu}
+                        onRowSelect={handleRowSelectClick}
+                    />
                 </Table>
             </TableContainer>
             <BaseTablePagination
