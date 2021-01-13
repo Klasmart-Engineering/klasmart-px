@@ -56,7 +56,7 @@ function DialogActionButton (props: DialogActionButtonProps) {
     const theme = useTheme();
     return <Button
         style={{
-            color: theme.palette[action.color][theme.palette.type],
+            color: !action.disabled ? theme.palette[action.color][theme.palette.type] : undefined,
         }}
         disabled={action.disabled}
         onClick={action.onClick}
