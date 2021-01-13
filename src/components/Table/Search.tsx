@@ -68,15 +68,15 @@ export interface SearchLocalization {
 
 interface Props {
     value: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
     localization?: SearchLocalization;
+    onChange: (value: string) => void;
 }
 
 export default function BaseTableSearch (props: Props) {
     const {
         value,
-        setValue,
         localization,
+        onChange,
     } = props;
     const classes = useStyles();
 
@@ -87,7 +87,7 @@ export default function BaseTableSearch (props: Props) {
                 className={classes.textField}
                 placeholder={localization?.placeholder ?? `Search`}
                 value={value}
-                onChange={(e) => setValue(e.currentTarget.value)}
+                onChange={(e) => onChange(e.currentTarget.value)}
             />
             <Box className={classes.iconRowContainer}>
                 <div className={classes.iconContainer}>
@@ -97,7 +97,7 @@ export default function BaseTableSearch (props: Props) {
                     <Tooltip title={localization?.clear ?? `Clear search`}>
                         <IconButton
                             className={classes.actionIcon}
-                            onClick={() => setValue(``)}
+                            onClick={() => onChange(``)}
                         >
                             <ClearIcon color="action" />
                         </IconButton>

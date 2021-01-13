@@ -109,8 +109,11 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
 
     const handleGroupChange = (e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>, child: React.ReactNode) => {
         const newGroup = e.target.value as "" | NonNullable<keyof T>;
-        setSubgroupBy(undefined);
-        onSelectSubgroup(undefined);
+        const newSubgroup = undefined;
+        if (newSubgroup !== subgroupBy_) {
+            setSubgroupBy(newSubgroup);
+            onSelectSubgroup(newSubgroup);
+        }
         setGroupBy(newGroup);
         onSelectGroup(newGroup === `` ? undefined : newGroup);
     };

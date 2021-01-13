@@ -183,7 +183,7 @@ export default function BaseTable<T>(props: Props<T>) {
             50,
         ],
         page,
-        search = ``,
+        search,
         primaryAction,
         rowActions,
         secondaryActions,
@@ -214,11 +214,14 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ selectedColumns_, setSelectedColumns ] = useState(union(selectedColumnIds, persistentColumnIds));
     const [ page_, setPage ] = useState(page ?? 0);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage ?? 10);
-    const [ search_, setSearch ] = useState(search);
+    const [ search_, setSearch ] = useState(search ?? ``);
 
     useEffect(() => {
-        setPage(0);
-    }, [ search_, subgroupBy_ ]);
+        if (loading) return;
+        const count = filteredSortedGroupedRows.length;
+        const lastPage = Math.ceil(count / rowsPerPage_) - 1;
+        setPage(clamp(page_, 0, lastPage));
+    }, [ rows ]);
 
     useEffect(() => {
         const subgroupIds = groupBy_ && isValidGroup(groupBy_, groupableColumns) ? uniq(rows.flatMap((row) => {
@@ -309,6 +312,20 @@ export default function BaseTable<T>(props: Props<T>) {
         setPage(0);
     };
 
+    const handleSelectGroup = (group: keyof T | undefined) => {
+        setGroupBy(group);
+    };
+
+    const handleSelectSubgroup = (subgroup: T[keyof T] | undefined) => {
+        setSubgroupBy(subgroup);
+        setPage(0);
+    };
+
+    const handleChangeSearch = (value: string) => {
+        setSearch(value);
+        setPage(0);
+    };
+
     const isRowSelected = (idFieldValue: T[Extract<keyof T, string>]) => selectedRows_.indexOf(idFieldValue) !== -1;
     const isColumnSelected = (column: Extract<keyof T, string>) => selectedColumns_.indexOf(column) !== -1;
 
@@ -355,13 +372,6 @@ export default function BaseTable<T>(props: Props<T>) {
     };
 
     useEffect(() => {
-        // set correct page when loading of data finishes
-        if (loading) return;
-        const lastPage = Math.ceil(filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, subgroupBy_, customGroup)).length / rowsPerPage_) - 1;
-        setPage(clamp(page ?? 0, 0, lastPage));
-    }, [ rows ]);
-
-    useEffect(() => {
         onChange?.(tableData);
     }, [ tableData ]);
 
@@ -381,8 +391,8 @@ export default function BaseTable<T>(props: Props<T>) {
             {hasSearchColumns &&
                 <BaseTableSearch
                     value={search_}
-                    setValue={setSearch}
                     localization={localization?.search}
+                    onChange={handleChangeSearch}
                 />
             }
             {hasGroups &&
@@ -393,8 +403,8 @@ export default function BaseTable<T>(props: Props<T>) {
                     subgroupBy={subgroupBy_}
                     subgroups={subgroups_}
                     localization={localization?.groupTabs}
-                    onSelectGroup={setGroupBy}
-                    onSelectSubgroup={setSubgroupBy}
+                    onSelectGroup={handleSelectGroup}
+                    onSelectSubgroup={handleSelectSubgroup}
                 />
             }
             <TableContainer>
