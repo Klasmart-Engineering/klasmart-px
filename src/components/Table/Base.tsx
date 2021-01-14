@@ -57,8 +57,8 @@ import BaseTableBody,
 
 function descendingComparator<T>(a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) {
     if ((typeof a === `string` && typeof b === `string`) || (a instanceof String && b instanceof String)) {
-        const aValue = a as unknown as string;
-        const bValue = b as unknown as string;
+        const aValue = a as Extract<T[keyof T], string>;
+        const bValue = b as Extract<T[keyof T], string>;
         return bValue.localeCompare(aValue, locale, collatorOptions);
     } else {
         if (b < a) return -1;
@@ -191,7 +191,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const persistentColumnIds = columns.filter((c) => c.persistent).map(({ id }) => id);
     const selectedColumnIds = columns.filter(({ hidden }) => !hidden).map(({ id }) => id);
     const searchableColumns = columns.filter((c) => !c.disableSearch);
-    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter((c) => c.groupable || c.group).map(({ id, label }) => ({
+    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter((c) => c.groupable || c.group || c.groupSort).map(({ id, label }) => ({
         id,
         label,
     }));
@@ -318,9 +318,8 @@ export default function BaseTable<T>(props: Props<T>) {
             id,
             count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, id, customGroup)).length,
         }));
-        const customSort = columns[columns.findIndex((c) => c.id === groupBy)]?.groupSort;
-        const sort = customSort ?? ((a, b, locale, collatorOptions) => a.id.localeCompare(b.id, locale, collatorOptions));
-        const sortedSubgroups = subgroups.sort((a, b) => sort(a, b, locale, collatorOptions));
+        const customSort = columns[columns.findIndex((c) => c.id === groupBy_)]?.groupSort;
+        const sortedSubgroups = stableSort(subgroups, getComparator(`asc`, `id`, customSort, locale, collatorOptions));
         return sortedSubgroups;
     }, [
         rows,
