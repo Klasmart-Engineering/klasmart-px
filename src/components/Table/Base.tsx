@@ -294,9 +294,9 @@ export default function BaseTable<T>(props: Props<T>) {
 
     const filterRowsBySearch = (row: T) => search_ ? rowSearch(searchableColumns, row, search_) : true;
     const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
-    const filterRowsBySubgroup = (group?: keyof T, subgroup?: string, customGroup?: CustomGroup<T>) => (row: T) => {
+    const filterRowsBySubgroup = (group?: keyof T, subgroup?: string, customGroupText?: CustomGroup<T>) => (row: T) => {
         if (!group || subgroup === undefined) return false;
-        const value = customGroup?.(row[group]) ?? row[group];
+        const value = customGroupText?.(row[group]) ?? row[group];
         const groupedValues = Array.isArray(value) ? value as unknown as any[] : [ value ];
         return groupedValues.some((value) => value === subgroup);
     };
