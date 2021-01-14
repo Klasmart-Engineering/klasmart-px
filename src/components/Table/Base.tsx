@@ -387,14 +387,15 @@ export default function BaseTable<T>(props: Props<T>) {
                 />
                 <Divider />
             </>}
-            {hasSearchColumns &&
+            {hasSearchColumns && <>
                 <BaseTableSearch
                     value={search_}
                     localization={localization?.search}
                     onChange={handleChangeSearch}
                 />
-            }
-            {hasGroups &&
+                <Divider />
+            </>}
+            {hasGroups && <>
                 <BaseTableGroupTabs
                     allCount={filteredSortedRows.length}
                     groupBy={groupBy_}
@@ -405,7 +406,8 @@ export default function BaseTable<T>(props: Props<T>) {
                     onSelectGroup={handleSelectGroup}
                     onSelectSubgroup={handleSelectSubgroup}
                 />
-            }
+                <Divider />
+            </>}
             <TableContainer>
                 <Table>
                     <BaseTableHead

@@ -181,7 +181,6 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
                     )}
                 </Select>
             </Box>
-            <Divider />
         </>
     );
 }

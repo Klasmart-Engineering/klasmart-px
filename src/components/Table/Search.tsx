@@ -3,7 +3,6 @@ import React,
 import {
     Box,
     createStyles,
-    Divider,
     IconButton,
     makeStyles,
     TextField,
@@ -114,7 +113,6 @@ export default function BaseTableSearch (props: Props) {
                     </Tooltip>
                 }
             </Box>
-            <Divider />
         </div>
     );
 }
