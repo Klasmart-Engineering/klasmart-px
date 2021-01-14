@@ -9,8 +9,7 @@ import {
     Theme,
     Typography,
 } from "@material-ui/core";
-import { BaseTable } from 'kidsloop-px'
-
+import { Table } from 'kidsloop-px'
 import {
     Add as AddIcon,
     CloudDownload as CloudDownloadIcon,
@@ -20,22 +19,11 @@ import {
     FileCopy as FileCopyIcon,
     OpenInNew as OpenInNewIcon,
 } from "@material-ui/icons";
-import { GroupSelectMenuItem } from "kidsloop-px/dist/types/components/Base/Table/GroupTabs";
-import { HeadCell } from "kidsloop-px/dist/types/components/Base/Table/Head";
+import { TableColumn } from "kidsloop-px/dist/types/components/Table/Head";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({}),
 );
-
-interface MetaData {
-    hello: string;
-    nice: string;
-}
-
-interface School {
-    title: string;
-    code: string;
-}
 
 interface NutritionData {
     calories: number;
@@ -67,12 +55,6 @@ const schools = [
 
 const today = new Intl.DateTimeFormat(`en-US`).format(new Date());
 
-const student = `Student`;
-const teacher = `Teacher`;
-const parent = `Parent`;
-const orgAdmin = `Organization Admin`;
-const schoolAdmin = `School Admin`;
-
 const rows: NutritionData[] = [
     {
         name: `Cupcake`,
@@ -83,7 +65,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: student,
+        role: `Student`,
     },
     {
         name: `Donut`,
@@ -94,7 +76,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: teacher,
+        role: `Teacher`,
     },
     {
         name: `Eclair`,
@@ -105,7 +87,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: parent,
+        role: `Parent`,
     },
     {
         name: `Frozen yoghurt`,
@@ -116,7 +98,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: orgAdmin,
+        role: `Organization Admin`,
     },
     {
         name: `Gingerbread`,
@@ -127,7 +109,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: schoolAdmin,
+        role: `School Admin`,
     },
     {
         name: `Honeycomb`,
@@ -138,7 +120,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: student,
+        role: `Student`,
     },
     {
         name: `Ice cream sandwich`,
@@ -149,7 +131,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: teacher,
+        role: `Teacher`,
     },
     {
         name: `Jelly Bean`,
@@ -160,7 +142,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: orgAdmin,
+        role: `Organization Admin`,
     },
     {
         name: `KitKat`,
@@ -171,7 +153,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: schoolAdmin,
+        role: `School Admin`,
     },
     {
         name: `Lollipop`,
@@ -182,7 +164,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: parent,
+        role: `Parent`,
     },
     {
         name: `Marshmallow`,
@@ -193,7 +175,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: schoolAdmin,
+        role: `School Admin`,
     },
     {
         name: `Nougat`,
@@ -204,7 +186,7 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: student,
+        role: `Student`,
     },
     {
         name: `Oreo`,
@@ -215,17 +197,16 @@ const rows: NutritionData[] = [
         metaData: JSON.stringify(metaData),
         schools: JSON.stringify(schools),
         date: today,
-        role: student,
+        role: `Student`,
     },
 ];
 
-const columns: HeadCell<NutritionData>[] = [
+const columns: TableColumn<NutritionData>[] = [
     {
         id: `name`,
         align: `left`,
         label: `Dessert (100g serving)`,
         persistent: true,
-        searchable: true,
         groupable: true,
         render: (row) => <Box
             flexDirection="row"
@@ -261,12 +242,12 @@ const columns: HeadCell<NutritionData>[] = [
         align: `center`,
         label: `Carbs (g)`,
         hidden: true,
+        // groupable: true,
     },
     {
         id: `protein`,
         align: `center`,
         label: `Protein (g)`,
-        groupable: true,
     },
     {
         id: `metaData`,
@@ -284,14 +265,31 @@ const columns: HeadCell<NutritionData>[] = [
         id: `date`,
         align: `left`,
         label: `Date`,
-        searchable: true,
     },
     {
         id: `role`,
         align: `left`,
         label: `Role`,
-        searchable: true,
-        groupable: true,
+        groups: [
+            {
+                text: `Organization Admin`,
+            },
+            {
+                text: `School Admin`,
+            },
+            {
+                text: `Teacher`,
+            },
+            {
+                text: `Parent`,
+            },
+            {
+                text: `Student`,
+            },
+            {
+                text: `Super Heroes`
+            }
+        ],
         render: (row) => <Typography variant="overline">{row.role}</Typography>
     },
 ];
@@ -303,7 +301,7 @@ export default function TableExample () {
     return (
         <>
             <Button onClick={() => setLoading(!loading)}>Toggle loading</Button>
-            <BaseTable
+            <Table
                 columns={columns}
                 rows={rows}
                 idField={`name`}
