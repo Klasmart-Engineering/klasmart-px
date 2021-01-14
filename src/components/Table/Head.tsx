@@ -51,9 +51,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export type Order = "asc" | "desc";
 export type Align = TableCellProps["align"]
-export type CustomGroup<T> = (rowValue: T[keyof T]) => {}
+export type CustomGroup<T> = (rowValue: T[keyof T]) => string
 export type CustomSearch<T> = (rowValue: T[Extract<keyof T, string>], searchValue: string) => boolean
 export type CustomSort<T> = (a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) => number
+export type CustomGroupSort = (a: string, b: string, locale?: string, collatorOptions?: Intl.CollatorOptions) => number
 
 export interface TableColumn<T> {
     id: Extract<keyof T, string>;
@@ -64,10 +65,11 @@ export interface TableColumn<T> {
     disableSearch?: boolean;
     disableSort?: boolean;
     hidden?: boolean;
-    group?: CustomGroup<T>;
+    groupText?: CustomGroup<T>;
     search?: CustomSearch<T>;
     sort?: CustomSort<T>;
-    groupSort?: CustomSort<SubgroupTab<T>>;
+    groupSort?: CustomGroupSort;
+    groups?: SubgroupTab<T>[];
     render?: (row: T) => ReactElement | ReactElement[];
 }
 

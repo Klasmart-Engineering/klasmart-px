@@ -61,8 +61,8 @@ export interface GroupSelectMenuItem<T> {
 }
 
 export interface SubgroupTab<T> {
-    id: T[keyof T];
-    count: number;
+    text: string;
+    count?: number;
 }
 
 export interface GroupTabsLocalization {
@@ -75,11 +75,11 @@ interface Props<T> {
     allCount: number;
     groupBy?: keyof T;
     groups?: GroupSelectMenuItem<T>[];
-    subgroupBy?: T[keyof T];
+    subgroupBy?: string;
     subgroups?: SubgroupTab<T>[];
     localization?: GroupTabsLocalization;
     onSelectGroup: (value: keyof T | undefined) => void;
-    onSelectSubgroup: (value: T[keyof T] | undefined) => void;
+    onSelectSubgroup: (value: string | undefined) => void;
 }
 
 export default function BaseTableGroupTabs<T>(props: Props<T>) {
@@ -98,13 +98,13 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
 
     // adjusting index+1 b/c "all"-tab is always index 0
-    const subgroupIndex = 1 + subgroups.findIndex((subgroup) => subgroup.id === subgroupBy_);
+    const subgroupIndex = 1 + subgroups.findIndex((subgroup) => subgroup.text === subgroupBy_);
 
     const handleSubgroupChange = (event: React.ChangeEvent<unknown>, value: number) => {
         const newSubgroupIndex = value - 1; // "all"-tab is always index 0 so need to subtract by 1
         const newSubgroup = subgroups[newSubgroupIndex];
-        setSubgroupBy(newSubgroup?.id);
-        onSelectSubgroup(newSubgroup?.id);
+        setSubgroupBy(newSubgroup?.text);
+        onSelectSubgroup(newSubgroup?.text);
     };
 
     const handleGroupChange = (e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>, child: React.ReactNode) => {
@@ -150,7 +150,7 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
                         <Tab
                             key={`subgroup-${i}`}
                             className={classes.tabRoot}
-                            label={`${subgroup.id} (${subgroup.count})`}
+                            label={`${subgroup.text} (${subgroup.count})`}
                         />,
                     )}
                 </Tabs>

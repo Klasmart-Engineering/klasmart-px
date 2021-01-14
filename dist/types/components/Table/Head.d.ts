@@ -5,9 +5,10 @@ import { CheckboxDropdownLocalization, CheckboxDropdownValue } from "./CheckboxD
 import { SubgroupTab } from "./GroupTabs";
 export declare type Order = "asc" | "desc";
 export declare type Align = TableCellProps["align"];
-export declare type CustomGroup<T> = (rowValue: T[keyof T]) => {};
+export declare type CustomGroup<T> = (rowValue: T[keyof T]) => string;
 export declare type CustomSearch<T> = (rowValue: T[Extract<keyof T, string>], searchValue: string) => boolean;
 export declare type CustomSort<T> = (a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) => number;
+export declare type CustomGroupSort = (a: string, b: string, locale?: string, collatorOptions?: Intl.CollatorOptions) => number;
 export interface TableColumn<T> {
     id: Extract<keyof T, string>;
     label: string;
@@ -17,10 +18,11 @@ export interface TableColumn<T> {
     disableSearch?: boolean;
     disableSort?: boolean;
     hidden?: boolean;
-    group?: CustomGroup<T>;
+    groupText?: CustomGroup<T>;
     search?: CustomSearch<T>;
     sort?: CustomSort<T>;
-    groupSort?: CustomSort<SubgroupTab<T>>;
+    groupSort?: CustomGroupSort;
+    groups?: SubgroupTab<T>[];
     render?: (row: T) => ReactElement | ReactElement[];
 }
 export interface HeadLocalization {

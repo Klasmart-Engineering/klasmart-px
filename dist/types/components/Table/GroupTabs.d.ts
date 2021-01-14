@@ -4,8 +4,8 @@ export interface GroupSelectMenuItem<T> {
     id: keyof T;
 }
 export interface SubgroupTab<T> {
-    id: T[keyof T];
-    count: number;
+    text: string;
+    count?: number;
 }
 export interface GroupTabsLocalization {
     selectLabel?: string;
@@ -16,11 +16,11 @@ interface Props<T> {
     allCount: number;
     groupBy?: keyof T;
     groups?: GroupSelectMenuItem<T>[];
-    subgroupBy?: T[keyof T];
+    subgroupBy?: string;
     subgroups?: SubgroupTab<T>[];
     localization?: GroupTabsLocalization;
     onSelectGroup: (value: keyof T | undefined) => void;
-    onSelectSubgroup: (value: T[keyof T] | undefined) => void;
+    onSelectSubgroup: (value: string | undefined) => void;
 }
 export default function BaseTableGroupTabs<T>(props: Props<T>): JSX.Element;
 export {};

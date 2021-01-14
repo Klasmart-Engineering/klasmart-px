@@ -26,7 +26,7 @@ export interface TableData<T> {
     orderBy: keyof T;
     order: Order;
     groupBy?: keyof T;
-    subgroupBy?: T[keyof T];
+    subgroupBy?: string;
     page: number;
     rowsPerPage: number;
 }
@@ -36,7 +36,7 @@ interface Props<T> {
     orderBy?: Extract<keyof T, string>;
     order?: Order;
     groupBy?: keyof T;
-    subgroupBy?: T[keyof T];
+    subgroupBy?: string;
     rowActions?: (row: T) => RowAction<T>[];
     rows: T[];
     rowsPerPage?: number;
