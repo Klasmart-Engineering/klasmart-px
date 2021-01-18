@@ -21,6 +21,7 @@ interface Props<T> {
     noDataLabel?: string;
     helperText?: string;
     error?: boolean;
+    disabled?: boolean;
     itemValue?: (item: T) => string;
     itemText?: (item: T) => string;
     onChange?: (values: string[]) => void;
@@ -35,6 +36,7 @@ export default function MultiSelect<T> (props: Props<T>) {
         noDataLabel,
         helperText,
         error,
+        disabled,
         itemValue = (item) => String(item),
         itemText = (item) => String(item),
         onChange,
@@ -59,6 +61,7 @@ export default function MultiSelect<T> (props: Props<T>) {
             variant="outlined"
             helperText={helperText ?? ` `}
             error={error}
+            disabled={disabled}
             SelectProps={{
                 multiple: true,
                 renderValue: value_.includes(``) ? undefined : (value) =>

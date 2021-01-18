@@ -7,6 +7,7 @@ interface Props<T> {
     noDataLabel?: string;
     helperText?: string;
     error?: boolean;
+    disabled?: boolean;
     itemValue?: (item: T) => string;
     itemText?: (item: T) => string;
     onChange?: (values: string[]) => void;
