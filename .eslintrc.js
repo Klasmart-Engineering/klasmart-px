@@ -114,6 +114,7 @@ module.exports = {
                 reservedFirst: [ `key`, `ref` ],
             },
         ],
+        "@typescript-eslint/ban-ts-comment": `off`, // TODO (Henrik): remove when proper types in global dialogs' contexts are set
         "@typescript-eslint/ban-types": [
             `error`,
             {
@@ -133,7 +134,11 @@ module.exports = {
             },
             {
                 selector: `variable`,
-                format: [ `camelCase`, `UPPER_CASE` ],
+                format: [
+                    `camelCase`,
+                    `UPPER_CASE`,
+                    `PascalCase`,
+                ],
                 trailingUnderscore: `allow`,
             },
             {
