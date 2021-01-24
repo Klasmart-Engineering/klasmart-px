@@ -1,9 +1,9 @@
-import { FabProps } from "@material-ui/core/Fab";
 import {
     Fab,
     Hidden,
     withStyles,
 } from "@material-ui/core";
+import { FabProps } from "@material-ui/core/Fab";
 import { Send as SendIcon } from "@styled-icons/material";
 import React from "react";
 
@@ -13,20 +13,7 @@ interface Props extends FabProps {
     flat?: boolean;
 }
 
-const Baseb = withStyles({
-    root: {
-        "&:hover": {
-            "-webkit-transition": `all .4s ease`,
-            background: `#1B365D`,
-            "box-shadow":
-                `0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)`,
-            transform: `translateY(-2px)`,
-            transition: `all .4s ease`,
-        },
-        background: `#0E78D5`,
-        color: `#FFF`,
-    },
-})(Fab);
+const Baseb = withStyles({})(Fab);
 
 export default function BaseB(
     props: Props & { children?: React.ReactNode },
@@ -45,12 +32,14 @@ export default function BaseB(
 
     return extendedOnly ? (
         <Baseb
+            color="primary"
             variant="extended"
+            className="MuiTypography-noWrap"
             style={{
                 minWidth: 120,
                 boxShadow: flat
                     ? `none`
-                    : `0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)`,
+                    : undefined,
             }}
             {...other}
         >
@@ -60,12 +49,14 @@ export default function BaseB(
         <>
             <Hidden smDown>
                 <Baseb
+                    color="primary"
                     variant="extended"
+                    className="MuiTypography-noWrap"
                     style={{
                         minWidth: 120,
                         boxShadow: flat
                             ? `none`
-                            : `0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)`,
+                            : undefined,
                     }}
                     {...other}
                 >
@@ -74,9 +65,12 @@ export default function BaseB(
             </Hidden>
             <Hidden mdUp>
                 <Baseb
+                    color="primary"
                     variant="round"
                     size="small"
-                    {...other}>
+                    className="MuiTypography-noWrap"
+                    {...other}
+                >
                     {sibling || <SendIcon fontSize="small" />}
                 </Baseb>
             </Hidden>
