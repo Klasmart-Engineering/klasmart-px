@@ -1,10 +1,10 @@
 import nameToInitials from './nameToInitials';
-import stringToHslColor from './stringToHslColor';
+import stringToColor from './stringToColor';
 import sleep from './sleep';
 
 const utils = {
     nameToInitials,
-    stringToHslColor,
+    stringToColor,
     sleep,
 };
 
@@ -12,6 +12,6 @@ export default utils;
 
 export {
     nameToInitials,
-    stringToHslColor,
+    stringToColor,
     sleep,
 };

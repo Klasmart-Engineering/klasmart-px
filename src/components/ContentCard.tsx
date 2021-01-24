@@ -28,7 +28,7 @@ import React,
 } from "react";
 import {
     nameToInitials,
-    stringToHslColor,
+    stringToColor,
 } from "../utils";
 // import MoreMenu from './Common/MoreMenu';
 
@@ -231,7 +231,7 @@ export default function ContentCard(props: Props) {
                 <Avatar
                     style={{
                         color: `white`,
-                        backgroundColor: stringToHslColor(author),
+                        backgroundColor: stringToColor(author),
                     }}
                     className={classes.smallAvatar}
                 >
