@@ -1,18 +1,18 @@
 /// <reference types="react" />
 import { SvgIconComponent } from "@material-ui/icons";
-export interface RowAction<T> {
+export interface MenuAction<T> {
     label: string;
     icon?: SvgIconComponent;
     disabled?: boolean;
     onClick: ((item: T) => void);
 }
-export interface RowMoreMenuLocalization {
+export interface MoreMenuLocalization {
     moreMenuButton?: string;
 }
 interface Props<T> {
-    actions: RowAction<T>[];
+    actions: MenuAction<T>[];
     item: T;
-    localization?: RowMoreMenuLocalization;
+    localization?: MoreMenuLocalization;
 }
-export default function BaseTableRowMoreMenu<T>(props: Props<T>): JSX.Element;
+export default function MoreMenu<T>(props: Props<T>): JSX.Element;
 export {};

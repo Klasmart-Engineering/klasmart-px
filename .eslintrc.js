@@ -71,19 +71,19 @@ module.exports = {
         'object-curly-newline': [
             `error`,
             {
-                ObjectExpression: { // eslint-disable-line @typescript-eslint/naming-convention
+                ObjectExpression: {
                     multiline: true,
                     minProperties: 1,
                 },
-                ObjectPattern: { // eslint-disable-line @typescript-eslint/naming-convention
+                ObjectPattern: {
                     multiline: true,
                     minProperties: 3,
                 },
-                ImportDeclaration: { // eslint-disable-line @typescript-eslint/naming-convention
+                ImportDeclaration: {
                     multiline: true,
                     minProperties: 3,
                 },
-                ExportDeclaration: { // eslint-disable-line @typescript-eslint/naming-convention
+                ExportDeclaration: {
                     multiline: true,
                     minProperties: 3,
                 },
@@ -164,6 +164,7 @@ module.exports = {
                     `camelCase`,
                     `snake_case`,
                     `UPPER_CASE`,
+                    `PascalCase`,
                 ],
             },
             {

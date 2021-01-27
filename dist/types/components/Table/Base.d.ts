@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import { ToolbarAction, ToolbarLocalization } from "./Toolbar";
 import { HeadLocalization, Order, TableColumn } from "./Head";
-import { RowAction, RowMoreMenuLocalization } from "./RowMoreMenu";
+import { MenuAction, MoreMenuLocalization } from "../MoreMenu";
 import { PaginationLocalization } from "./Pagination";
 import { GroupTabsLocalization } from "./GroupTabs";
 import { CheckboxDropdownLocalization } from "./CheckboxDropdown";
@@ -16,7 +16,7 @@ export interface TableLocalization {
     columnSelector?: ColumnSelectorLocalization;
     checkboxDropdown?: CheckboxDropdownLocalization;
     body?: BodyLocalization;
-    rowMoreMenu?: RowMoreMenuLocalization;
+    rowMoreMenu?: MoreMenuLocalization;
     pagination?: PaginationLocalization;
 }
 export interface TableData<T> {
@@ -37,7 +37,7 @@ interface Props<T> {
     order?: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
-    rowActions?: (row: T) => RowAction<T>[];
+    rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | {

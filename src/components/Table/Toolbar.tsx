@@ -13,7 +13,7 @@ import {
 import clsx from "clsx";
 import { TableData } from "./Base";
 import { SvgIconComponent } from "@material-ui/icons";
-import { BaseFabButton } from "../..";
+import FabButton from "../FabButton";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -129,7 +129,7 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                 </> :
                 <>
                     <Typography
-                        variant="h4"
+                        variant="h6"
                         id="tableTitle"
                         component="div"
                         className={classes.title}
@@ -163,13 +163,14 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                             </Button>,
                     )}
                     {primaryAction &&
-                        <BaseFabButton
+                        <FabButton
+                            color="primary"
                             disabled={primaryAction.disabled}
                             onClick={() => primaryAction.onClick(tableData)}
                         >
                             {primaryAction.icon && <primaryAction.icon className={classes.primaryActionIcon} />}
                             {primaryAction.label}
-                        </BaseFabButton>
+                        </FabButton>
                     }
                 </>
             }

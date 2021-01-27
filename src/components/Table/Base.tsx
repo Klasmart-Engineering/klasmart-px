@@ -28,9 +28,9 @@ import BaseTableHead,
 } from "./Head";
 import BaseTableLoading from "./Loading";
 import {
-    RowAction,
-    RowMoreMenuLocalization,
-} from "./RowMoreMenu";
+    MenuAction,
+    MoreMenuLocalization,
+} from "../MoreMenu";
 import BaseTablePagination,
 { PaginationLocalization } from "./Pagination";
 import BaseTableGroupTabs,
@@ -119,7 +119,7 @@ export interface TableLocalization {
     columnSelector?: ColumnSelectorLocalization;
     checkboxDropdown?: CheckboxDropdownLocalization;
     body?: BodyLocalization;
-    rowMoreMenu?: RowMoreMenuLocalization;
+    rowMoreMenu?: MoreMenuLocalization;
     pagination?: PaginationLocalization;
 }
 
@@ -142,7 +142,7 @@ interface Props<T> {
     order?: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
-    rowActions?: (row: T) => RowAction<T>[];
+    rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | { value: number; label: string }>;
@@ -336,7 +336,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
     const hasSearchColumns = !!searchableColumns?.length;
-    const hasRowActions = !!rowActions?.length;
+    const hasRowActions = !!rowActions;
     const hasSelectActions = !!selectActions?.length;
     const hasGroups = !!groupableColumns?.length;
     const columnCount = columns.length + (hasRowActions ? 1 : 0) + (hasSelectActions ? 1 : 0);

@@ -1,5 +1,5 @@
 import React from "react";
-import { RowAction, RowMoreMenuLocalization } from "./RowMoreMenu";
+import { MenuAction, MoreMenuLocalization } from "../MoreMenu";
 import { TableColumn } from "./Head";
 export interface BodyLocalization {
     noData?: string;
@@ -9,11 +9,11 @@ interface Props<T> {
     columnCount: number;
     hasSelectActions: boolean;
     idField: Extract<keyof T, string>;
-    rowActions?: (row: T) => RowAction<T>[];
+    rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
     selectedRows: T[Extract<keyof T, string>][];
     localization?: BodyLocalization;
-    rowMoreMenuLocalization?: RowMoreMenuLocalization;
+    rowMoreMenuLocalization?: MoreMenuLocalization;
     onRowSelect: (event: React.MouseEvent<unknown>, rowId: T[Extract<keyof T, string>]) => void;
 }
 export default function BaseTableBody<T>(props: Props<T>): JSX.Element;

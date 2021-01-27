@@ -30,7 +30,6 @@ import {
     nameToInitials,
     stringToColor,
 } from "../utils";
-// import MoreMenu from './Common/MoreMenu';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

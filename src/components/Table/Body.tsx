@@ -7,11 +7,11 @@ import {
     TableCell,
     TableRow,
 } from "@material-ui/core";
-import BaseTableRowMoreMenu,
+import MoreMenu,
 {
-    RowAction,
-    RowMoreMenuLocalization,
-} from "./RowMoreMenu";
+    MenuAction,
+    MoreMenuLocalization,
+} from "../MoreMenu";
 import { TableColumn } from "./Head";
 
 const useStyles = makeStyles((theme) => createStyles({
@@ -29,11 +29,11 @@ interface Props<T> {
     columnCount: number;
     hasSelectActions: boolean;
     idField: Extract<keyof T, string>;
-    rowActions?: (row: T) => RowAction<T>[];
+    rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
     selectedRows: T[Extract<keyof T, string>][];
     localization?: BodyLocalization;
-    rowMoreMenuLocalization?: RowMoreMenuLocalization;
+    rowMoreMenuLocalization?: MoreMenuLocalization;
     onRowSelect: (event: React.MouseEvent<unknown>, rowId: T[Extract<keyof T, string>]) => void;
 }
 
@@ -103,7 +103,7 @@ export default function BaseTableBody<T>(props: Props<T>) {
                             })}
                             <TableCell padding="checkbox">
                                 {rowActions && rowActions.length > 0 &&
-                                    <BaseTableRowMoreMenu
+                                    <MoreMenu
                                         item={row}
                                         actions={rowActions(row)}
                                         localization={rowMoreMenuLocalization}
