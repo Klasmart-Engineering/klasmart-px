@@ -1,23 +1,19 @@
-import React,
-{
-    useEffect,
-    useMemo,
-    useState,
-} from "react";
 import {
-    createStyles,
-    Divider,
-    makeStyles,
-    Table,
-    TableContainer,
-    Theme,
-} from "@material-ui/core";
-import BaseTableToolbar,
+    MenuAction,
+    MoreMenuLocalization,
+} from "../MoreMenu";
+import BaseTableBody, { BodyLocalization } from "./Body";
+import {
+    CheckboxDropdownLocalization,
+    CheckboxDropdownValue,
+} from "./CheckboxDropdown";
+import { ColumnSelectorLocalization } from "./ColumnSelector";
+import BaseTableGroupTabs,
 {
-    ToolbarAction,
-    ToolbarLocalization,
-} from "./Toolbar";
-import BaseTableSearch from "./Search";
+    GroupSelectMenuItem,
+    GroupTabsLocalization,
+    SubgroupTab,
+} from "./GroupTabs";
 import BaseTableHead,
 {
     CustomGroup,
@@ -27,18 +23,20 @@ import BaseTableHead,
     TableColumn,
 } from "./Head";
 import BaseTableLoading from "./Loading";
+import BaseTablePagination, { PaginationLocalization } from "./Pagination";
+import BaseTableSearch, { SearchLocalization } from "./Search";
+import BaseTableToolbar, {
+    ToolbarAction,
+    ToolbarLocalization,
+} from "./Toolbar";
 import {
-    MenuAction,
-    MoreMenuLocalization,
-} from "../MoreMenu";
-import BaseTablePagination,
-{ PaginationLocalization } from "./Pagination";
-import BaseTableGroupTabs,
-{
-    GroupSelectMenuItem,
-    GroupTabsLocalization,
-    SubgroupTab,
-} from "./GroupTabs";
+    createStyles,
+    Divider,
+    makeStyles,
+    Table,
+    TableContainer,
+    Theme,
+} from "@material-ui/core";
 import {
     clamp,
     escapeRegExp,
@@ -46,14 +44,12 @@ import {
     union,
     uniq,
 } from "lodash";
-import {
-    CheckboxDropdownLocalization,
-    CheckboxDropdownValue,
-} from "./CheckboxDropdown";
-import { SearchLocalization } from "./Search";
-import { ColumnSelectorLocalization } from "./ColumnSelector";
-import BaseTableBody,
-{ BodyLocalization } from "./Body";
+import React,
+{
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 
 function descendingComparator<T>(a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) {
     if ((typeof a === `string` && typeof b === `string`) || (a instanceof String && b instanceof String)) {
@@ -144,6 +140,7 @@ interface Props<T> {
     subgroupBy?: string;
     rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
+    selectedRows?: T[Extract<keyof T, string>][];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | { value: number; label: string }>;
     page?: number;
@@ -157,6 +154,7 @@ interface Props<T> {
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
     onChange?: (data: TableData<T>) => void;
+    onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
 }
 
 export default function BaseTable<T>(props: Props<T>) {
@@ -168,6 +166,7 @@ export default function BaseTable<T>(props: Props<T>) {
         groupBy,
         subgroupBy,
         rows = [],
+        selectedRows = [],
         rowsPerPage,
         rowsPerPageOptions = [
             10,
@@ -186,6 +185,7 @@ export default function BaseTable<T>(props: Props<T>) {
         locale,
         collatorOptions,
         onChange,
+        onSelected,
     } = props;
 
     const classes = useStyles();
@@ -202,7 +202,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ orderBy_, setOrderBy ] = useState(orderBy ?? idField);
     const [ groupBy_, setGroupBy ] = useState(groupBy);
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
-    const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>([]);
+    const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>(selectedRows.filter((rowId) => rows.find((row) => row[idField] === rowId)));
     const [ selectedColumns_, setSelectedColumns ] = useState(union(selectedColumnIds, persistentColumnIds));
     const [ page_, setPage ] = useState(page ?? 0);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage ?? 10);
@@ -333,7 +333,6 @@ export default function BaseTable<T>(props: Props<T>) {
     ]);
     const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && isValidSubgroup(subgroupBy_, subgroups_)) ? filterRowsBySubgroup(groupBy_, subgroupBy_, customGroupText) : () => true);
     const filteredSortedSelectedRows = filteredSortedRows.filter(filterRowsBySelected);
-    const filteredSortedGroupedSelectedRows = filteredSortedGroupedRows.filter(filterRowsBySelected);
     const filteredSortedGroupedSlicedRows = filteredSortedGroupedRows.slice(page_ * rowsPerPage_, page_ * rowsPerPage_ + rowsPerPage_);
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
@@ -347,7 +346,7 @@ export default function BaseTable<T>(props: Props<T>) {
 
     const tableData: TableData<T> = {
         columns: filteredColumnIds,
-        rows: (filteredSortedGroupedSelectedRows.length === 0 ? filteredSortedGroupedRows : filteredSortedGroupedSelectedRows).map((row) => pick(row, filteredColumnIds)),
+        rows: filteredSortedGroupedRows.map((row) => pick(row, filteredColumnIds)),
         search: search_,
         order: order_,
         orderBy: orderBy_,
@@ -375,6 +374,10 @@ export default function BaseTable<T>(props: Props<T>) {
     useEffect(() => {
         onChange?.(tableData);
     }, [ tableData ]);
+
+    useEffect(() => {
+        onSelected?.(selectedRows_);
+    }, [ selectedRows_ ]);
 
     return (
         <div className={classes.root}>
