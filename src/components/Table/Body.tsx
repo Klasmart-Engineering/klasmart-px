@@ -27,7 +27,7 @@ export interface BodyLocalization {
 interface Props<T> {
     columns: TableColumn<T>[];
     columnCount: number;
-    hasSelectActions: boolean;
+    showCheckboxes: boolean;
     idField: Extract<keyof T, string>;
     rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
@@ -41,7 +41,7 @@ export default function BaseTableBody<T>(props: Props<T>) {
     const {
         columns,
         columnCount,
-        hasSelectActions,
+        showCheckboxes,
         idField,
         rowActions,
         rows,
@@ -77,7 +77,7 @@ export default function BaseTableBody<T>(props: Props<T>) {
                             tabIndex={-1}
                             className={classes.row}
                         >
-                            {hasSelectActions &&
+                            {showCheckboxes &&
                                 <TableCell padding="checkbox">
                                     <Checkbox
                                         role="checkbox"

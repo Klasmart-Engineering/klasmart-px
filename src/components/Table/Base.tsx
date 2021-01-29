@@ -148,6 +148,7 @@ interface Props<T> {
     rowsPerPageOptions?: Array<number | { value: number; label: string }>;
     page?: number;
     search?: string;
+    showCheckboxes?: boolean;
     primaryAction?: ToolbarAction<T>;
     secondaryActions?: ToolbarAction<T>[];
     selectActions?: ToolbarAction<T>[];
@@ -175,6 +176,7 @@ export default function BaseTable<T>(props: Props<T>) {
         ],
         page,
         search,
+        showCheckboxes,
         primaryAction,
         rowActions,
         secondaryActions,
@@ -336,10 +338,10 @@ export default function BaseTable<T>(props: Props<T>) {
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
     const hasSearchColumns = !!searchableColumns?.length;
-    const hasRowActions = !!rowActions;
-    const hasSelectActions = !!selectActions?.length;
+    const hasRowActions = !!rowActions?.length;
+    const showCheckboxes_ = !!(selectActions?.length || showCheckboxes);
     const hasGroups = !!groupableColumns?.length;
-    const columnCount = columns.length + (hasRowActions ? 1 : 0) + (hasSelectActions ? 1 : 0);
+    const columnCount = columns.length + (hasRowActions ? 1 : 0) + (showCheckboxes_ ? 1 : 0);
     const showToolbar = !!localization?.toolbar?.title || !!primaryAction || !!secondaryActions?.length || !!selectActions?.length;
     const lastPage = Math.ceil(filteredSortedGroupedRows.length / rowsPerPage_) - 1;
 
@@ -417,7 +419,7 @@ export default function BaseTable<T>(props: Props<T>) {
                         rowCount={filteredSortedGroupedSlicedRows.length}
                         columns={columns}
                         selected={selectedColumns_}
-                        hasSelectActions={hasSelectActions}
+                        showCheckboxes={showCheckboxes_}
                         hasGroups={hasGroups}
                         localization={localization?.head}
                         checkboxDropdownLocalization={localization?.checkboxDropdown}
@@ -434,7 +436,7 @@ export default function BaseTable<T>(props: Props<T>) {
                     <BaseTableBody
                         columns={filteredColumns}
                         columnCount={columnCount}
-                        hasSelectActions={hasSelectActions}
+                        showCheckboxes={showCheckboxes_}
                         idField={idField}
                         rows={filteredSortedGroupedSlicedRows}
                         rowActions={rowActions}

@@ -87,7 +87,7 @@ interface Props<T> {
     rowCount: number;
     selected: (keyof T)[];
     columns: TableColumn<T>[];
-    hasSelectActions: boolean;
+    showCheckboxes: boolean;
     hasGroups: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;
@@ -106,7 +106,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
         onRequestSort,
         columns,
         selected,
-        hasSelectActions,
+        showCheckboxes,
         hasGroups,
         checkboxDropdownLocalization,
         columnSelectorLocalization,
@@ -123,7 +123,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
     return (
         <TableHead>
             <TableRow className={classes.container}>
-                {hasSelectActions &&
+                {showCheckboxes &&
                     <TableCell padding="checkbox">
                         <BaseTableCheckboxDropdown
                             hasGroups={hasGroups}
