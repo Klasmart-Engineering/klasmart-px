@@ -7,7 +7,7 @@ export interface BodyLocalization {
 interface Props<T> {
     columns: TableColumn<T>[];
     columnCount: number;
-    hasSelectActions: boolean;
+    showCheckboxes: boolean;
     idField: Extract<keyof T, string>;
     rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];

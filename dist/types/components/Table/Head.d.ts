@@ -38,7 +38,7 @@ interface Props<T> {
     rowCount: number;
     selected: (keyof T)[];
     columns: TableColumn<T>[];
-    hasSelectActions: boolean;
+    showCheckboxes: boolean;
     hasGroups: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;

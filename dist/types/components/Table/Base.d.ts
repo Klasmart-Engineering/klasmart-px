@@ -1,13 +1,13 @@
 /// <reference types="react" />
-import { ToolbarAction, ToolbarLocalization } from "./Toolbar";
-import { HeadLocalization, Order, TableColumn } from "./Head";
 import { MenuAction, MoreMenuLocalization } from "../MoreMenu";
-import { PaginationLocalization } from "./Pagination";
-import { GroupTabsLocalization } from "./GroupTabs";
-import { CheckboxDropdownLocalization } from "./CheckboxDropdown";
-import { SearchLocalization } from "./Search";
-import { ColumnSelectorLocalization } from "./ColumnSelector";
 import { BodyLocalization } from "./Body";
+import { CheckboxDropdownLocalization } from "./CheckboxDropdown";
+import { ColumnSelectorLocalization } from "./ColumnSelector";
+import { GroupTabsLocalization } from "./GroupTabs";
+import { HeadLocalization, Order, TableColumn } from "./Head";
+import { PaginationLocalization } from "./Pagination";
+import { SearchLocalization } from "./Search";
+import { ToolbarAction, ToolbarLocalization } from "./Toolbar";
 export interface TableLocalization {
     toolbar?: ToolbarLocalization;
     search?: SearchLocalization;
@@ -39,6 +39,7 @@ interface Props<T> {
     subgroupBy?: string;
     rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
+    selectedRows?: T[Extract<keyof T, string>][];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | {
         value: number;
@@ -46,6 +47,7 @@ interface Props<T> {
     }>;
     page?: number;
     search?: string;
+    showCheckboxes?: boolean;
     primaryAction?: ToolbarAction<T>;
     secondaryActions?: ToolbarAction<T>[];
     selectActions?: ToolbarAction<T>[];
@@ -54,6 +56,7 @@ interface Props<T> {
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
     onChange?: (data: TableData<T>) => void;
+    onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
 }
 export default function BaseTable<T>(props: Props<T>): JSX.Element;
 export {};
