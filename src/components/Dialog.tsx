@@ -1,8 +1,6 @@
-import React from "react";
+import Button from "./Button";
 import {
     Box,
-    Button,
-    CircularProgress,
     createStyles,
     Dialog,
     DialogActions,
@@ -13,14 +11,13 @@ import {
     makeStyles,
     Theme,
     Tooltip,
-    useTheme,
 } from "@material-ui/core";
-import { Close as CloseIcon } from "@material-ui/icons";
-import clsx from "clsx";
 import {
     Palette,
     PaletteColor,
 } from "@material-ui/core/styles/createPalette";
+import { Close as CloseIcon } from "@material-ui/icons";
+import React from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,35 +38,8 @@ export interface DialogAction {
     align?: "left" | "right";
     color: { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette];
     label: string;
-    loading?: boolean;
     disabled?: boolean;
     onClick: () => any;
-}
-
-interface DialogActionButtonProps {
-    action: DialogAction;
-}
-
-function DialogActionButton (props: DialogActionButtonProps) {
-    const { action } = props;
-    const classes = useStyles();
-    const theme = useTheme();
-    return <Button
-        style={{
-            color: !action.disabled ? theme.palette[action.color][theme.palette.type] : undefined,
-        }}
-        disabled={action.disabled}
-        onClick={action.onClick}
-    >
-        <span
-            className={clsx({
-                [classes.loading]: action.loading,
-            })}
-        >
-            {action.label}
-        </span>
-        {action.loading && <CircularProgress size={24} />}
-    </Button>;
 }
 
 interface Props extends DialogProps {
@@ -116,9 +86,12 @@ export default function BaseDialog (props: Props) {
                 {actions
                     ?.filter((a) => a.align === `left`)
                     ?.map((action, i) =>
-                        <DialogActionButton
+                        <Button
                             key={`action-${i}`}
-                            action={action}
+                            label={action.label}
+                            disabled={action.disabled}
+                            color={action.color}
+                            onClick={action.onClick}
                         />,
                     )
                 }
@@ -126,9 +99,12 @@ export default function BaseDialog (props: Props) {
                 {actions
                     ?.filter((a) => a.align !== `left`)
                     ?.map((action, i) =>
-                        <DialogActionButton
+                        <Button
                             key={`action-${i}`}
-                            action={action}
+                            label={action.label}
+                            disabled={action.disabled}
+                            color={action.color}
+                            onClick={action.onClick}
                         />,
                     )
                 }

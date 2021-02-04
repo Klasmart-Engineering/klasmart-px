@@ -7,7 +7,6 @@ export interface DialogAction {
         [P in keyof Palette]: Palette[P] extends PaletteColor ? P : never;
     }[keyof Palette];
     label: string;
-    loading?: boolean;
     disabled?: boolean;
     onClick: () => any;
 }

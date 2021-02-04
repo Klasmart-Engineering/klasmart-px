@@ -1,3 +1,4 @@
+import { TableColumn } from "./Head";
 import {
     Checkbox,
     createStyles,
@@ -23,7 +24,6 @@ import React, {
     Fragment,
     useState,
 } from "react";
-import { TableColumn } from "./Head";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles ({

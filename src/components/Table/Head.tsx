@@ -1,9 +1,11 @@
-import React,
-{ ReactElement } from "react";
-import {
-    Close as CloseIcon,
-    Lock as LockIcon,
-} from "@material-ui/icons";
+import BaseTableCheckboxDropdown,
+{
+    CheckboxDropdownLocalization,
+    CheckboxDropdownValue,
+} from "./CheckboxDropdown";
+import BaseTableColumnSelector,
+{ ColumnSelectorLocalization } from "./ColumnSelector";
+import { SubgroupTab } from "./GroupTabs";
 import {
     Box,
     createStyles,
@@ -18,14 +20,12 @@ import {
     Theme,
     Tooltip,
 } from "@material-ui/core";
-import BaseTableColumnSelector,
-{ ColumnSelectorLocalization } from "./ColumnSelector";
-import BaseTableCheckboxDropdown,
-{
-    CheckboxDropdownLocalization,
-    CheckboxDropdownValue,
-} from "./CheckboxDropdown";
-import { SubgroupTab } from "./GroupTabs";
+import {
+    Close as CloseIcon,
+    Lock as LockIcon,
+} from "@material-ui/icons";
+import React,
+{ ReactElement } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -87,6 +87,7 @@ interface Props<T> {
     rowCount: number;
     selected: (keyof T)[];
     columns: TableColumn<T>[];
+    loading?: boolean;
     showCheckboxes: boolean;
     hasGroups: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
@@ -106,6 +107,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
         onRequestSort,
         columns,
         selected,
+        loading,
         showCheckboxes,
         hasGroups,
         checkboxDropdownLocalization,
@@ -127,6 +129,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
                     <TableCell padding="checkbox">
                         <BaseTableCheckboxDropdown
                             hasGroups={hasGroups}
+                            disabled={loading}
                             indeterminate={numSelected > 0 && numSelected < rowCount}
                             checked={rowCount > 0 && numSelected === rowCount}
                             localization={checkboxDropdownLocalization}

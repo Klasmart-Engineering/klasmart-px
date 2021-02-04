@@ -1,5 +1,3 @@
-import React,
-{ useState } from "react";
 import {
     Box,
     createStyles,
@@ -14,6 +12,8 @@ import {
     Search as SearchIcon,
 } from "@material-ui/icons";
 import { debounce } from "lodash";
+import React,
+{ useState } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

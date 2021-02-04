@@ -1,5 +1,3 @@
-import React,
-{ useState } from "react";
 import {
     Box,
     Button,
@@ -13,6 +11,8 @@ import {
     Typography,
 } from "@material-ui/core";
 import { ArrowDropDown } from "@material-ui/icons";
+import React,
+{ useState } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,6 +42,7 @@ interface Props {
     indeterminate: boolean;
     checked: boolean;
     hasGroups: boolean;
+    disabled?: boolean;
     localization?: CheckboxDropdownLocalization;
     onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
     onSelectAllPageClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -51,6 +52,7 @@ export default function BaseTableCheckboxDropdown(props: Props) {
     const {
         indeterminate,
         checked,
+        disabled,
         hasGroups,
         localization,
         onSelectAllClick,
@@ -95,8 +97,9 @@ export default function BaseTableCheckboxDropdown(props: Props) {
             flexDirection="row"
         >
             <Checkbox
-                indeterminate={indeterminate}
                 checked={checked}
+                disabled={disabled}
+                indeterminate={indeterminate}
                 inputProps={{
                     "aria-label": `select all on page`,
                 }}

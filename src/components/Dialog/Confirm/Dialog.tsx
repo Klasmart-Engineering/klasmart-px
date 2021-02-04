@@ -1,18 +1,18 @@
-import React from "react";
-import {
-    Button,
-    createStyles,
-    Dialog,
-    DialogActions,
-    makeStyles,
-} from "@material-ui/core";
-import DialogTitle from "../DialogTitle";
+import Button from "../../Button";
 import DialogContent from "../DialogContent";
+import DialogTitle from "../DialogTitle";
 import {
     CancelableDialog,
     CommonDialog,
     Openable,
 } from "../shared";
+import {
+    createStyles,
+    Dialog,
+    DialogActions,
+    makeStyles,
+} from "@material-ui/core";
+import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
@@ -47,17 +47,15 @@ export default function ConfirmDialog (props: Props & Openable<boolean>) {
                 <DialogContent content={content}/>
                 <DialogActions>
                     <Button
+                        label={cancelLabel}
                         color="primary"
                         onClick={() => onClose(false)}
-                    >
-                        {cancelLabel}
-                    </Button>
+                    />
                     <Button
+                        label={okLabel}
                         color="primary"
                         onClick={() => onClose(true)}
-                    >
-                        {okLabel}
-                    </Button>
+                    />
                 </DialogActions>
             </Dialog>
         </>

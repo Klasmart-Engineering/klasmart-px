@@ -1,6 +1,6 @@
-import React from "react";
 import { MenuAction, MoreMenuLocalization } from "../MoreMenu";
 import { TableColumn } from "./Head";
+import React from "react";
 export interface BodyLocalization {
     noData?: string;
 }
@@ -9,6 +9,7 @@ interface Props<T> {
     columnCount: number;
     showCheckboxes: boolean;
     idField: Extract<keyof T, string>;
+    loading?: boolean;
     rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
     selectedRows: T[Extract<keyof T, string>][];

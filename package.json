@@ -74,10 +74,11 @@
         "webpack-node-externals": "2.5.2"
     },
     "dependencies": {
+        "clsx": "^1.1.1",
         "lodash": "^4.17.20",
         "node-source-han-sans-sc": "^1.1.0-2.001R",
-        "notistack": "1.0.3",
-        "react-cookie": "4.0.3",
+        "notistack": "^1.0.3",
+        "react-cookie": "^4.0.3",
         "typeface-nanum-square-round": "^1.0.2"
     }
 }

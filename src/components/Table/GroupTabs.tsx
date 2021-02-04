@@ -1,5 +1,3 @@
-import React,
-{ useState } from "react";
 import {
     Box,
     createStyles,
@@ -12,6 +10,8 @@ import {
     Theme,
     Typography,
 } from "@material-ui/core";
+import React,
+{ useState } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -170,7 +170,7 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
                     }
                     onChange={handleGroupChange}
                 >
-                    <MenuItem value="">{localization?.selectNone ?? `No group`}</MenuItem>
+                    <MenuItem value="">{localization?.selectNone ?? `None`}</MenuItem>
                     {groups?.map((group, i) =>
                         <MenuItem
                             key={`group-${i}`}

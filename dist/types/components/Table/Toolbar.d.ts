@@ -1,22 +1,26 @@
 /// <reference types="react" />
-import { TableData } from "./Base";
 import { SvgIconComponent } from "@material-ui/icons";
 export interface ToolbarLocalization {
     title?: string;
     numSelected?: (num: number) => string;
 }
-export interface ToolbarAction<T> {
+export interface ToolbarAction {
     label: string;
     icon?: SvgIconComponent;
     disabled?: boolean;
-    onClick: (data: TableData<T>) => void;
+    onClick: () => void;
+}
+export interface ToolbarSelectAction<T> {
+    label: string;
+    icon?: SvgIconComponent;
+    disabled?: boolean;
+    onClick: (rowIds: T[Extract<keyof T, string>][]) => void;
 }
 interface Props<T> {
-    numSelected: number;
-    primaryAction?: ToolbarAction<T>;
-    secondaryActions?: ToolbarAction<T>[];
-    selectActions?: ToolbarAction<T>[];
-    tableData: TableData<T>;
+    primaryAction?: ToolbarAction;
+    secondaryActions?: ToolbarAction[];
+    selectActions?: ToolbarSelectAction<T>[];
+    selectedRows: T[Extract<keyof T, string>][];
     localization?: ToolbarLocalization;
 }
 export default function BaseTableToolbar<T>(props: Props<T>): JSX.Element;

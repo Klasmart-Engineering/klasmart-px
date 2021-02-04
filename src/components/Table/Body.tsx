@@ -1,4 +1,8 @@
-import React from "react";
+import MoreMenu, {
+    MenuAction,
+    MoreMenuLocalization,
+} from "../MoreMenu";
+import { TableColumn } from "./Head";
 import {
     Checkbox,
     createStyles,
@@ -7,12 +11,7 @@ import {
     TableCell,
     TableRow,
 } from "@material-ui/core";
-import MoreMenu,
-{
-    MenuAction,
-    MoreMenuLocalization,
-} from "../MoreMenu";
-import { TableColumn } from "./Head";
+import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
     row: {
@@ -29,6 +28,7 @@ interface Props<T> {
     columnCount: number;
     showCheckboxes: boolean;
     idField: Extract<keyof T, string>;
+    loading?: boolean;
     rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
     selectedRows: T[Extract<keyof T, string>][];
@@ -43,6 +43,7 @@ export default function BaseTableBody<T>(props: Props<T>) {
         columnCount,
         showCheckboxes,
         idField,
+        loading,
         rowActions,
         rows,
         selectedRows,
@@ -82,6 +83,7 @@ export default function BaseTableBody<T>(props: Props<T>) {
                                     <Checkbox
                                         role="checkbox"
                                         checked={isSelected}
+                                        disabled={loading}
                                         inputProps={{
                                             "aria-labelledby": labelId,
                                         }}
@@ -102,7 +104,7 @@ export default function BaseTableBody<T>(props: Props<T>) {
                                 </TableCell>;
                             })}
                             <TableCell padding="checkbox">
-                                {rowActions && rowActions.length > 0 &&
+                                {rowActions && rowActions(row).length > 0 &&
                                     <MoreMenu
                                         item={row}
                                         actions={rowActions(row)}

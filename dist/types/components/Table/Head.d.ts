@@ -1,8 +1,8 @@
-import React, { ReactElement } from "react";
-import { TableCellProps } from "@material-ui/core";
-import { ColumnSelectorLocalization } from "./ColumnSelector";
 import { CheckboxDropdownLocalization, CheckboxDropdownValue } from "./CheckboxDropdown";
+import { ColumnSelectorLocalization } from "./ColumnSelector";
 import { SubgroupTab } from "./GroupTabs";
+import { TableCellProps } from "@material-ui/core";
+import React, { ReactElement } from "react";
 export declare type Order = "asc" | "desc";
 export declare type Align = TableCellProps["align"];
 export declare type CustomGroup<T> = (rowValue: T[keyof T]) => string;
@@ -38,6 +38,7 @@ interface Props<T> {
     rowCount: number;
     selected: (keyof T)[];
     columns: TableColumn<T>[];
+    loading?: boolean;
     showCheckboxes: boolean;
     hasGroups: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;

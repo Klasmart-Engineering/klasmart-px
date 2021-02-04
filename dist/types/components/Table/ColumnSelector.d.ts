@@ -1,5 +1,5 @@
-import React from "react";
 import { TableColumn } from "./Head";
+import React from "react";
 export interface ColumnSelectorLocalization {
     addButton?: string;
     listTitle?: string;

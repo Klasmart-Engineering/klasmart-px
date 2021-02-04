@@ -7,7 +7,7 @@ import { GroupTabsLocalization } from "./GroupTabs";
 import { HeadLocalization, Order, TableColumn } from "./Head";
 import { PaginationLocalization } from "./Pagination";
 import { SearchLocalization } from "./Search";
-import { ToolbarAction, ToolbarLocalization } from "./Toolbar";
+import { ToolbarAction, ToolbarLocalization, ToolbarSelectAction } from "./Toolbar";
 export interface TableLocalization {
     toolbar?: ToolbarLocalization;
     search?: SearchLocalization;
@@ -48,9 +48,9 @@ interface Props<T> {
     page?: number;
     search?: string;
     showCheckboxes?: boolean;
-    primaryAction?: ToolbarAction<T>;
-    secondaryActions?: ToolbarAction<T>[];
-    selectActions?: ToolbarAction<T>[];
+    primaryAction?: ToolbarAction;
+    secondaryActions?: ToolbarAction[];
+    selectActions?: ToolbarSelectAction<T>[];
     loading?: boolean;
     localization?: TableLocalization;
     locale?: string;

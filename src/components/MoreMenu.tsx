@@ -65,7 +65,6 @@ export default function MoreMenu<T>(props: Props<T>) {
             </IconButton>
         </Tooltip>
         <Popover
-            keepMounted
             anchorEl={anchorEl}
             open={open}
             anchorOrigin={{

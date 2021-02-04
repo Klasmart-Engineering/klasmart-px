@@ -1,4 +1,3 @@
-import React from "react";
 import {
     createStyles,
     IconButton,
@@ -15,6 +14,7 @@ import {
     LastPage as LastPageIcon,
 } from "@material-ui/icons";
 import { clamp } from "lodash";
+import React from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

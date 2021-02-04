@@ -28,6 +28,7 @@ import BaseTableSearch, { SearchLocalization } from "./Search";
 import BaseTableToolbar, {
     ToolbarAction,
     ToolbarLocalization,
+    ToolbarSelectAction,
 } from "./Toolbar";
 import {
     createStyles,
@@ -40,6 +41,7 @@ import {
 import {
     clamp,
     escapeRegExp,
+    isEqual,
     pick,
     union,
     uniq,
@@ -99,13 +101,7 @@ const isValidGroup = <T,>(group: keyof T, groups?: GroupSelectMenuItem<T>[]) => 
 
 const isValidSubgroup = <T,>(subgroup: string, subgroups?: SubgroupTab<T>[]) => (subgroup !== undefined && subgroups?.find((s) => s.text === subgroup) ? subgroup : undefined) !== undefined;
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            width: `100%`,
-        },
-    }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 export interface TableLocalization {
     toolbar?: ToolbarLocalization;
@@ -146,9 +142,9 @@ interface Props<T> {
     page?: number;
     search?: string;
     showCheckboxes?: boolean;
-    primaryAction?: ToolbarAction<T>;
-    secondaryActions?: ToolbarAction<T>[];
-    selectActions?: ToolbarAction<T>[];
+    primaryAction?: ToolbarAction;
+    secondaryActions?: ToolbarAction[];
+    selectActions?: ToolbarSelectAction<T>[];
     loading?: boolean;
     localization?: TableLocalization;
     locale?: string;
@@ -332,15 +328,14 @@ export default function BaseTable<T>(props: Props<T>) {
         search_,
     ]);
     const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && isValidSubgroup(subgroupBy_, subgroups_)) ? filterRowsBySubgroup(groupBy_, subgroupBy_, customGroupText) : () => true);
-    const filteredSortedSelectedRows = filteredSortedRows.filter(filterRowsBySelected);
     const filteredSortedGroupedSlicedRows = filteredSortedGroupedRows.slice(page_ * rowsPerPage_, page_ * rowsPerPage_ + rowsPerPage_);
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
     const hasSearchColumns = !!searchableColumns?.length;
-    const hasRowActions = !!rowActions?.length;
     const showCheckboxes_ = !!(selectActions?.length || showCheckboxes);
     const hasGroups = !!groupableColumns?.length;
-    const columnCount = columns.length + (hasRowActions ? 1 : 0) + (showCheckboxes_ ? 1 : 0);
+    const columnCount = columns.length + (showCheckboxes_ ? 1 : 0) + 1; // +1 for row actions column
+
     const showToolbar = !!localization?.toolbar?.title || !!primaryAction || !!secondaryActions?.length || !!selectActions?.length;
     const lastPage = Math.ceil(filteredSortedGroupedRows.length / rowsPerPage_) - 1;
 
@@ -379,15 +374,20 @@ export default function BaseTable<T>(props: Props<T>) {
         onSelected?.(selectedRows_);
     }, [ selectedRows_ ]);
 
+    useEffect(() => {
+        if (!loading) return;
+        if (isEqual(selectedRows, selectedRows_)) return;
+        setSelectedRows(selectedRows);
+    }, [ selectedRows ]);
+
     return (
-        <div className={classes.root}>
+        <>
             {showToolbar && <>
                 <BaseTableToolbar
                     primaryAction={primaryAction}
                     secondaryActions={secondaryActions}
                     selectActions={selectActions}
-                    numSelected={filteredSortedSelectedRows.length}
-                    tableData={tableData}
+                    selectedRows={selectedRows_}
                     localization={localization?.toolbar}
                 />
                 <Divider />
@@ -421,6 +421,7 @@ export default function BaseTable<T>(props: Props<T>) {
                         orderBy={orderBy_}
                         rowCount={filteredSortedGroupedSlicedRows.length}
                         columns={columns}
+                        loading={loading}
                         selected={selectedColumns_}
                         showCheckboxes={showCheckboxes_}
                         hasGroups={hasGroups}
@@ -441,6 +442,7 @@ export default function BaseTable<T>(props: Props<T>) {
                         columnCount={columnCount}
                         showCheckboxes={showCheckboxes_}
                         idField={idField}
+                        loading={loading}
                         rows={filteredSortedGroupedSlicedRows}
                         rowActions={rowActions}
                         selectedRows={selectedRows_}
@@ -459,6 +461,6 @@ export default function BaseTable<T>(props: Props<T>) {
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
             />
-        </div>
+        </>
     );
 }

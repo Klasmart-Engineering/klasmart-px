@@ -1,17 +1,17 @@
-import React from "react";
+import Button from "../../Button";
+import DialogContent from "../DialogContent";
+import DialogTitle from "../DialogTitle";
 import {
-    Button,
+    CommonDialog,
+    Openable,
+} from "../shared";
+import {
     createStyles,
     Dialog,
     DialogActions,
     makeStyles,
 } from "@material-ui/core";
-import DialogTitle from "../DialogTitle";
-import DialogContent from "../DialogContent";
-import {
-    CommonDialog,
-    Openable,
-} from "../shared";
+import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
@@ -46,10 +46,9 @@ export default function AlertDialog (props: Props & Openable<boolean>) {
                 <DialogActions>
                     <Button
                         color="primary"
+                        label={okLabel}
                         onClick={() => onClose(true)}
-                    >
-                        {okLabel}
-                    </Button>
+                    />
                 </DialogActions>
             </Dialog>
         </>
