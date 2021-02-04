@@ -6,14 +6,9 @@ import {
     StandardTextFieldProps,
     TextField as TxtField,
 } from "@material-ui/core";
-import clsx from "clsx";
 import React, { useState } from "react";
 
-const useStyles = makeStyles((theme) => createStyles({
-    root: {
-        marginBottom: theme.spacing(2),
-    },
-}));
+const useStyles = makeStyles((theme) => createStyles({}));
 
 const getErrorText = (value: unknown, validations: ((input: unknown) => true | string)[] | undefined) => validations?.map((validation) => validation(value)).find((result) => result !== true);
 
@@ -56,7 +51,7 @@ export default function TextField (props: Props) {
     };
 
     return <TxtField
-        className={clsx(classes.root, className)}
+        className={className}
         variant={variant}
         value={value_}
         error={!!error_}

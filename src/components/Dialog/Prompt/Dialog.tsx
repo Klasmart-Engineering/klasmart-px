@@ -56,6 +56,7 @@ export default function ConfirmDialog (props: Props & Openable<any>) {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
+        if (!isValid) return;
         onClose(value);
     };
 
@@ -72,8 +73,8 @@ export default function ConfirmDialog (props: Props & Openable<any>) {
                     variant={variant}
                     hideIcon={hideIcon}
                 />
+                {content && <DialogContent content={content} />}
                 <Content>
-                    {content && <DialogContent content={content} />}
                     <form onSubmit={handleSubmit}>
                         <TextField
                             autoFocus
