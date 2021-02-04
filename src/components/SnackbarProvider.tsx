@@ -1,11 +1,11 @@
-import React,
-{ ReactText } from "react";
 import { Button } from "@material-ui/core";
 import {
     SnackbarProvider,
     SnackbarProviderProps,
     useSnackbar,
 } from 'notistack';
+import React,
+{ ReactText } from "react";
 
 interface CloseButtonProps {
     actionKey: ReactText;

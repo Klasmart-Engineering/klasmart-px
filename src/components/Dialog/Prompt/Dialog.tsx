@@ -1,4 +1,6 @@
 import Button from "../../Button";
+import TextField from "../../TextField";
+import DialogContent from "../DialogContent";
 import DialogTitle from "../DialogTitle";
 import {
     CancelableDialog,
@@ -9,10 +11,8 @@ import {
     createStyles,
     Dialog,
     DialogActions,
-    DialogContent,
-    DialogContentText,
+    DialogContent as Content,
     makeStyles,
-    TextField,
 } from "@material-ui/core";
 import React,
 {
@@ -28,6 +28,7 @@ export interface Props extends CommonDialog, CancelableDialog {
     label?: string;
     placeholder?: string;
     inputType?: Input;
+    validations?: ((input: unknown) => true | string)[];
 }
 
 export default function ConfirmDialog (props: Props & Openable<any>) {
@@ -42,12 +43,14 @@ export default function ConfirmDialog (props: Props & Openable<any>) {
         okLabel,
         cancelLabel,
         content,
+        validations,
         onClose,
 
         ...rest
     } = props;
     const classes = useStyles();
     const [ value, setValue ] = useState(``);
+    const [ isValid, setIsValid ] = useState(false);
     useEffect(() => setValue(``), [ open ]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,21 +72,22 @@ export default function ConfirmDialog (props: Props & Openable<any>) {
                     variant={variant}
                     hideIcon={hideIcon}
                 />
-                <DialogContent>
-                    {content && <DialogContentText>{content}</DialogContentText>}
+                <Content>
+                    {content && <DialogContent content={content} />}
                     <form onSubmit={handleSubmit}>
                         <TextField
                             autoFocus
                             fullWidth
-                            variant="outlined"
                             label={label}
                             placeholder={placeholder}
                             type={inputType}
                             value={value}
-                            onChange={(e) => setValue(e.currentTarget.value)}
+                            validations={validations}
+                            onChange={setValue}
+                            onValidChange={setIsValid}
                         />
                     </form>
-                </DialogContent>
+                </Content>
                 <DialogActions>
                     <Button
                         label={cancelLabel}
@@ -94,6 +98,7 @@ export default function ConfirmDialog (props: Props & Openable<any>) {
                         label={okLabel}
                         type="submit"
                         color="primary"
+                        disabled={!isValid}
                         onClick={() => onClose(value)}
                     />
                 </DialogActions>

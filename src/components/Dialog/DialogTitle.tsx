@@ -1,9 +1,7 @@
-import React,
-{ ReactNode } from "react";
 import {
     Box,
     createStyles,
-    DialogTitle,
+    DialogTitle as Title,
     DialogTitleProps,
     makeStyles,
     useTheme,
@@ -19,6 +17,8 @@ import {
     Info as InfoIcon,
     Warning as WarningIcon,
 } from "@material-ui/icons";
+import React,
+{ ReactNode } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
     typeIcon: {
@@ -44,7 +44,7 @@ interface Props extends Omit<DialogTitleProps, "title"> {
     hideIcon?: boolean;
 }
 
-export default function Title (props: Props) {
+export default function DialogTitle (props: Props) {
     const {
         title,
         variant,
@@ -55,7 +55,7 @@ export default function Title (props: Props) {
     const theme = useTheme();
     const Icon = typeToIcon(variant);
 
-    return <DialogTitle
+    return <Title
         style={{
             color: variant ? `white` : undefined,
             backgroundColor: variant ? theme.palette[variant].main : undefined,
@@ -72,5 +72,5 @@ export default function Title (props: Props) {
             </Box>
             : title
         }
-    </DialogTitle>;
+    </Title>;
 }

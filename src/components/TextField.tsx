@@ -1,8 +1,10 @@
 import {
     createStyles,
+    FilledTextFieldProps,
     makeStyles,
     OutlinedTextFieldProps,
-    TextField,
+    StandardTextFieldProps,
+    TextField as TxtField,
 } from "@material-ui/core";
 import clsx from "clsx";
 import React, { useState } from "react";
@@ -15,14 +17,14 @@ const useStyles = makeStyles((theme) => createStyles({
 
 const getErrorText = (value: unknown, validations: ((input: unknown) => true | string)[] | undefined) => validations?.map((validation) => validation(value)).find((result) => result !== true);
 
-interface Props extends Omit<OutlinedTextFieldProps, "children" | "onChange" | "variant"> {
+interface Props extends Omit<StandardTextFieldProps | OutlinedTextFieldProps | FilledTextFieldProps, "children" | "onChange"> {
     validations?: ((input: unknown) => true | string)[];
     hideHelperText?: boolean;
     onChange?: (value: string) => void;
     onValidChange?: (valid: boolean) => void;
 }
 
-export default function (props: Props) {
+export default function TextField (props: Props) {
     const {
         hideHelperText,
         value,
@@ -30,6 +32,7 @@ export default function (props: Props) {
         onChange,
         onValidChange,
         className,
+        variant = `outlined`,
         ...rest
     } = props;
     const classes = useStyles();
@@ -52,9 +55,9 @@ export default function (props: Props) {
         setError(undefined);
     };
 
-    return <TextField
+    return <TxtField
         className={clsx(classes.root, className)}
-        variant="outlined"
+        variant={variant}
         value={value_}
         error={!!error_}
         helperText={hideHelperText ? undefined : (error_ ?? ` `)}

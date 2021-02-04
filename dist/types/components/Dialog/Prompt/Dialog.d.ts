@@ -5,5 +5,6 @@ export interface Props extends CommonDialog, CancelableDialog {
     label?: string;
     placeholder?: string;
     inputType?: Input;
+    validations?: ((input: unknown) => true | string)[];
 }
 export default function ConfirmDialog(props: Props & Openable<any>): JSX.Element;
