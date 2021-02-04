@@ -36,18 +36,11 @@ export default function TextField (props: Props) {
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const { value }= e.currentTarget;
-        setValue(value);
-        onChange?.(value);
-    };
-
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const error = getErrorText(e.currentTarget.value, validations);
+        const error = getErrorText(value, validations);
         setError(error);
         onValidChange?.(!error);
-    };
-
-    const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setError(undefined);
+        setValue(value);
+        onChange?.(value);
     };
 
     return <TxtField
@@ -57,8 +50,6 @@ export default function TextField (props: Props) {
         error={!!error_}
         helperText={hideHelperText ? undefined : (error_ ?? ` `)}
         onChange={handleChange}
-        onBlur={handleBlur}
-        onFocus={handleFocus}
         {...rest}
     />;
 }
