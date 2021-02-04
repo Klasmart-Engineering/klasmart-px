@@ -8,6 +8,7 @@ export { default as ConfirmDialogProvider } from "./components/Dialog/Confirm/Pr
 export { usePrompt } from "./components/Dialog/Prompt/hooks";
 export { default as PromptDialogProvider } from "./components/Dialog/Prompt/Provider";
 export { default as Fab } from "./components/Fab";
+export { default as FullScreenDialog } from "./components/FullScreenDialog";
 export { default as IconButton } from "./components/IconButton";
 export { default as LanguageSelect } from "./components/LanguageSelect";
 export { default as MoreMenu } from "./components/MoreMenu";
