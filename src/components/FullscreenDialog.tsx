@@ -1,4 +1,4 @@
-import Button from "../components/Button";
+import Button from "./Button";
 import {
     AppBar,
     createStyles,
@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => createStyles({
     title: {
         marginLeft: theme.spacing(2),
         flex: 1,
+    },
+    content: {
+        marginTop: theme.mixins.toolbar.minHeight,
     },
 }));
 
@@ -89,7 +92,7 @@ export default function FullScreenDialog (props: Props) {
                         }
                     </Toolbar>
                 </AppBar>
-                <DialogContent>
+                <DialogContent className={classes.content}>
                     {children}
                 </DialogContent>
             </Dialog>
