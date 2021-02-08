@@ -21,7 +21,10 @@ const useStyles = makeStyles((theme) => createStyles({
         flex: 1,
     },
     content: {
-        marginTop: theme.mixins.toolbar.minHeight,
+        marginTop: 48 + theme.spacing(1),
+        [theme.breakpoints.up(`sm`)]: {
+            marginTop: 64 + theme.spacing(1),
+        },
     },
 }));
 
