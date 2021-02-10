@@ -1,9 +1,10 @@
 import {
     createStyles,
     makeStyles,
-    Tab,
-    Tabs,
+    Tab as MaterialTab,
+    Tabs as MaterialTabs,
 } from "@material-ui/core";
+import clsx from "clsx";
 import React, {
     useEffect,
     useState,
@@ -21,10 +22,10 @@ const useStyles = makeStyles((theme) => createStyles({
         borderTopRightRadius: 4,
     },
     tabsContainer: {
-        flex: 0,
+        flex: 1,
         backgroundColor: `transparent !important`,
         "& .MuiTabs-flexContainer": {
-            padding: theme.spacing(0, 2),
+            height: `100%`,
         },
         "& .MuiTab-root": {
             backgroundColor: `transparent !important`,
@@ -38,34 +39,31 @@ export interface Tab {
 }
 
 interface Props {
+    className?: string;
     tabs: Tab[];
     value?: string;
     valuesAsPaths?: boolean;
     onChange?: (value: string) => void;
 }
 
-export default function (props: Props) {
+export default function Tabs (props: Props) {
     const {
+        className,
         tabs,
         value,
         valuesAsPaths,
         onChange,
     } = props;
     const classes = useStyles();
-    const [ value_, setValue_ ] = useState(value ?? ``);
-
-    useEffect(() => {
-        if (!value) return;
-        setValue_(value);
-    }, [ value ]);
 
     const handleChange = (event: React.ChangeEvent<{}>, value: any) => {
+        if (value === 0) value = undefined;
         onChange?.(value);
     };
 
     return (
-        <Tabs
-            value={value_}
+        <MaterialTabs
+            value={value ?? 0}
             TabIndicatorProps={{
                 className: classes.tabIndicator,
             }}
@@ -73,11 +71,11 @@ export default function (props: Props) {
             textColor="primary"
             variant="scrollable"
             scrollButtons="auto"
-            className={classes.tabsContainer}
+            className={clsx(classes.tabsContainer, className)}
             onChange={handleChange}
         >
             {tabs.map((tab, i) => (
-                <Tab
+                <MaterialTab
                     key={`tab-${i}`}
                     className={classes.tabRoot}
                     label={`${tab.text}`}
@@ -85,6 +83,6 @@ export default function (props: Props) {
                     value={tab.value}
                 />
             ))}
-        </Tabs>
+        </MaterialTabs>
     );
 }

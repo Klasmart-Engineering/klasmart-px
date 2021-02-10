@@ -4,10 +4,11 @@ export interface Tab {
     value: string | undefined;
 }
 interface Props {
+    className?: string;
     tabs: Tab[];
     value?: string;
     valuesAsPaths?: boolean;
     onChange?: (value: string) => void;
 }
-export default function (props: Props): JSX.Element;
+export default function Tabs(props: Props): JSX.Element;
 export {};
