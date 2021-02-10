@@ -1,3 +1,4 @@
+import Tabs, { Tab } from "../Tabs";
 import {
     Box,
     createStyles,
@@ -5,8 +6,6 @@ import {
     makeStyles,
     MenuItem,
     Select,
-    Tab,
-    Tabs,
     Theme,
     Typography,
 } from "@material-ui/core";
@@ -23,21 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
             "& .MuiInput-underline:after": {
                 display: `none`,
             },
-        },
-        tabsContainer: {
-            flex: 1,
-            backgroundColor: theme.palette.background.paper,
-            "& .MuiTabs-flexContainer": {
-                height: `100%`,
-            },
-            "& .MuiTab-root": {
-                backgroundColor: `transparent !important`,
-            },
-        },
-        tabRoot: {
-            minWidth: `inherit`,
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2),
         },
         select: {
             minWidth: 150,
@@ -97,14 +81,9 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
     const [ groupBy_, setGroupBy ] = useState<"" | keyof T>(groupBy && groups.find((group) => group.id === groupBy) ? groupBy : ``);
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
 
-    // adjusting index+1 b/c "all"-tab is always index 0
-    const subgroupIndex = 1 + subgroups.findIndex((subgroup) => subgroup.text === subgroupBy_);
-
-    const handleSubgroupChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        const newSubgroupIndex = value - 1; // "all"-tab is always index 0 so need to subtract by 1
-        const newSubgroup = subgroups[newSubgroupIndex];
-        setSubgroupBy(newSubgroup?.text);
-        onSelectSubgroup(newSubgroup?.text);
+    const handleSubgroupChange = (value: string) => {
+        setSubgroupBy(value);
+        onSelectSubgroup(value);
     };
 
     const handleGroupChange = (e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>, child: React.ReactNode) => {
@@ -118,6 +97,17 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
         onSelectGroup(newGroup === `` ? undefined : newGroup);
     };
 
+    const tabs: Tab[] = [
+        {
+            text: `${localization?.tabAll ?? `All`} (${allCount})`,
+            value: undefined,
+        },
+        ...subgroups.map((subgroup) => ({
+            text: `${subgroup.text} (${subgroup.count ?? 0})`,
+            value: subgroup.text,
+        })),
+    ];
+
     return (
         <>
             <Box
@@ -126,34 +116,10 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
                 className={classes.root}
             >
                 <Tabs
-                    value={subgroupIndex}
-                    TabIndicatorProps={{
-                        style: {
-                            height: 4,
-                            borderTopLeftRadius: 4,
-                            borderTopRightRadius: 4,
-                        },
-                    }}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    aria-label="groups"
-                    className={classes.tabsContainer}
+                    value={subgroupBy_}
+                    tabs={tabs}
                     onChange={handleSubgroupChange}
-                >
-                    <Tab
-                        label={`${localization?.tabAll ?? `All`} (${allCount})`}
-                        className={classes.tabRoot}
-                    />
-                    {subgroups.map((subgroup, i) =>
-                        <Tab
-                            key={`subgroup-${i}`}
-                            className={classes.tabRoot}
-                            label={`${subgroup.text} (${subgroup.count})`}
-                        />,
-                    )}
-                </Tabs>
+                />
                 <Divider orientation="vertical"/>
                 <Select
                     displayEmpty
