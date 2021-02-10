@@ -23,6 +23,7 @@ export { default as TableLoading } from "./components/Table/Loading";
 export { default as TablePagination } from "./components/Table/Pagination";
 export { default as TableSearch } from "./components/Table/Search";
 export { default as TableToolbar } from "./components/Table/Toolbar";
+export { default as Tabs } from "./components/Tabs";
 export { default as themeBuilder } from "./theme/builder";
 export { default as utils } from "./utils";
 export { useWidth } from "./utils/layout";
