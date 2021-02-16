@@ -1,7 +1,7 @@
 import {
     getErrorText,
     Input,
-} from "./util";
+} from "./shared";
 import {
     Checkbox,
     createStyles,

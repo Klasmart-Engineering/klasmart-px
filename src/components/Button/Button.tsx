@@ -1,24 +1,39 @@
-import ButtonLoading, { useLoadingStyles } from "./ButtonLoading";
+import Loading, { useLoadingStyles } from "./Loading";
 import {
+    Box,
     Button as Btn,
     createStyles,
     makeStyles,
     Tooltip,
+    Typography,
     useTheme,
 } from "@material-ui/core";
 import {
     Palette,
     PaletteColor,
 } from "@material-ui/core/styles/createPalette";
+import { SvgIconComponent } from "@material-ui/icons";
 import clsx from "clsx";
 import React, { useState } from "react";
 
-const useStyles = makeStyles((theme) => createStyles({}));
+const useStyles = makeStyles((theme) => createStyles({
+    extendedText: {
+        marginLeft: theme.spacing(1),
+    },
+    rounded: {
+        borderRadius: 24,
+    },
+}));
 
 interface Props {
+    className?: string;
     label: React.ReactNode;
+    icon?: SvgIconComponent;
     type?: "submit" | "reset" | "button";
     variant?: "text" | "outlined" | "contained";
+    size?: "small" | "medium" | "large";
+    rounded?: boolean;
+    fullWidth?: boolean;
     color?: { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette];
     disabled?: boolean;
     tooltip?: string;
@@ -27,6 +42,7 @@ interface Props {
 
 export default function Button (props: Props) {
     const {
+        className,
         label,
         type,
         variant,
@@ -34,6 +50,9 @@ export default function Button (props: Props) {
         disabled,
         tooltip,
         onClick,
+        rounded,
+        icon: Icon,
+        ...rest
     } = props;
     const classes = useStyles();
     const loadingClasses = useLoadingStyles();
@@ -65,19 +84,33 @@ export default function Button (props: Props) {
                     backgroundColor: !disabled ? backgroundColor : undefined,
                 }}
                 disabled={disabled}
-                className={clsx({
+                className={clsx(className, {
                     [loadingClasses.buttonLoading]: loading,
+                    [classes.rounded]: rounded,
                 })}
                 onClick={handleClick}
+                {...rest}
             >
-                <span
+                <Box
+                    display="flex"
+                    flexDirection="row"
                     className={clsx({
                         [loadingClasses.buttonLoadingContent]: loading,
                     })}
                 >
-                    {label}
-                </span>
-                {loading && <ButtonLoading />}
+
+                    {Icon && <Icon />}
+                    <Typography
+                        noWrap
+                        variant="button"
+                        className={clsx({
+                            [classes.extendedText]: Icon && label,
+                        })}
+                    >
+                        {label}
+                    </Typography>
+                </Box>
+                {loading && <Loading />}
             </Btn>
         </span>
     </Tooltip>;

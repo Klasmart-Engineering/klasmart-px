@@ -5,6 +5,8 @@ export interface Input {
     disabled?: boolean;
     fullWidth?: boolean;
     variant?: "filled" | "standard" | "outlined";
+    autoFocus?: boolean;
+    placeholder?: string;
     validations?: ((input: unknown) => true | string)[];
     onBlur?: () => void;
     onChange?: (value: string) => void;

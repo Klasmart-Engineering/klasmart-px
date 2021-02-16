@@ -1,4 +1,4 @@
-import Button from "../../Button";
+import Button from "../../Button/Button";
 import DialogContent from "../DialogContent";
 import DialogTitle from "../DialogTitle";
 import {

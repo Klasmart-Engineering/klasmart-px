@@ -1,5 +1,5 @@
-import { useWidth } from "../utils/layout";
-import ButtonLoading, { useLoadingStyles } from "./ButtonLoading";
+import { useWidth } from "../../utils/layout";
+import Loading, { useLoadingStyles } from "./Loading";
 import {
     Box,
     createStyles,
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => createStyles({
 }));
 
 interface Props {
+    className?: string;
     icon?: SvgIconComponent;
     responsiveExtended?: Breakpoint[];
     color?: { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette];
@@ -45,6 +46,7 @@ export default function Fab (props: Props) {
         responsiveExtended,
         tooltip,
         onClick,
+        className,
     } = props;
 
     const classes = useStyles();
@@ -73,7 +75,7 @@ export default function Fab (props: Props) {
             <FabButton
                 variant={variant_}
                 disabled={disabled}
-                className={clsx({
+                className={clsx(className, {
                     [loadingClasses.buttonLoading]: loading,
                 })}
                 style={{
@@ -109,7 +111,7 @@ export default function Fab (props: Props) {
                         />
                         : <span />
                 }
-                {loading && <ButtonLoading />}
+                {loading && <Loading />}
             </FabButton>
         </span>
     </Tooltip>;

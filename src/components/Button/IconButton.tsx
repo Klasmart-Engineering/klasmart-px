@@ -1,4 +1,4 @@
-import ButtonLoading, { useLoadingStyles } from "./ButtonLoading";
+import Loading, { useLoadingStyles } from "./Loading";
 import {
     createStyles,
     IconButton as IconBtn,
@@ -17,6 +17,7 @@ import React, { useState } from "react";
 const useStyles = makeStyles((theme) => createStyles({}));
 
 interface Props {
+    className?: string;
     icon: SvgIconComponent;
     tooltip?: string;
     disabled?: boolean;
@@ -31,6 +32,7 @@ export default function IconButton (props: Props) {
         disabled,
         color,
         onClick,
+        className,
     } = props;
     const classes = useStyles();
     const loadingClasses = useLoadingStyles();
@@ -53,7 +55,7 @@ export default function IconButton (props: Props) {
         <span>
             <IconBtn
                 disabled={disabled}
-                className={clsx({
+                className={clsx(className, {
                     [loadingClasses.buttonLoading]: loading,
                 })}
                 style={{
@@ -64,7 +66,7 @@ export default function IconButton (props: Props) {
                 <Icon className={clsx({
                     [loadingClasses.buttonLoadingContent]: loading,
                 })} />
-                {loading && <ButtonLoading />}
+                {loading && <Loading />}
             </IconBtn>
         </span>
     </Tooltip>;

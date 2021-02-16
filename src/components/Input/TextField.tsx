@@ -1,7 +1,7 @@
 import {
     getErrorText,
     Input,
-} from "./util";
+} from "./shared";
 import {
     createStyles,
     makeStyles,
@@ -11,7 +11,10 @@ import React, { useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
+export type InputType = `text` | `number` | `password` | `date` | `datetime-local` | `email` | `time` | `month` | `tel` | `url` | `week`
+
 interface Props extends Input {
+    type?: InputType;
     className?: string;
     validations?: ((input: unknown) => true | string)[];
     hideHelperText?: boolean;

@@ -1,5 +1,5 @@
-import Button from "../../Button";
-import TextField from "../../Input/TextField";
+import Button from "../../Button/Button";
+import TextField, { InputType } from "../../Input/TextField";
 import DialogContent from "../DialogContent";
 import DialogTitle from "../DialogTitle";
 import {
@@ -22,12 +22,10 @@ import React,
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
-export type Input = `text` | `number` | `password` | `date` | `datetime-local` | `email` | `time` | `month` | `tel` | `url` | `week`
-
 export interface Props extends CommonDialog, CancelableDialog {
     label?: string;
     placeholder?: string;
-    inputType?: Input;
+    inputType?: InputType;
     validations?: ((input: unknown) => true | string)[];
 }
 
