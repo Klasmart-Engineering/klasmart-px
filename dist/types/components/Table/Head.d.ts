@@ -2,7 +2,7 @@ import { CheckboxDropdownLocalization, CheckboxDropdownValue } from "./CheckboxD
 import { ColumnSelectorLocalization } from "./ColumnSelector";
 import { SubgroupTab } from "./GroupTabs";
 import { TableCellProps } from "@material-ui/core";
-import React, { ReactElement } from "react";
+import React, { ReactNode } from "react";
 export declare type Order = "asc" | "desc";
 export declare type Align = TableCellProps["align"];
 export declare type CustomGroup<T> = (rowValue: T[keyof T]) => string;
@@ -23,7 +23,8 @@ export interface TableColumn<T> {
     sort?: CustomSort<T>;
     groupSort?: CustomGroupSort;
     groups?: SubgroupTab<T>[];
-    render?: (row: T) => ReactElement | ReactElement[];
+    tooltip?: string;
+    render?: (row: T) => ReactNode;
 }
 export interface HeadLocalization {
     hideColumnButton?: string;
