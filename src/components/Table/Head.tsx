@@ -22,10 +22,11 @@ import {
 } from "@material-ui/core";
 import {
     Close as CloseIcon,
+    Info as InfoIcon,
     Lock as LockIcon,
 } from "@material-ui/icons";
-import React,
-{ ReactElement } from "react";
+import clsx from "clsx";
+import React, { ReactNode } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -45,6 +46,12 @@ const useStyles = makeStyles((theme: Theme) =>
             "$hoverHeader:hover &": {
                 opacity: 1,
             },
+        },
+        infoIcon: {
+            marginLeft: theme.spacing(1),
+        },
+        infoIconReverse: {
+            marginRight: theme.spacing(1),
         },
     }),
 );
@@ -70,7 +77,8 @@ export interface TableColumn<T> {
     sort?: CustomSort<T>;
     groupSort?: CustomGroupSort;
     groups?: SubgroupTab<T>[];
-    render?: (row: T) => ReactElement | ReactElement[];
+    tooltip?: string;
+    render?: (row: T) => ReactNode;
 }
 
 export interface HeadLocalization {
@@ -140,7 +148,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
                 }
                 {columns
                     .filter((column) => isSelected(column.id))
-                    .map((column: TableColumn<T>) => {
+                    .map((column) => {
                         const hideButton = <IconButton
                             disabled={column.persistent}
                             className={classes.removeButton}
@@ -180,7 +188,21 @@ export default function BaseTableHead<T>(props: Props<T>) {
                                     }}
                                     onClick={createSortHandler(column.id)}
                                 >
-                                    {column.label}
+                                    <Box
+                                        display="flex"
+                                        flexDirection={flexDirection}
+                                    >
+                                        {column.label}
+                                        {column.tooltip && <Tooltip title={column.tooltip}>
+                                            <InfoIcon
+                                                color="action"
+                                                className={clsx({
+                                                    [classes.infoIcon]: column.align !== `right`,
+                                                    [classes.infoIconReverse]: column.align === `right`,
+                                                })}
+                                            />
+                                        </Tooltip>}
+                                    </Box>
                                 </TableSortLabel>
                                 {isAlignCenter && <Box flex="1" />}
                                 {column.persistent
