@@ -102,7 +102,7 @@ export default function Button (props: Props) {
                     {Icon && <Icon />}
                     <Typography
                         noWrap
-                        variant="button"
+                        variant="inherit"
                         className={clsx({
                             [classes.extendedText]: Icon && label,
                         })}
