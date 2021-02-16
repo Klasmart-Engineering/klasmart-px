@@ -1,3 +1,4 @@
+import { getErrorText } from "./util";
 import {
     createStyles,
     FilledTextFieldProps,
@@ -10,13 +11,11 @@ import React, { useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
-const getErrorText = (value: unknown, validations: ((input: unknown) => true | string)[] | undefined) => validations?.map((validation) => validation(value)).find((result) => result !== true);
-
 interface Props extends Omit<StandardTextFieldProps | OutlinedTextFieldProps | FilledTextFieldProps, "children" | "onChange"> {
     validations?: ((input: unknown) => true | string)[];
     hideHelperText?: boolean;
     onChange?: (value: string) => void;
-    onValidChange?: (valid: boolean) => void;
+    onValid?: (valid: boolean) => void;
 }
 
 export default function TextField (props: Props) {
@@ -25,7 +24,7 @@ export default function TextField (props: Props) {
         value,
         validations,
         onChange,
-        onValidChange,
+        onValid,
         className,
         variant = `outlined`,
         ...rest
@@ -38,7 +37,7 @@ export default function TextField (props: Props) {
         const { value }= e.currentTarget;
         const error = getErrorText(value, validations);
         setError(error);
-        onValidChange?.(!error);
+        onValid?.(!error);
         setValue(value);
         onChange?.(value);
     };

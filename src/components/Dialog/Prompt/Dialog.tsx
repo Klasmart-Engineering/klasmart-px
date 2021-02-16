@@ -1,5 +1,5 @@
 import Button from "../../Button";
-import TextField from "../../TextField";
+import TextField from "../../Input/TextField";
 import DialogContent from "../DialogContent";
 import DialogTitle from "../DialogTitle";
 import {
@@ -85,7 +85,7 @@ export default function ConfirmDialog (props: Props & Openable<any>) {
                             value={value}
                             validations={validations}
                             onChange={setValue}
-                            onValidChange={setIsValid}
+                            onValid={setIsValid}
                         />
                     </form>
                 </Content>

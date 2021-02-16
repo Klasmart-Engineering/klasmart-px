@@ -10,9 +10,10 @@ export { default as PromptDialogProvider } from "./components/Dialog/Prompt/Prov
 export { default as Fab } from "./components/Fab";
 export { default as FullScreenDialog } from "./components/FullScreenDialog";
 export { default as IconButton } from "./components/IconButton";
+export { default as Select } from "./components/Input/Select";
+export { default as TextField } from "./components/Input/TextField";
 export { default as LanguageSelect } from "./components/LanguageSelect";
 export { default as MoreMenu } from "./components/MoreMenu";
-export { default as MultiSelect } from "./components/MultiSelect";
 export { default as SnackbarProvider } from "./components/SnackbarProvider";
 export { default as Table } from "./components/Table/Base";
 export { default as TableBody } from "./components/Table/Body";

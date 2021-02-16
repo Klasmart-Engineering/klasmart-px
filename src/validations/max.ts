@@ -1,1 +1,1 @@
-export default (max: number, errorMessage?: string) => (input: any) => String(input).length <= max || (errorMessage ?? `Input needs to be maximum ${max} characters`);
+export default (max: number, errorMessage?: string) => (input: any) => (Array.isArray(input) ? input.length : String(input).length) <= max || (errorMessage ?? `Maximum ${max}`);
