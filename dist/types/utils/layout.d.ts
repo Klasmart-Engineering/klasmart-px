@@ -1,1 +1,1 @@
-export declare function useWidth(): "sm" | "xs" | "md" | "lg" | "xl";
+export declare function useWidth(): "xs" | "sm" | "md" | "lg" | "xl";

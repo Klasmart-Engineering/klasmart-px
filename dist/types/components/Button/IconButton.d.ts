@@ -2,6 +2,7 @@ import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
 import { SvgIconComponent } from "@material-ui/icons";
 import React from "react";
 interface Props {
+    className?: string;
     icon: SvgIconComponent;
     tooltip?: string;
     disabled?: boolean;
