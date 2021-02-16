@@ -1,21 +1,22 @@
-import { getErrorText } from "./util";
+import {
+    getErrorText,
+    Input,
+} from "./util";
 import {
     createStyles,
-    FilledTextFieldProps,
     makeStyles,
-    OutlinedTextFieldProps,
-    StandardTextFieldProps,
     TextField as TxtField,
 } from "@material-ui/core";
 import React, { useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
-interface Props extends Omit<StandardTextFieldProps | OutlinedTextFieldProps | FilledTextFieldProps, "children" | "onChange"> {
+interface Props extends Input {
+    className?: string;
     validations?: ((input: unknown) => true | string)[];
     hideHelperText?: boolean;
     onChange?: (value: string) => void;
-    onValid?: (valid: boolean) => void;
+    onValidate?: (valid: boolean) => void;
 }
 
 export default function TextField (props: Props) {
@@ -24,7 +25,7 @@ export default function TextField (props: Props) {
         value,
         validations,
         onChange,
-        onValid,
+        onValidate,
         className,
         variant = `outlined`,
         ...rest
@@ -37,7 +38,7 @@ export default function TextField (props: Props) {
         const { value }= e.currentTarget;
         const error = getErrorText(value, validations);
         setError(error);
-        onValid?.(!error);
+        onValidate?.(!error);
         setValue(value);
         onChange?.(value);
     };

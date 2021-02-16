@@ -1,4 +1,7 @@
-import { getErrorText } from "./util";
+import {
+    getErrorText,
+    Input,
+} from "./util";
 import {
     Checkbox,
     createStyles,
@@ -24,22 +27,16 @@ const useStyles = makeStyles((theme) => createStyles({
     },
 }));
 
-interface Props<T> {
-    className?: string;
-    label: string;
-    items: T[];
+interface Props<T> extends Omit<Input, "value" | "onChange"> {
     value: string | string[];
+    className?: string;
+    items: T[];
     selectAllLabel?: string;
     noDataLabel?: string;
-    hideHelperText?: boolean;
-    disabled?: boolean;
     multiple?: boolean;
-    fullWidth?: boolean;
-    validations?: ((input: unknown) => true | string)[];
     itemValue?: (item: T) => string;
     itemText?: (item: T) => string;
     onChange?: (value: string | string[]) => void;
-    onValid?: (valid: boolean) => void;
 }
 
 export default function Select<T> (props: Props<T>) {
@@ -51,14 +48,16 @@ export default function Select<T> (props: Props<T>) {
         selectAllLabel,
         noDataLabel,
         hideHelperText,
-        disabled,
         multiple,
-        fullWidth,
         validations,
         itemValue = (item) => String(item),
         itemText = (item) => String(item),
+        variant = `outlined`,
+        onBlur,
+        onFocus,
         onChange,
-        onValid,
+        onValidate,
+        ...rest
     } = props;
     const classes = useStyles();
     const [ value_, setValue ] = useState(multiple && !Array.isArray(value) ? [ value ] : value);
@@ -75,7 +74,7 @@ export default function Select<T> (props: Props<T>) {
         setValue(value);
         setError(error);
         onChange?.(value);
-        onValid?.(!error);
+        onValidate?.(!error);
     };
 
     const menuItems = items.map((item) => (
@@ -115,12 +114,10 @@ export default function Select<T> (props: Props<T>) {
         <TextField
             select
             className={clsx(className, classes.root)}
-            fullWidth={fullWidth}
             label={label}
-            variant="outlined"
+            variant={variant}
             helperText={hideHelperText ? undefined : (error_ ?? ` `)}
             error={!!error_}
-            disabled={disabled}
             SelectProps={{
                 multiple,
                 renderValue: Array.isArray(value_) && !value_.includes(``) ? (value) =>
@@ -130,8 +127,11 @@ export default function Select<T> (props: Props<T>) {
                         return itemText(item);
                     }).join(`, `) : undefined,
                 value: value_,
+                onBlur,
                 onChange: handleChange,
+                onFocus,
             }}
+            {...rest}
         >
             {items.length === 0
                 ? <MenuItem disabled>

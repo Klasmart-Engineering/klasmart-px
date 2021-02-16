@@ -85,7 +85,7 @@ export default function ConfirmDialog (props: Props & Openable<any>) {
                             value={value}
                             validations={validations}
                             onChange={setValue}
-                            onValid={setIsValid}
+                            onValidate={setIsValid}
                         />
                     </form>
                 </Content>
