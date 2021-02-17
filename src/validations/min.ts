@@ -1,1 +1,11 @@
-export default (min: number, errorMessage?: string) => (input: any) => (Array.isArray(input) ? input.length : String(input).length) >= min || (errorMessage ?? `Minimum ${min}`);
+export default (min: number, errorMessage?: string) => (input: any) => {
+    let inputMin;
+    if (Array.isArray(input)) {
+        inputMin = input.length;
+    } else if (typeof input === `number`) {
+        inputMin = input;
+    } else {
+        inputMin = String(input).length;
+    }
+    return inputMin >= min || (errorMessage ?? `Minimum ${min}`);
+};

@@ -1,5 +1,5 @@
 export interface Input {
-    value: string;
+    value: unknown;
     label?: string;
     hideHelperText?: boolean;
     disabled?: boolean;
@@ -9,7 +9,7 @@ export interface Input {
     placeholder?: string;
     validations?: ((input: unknown) => true | string)[];
     onBlur?: () => void;
-    onChange?: (value: string) => void;
+    onChange?: (value: any) => void;
     onFocus?: () => void;
     onValidate?: (valid: boolean) => void;
 }

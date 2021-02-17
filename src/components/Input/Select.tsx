@@ -27,16 +27,14 @@ const useStyles = makeStyles((theme) => createStyles({
     },
 }));
 
-interface Props<T> extends Omit<Input, "value" | "onChange"> {
-    value: string | string[];
+interface Props<T> extends Input {
     className?: string;
     items: T[];
     selectAllLabel?: string;
     noDataLabel?: string;
     multiple?: boolean;
-    itemValue?: (item: T) => string;
+    itemValue?: (item: T) => any;
     itemText?: (item: T) => string;
-    onChange?: (value: string | string[]) => void;
 }
 
 export default function Select<T> (props: Props<T>) {
@@ -50,7 +48,7 @@ export default function Select<T> (props: Props<T>) {
         hideHelperText,
         multiple,
         validations,
-        itemValue = (item) => String(item),
+        itemValue = (item) => item,
         itemText = (item) => String(item),
         variant = `outlined`,
         onBlur,
@@ -66,7 +64,7 @@ export default function Select<T> (props: Props<T>) {
     const getToggleSelectAll = (values: string[]) => values.length !== items.length ? items.map(itemValue) : [];
 
     const handleChange = (event: React.ChangeEvent<{name?: string | undefined; value: unknown}>, child: React.ReactNode) => {
-        let value = event.target.value as string | string[];
+        let value = event.target.value;
         if (Array.isArray(value) && value.includes(``)) {
             value = getToggleSelectAll(value.filter((v) => v));
         }
@@ -82,7 +80,7 @@ export default function Select<T> (props: Props<T>) {
             key={itemValue(item)}
             value={itemValue(item)}
         >
-            {multiple &&
+            {multiple && Array.isArray(value_) &&
                 <ListItemIcon>
                     <Checkbox checked={value_.includes(itemValue(item))} />
                 </ListItemIcon>
@@ -92,7 +90,7 @@ export default function Select<T> (props: Props<T>) {
             </ListItemText>
         </MenuItem>
     ));
-    if (multiple) menuItems.unshift(
+    if (multiple && Array.isArray(value_)) menuItems.unshift(
         <MenuItem
             key="selectAll"
             value=""

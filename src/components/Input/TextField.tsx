@@ -7,7 +7,8 @@ import {
     makeStyles,
     TextField as TxtField,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React,
+{ useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
@@ -16,10 +17,6 @@ export type InputType = `text` | `number` | `password` | `date` | `datetime-loca
 interface Props extends Input {
     type?: InputType;
     className?: string;
-    validations?: ((input: unknown) => true | string)[];
-    hideHelperText?: boolean;
-    onChange?: (value: string) => void;
-    onValidate?: (valid: boolean) => void;
 }
 
 export default function TextField (props: Props) {
