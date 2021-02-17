@@ -35,8 +35,8 @@ export default function TextField (props: Props) {
     const [ value_, setValue ] = useState(value ?? ``);
     const [ error_, setError ] = useState(getErrorText(value, validations));
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        const { value }= e.currentTarget;
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const value =  type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value ;
         const error = getErrorText(value, validations);
         setError(error);
         onValidate?.(!error);
@@ -51,10 +51,6 @@ export default function TextField (props: Props) {
         error={!!error_}
         helperText={hideHelperText ? undefined : (error_ ?? ` `)}
         type={type}
-        inputProps={type === `number` ? {
-            inputMode: `numeric`,
-            pattern: `[0-9]*`,
-        } : undefined}
         onChange={handleChange}
         {...rest}
     />;
