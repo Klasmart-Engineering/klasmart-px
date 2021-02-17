@@ -27,6 +27,7 @@ export default function TextField (props: Props) {
         onChange,
         onValidate,
         className,
+        type,
         variant = `outlined`,
         ...rest
     } = props;
@@ -49,6 +50,11 @@ export default function TextField (props: Props) {
         value={value_}
         error={!!error_}
         helperText={hideHelperText ? undefined : (error_ ?? ` `)}
+        type={type}
+        inputProps={type === `number` ? {
+            inputMode: `numeric`,
+            pattern: `[0-9]*`,
+        } : undefined}
         onChange={handleChange}
         {...rest}
     />;
