@@ -2,7 +2,8 @@ import {
     MenuAction,
     MoreMenuLocalization,
 } from "../MoreMenu";
-import BaseTableBody, { BodyLocalization } from "./Body";
+import BaseTableBody,
+{ BodyLocalization } from "./Body";
 import {
     CheckboxDropdownLocalization,
     CheckboxDropdownValue,
@@ -23,8 +24,10 @@ import BaseTableHead,
     TableColumn,
 } from "./Head";
 import BaseTableLoading from "./Loading";
-import BaseTablePagination, { PaginationLocalization } from "./Pagination";
-import BaseTableSearch, { SearchLocalization } from "./Search";
+import BaseTablePagination,
+{ PaginationLocalization } from "./Pagination";
+import BaseTableSearch,
+{ SearchLocalization } from "./Search";
 import BaseTableToolbar, {
     ToolbarAction,
     ToolbarLocalization,
@@ -115,19 +118,34 @@ export interface TableLocalization {
     pagination?: PaginationLocalization;
 }
 
-export interface TableData<T> {
+interface BaseTableData<T> {
     columns: (keyof T)[];
     rows: Partial<T>[];
+    selectedRows: T[Extract<keyof T, string>][];
     search: string;
     orderBy: keyof T;
     order: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
-    page: number;
     rowsPerPage: number;
 }
+export interface PageTableData<T> extends BaseTableData<T> {
+    page: number;
+}
+
+export interface CursorTableData<T> extends BaseTableData<T> {
+    cursor: string;
+}
+
+type TableData<M, T> =
+    M extends `cursor` ? CursorTableData<T> :
+    M extends `page` ? PageTableData<T> :
+    never;
+
+export type TableMode = `cursor` | `page`;
 
 interface Props<T> {
+    mode?: TableMode;
     columns: TableColumn<T>[];
     idField: Extract<keyof T, string>;
     orderBy?: Extract<keyof T, string>;
@@ -149,12 +167,13 @@ interface Props<T> {
     localization?: TableLocalization;
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
-    onChange?: (data: TableData<T>) => void;
+    onChange?: <M extends TableMode>(data: TableData<M, T>) => void;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
 }
 
 export default function BaseTable<T>(props: Props<T>) {
     const {
+        mode = `page`,
         columns,
         idField,
         order,
@@ -339,9 +358,10 @@ export default function BaseTable<T>(props: Props<T>) {
     const showToolbar = !!localization?.toolbar?.title || !!primaryAction || !!secondaryActions?.length || !!selectActions?.length;
     const lastPage = Math.ceil(filteredSortedGroupedRows.length / rowsPerPage_) - 1;
 
-    const tableData: TableData<T> = {
+    const tableData = mode === `page` ? {
         columns: filteredColumnIds,
         rows: filteredSortedGroupedRows.map((row) => pick(row, filteredColumnIds)),
+        selectedRows: selectedRows_,
         search: search_,
         order: order_,
         orderBy: orderBy_,
@@ -349,7 +369,18 @@ export default function BaseTable<T>(props: Props<T>) {
         rowsPerPage: rowsPerPage_,
         groupBy: groupBy_,
         subgroupBy: subgroupBy_,
-    };
+    } as PageTableData<T> : {
+        columns: filteredColumnIds,
+        rows: filteredSortedGroupedRows.map((row) => pick(row, filteredColumnIds)),
+        selectedRows: selectedRows_,
+        search: search_,
+        order: order_,
+        orderBy: orderBy_,
+        cursor: ``,
+        rowsPerPage: rowsPerPage_,
+        groupBy: groupBy_,
+        subgroupBy: subgroupBy_,
+    } as CursorTableData<T>;
 
     useEffect(() => {
         // set start page when loading finishes
