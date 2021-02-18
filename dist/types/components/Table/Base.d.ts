@@ -19,18 +19,27 @@ export interface TableLocalization {
     rowMoreMenu?: MoreMenuLocalization;
     pagination?: PaginationLocalization;
 }
-export interface TableData<T> {
+interface BaseTableData<T> {
     columns: (keyof T)[];
     rows: Partial<T>[];
+    selectedRows: T[Extract<keyof T, string>][];
     search: string;
     orderBy: keyof T;
     order: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
-    page: number;
     rowsPerPage: number;
 }
+export interface PageTableData<T> extends BaseTableData<T> {
+    page: number;
+}
+export interface CursorTableData<T> extends BaseTableData<T> {
+    cursor: string;
+}
+declare type TableData<M, T> = M extends `cursor` ? CursorTableData<T> : M extends `page` ? PageTableData<T> : never;
+export declare type TableMode = `cursor` | `page`;
 interface Props<T> {
+    mode?: TableMode;
     columns: TableColumn<T>[];
     idField: Extract<keyof T, string>;
     orderBy?: Extract<keyof T, string>;
@@ -55,7 +64,7 @@ interface Props<T> {
     localization?: TableLocalization;
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
-    onChange?: (data: TableData<T>) => void;
+    onChange?: <M extends TableMode>(data: TableData<M, T>) => void;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
 }
 export default function BaseTable<T>(props: Props<T>): JSX.Element;
