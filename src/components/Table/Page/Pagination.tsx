@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface PaginationLocalization {
     rowsPerPage?: string;
-    fromToMax?: (from: number, to: number, max: number) => string;
+    fromToTotal?: (from: number, to: number, total: number) => string;
     prevPage?: string;
     nextPage?: string;
     firstPage?: string;
@@ -44,7 +44,7 @@ interface Props {
     onChangeRowsPerPage?: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
 }
 
-export default function BaseTablePagination (props: Props) {
+export default function PageTablePagination (props: Props) {
     const classes = useStyles();
     const theme = useTheme();
     const {
@@ -128,9 +128,9 @@ export default function BaseTablePagination (props: Props) {
         <TablePagination
             rowsPerPageOptions={rowsPerPageOptions}
             labelRowsPerPage={localization?.rowsPerPage}
-            labelDisplayedRows={localization?.fromToMax ? (({
+            labelDisplayedRows={localization?.fromToTotal ? (({
                 from, to, count,
-            }) => localization?.fromToMax?.(from, to, count)) : undefined}
+            }) => localization?.fromToTotal?.(from, to, count)) : undefined}
             component="div"
             count={count}
             rowsPerPage={rowsPerPage}

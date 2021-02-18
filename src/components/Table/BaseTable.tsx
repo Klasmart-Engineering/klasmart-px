@@ -24,8 +24,8 @@ import BaseTableHead,
     TableColumn,
 } from "./Head";
 import BaseTableLoading from "./Loading";
-import BaseTablePagination,
-{ PaginationLocalization } from "./Pagination";
+import PageTablePagination,
+{ PaginationLocalization } from "./Page/Pagination";
 import BaseTableSearch,
 { SearchLocalization } from "./Search";
 import BaseTableToolbar, {
@@ -51,6 +51,7 @@ import {
 } from "lodash";
 import React,
 {
+    ReactNode,
     useEffect,
     useMemo,
     useState,
@@ -118,34 +119,20 @@ export interface TableLocalization {
     pagination?: PaginationLocalization;
 }
 
-interface BaseTableData<T> {
+export interface BaseTableData<T> {
     columns: (keyof T)[];
     rows: Partial<T>[];
     selectedRows: T[Extract<keyof T, string>][];
     search: string;
-    orderBy: keyof T;
-    order: Order;
+    orderBy?: keyof T;
+    order?: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
     rowsPerPage: number;
-}
-export interface PageTableData<T> extends BaseTableData<T> {
-    page: number;
+    total: number;
 }
 
-export interface CursorTableData<T> extends BaseTableData<T> {
-    cursor: string;
-}
-
-type TableData<M, T> =
-    M extends `cursor` ? CursorTableData<T> :
-    M extends `page` ? PageTableData<T> :
-    never;
-
-export type TableMode = `cursor` | `page`;
-
-interface Props<T> {
-    mode?: TableMode;
+export interface BaseProps<T> {
     columns: TableColumn<T>[];
     idField: Extract<keyof T, string>;
     orderBy?: Extract<keyof T, string>;
@@ -167,13 +154,19 @@ interface Props<T> {
     localization?: TableLocalization;
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
-    onChange?: <M extends TableMode>(data: TableData<M, T>) => void;
+    total?: number;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
+}
+
+export interface Props<T> extends BaseProps<T> {
+    PaginationComponent?: ReactNode;
+    localStartSlice?: number;
+    localEndSlice?: number;
+    onChange: (baseTableData: BaseTableData<T>) => void;
 }
 
 export default function BaseTable<T>(props: Props<T>) {
     const {
-        mode = `page`,
         columns,
         idField,
         order,
@@ -181,14 +174,10 @@ export default function BaseTable<T>(props: Props<T>) {
         groupBy,
         subgroupBy,
         rows = [],
+        rowsPerPage = 10,
         selectedRows = [],
-        rowsPerPage,
-        rowsPerPageOptions = [
-            10,
-            25,
-            50,
-        ],
-        page,
+        localStartSlice,
+        localEndSlice,
         search,
         showCheckboxes,
         primaryAction,
@@ -199,6 +188,8 @@ export default function BaseTable<T>(props: Props<T>) {
         localization,
         locale,
         collatorOptions,
+        total,
+        PaginationComponent,
         onChange,
         onSelected,
     } = props;
@@ -219,8 +210,6 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
     const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>(selectedRows.filter((rowId) => rows.find((row) => row[idField] === rowId)));
     const [ selectedColumns_, setSelectedColumns ] = useState(union(selectedColumnIds, persistentColumnIds));
-    const [ page_, setPage ] = useState(page ?? 0);
-    const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage ?? 10);
     const [ search_, setSearch ] = useState(search ?? ``);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => {
@@ -284,27 +273,16 @@ export default function BaseTable<T>(props: Props<T>) {
         setSelectedColumns(newSelected);
     };
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
     const handleSelectGroup = (group: keyof T | undefined) => {
         setGroupBy(group);
     };
 
     const handleSelectSubgroup = (subgroup: string | undefined) => {
         setSubgroupBy(subgroup);
-        setPage(0);
     };
 
     const handleChangeSearch = (value: string) => {
         setSearch(value);
-        setPage(0);
     };
 
     const isColumnSelected = (column: Extract<keyof T, string>) => selectedColumns_.indexOf(column) !== -1;
@@ -324,8 +302,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const filteredColumns = columns.filter(({ id }) => isColumnSelected(id));
     const filteredColumnIds = filteredColumns.map(({ id }) => id);
 
-    const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions))
-        .filter(filterRowsBySearch);
+    const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions)).filter(filterRowsBySearch);
 
     const subgroups_ = useMemo<SubgroupTab<T>[]>(() => {
         const column = columns[columns.findIndex((c) => c.id === groupBy_)];
@@ -347,7 +324,7 @@ export default function BaseTable<T>(props: Props<T>) {
         search_,
     ]);
     const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && isValidSubgroup(subgroupBy_, subgroups_)) ? filterRowsBySubgroup(groupBy_, subgroupBy_, customGroupText) : () => true);
-    const filteredSortedGroupedSlicedRows = filteredSortedGroupedRows.slice(page_ * rowsPerPage_, page_ * rowsPerPage_ + rowsPerPage_);
+    const filteredSortedGroupedSlicedRows = (localStartSlice || localEndSlice) ? filteredSortedGroupedRows.slice(localStartSlice, localEndSlice) : filteredSortedGroupedRows;
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
     const hasSearchColumns = !!searchableColumns?.length;
@@ -356,50 +333,19 @@ export default function BaseTable<T>(props: Props<T>) {
     const columnCount = columns.length + (showCheckboxes_ ? 1 : 0) + 1; // +1 for row actions column
 
     const showToolbar = !!localization?.toolbar?.title || !!primaryAction || !!secondaryActions?.length || !!selectActions?.length;
-    const lastPage = Math.ceil(filteredSortedGroupedRows.length / rowsPerPage_) - 1;
 
-    const tableData = mode === `page` ? {
+    const tableData: BaseTableData<T> = {
         columns: filteredColumnIds,
         rows: filteredSortedGroupedRows.map((row) => pick(row, filteredColumnIds)),
         selectedRows: selectedRows_,
+        rowsPerPage: rowsPerPage,
+        total: total ?? filteredSortedGroupedRows.length,
         search: search_,
         order: order_,
         orderBy: orderBy_,
-        page: page_,
-        rowsPerPage: rowsPerPage_,
         groupBy: groupBy_,
         subgroupBy: subgroupBy_,
-    } as PageTableData<T> : {
-        columns: filteredColumnIds,
-        rows: filteredSortedGroupedRows.map((row) => pick(row, filteredColumnIds)),
-        selectedRows: selectedRows_,
-        search: search_,
-        order: order_,
-        orderBy: orderBy_,
-        cursor: ``,
-        rowsPerPage: rowsPerPage_,
-        groupBy: groupBy_,
-        subgroupBy: subgroupBy_,
-    } as CursorTableData<T>;
-
-    useEffect(() => {
-        // set start page when loading finishes
-        if (loading) return;
-        const newPage = clamp(page ?? page_, 0, lastPage);
-        if (newPage === page_) return;
-        setPage(clamp(page ?? page_, 0, lastPage));
-    }, [ rows ]);
-
-    useEffect(() => {
-        // clamp page
-        const newPage = clamp(page_, 0, lastPage);
-        if (newPage === page_) return;
-        setPage(clamp(page_, 0, lastPage));
-    }, [ page_ ]);
-
-    useEffect(() => {
-        onChange?.(tableData);
-    }, [ tableData ]);
+    };
 
     useEffect(() => {
         onSelected?.(selectedRows_);
@@ -410,6 +356,10 @@ export default function BaseTable<T>(props: Props<T>) {
         if (isEqual(selectedRows, selectedRows_)) return;
         setSelectedRows(selectedRows);
     }, [ selectedRows ]);
+
+    useEffect(() => {
+        onChange(tableData);
+    }, [ tableData ]);
 
     return (
         <>
@@ -483,15 +433,7 @@ export default function BaseTable<T>(props: Props<T>) {
                     />
                 </Table>
             </TableContainer>
-            <BaseTablePagination
-                rowsPerPageOptions={rowsPerPageOptions}
-                count={filteredSortedGroupedRows.length}
-                rowsPerPage={rowsPerPage_}
-                page={page_}
-                localization={localization?.pagination}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
+            {PaginationComponent && PaginationComponent}
         </>
     );
 }
