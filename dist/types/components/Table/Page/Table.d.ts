@@ -4,7 +4,7 @@ export interface PageTableData<T> extends BaseTableData<T> {
     page: number;
 }
 interface Props<T> extends BaseTableProps<T> {
-    page: number;
+    page?: number;
     onChange?: (tableData: PageTableData<T>) => void;
 }
 export default function PageTable<T>(props: Props<T>): JSX.Element;

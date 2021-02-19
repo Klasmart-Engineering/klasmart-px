@@ -1,7 +1,7 @@
 example/
 .babelrc
 .eslintignore
-.eslint.js
+.eslintrc.js
 .gitattributes
 .gitignore
 jest.config.ts

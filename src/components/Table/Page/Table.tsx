@@ -22,7 +22,7 @@ export interface PageTableData<T> extends BaseTableData<T> {
 }
 
 interface Props<T> extends BaseTableProps<T> {
-    page: number;
+    page?: number;
     onChange?: (tableData: PageTableData<T>) => void;
 }
 
