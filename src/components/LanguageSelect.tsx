@@ -1,13 +1,19 @@
 import Button from "@material-ui/core/Button";
-import Menu, { MenuProps } from "@material-ui/core/Menu";
+import Menu,
+{ MenuProps } from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
+import {
+    createStyles,
+    makeStyles,
+    Theme,
+    withStyles,
+} from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import LanguageIcon from "@material-ui/icons/Translate";
+import clsx from "clsx";
 import { useState } from "react";
 import * as React from "react";
-import clsx from "clsx";
 import { useCookies } from "react-cookie";
 
 export interface LanguageSelectLocalization {
@@ -30,18 +36,18 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         expand: {
-            transform: 'rotate(0deg)',
-            transition: theme.transitions.create("transform", {
+            transform: `rotate(0deg)`,
+            transition: theme.transitions.create(`transform`, {
                 duration: theme.transitions.duration.shortest,
             }),
         },
         expandOpen: {
-            transform: "rotate(180deg)",
+            transform: `rotate(180deg)`,
         },
         language: {
             margin: theme.spacing(0, 1),
-            display: "block",
-        }
+            display: `block`,
+        },
     }),
 );
 
@@ -50,12 +56,12 @@ const StyledMenu = withStyles({})((props: MenuProps) => (
         elevation={4}
         getContentAnchorEl={null}
         anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
+            vertical: `bottom`,
+            horizontal: `center`,
         }}
         transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
+            vertical: `top`,
+            horizontal: `center`,
         }}
         {...props}
     />
@@ -63,9 +69,7 @@ const StyledMenu = withStyles({})((props: MenuProps) => (
 
 export default function LanguageSelect(props: Props) {
     const classes = useStyles();
-    let {
-        languages
-    } = props;
+    let { languages } = props;
     const {
         cookieDomain,
         localization,
@@ -74,10 +78,12 @@ export default function LanguageSelect(props: Props) {
     } = props;
 
     if (languages.length === 0) {
-        languages = [{
-            code: "en",
-            text: "English",
-        }]
+        languages = [
+            {
+                code: `en`,
+                text: `English`,
+            },
+        ];
     }
     const localeCodes = languages.map(l => l.code);
 
@@ -94,43 +100,54 @@ export default function LanguageSelect(props: Props) {
                 return l;
             }
         }
-        return "en";
+        return `en`;
     }
 
     const url = new URL(window.location.href);
-    const localeParam = url.searchParams.get("iso");
-    const [cookies, setCookies] = useCookies(["locale"]);
+    const localeParam = url.searchParams.get(`iso`);
+    const [ cookies, setCookies ] = useCookies([ `locale` ]);
 
     const locale = localeParam || cookies.locale || getDefaultLanguageCode();
 
     if (!cookies.locale) {
-        setCookies("locale", locale, { path: "/", domain: cookieDomain || "kidsloop.net" });
+        setCookies(`locale`, locale, {
+            path: `/`,
+            domain: cookieDomain || `kidsloop.net`,
+        });
     }
 
-    const language = languages.find((l) => l.code === locale) || { code: "en", text: "English" };
-    const [languageText, setLanguageText] = useState<string>(language.text);
-    const [languageMenuElement, setLanguageMenuElement] = useState<null | HTMLElement>(null);
+    const language = languages.find((l) => l.code === locale) || {
+        code: `en`,
+        text: `English`,
+    };
+    const [ languageText, setLanguageText ] = useState<string>(language.text);
+    const [ languageMenuElement, setLanguageMenuElement ] = useState<null | HTMLElement>(null);
 
     function languageSelect(language: Language) {
-        setCookies('locale', language.code, { path: "/", domain: cookieDomain || "kidsloop.net" });
+        setCookies(`locale`, language.code, {
+            path: `/`,
+            domain: cookieDomain || `kidsloop.net`,
+        });
         setLanguageText(language.text);
         setLanguageMenuElement(null);
     }
 
     return(
         <React.Fragment>
-            <Tooltip title={localization?.tooltip ?? "Change Language"} enterDelay={300}>
+            <Tooltip
+                title={localization?.tooltip ?? `Change Language`}
+                enterDelay={300}>
                 <Button
                     color="inherit"
-                    aria-owns={languageMenuElement ? "language-menu" : undefined}
+                    aria-owns={languageMenuElement ? `language-menu` : undefined}
                     aria-haspopup="true"
-                    onClick={(e) => setLanguageMenuElement(e.currentTarget)}
                     size="small"
+                    onClick={(e) => setLanguageMenuElement(e.currentTarget)}
                 >
                     { !noIcon && <LanguageIcon fontSize="inherit" />}
                     <span className={classes.language}>
-                        { locale === "" ?
-                            (localization?.select ?? "Select Language") :
+                        { locale === `` ?
+                            (localization?.select ?? `Select Language`) :
                             languageText
                         }
                     </span>
@@ -143,9 +160,9 @@ export default function LanguageSelect(props: Props) {
                 </Button>
             </Tooltip>
             <StyledMenu
+                keepMounted
                 id="language-menu"
                 anchorEl={languageMenuElement}
-                keepMounted
                 open={Boolean(languageMenuElement)}
                 onClose={() => setLanguageMenuElement(null)}
             >

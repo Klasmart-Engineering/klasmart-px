@@ -1,5 +1,6 @@
 import Button from "../../Button/Button";
-import TextField, { InputType } from "../../Input/TextField";
+import TextField,
+{ InputType } from "../../Input/TextField";
 import DialogContent from "../DialogContent";
 import DialogTitle from "../DialogTitle";
 import {

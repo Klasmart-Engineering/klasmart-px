@@ -25,32 +25,30 @@ import React, {
     useState,
 } from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles ({
-        toolbar: {
-            paddingTop: 0,
-            paddingBottom: 0,
-            minHeight: 56,
-            backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
-        },
-        title: {
-            fontWeight: 600,
-        },
-        list: {
-            paddingTop: 0,
-        },
-        columnItemContainer: {
-            paddingTop: 0,
-            paddingBottom: 0,
-        },
-        persistentText: {
-            color: theme.palette.grey[600],
-        },
-        persistentIcon: {
-            color: theme.palette.grey[400],
-        },
-    }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles ({
+    toolbar: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        minHeight: 56,
+        backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
+    },
+    title: {
+        fontWeight: 600,
+    },
+    list: {
+        paddingTop: 0,
+    },
+    columnItemContainer: {
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+    persistentText: {
+        color: theme.palette.grey[600],
+    },
+    persistentIcon: {
+        color: theme.palette.grey[400],
+    },
+}));
 
 export interface ColumnSelectorLocalization {
     addButton?: string;
@@ -148,8 +146,7 @@ export default function BaseTableColumnSelector<T>(props: Props<T>) {
                                 </ListItemSecondaryAction>
                             }
                         </ListItem>
-                    </Fragment>,
-                )}
+                    </Fragment>)}
             </List>
         </Popover>
     </>;

@@ -14,15 +14,13 @@ import { ArrowDropDown } from "@material-ui/icons";
 import React,
 { useState } from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        menuButton: {
-            minWidth: 24,
-            paddingLeft: theme.spacing(0),
-            paddingRight: theme.spacing(0),
-        },
-    }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    menuButton: {
+        minWidth: 24,
+        paddingLeft: theme.spacing(0),
+        paddingRight: theme.spacing(0),
+    },
+}));
 
 export type CheckboxDropdownValue = "all" | "allPages" | "none" | "page"
 
@@ -135,8 +133,7 @@ export default function BaseTableCheckboxDropdown(props: Props) {
                             }}
                         >
                             <Typography variant="body2">{action.label}</Typography>
-                        </MenuItem>,
-                    )}
+                        </MenuItem>)}
                 </MenuList>
             </Popover>
         </Box>

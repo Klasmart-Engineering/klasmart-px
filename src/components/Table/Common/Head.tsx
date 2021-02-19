@@ -29,33 +29,31 @@ import clsx from "clsx";
 import React,
 { ReactNode } from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        container: {
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    container: {
+        backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
+    },
+    hoverHeader: {
+        height: 53,
+        padding: theme.spacing(0, 2),
+        "&:hover": {
             backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
         },
-        hoverHeader: {
-            height: 53,
-            padding: theme.spacing(0, 2),
-            "&:hover": {
-                backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
-            },
+    },
+    removeButton: {
+        opacity: 0,
+        transition: `opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms`,
+        "$hoverHeader:hover &": {
+            opacity: 1,
         },
-        removeButton: {
-            opacity: 0,
-            transition: `opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms`,
-            "$hoverHeader:hover &": {
-                opacity: 1,
-            },
-        },
-        infoIcon: {
-            marginLeft: theme.spacing(1),
-        },
-        infoIconReverse: {
-            marginRight: theme.spacing(1),
-        },
-    }),
-);
+    },
+    infoIcon: {
+        marginLeft: theme.spacing(1),
+    },
+    infoIconReverse: {
+        marginRight: theme.spacing(1),
+    },
+}));
 
 export type Order = "asc" | "desc";
 export type Align = TableCellProps["align"]

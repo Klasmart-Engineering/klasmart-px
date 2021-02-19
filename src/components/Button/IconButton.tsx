@@ -1,4 +1,5 @@
-import Loading, { useLoadingStyles } from "./Loading";
+import Loading,
+{ useLoadingStyles } from "./Loading";
 import {
     createStyles,
     IconButton as IconBtn,
@@ -12,7 +13,8 @@ import {
 } from "@material-ui/core/styles/createPalette";
 import { SvgIconComponent } from "@material-ui/icons";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React,
+{ useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 

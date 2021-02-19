@@ -1,5 +1,5 @@
-import { createContext } from "react";
 import { Props as DialogOptions } from "./Dialog";
+import { createContext } from "react";
 
 // TODO (Henrik): create proper and safe type
 // @ts-ignore

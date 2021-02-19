@@ -25,7 +25,7 @@ export interface BaseTableData<T> {
     selectedRows: T[Extract<keyof T, string>][];
     search: string;
     orderBy?: keyof T;
-    order?: Order;
+    order: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
     rowsPerPage: number;

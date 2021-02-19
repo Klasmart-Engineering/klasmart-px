@@ -1,12 +1,12 @@
+import AlertContext from "./Context";
+import AlertDialog,
+{ Props as DialogOptions } from "./Dialog";
 import React,
 {
     ReactNode,
     useCallback,
     useState,
 } from "react";
-import AlertDialog,
-{ Props as DialogOptions } from "./Dialog";
-import AlertContext from "./Context";
 
 export interface DefaultOptions extends DialogOptions {
     title: ReactNode;

@@ -5,7 +5,8 @@ import {
     DialogContentText,
     makeStyles,
 } from "@material-ui/core";
-import React, { ReactNode } from "react";
+import React,
+{ ReactNode } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 

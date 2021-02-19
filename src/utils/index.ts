@@ -1,6 +1,6 @@
 import nameToInitials from './nameToInitials';
-import stringToColor from './stringToColor';
 import sleep from './sleep';
+import stringToColor from './stringToColor';
 
 const utils = {
     nameToInitials,
@@ -12,6 +12,6 @@ export default utils;
 
 export {
     nameToInitials,
-    stringToColor,
     sleep,
+    stringToColor,
 };

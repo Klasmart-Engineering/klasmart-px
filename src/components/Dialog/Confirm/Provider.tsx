@@ -1,12 +1,12 @@
+import ConfirmContext from "./Context";
+import ConfirmDialog,
+{ Props as DialogOptions } from "./Dialog";
 import React,
 {
     ReactNode,
     useCallback,
     useState,
 } from "react";
-import ConfirmDialog,
-{ Props as DialogOptions } from "./Dialog";
-import ConfirmContext from "./Context";
 
 interface DefaultOptions extends DialogOptions {
     title: ReactNode;

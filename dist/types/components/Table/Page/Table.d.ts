@@ -7,5 +7,5 @@ interface Props<T> extends BaseTableProps<T> {
     page: number;
     onChange?: (tableData: PageTableData<T>) => void;
 }
-export default function CursorTable<T>(props: Props<T>): JSX.Element;
+export default function PageTable<T>(props: Props<T>): JSX.Element;
 export {};

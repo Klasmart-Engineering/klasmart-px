@@ -1,13 +1,13 @@
-import React,
-{ cloneElement } from 'react';
-import ContentCard from './ContentCard';
 import { nameToInitials } from '../utils';
+import ContentCard from './ContentCard';
+import { Add as AddIcon } from '@material-ui/icons';
 import {
     render,
     screen,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Add as AddIcon } from '@material-ui/icons';
+import React,
+{ cloneElement } from 'react';
 
 const consoleLog = console.log;
 beforeEach(() => {

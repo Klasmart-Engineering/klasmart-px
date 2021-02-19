@@ -13,32 +13,30 @@ import {
 import React,
 { useState } from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            height: 53,
-            "& .MuiInput-underline:before": {
-                display: `none`,
-            },
-            "& .MuiInput-underline:after": {
-                display: `none`,
-            },
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    root: {
+        height: 53,
+        "& .MuiInput-underline:before": {
+            display: `none`,
         },
-        select: {
-            minWidth: 150,
-            "& .MuiSelect-root": {
-                padding: theme.spacing(2 + 1/8, 6, 2 + 1/8, 2),
-            },
-            "& .MuiSelect-icon": {
-                marginRight: theme.spacing(2),
-            },
+        "& .MuiInput-underline:after": {
+            display: `none`,
         },
-        selectPlaceholderText: {
-            color: theme.palette.grey[500],
-            lineHeight: `inherit`,
+    },
+    select: {
+        minWidth: 150,
+        "& .MuiSelect-root": {
+            padding: theme.spacing(2 + 1/8, 6, 2 + 1/8, 2),
         },
-    }),
-);
+        "& .MuiSelect-icon": {
+            marginRight: theme.spacing(2),
+        },
+    },
+    selectPlaceholderText: {
+        color: theme.palette.grey[500],
+        lineHeight: `inherit`,
+    },
+}));
 
 export interface GroupSelectMenuItem<T> {
     label: string;
@@ -144,8 +142,7 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
                             value={group.id as Extract<keyof T, "string">}
                         >
                             {group.label}
-                        </MenuItem>,
-                    )}
+                        </MenuItem>)}
                 </Select>
             </Box>
         </>

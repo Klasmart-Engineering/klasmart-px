@@ -17,16 +17,6 @@ import React,
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
-const defaultBaseTableData = {
-    columns: [],
-    rows: [],
-    selectedRows: [],
-    rowsPerPage: 0,
-    search: ``,
-    total: 0,
-    subgroupBy: ``,
-};
-
 export interface PageTableData<T> extends BaseTableData<T> {
     page: number;
 }
@@ -36,18 +26,18 @@ interface Props<T> extends BaseTableProps<T> {
     onChange?: (tableData: PageTableData<T>) => void;
 }
 
-export default function CursorTable<T> (props: Props<T>) {
+export default function PageTable<T> (props: Props<T>) {
     const {
-        loading,
-        localization,
         page = 0,
         rowsPerPage = 10,
-        total,
         rowsPerPageOptions = [
             10,
             25,
             50,
         ],
+        total,
+        loading,
+        localization,
         onChange,
         ...other
     } = props;
@@ -55,10 +45,10 @@ export default function CursorTable<T> (props: Props<T>) {
     const classes = useStyles();
     const [ page_, setPage ] = useState(page);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage);
-    const [ prevBaseTableData, setPrevBaseTableData ] = useState<BaseTableData<T>>(defaultBaseTableData);
-    const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>(defaultBaseTableData);
+    const [ prevBaseTableData, setPrevBaseTableData ] = useState<BaseTableData<T>>();
+    const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>();
 
-    const lastPage = Math.ceil(baseTableData.total / rowsPerPage_) - 1;
+    const lastPage = Math.ceil((baseTableData?.total ?? 0) / rowsPerPage_) - 1;
 
     useEffect(() => {
         // set start page when loading finishes
@@ -66,7 +56,7 @@ export default function CursorTable<T> (props: Props<T>) {
         const newPage = clamp(page ?? page_, 0, lastPage);
         if (newPage === page_) return;
         setPage(clamp(page ?? page_, 0, lastPage));
-    }, [ baseTableData.total ]);
+    }, [ baseTableData?.total ?? 0 ]);
 
     useEffect(() => {
         // clamp page
@@ -77,9 +67,11 @@ export default function CursorTable<T> (props: Props<T>) {
 
     useEffect(() => {
         setPrevBaseTableData(baseTableData);
-        if (baseTableData.search !== prevBaseTableData.search
-            || baseTableData.subgroupBy !== prevBaseTableData.subgroupBy
-            || baseTableData.rowsPerPage !== prevBaseTableData.rowsPerPage) {
+        if (!baseTableData) return;
+        if (baseTableData?.search !== prevBaseTableData?.search
+            || baseTableData?.subgroupBy !== prevBaseTableData?.subgroupBy
+            || baseTableData?.rowsPerPage !== prevBaseTableData?.rowsPerPage
+            || baseTableData?.order !== prevBaseTableData?.order) {
             setPage(0);
             return;
         }
@@ -94,7 +86,7 @@ export default function CursorTable<T> (props: Props<T>) {
             PaginationComponent={
                 <PageTablePagination
                     rowsPerPageOptions={rowsPerPageOptions}
-                    count={baseTableData.total}
+                    count={baseTableData?.total ?? 0}
                     rowsPerPage={rowsPerPage_}
                     page={page_}
                     localization={localization?.pagination}

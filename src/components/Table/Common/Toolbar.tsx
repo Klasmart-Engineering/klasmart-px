@@ -13,35 +13,33 @@ import { SvgIconComponent } from "@material-ui/icons";
 import clsx from "clsx";
 import React from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            borderTopLeftRadius: `inherit`,
-            borderTopRightRadius: `inherit`,
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2),
-            "& > *:not(:first-child)": {
-                marginLeft: theme.direction === `ltr` ? theme.spacing(2) : undefined,
-                marginRight: theme.direction === `rtl` ? theme.spacing(2) : undefined,
-            },
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    root: {
+        borderTopLeftRadius: `inherit`,
+        borderTopRightRadius: `inherit`,
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        "& > *:not(:first-child)": {
+            marginLeft: theme.direction === `ltr` ? theme.spacing(2) : undefined,
+            marginRight: theme.direction === `rtl` ? theme.spacing(2) : undefined,
         },
-        highlight: theme.palette.type === `light`
-            ? {
-                color: theme.palette.secondary.main,
-                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-            }
-            : {
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark,
-            },
-        title: {
-            flex: `1 1 100%`,
+    },
+    highlight: theme.palette.type === `light`
+        ? {
+            color: theme.palette.secondary.main,
+            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+        }
+        : {
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.secondary.dark,
         },
-        primaryActionIcon: {
-            marginRight: theme.spacing(1),
-        },
-    }),
-);
+    title: {
+        flex: `1 1 100%`,
+    },
+    primaryActionIcon: {
+        marginRight: theme.spacing(1),
+    },
+}));
 
 export interface ToolbarLocalization {
     title?: string;
@@ -114,8 +112,7 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                                 color="primary"
                                 disabled={action.disabled}
                                 onClick={() => action.onClick(selectedRows)}
-                            />,
-                    )}
+                            />)}
                 </> :
                 <>
                     <Typography
@@ -142,8 +139,7 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                                 color="primary"
                                 disabled={action.disabled}
                                 onClick={action.onClick}
-                            />,
-                    )}
+                            />)}
                     {primaryAction &&
                         <Fab
                             responsiveExtended={[

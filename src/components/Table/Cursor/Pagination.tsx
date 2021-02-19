@@ -16,25 +16,23 @@ import {
 } from "@material-ui/icons";
 import React from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            flexShrink: 0,
-            marginLeft: theme.spacing(2.5),
-        },
-    }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    root: {
+        flexShrink: 0,
+        marginLeft: theme.spacing(2.5),
+    },
+}));
 
-export type TableDirection = `start` | `previous` | `next` | `end`
+export type Page = `start` | `previous` | `next` | `end`
 
 interface Props {
     rowsPerPageOptions: Array<number | { value: number; label: string }>;
     count: number;
     rowsPerPage: number;
     localization?: PaginationLocalization;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-    onChangePage: (direction: TableDirection) => void;
+    hasNextPage?: boolean;
+    hasPreviousPage?: boolean;
+    onChangePage: (page: Page) => void;
     onChangeRowsPerPage?: (rowsPerPage: number) => void;
 }
 
@@ -73,7 +71,7 @@ export default function CursorTablePagination (props: Props) {
                 <Tooltip title={localization?.firstPage ?? `First page`}>
                     <span>
                         <IconButton
-                            disabled={hasPreviousPage}
+                            disabled={!hasPreviousPage}
                             aria-label="first page"
                             onClick={handleFirstPageButtonClick}
                         >
@@ -84,7 +82,7 @@ export default function CursorTablePagination (props: Props) {
                 <Tooltip title={localization?.prevPage ?? `Previous page`}>
                     <span>
                         <IconButton
-                            disabled={hasPreviousPage}
+                            disabled={!hasPreviousPage}
                             aria-label="previous page"
                             onClick={handleBackButtonClick}>
                             {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
@@ -94,7 +92,7 @@ export default function CursorTablePagination (props: Props) {
                 <Tooltip title={localization?.nextPage ?? `Next page`}>
                     <span>
                         <IconButton
-                            disabled={hasNextPage}
+                            disabled={!hasNextPage}
                             aria-label="next page"
                             onClick={handleNextButtonClick}
                         >
@@ -105,7 +103,7 @@ export default function CursorTablePagination (props: Props) {
                 <Tooltip title={localization?.lastPage ?? `Last page`}>
                     <span>
                         <IconButton
-                            disabled={hasNextPage}
+                            disabled={!hasNextPage}
                             aria-label="last page"
                             onClick={handleLastPageButtonClick}
                         >

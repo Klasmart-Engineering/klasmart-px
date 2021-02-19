@@ -1,12 +1,12 @@
+import PromptContext from "./Context";
+import PromptDialog,
+{ Props as DialogOptions } from "./Dialog";
 import React,
 {
     ReactNode,
     useCallback,
     useState,
 } from "react";
-import PromptDialog,
-{ Props as DialogOptions } from "./Dialog";
-import PromptContext from "./Context";
 
 interface DefaultOptions extends DialogOptions {
     title: ReactNode;

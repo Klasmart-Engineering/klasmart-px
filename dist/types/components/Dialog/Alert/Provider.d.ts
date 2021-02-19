@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
 import { Props as DialogOptions } from "./Dialog";
+import React, { ReactNode } from "react";
 export interface DefaultOptions extends DialogOptions {
     title: ReactNode;
     content: ReactNode;

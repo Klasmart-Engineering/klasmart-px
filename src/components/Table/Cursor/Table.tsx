@@ -3,8 +3,9 @@ import BaseTable,
     BaseProps as BaseTableProps,
     BaseTableData,
 } from "../Common/BaseTable";
+import { Order } from "../Common/Head";
 import CursorTablePagination,
-{ TableDirection } from "./Pagination";
+{ Page } from "./Pagination";
 import {
     createStyles,
     makeStyles,
@@ -17,27 +18,18 @@ import React,
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
-const defaultBaseTableData = {
-    columns: [],
-    rows: [],
-    selectedRows: [],
-    rowsPerPage: 0,
-    search: ``,
-    total: 0,
-    subgroupBy: ``,
-};
-
 export interface CursorTableData<T> extends BaseTableData<T> {
     cursor?: string;
 }
 
 interface Props<T> extends BaseTableProps<T> {
     cursor?: string;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
+    hasNextPage: boolean | undefined;
+    hasPreviousPage: boolean | undefined;
     startCursor: string | undefined;
     endCursor: string | undefined;
     onChange?: (tableData: CursorTableData<T>) => void;
+    onPageChange?: (page: Page, order: Order, cursor?: string) => void;
 }
 
 export default function CursorTable<T> (props: Props<T>) {
@@ -47,7 +39,7 @@ export default function CursorTable<T> (props: Props<T>) {
         hasPreviousPage,
         startCursor,
         endCursor,
-        total = 0,
+        total,
         rowsPerPage = 10,
         rowsPerPageOptions = [
             10,
@@ -56,35 +48,40 @@ export default function CursorTable<T> (props: Props<T>) {
         ],
         localization,
         onChange,
+        onPageChange,
         ...other
     } = props;
     const classes = useStyles();
     const [ cursor_, setCursor ] = useState(cursor);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage);
-    const [ prevBaseTableData, setPrevBaseTableData ] = useState<BaseTableData<T>>(defaultBaseTableData);
-    const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>(defaultBaseTableData);
+    const [ prevBaseTableData, setPrevBaseTableData ] = useState<BaseTableData<T>>();
+    const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>();
 
-    const handlePageChange = (direction: TableDirection) => {
-        const { order } = baseTableData;
+    const handlePageChange = (direction: Page) => {
+        const order = baseTableData?.order ?? `desc`;
+        let cursor;
         switch (direction) {
         case `start`:
         case `end`:
-            setCursor(undefined);
-            return;
+            break;
         case `previous`:
-            setCursor(order === `asc` ? endCursor : startCursor);
-            return;
+            cursor = order === `asc` ? endCursor : startCursor;
+            break;
         case `next`:
-            setCursor(order === `asc` ? startCursor : endCursor);
-            return;
+            cursor = order === `asc` ? startCursor : endCursor;
+            break;
         }
+        setCursor(cursor);
+        onPageChange?.(direction, order, cursor);
     };
 
     useEffect(() => {
         setPrevBaseTableData(baseTableData);
-        if (baseTableData.search !== prevBaseTableData.search
-            || baseTableData.subgroupBy !== prevBaseTableData.subgroupBy
-            || baseTableData.rowsPerPage !== prevBaseTableData.rowsPerPage) {
+        if (!baseTableData) return;
+        if (baseTableData?.search !== prevBaseTableData?.search
+            || baseTableData?.subgroupBy !== prevBaseTableData?.subgroupBy
+            || baseTableData?.rowsPerPage !== prevBaseTableData?.rowsPerPage
+            || baseTableData?.order !== prevBaseTableData?.order) {
             handlePageChange(`start`);
             return;
         }
@@ -98,9 +95,9 @@ export default function CursorTable<T> (props: Props<T>) {
         <BaseTable
             PaginationComponent={
                 <CursorTablePagination
-                    hasNextPage={hasNextPage}
-                    hasPreviousPage={hasPreviousPage}
-                    count={baseTableData.total}
+                    hasNextPage={baseTableData?.order === `asc` ? hasPreviousPage : hasNextPage}
+                    hasPreviousPage={baseTableData?.order === `asc` ? hasNextPage : hasPreviousPage}
+                    count={baseTableData?.total ?? 0}
                     rowsPerPage={rowsPerPage_}
                     rowsPerPageOptions={rowsPerPageOptions}
                     localization={localization?.pagination}
@@ -110,6 +107,7 @@ export default function CursorTable<T> (props: Props<T>) {
             }
             rowsPerPage={rowsPerPage_}
             total={total}
+            localization={localization}
             onChange={setBaseTableData}
             {...other}
         />

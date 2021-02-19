@@ -1,4 +1,8 @@
 import {
+    nameToInitials,
+    stringToColor,
+} from "../utils";
+import {
     Avatar,
     Box,
     Card,
@@ -26,10 +30,6 @@ import React,
     ChangeEvent,
     cloneElement,
 } from "react";
-import {
-    nameToInitials,
-    stringToColor,
-} from "../utils";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

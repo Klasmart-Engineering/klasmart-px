@@ -6,20 +6,18 @@ import {
 } from "@material-ui/core";
 import React from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        loadingContainer: {
-            "& th": {
-                position: `relative`,
-                padding: 0,
-            },
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    loadingContainer: {
+        "& th": {
+            position: `relative`,
+            padding: 0,
         },
-        loading: {
-            position: `absolute`,
-            width: `100%`,
-        },
-    }),
-);
+    },
+    loading: {
+        position: `absolute`,
+        width: `100%`,
+    },
+}));
 
 interface Props {
     loading?: boolean;

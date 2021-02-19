@@ -41,7 +41,6 @@ import {
     Theme,
 } from "@material-ui/core";
 import {
-    clamp,
     escapeRegExp,
     isEqual,
     pick,
@@ -124,7 +123,7 @@ export interface BaseTableData<T> {
     selectedRows: T[Extract<keyof T, string>][];
     search: string;
     orderBy?: keyof T;
-    order?: Order;
+    order: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
     rowsPerPage: number;
@@ -202,7 +201,7 @@ export default function BaseTable<T>(props: Props<T>) {
         label,
     }));
 
-    const [ order_, setOrder ] = useState(order ?? `asc`);
+    const [ order_, setOrder ] = useState(order ?? `desc`);
     const [ orderBy_, setOrderBy ] = useState(orderBy ?? idField);
     const [ groupBy_, setGroupBy ] = useState(groupBy);
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
@@ -311,8 +310,7 @@ export default function BaseTable<T>(props: Props<T>) {
             })).map((value) => ({
                 text: String(value),
             }))
-            : [], getComparator(`asc`, `text`, column?.groupSort, locale, collatorOptions),
-        )).map(({ text }) => ({
+            : [], getComparator(`asc`, `text`, column?.groupSort, locale, collatorOptions))).map(({ text }) => ({
             text,
             count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, text, customGroupText)).length,
         }));
@@ -332,19 +330,6 @@ export default function BaseTable<T>(props: Props<T>) {
 
     const showToolbar = !!localization?.toolbar?.title || !!primaryAction || !!secondaryActions?.length || !!selectActions?.length;
 
-    const tableData: BaseTableData<T> = {
-        columns: filteredColumnIds,
-        rows: filteredSortedGroupedRows.map((row) => pick(row, filteredColumnIds)),
-        selectedRows: selectedRows_,
-        rowsPerPage: rowsPerPage,
-        total: total ?? filteredSortedGroupedRows.length,
-        search: search_,
-        order: order_,
-        orderBy: orderBy_,
-        groupBy: groupBy_,
-        subgroupBy: subgroupBy_,
-    };
-
     useEffect(() => {
         onSelected?.(selectedRows_);
     }, [ selectedRows_ ]);
@@ -356,8 +341,32 @@ export default function BaseTable<T>(props: Props<T>) {
     }, [ selectedRows ]);
 
     useEffect(() => {
+        if (loading) return;
+        const tableData = {
+            columns: filteredColumnIds,
+            rows: filteredSortedGroupedRows.map((row) => pick(row, filteredColumnIds)),
+            selectedRows: selectedRows_,
+            rowsPerPage: rowsPerPage,
+            total: total ?? filteredSortedGroupedRows.length,
+            search: search_,
+            order: order_,
+            orderBy: orderBy_,
+            groupBy: groupBy_,
+            subgroupBy: subgroupBy_,
+        };
         onChange(tableData);
-    }, [ tableData ]);
+    }, [
+        columns,
+        rows,
+        selectedRows_,
+        rowsPerPage,
+        total,
+        search_,
+        order_,
+        orderBy_,
+        groupBy_,
+        subgroupBy_,
+    ]);
 
     return (
         <>
