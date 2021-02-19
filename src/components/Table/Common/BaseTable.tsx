@@ -1,7 +1,7 @@
 import {
     MenuAction,
     MoreMenuLocalization,
-} from "../MoreMenu";
+} from "../../MoreMenu";
 import BaseTableBody,
 { BodyLocalization } from "./Body";
 import {
@@ -24,8 +24,7 @@ import BaseTableHead,
     TableColumn,
 } from "./Head";
 import BaseTableLoading from "./Loading";
-import PageTablePagination,
-{ PaginationLocalization } from "./Page/Pagination";
+import { PaginationLocalization } from "./Pagination/shared";
 import BaseTableSearch,
 { SearchLocalization } from "./Search";
 import BaseTableToolbar, {
@@ -144,7 +143,6 @@ export interface BaseProps<T> {
     selectedRows?: T[Extract<keyof T, string>][];
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | { value: number; label: string }>;
-    page?: number;
     search?: string;
     showCheckboxes?: boolean;
     primaryAction?: ToolbarAction;

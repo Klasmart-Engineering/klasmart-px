@@ -14,7 +14,6 @@ import {
     KeyboardArrowRight as KeyboardArrowRightIcon,
     LastPage as LastPageIcon,
 } from "@material-ui/icons";
-import { clamp } from "lodash";
 import React from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,53 +25,55 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+export type TableDirection = `start` | `previous` | `next` | `end`
+
 interface Props {
     rowsPerPageOptions: Array<number | { value: number; label: string }>;
     count: number;
-    page: number;
     rowsPerPage: number;
     localization?: PaginationLocalization;
-    onChangePage: (page: number) => void;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    onChangePage: (direction: TableDirection) => void;
     onChangeRowsPerPage?: (rowsPerPage: number) => void;
 }
 
-export default function PageTablePagination (props: Props) {
+export default function CursorTablePagination (props: Props) {
     const {
         rowsPerPageOptions,
         count,
-        page,
         rowsPerPage,
         localization,
+        hasNextPage,
+        hasPreviousPage,
         onChangePage,
         onChangeRowsPerPage,
     } = props;
     const classes = useStyles();
     const theme = useTheme();
 
-    const lastPage = Math.ceil(count / rowsPerPage) - 1;
-
     const actions = () => {
         const handleFirstPageButtonClick = () => {
-            onChangePage(0);
+            onChangePage(`start`);
         };
 
         const handleBackButtonClick = () => {
-            onChangePage(page - 1);
+            onChangePage(`previous`);
         };
 
         const handleNextButtonClick = () => {
-            onChangePage(page + 1);
+            onChangePage(`next`);
         };
 
         const handleLastPageButtonClick = () => {
-            onChangePage(Math.max(0, lastPage));
+            onChangePage(`end`);
         };
         return (
             <div className={classes.root}>
                 <Tooltip title={localization?.firstPage ?? `First page`}>
                     <span>
                         <IconButton
-                            disabled={page === 0}
+                            disabled={hasPreviousPage}
                             aria-label="first page"
                             onClick={handleFirstPageButtonClick}
                         >
@@ -83,7 +84,7 @@ export default function PageTablePagination (props: Props) {
                 <Tooltip title={localization?.prevPage ?? `Previous page`}>
                     <span>
                         <IconButton
-                            disabled={page === 0}
+                            disabled={hasPreviousPage}
                             aria-label="previous page"
                             onClick={handleBackButtonClick}>
                             {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
@@ -93,7 +94,7 @@ export default function PageTablePagination (props: Props) {
                 <Tooltip title={localization?.nextPage ?? `Next page`}>
                     <span>
                         <IconButton
-                            disabled={page >= lastPage}
+                            disabled={hasNextPage}
                             aria-label="next page"
                             onClick={handleNextButtonClick}
                         >
@@ -104,7 +105,7 @@ export default function PageTablePagination (props: Props) {
                 <Tooltip title={localization?.lastPage ?? `Last page`}>
                     <span>
                         <IconButton
-                            disabled={page >= lastPage}
+                            disabled={hasNextPage}
                             aria-label="last page"
                             onClick={handleLastPageButtonClick}
                         >
@@ -120,15 +121,13 @@ export default function PageTablePagination (props: Props) {
         <TablePagination
             rowsPerPageOptions={rowsPerPageOptions}
             labelRowsPerPage={localization?.rowsPerPage}
-            labelDisplayedRows={localization?.fromToTotal ? (({
-                from, to, count,
-            }) => localization?.fromToTotal?.(from, to, count)) : undefined}
+            labelDisplayedRows={localization?.total ? (({ count }) => localization?.total?.(count)) : ({ count }) => `${count} results`}
             component="div"
             count={count}
             rowsPerPage={rowsPerPage}
-            page={clamp(page, 0, lastPage)}
+            page={0}
             ActionsComponent={actions}
-            onChangePage={(event, page) => onChangePage(page)}
+            onChangePage={() => {return;}}
             onChangeRowsPerPage={(event) => onChangeRowsPerPage?.(parseInt(event.target.value, 10))}
         />
     );

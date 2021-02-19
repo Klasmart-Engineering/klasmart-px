@@ -1,7 +1,7 @@
 import MoreMenu, {
     MenuAction,
     MoreMenuLocalization,
-} from "../MoreMenu";
+} from "../../MoreMenu";
 import { TableColumn } from "./Head";
 import {
     Checkbox,

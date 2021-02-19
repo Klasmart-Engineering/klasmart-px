@@ -26,7 +26,8 @@ import {
     Lock as LockIcon,
 } from "@material-ui/icons";
 import clsx from "clsx";
-import React, { ReactNode } from "react";
+import React,
+{ ReactNode } from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

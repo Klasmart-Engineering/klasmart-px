@@ -1,4 +1,5 @@
-import Tabs, { Tab } from "../Tabs";
+import Tabs,
+{ Tab } from "../../Tabs";
 import {
     Box,
     createStyles,

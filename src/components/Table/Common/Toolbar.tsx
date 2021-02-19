@@ -1,6 +1,6 @@
-import Button from "../Button/Button";
-import Fab from "../Button/Fab";
-import IconButton from "../Button/IconButton";
+import Button from "../../Button/Button";
+import Fab from "../../Button/Fab";
+import IconButton from "../../Button/IconButton";
 import {
     createStyles,
     lighten,

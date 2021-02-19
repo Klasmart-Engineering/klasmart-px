@@ -1,4 +1,4 @@
-import { MenuAction, MoreMenuLocalization } from "../MoreMenu";
+import { MenuAction, MoreMenuLocalization } from "../../MoreMenu";
 import { TableColumn } from "./Head";
 import React from "react";
 export interface BodyLocalization {

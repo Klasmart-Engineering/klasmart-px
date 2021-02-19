@@ -1,13 +1,13 @@
-/// <reference types="react" />
-import { MenuAction, MoreMenuLocalization } from "../MoreMenu";
+import { MenuAction, MoreMenuLocalization } from "../../MoreMenu";
 import { BodyLocalization } from "./Body";
 import { CheckboxDropdownLocalization } from "./CheckboxDropdown";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
 import { GroupTabsLocalization } from "./GroupTabs";
 import { HeadLocalization, Order, TableColumn } from "./Head";
-import { PaginationLocalization } from "./Pagination";
+import { PaginationLocalization } from "./Pagination/shared";
 import { SearchLocalization } from "./Search";
 import { ToolbarAction, ToolbarLocalization, ToolbarSelectAction } from "./Toolbar";
+import { ReactNode } from "react";
 export interface TableLocalization {
     toolbar?: ToolbarLocalization;
     search?: SearchLocalization;
@@ -19,27 +19,19 @@ export interface TableLocalization {
     rowMoreMenu?: MoreMenuLocalization;
     pagination?: PaginationLocalization;
 }
-interface BaseTableData<T> {
+export interface BaseTableData<T> {
     columns: (keyof T)[];
     rows: Partial<T>[];
     selectedRows: T[Extract<keyof T, string>][];
     search: string;
-    orderBy: keyof T;
-    order: Order;
+    orderBy?: keyof T;
+    order?: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
     rowsPerPage: number;
+    total: number;
 }
-export interface PageTableData<T> extends BaseTableData<T> {
-    page: number;
-}
-export interface CursorTableData<T> extends BaseTableData<T> {
-    cursor: string;
-}
-declare type TableData<M, T> = M extends `cursor` ? CursorTableData<T> : M extends `page` ? PageTableData<T> : never;
-export declare type TableMode = `cursor` | `page`;
-interface Props<T> {
-    mode?: TableMode;
+export interface BaseProps<T> {
     columns: TableColumn<T>[];
     idField: Extract<keyof T, string>;
     orderBy?: Extract<keyof T, string>;
@@ -54,7 +46,6 @@ interface Props<T> {
         value: number;
         label: string;
     }>;
-    page?: number;
     search?: string;
     showCheckboxes?: boolean;
     primaryAction?: ToolbarAction;
@@ -64,8 +55,13 @@ interface Props<T> {
     localization?: TableLocalization;
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
-    onChange?: <M extends TableMode>(data: TableData<M, T>) => void;
+    total?: number;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
 }
+export interface Props<T> extends BaseProps<T> {
+    PaginationComponent?: ReactNode;
+    localStartSlice?: number;
+    localEndSlice?: number;
+    onChange: (baseTableData: BaseTableData<T>) => void;
+}
 export default function BaseTable<T>(props: Props<T>): JSX.Element;
-export {};

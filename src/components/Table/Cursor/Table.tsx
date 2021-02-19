@@ -3,12 +3,12 @@ import BaseTable,
     BaseProps as BaseTableProps,
     BaseTableData,
 } from "../Common/BaseTable";
-import PageTablePagination from "./Pagination";
+import CursorTablePagination,
+{ TableDirection } from "./Pagination";
 import {
     createStyles,
     makeStyles,
 } from "@material-ui/core";
-import { clamp } from "lodash";
 import React,
 {
     useEffect,
@@ -27,86 +27,88 @@ const defaultBaseTableData = {
     subgroupBy: ``,
 };
 
-export interface PageTableData<T> extends BaseTableData<T> {
-    page: number;
+export interface CursorTableData<T> extends BaseTableData<T> {
+    cursor?: string;
 }
 
 interface Props<T> extends BaseTableProps<T> {
-    page: number;
-    onChange?: (tableData: PageTableData<T>) => void;
+    cursor?: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    startCursor: string | undefined;
+    endCursor: string | undefined;
+    onChange?: (tableData: CursorTableData<T>) => void;
 }
 
 export default function CursorTable<T> (props: Props<T>) {
     const {
-        loading,
-        localization,
-        page = 0,
+        cursor,
+        hasNextPage,
+        hasPreviousPage,
+        startCursor,
+        endCursor,
+        total = 0,
         rowsPerPage = 10,
-        total,
         rowsPerPageOptions = [
             10,
             25,
             50,
         ],
+        localization,
         onChange,
         ...other
     } = props;
-
     const classes = useStyles();
-    const [ page_, setPage ] = useState(page);
+    const [ cursor_, setCursor ] = useState(cursor);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage);
     const [ prevBaseTableData, setPrevBaseTableData ] = useState<BaseTableData<T>>(defaultBaseTableData);
     const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>(defaultBaseTableData);
 
-    const lastPage = Math.ceil(baseTableData.total / rowsPerPage_) - 1;
-
-    useEffect(() => {
-        // set start page when loading finishes
-        if (loading) return;
-        const newPage = clamp(page ?? page_, 0, lastPage);
-        if (newPage === page_) return;
-        setPage(clamp(page ?? page_, 0, lastPage));
-    }, [ baseTableData.total ]);
-
-    useEffect(() => {
-        // clamp page
-        const newPage = clamp(page_, 0, lastPage);
-        if (newPage === page_) return;
-        setPage(clamp(page_, 0, lastPage));
-    }, [ page_ ]);
+    const handlePageChange = (direction: TableDirection) => {
+        const { order } = baseTableData;
+        switch (direction) {
+        case `start`:
+        case `end`:
+            setCursor(undefined);
+            return;
+        case `previous`:
+            setCursor(order === `asc` ? endCursor : startCursor);
+            return;
+        case `next`:
+            setCursor(order === `asc` ? startCursor : endCursor);
+            return;
+        }
+    };
 
     useEffect(() => {
         setPrevBaseTableData(baseTableData);
         if (baseTableData.search !== prevBaseTableData.search
             || baseTableData.subgroupBy !== prevBaseTableData.subgroupBy
             || baseTableData.rowsPerPage !== prevBaseTableData.rowsPerPage) {
-            setPage(0);
+            handlePageChange(`start`);
             return;
         }
         onChange?.({
             ...baseTableData,
-            page: page_,
+            cursor: cursor_,
         });
-    }, [ baseTableData, page_ ]);
+    }, [ baseTableData, cursor_ ]);
 
     return (
         <BaseTable
             PaginationComponent={
-                <PageTablePagination
-                    rowsPerPageOptions={rowsPerPageOptions}
+                <CursorTablePagination
+                    hasNextPage={hasNextPage}
+                    hasPreviousPage={hasPreviousPage}
                     count={baseTableData.total}
                     rowsPerPage={rowsPerPage_}
-                    page={page_}
+                    rowsPerPageOptions={rowsPerPageOptions}
                     localization={localization?.pagination}
-                    onChangePage={setPage}
+                    onChangePage={handlePageChange}
                     onChangeRowsPerPage={setRowsPerPage}
                 />
             }
-            loading={loading}
-            localization={localization}
             rowsPerPage={rowsPerPage_}
-            localStartSlice={page_ * rowsPerPage_}
-            localEndSlice={page_ * rowsPerPage_ + rowsPerPage_}
             total={total}
             onChange={setBaseTableData}
             {...other}
