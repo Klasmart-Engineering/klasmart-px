@@ -29,11 +29,10 @@ const useStyles = makeStyles((theme) => createStyles({
     },
     sectionHeader: {
         minHeight: 32,
-        // backgroundColor: theme.palette.grey[200],
     },
 }));
 
-interface DrawerSection {
+export interface DrawerSection {
     header?: string;
     content: ReactNode;
 }

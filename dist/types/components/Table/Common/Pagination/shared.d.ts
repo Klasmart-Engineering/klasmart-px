@@ -7,3 +7,4 @@ export interface PaginationLocalization {
     firstPage?: string;
     lastPage?: string;
 }
+export declare const ROWS_PER_PAGE = 10;
