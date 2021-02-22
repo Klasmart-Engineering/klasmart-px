@@ -11,7 +11,8 @@ export interface Input {
     onBlur?: () => void;
     onChange?: (value: any) => void;
     onFocus?: () => void;
+    onError?: (error: string | undefined) => void;
     onValidate?: (valid: boolean) => void;
 }
 
-export const getErrorText = (value: unknown, validations: ((input: unknown) => true | string)[] | undefined) => validations?.map((validation) => validation(value)).find((result) => result !== true);
+export const getErrorText = (value: unknown, validations: ((input: unknown) => true | string)[] | undefined) => validations?.map((validation) => validation(value)).find((result) => result !== true) as string | undefined;

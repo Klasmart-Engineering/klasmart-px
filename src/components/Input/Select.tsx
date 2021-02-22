@@ -54,6 +54,7 @@ export default function Select<T> (props: Props<T>) {
         onBlur,
         onFocus,
         onChange,
+        onError,
         onValidate,
         ...rest
     } = props;
@@ -73,6 +74,7 @@ export default function Select<T> (props: Props<T>) {
         setError(error);
         onChange?.(value);
         onValidate?.(!error);
+        onError?.(error);
     };
 
     const menuItems = items.map((item) => (

@@ -15,6 +15,7 @@ export { default as TextField } from "./components/Input/TextField";
 export { default as LanguageSelect } from "./components/LanguageSelect";
 export { default as MoreMenu } from "./components/MoreMenu";
 export { default as SnackbarProvider } from "./components/SnackbarProvider";
+export { default as Stepper } from "./components/Stepper";
 export { default as TableBody } from "./components/Table/Common/Body";
 export { default as TableCheckboxDropdown } from "./components/Table/Common/CheckboxDropdown";
 export { default as TableGroupTabs } from "./components/Table/Common/GroupTabs";

@@ -25,6 +25,7 @@ export default function TextField (props: Props) {
         value,
         validations,
         onChange,
+        onError,
         onValidate,
         className,
         type,
@@ -38,10 +39,11 @@ export default function TextField (props: Props) {
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         const value =  type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value ;
         const error = getErrorText(value, validations);
-        setError(error);
-        onValidate?.(!error);
         setValue(value);
+        setError(error);
         onChange?.(value);
+        onValidate?.(!error);
+        onError?.(error);
     };
 
     return <TxtField
