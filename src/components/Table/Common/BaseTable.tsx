@@ -24,7 +24,10 @@ import BaseTableHead,
     TableColumn,
 } from "./Head";
 import BaseTableLoading from "./Loading";
-import { PaginationLocalization } from "./Pagination/shared";
+import {
+    PaginationLocalization,
+    ROWS_PER_PAGE,
+} from "./Pagination/shared";
 import BaseTableSearch,
 { SearchLocalization } from "./Search";
 import BaseTableToolbar, {
@@ -54,6 +57,8 @@ import React,
     useMemo,
     useState,
 } from "react";
+
+const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 function descendingComparator<T>(a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) {
     if ((typeof a === `string` && typeof b === `string`) || (a instanceof String && b instanceof String)) {
@@ -102,8 +107,6 @@ function rowSearch <T>(searchableColumns: TableColumn<T>[], row: T, searchValue:
 const isValidGroup = <T,>(group: keyof T, groups?: GroupSelectMenuItem<T>[]) => !!(group && groups?.find((g) => g.id === group) ? group : undefined);
 
 const isValidSubgroup = <T,>(subgroup: string, subgroups?: SubgroupTab<T>[]) => (subgroup !== undefined && subgroups?.find((s) => s.text === subgroup) ? subgroup : undefined) !== undefined;
-
-const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 export interface TableLocalization {
     toolbar?: ToolbarLocalization;
@@ -171,7 +174,7 @@ export default function BaseTable<T>(props: Props<T>) {
         groupBy,
         subgroupBy,
         rows = [],
-        rowsPerPage = 10,
+        rowsPerPage = ROWS_PER_PAGE,
         selectedRows = [],
         localStartSlice,
         localEndSlice,

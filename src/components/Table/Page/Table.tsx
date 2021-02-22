@@ -3,6 +3,7 @@ import BaseTable,
     BaseProps as BaseTableProps,
     BaseTableData,
 } from "../Common/BaseTable";
+import { ROWS_PER_PAGE } from "../Common/Pagination/shared";
 import PageTablePagination from "./Pagination";
 import {
     createStyles,
@@ -29,7 +30,7 @@ interface Props<T> extends BaseTableProps<T> {
 export default function PageTable<T> (props: Props<T>) {
     const {
         page = 0,
-        rowsPerPage = 10,
+        rowsPerPage = ROWS_PER_PAGE,
         rowsPerPageOptions = [
             10,
             25,

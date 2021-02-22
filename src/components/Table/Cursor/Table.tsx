@@ -4,6 +4,7 @@ import BaseTable,
     BaseTableData,
 } from "../Common/BaseTable";
 import { Order } from "../Common/Head";
+import { ROWS_PER_PAGE } from "../Common/Pagination/shared";
 import CursorTablePagination,
 { Page } from "./Pagination";
 import {
@@ -40,7 +41,7 @@ export default function CursorTable<T> (props: Props<T>) {
         startCursor,
         endCursor,
         total,
-        rowsPerPage = 10,
+        rowsPerPage = ROWS_PER_PAGE,
         rowsPerPageOptions = [
             10,
             25,
