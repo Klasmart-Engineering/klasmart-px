@@ -119,7 +119,7 @@ export default function CursorTablePagination (props: Props) {
         <TablePagination
             rowsPerPageOptions={rowsPerPageOptions}
             labelRowsPerPage={localization?.rowsPerPage}
-            labelDisplayedRows={localization?.total ? (({ count }) => localization?.total?.(count)) : ({ count }) => `${count} results`}
+            labelDisplayedRows={localization?.total ? (({ count }) => localization?.total?.(count)) : ({ count }) => `${count} result${count !== 1 ? `s` : ``}`}
             component="div"
             count={count}
             rowsPerPage={rowsPerPage}
