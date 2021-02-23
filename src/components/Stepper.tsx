@@ -47,9 +47,9 @@ const useStyles = makeStyles((theme) => createStyles({
 
 const getStepIndex = (index: number, steps: Step[]) => steps.length === 0 ? 0 : clamp(index, 0, steps.length - 1);
 
-const showCustomStepIcon = (step: Step, completed: boolean, editable?: boolean) => {
+const showCustomStepIcon = (step: Step, editable?: boolean) => {
     if (step.error) return false;
-    if (completed && editable) return true;
+    if (editable) return true;
     return !!step.icon;
 };
 
@@ -175,8 +175,8 @@ export default function Stepper (props: Props) {
         >
             {steps.map((step, index) => {
                 const completed = index < stepIndex;
-                const showEditableIcon = editable === true || completed;
-                const customIconProps = showCustomStepIcon(step, completed, showEditableIcon)
+                const showEditableIcon = editable || completed;
+                const customIconProps = showCustomStepIcon(step, showEditableIcon)
                     ? {
                         icon: <CustomStepIcon
                             icon={step.icon}
@@ -188,7 +188,7 @@ export default function Stepper (props: Props) {
                 return <Step key={`step-${index}`}>
                     <StepButton
                         active={stepIndex === index}
-                        completed={editable ?? completed}
+                        completed={editable || completed}
                         optional={
                             <OptionalLabel
                                 step={step}
