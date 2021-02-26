@@ -2,14 +2,14 @@ import { Order } from "../components/Table/Common/Head";
 import { ROWS_PER_PAGE } from "../components/Table/Common/Pagination/shared";
 import { Page } from "../components/Table/Cursor/Pagination";
 
-interface CursorPageInfo {
+export interface CursorPageInfo {
     first: number | undefined;
     last: number | undefined;
     before: string | undefined;
     after: string | undefined;
 }
 
-export const getCursorPageInfo = (direction: Page, order: Order, cursor: string | undefined, rowsPerPage = ROWS_PER_PAGE) => {
+export default (direction: Page, order: Order, cursor: string | undefined, rowsPerPage = ROWS_PER_PAGE) => {
     let variables: CursorPageInfo;
     switch (direction) {
     case `start`:

@@ -14,7 +14,10 @@ import {
 } from "@material-ui/core";
 import clsx from "clsx";
 import React,
-{ useState } from "react";
+{
+    useEffect,
+    useState,
+} from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
     root: {
@@ -76,6 +79,12 @@ export default function Select<T> (props: Props<T>) {
         onValidate?.(!error);
         onError?.(error);
     };
+
+    useEffect(() => {
+        onChange?.(value_);
+        onValidate?.(!error_);
+        onError?.(error_);
+    }, []);
 
     const menuItems = items.map((item) => (
         <MenuItem

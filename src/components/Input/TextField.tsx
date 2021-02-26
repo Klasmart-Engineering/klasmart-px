@@ -8,7 +8,10 @@ import {
     TextField as TxtField,
 } from "@material-ui/core";
 import React,
-{ useState } from "react";
+{
+    useEffect,
+    useState,
+} from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
@@ -45,6 +48,12 @@ export default function TextField (props: Props) {
         onValidate?.(!error);
         onError?.(error);
     };
+
+    useEffect(() => {
+        onChange?.(value_);
+        onValidate?.(!error_);
+        onError?.(error_);
+    }, []);
 
     return <TxtField
         className={className}

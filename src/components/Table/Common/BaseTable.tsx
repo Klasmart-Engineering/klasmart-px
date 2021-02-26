@@ -208,7 +208,7 @@ export default function BaseTable<T>(props: Props<T>) {
     const [ orderBy_, setOrderBy ] = useState(orderBy ?? idField);
     const [ groupBy_, setGroupBy ] = useState(groupBy);
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
-    const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>(selectedRows.filter((rowId) => rows.find((row) => row[idField] === rowId)));
+    const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>(selectedRows);
     const [ selectedColumns_, setSelectedColumns ] = useState(union(selectedColumnIds, persistentColumnIds));
     const [ search_, setSearch ] = useState(search ?? ``);
 
