@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => createStyles({
     },
 }));
 
-interface Props {
+export interface Props {
     className?: string;
     label: React.ReactNode;
     icon?: SvgIconComponent;
