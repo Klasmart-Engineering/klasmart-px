@@ -91,6 +91,7 @@
         "node-source-han-sans-sc": "^1.1.0-2.001R",
         "notistack": "^1.0.4",
         "react-cookie": "^4.0.3",
+        "react-dropzone": "11.3.2",
         "typeface-nanum-square-round": "^1.0.2"
     }
 }
