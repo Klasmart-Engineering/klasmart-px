@@ -1,7 +1,7 @@
 import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
 import { SvgIconComponent } from "@material-ui/icons";
 import React from "react";
-interface Props {
+export interface Props {
     className?: string;
     label: React.ReactNode;
     icon?: SvgIconComponent;
@@ -18,4 +18,3 @@ interface Props {
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 export default function Button(props: Props): JSX.Element;
-export {};

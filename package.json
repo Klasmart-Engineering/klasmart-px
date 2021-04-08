@@ -5,12 +5,12 @@
     "main": "./dist/main.js",
     "types": "dist/types/index.d.ts",
     "scripts": {
+        "build": "npm test && npm run build:js && npm run build:types",
         "build:js": "webpack",
         "build:types": "tsc --emitDeclarationOnly",
-        "build": "npm test && npm run build:js && npm run build:types",
-        "test": "jest",
-        "storybook": "start-storybook -p 6006",
-        "build-storybook": "build-storybook"
+        "build:sb": "build-storybook",
+        "start:sb": "start-storybook -p 6006",
+        "test": "jest"
     },
     "repository": {
         "type": "git",
@@ -71,6 +71,7 @@
         "eslint-plugin-simple-import-sort": "7.0.0",
         "file-loader": "6.2.0",
         "fork-ts-checker-webpack-plugin": "6.1.0",
+        "html-webpack-plugin": "5.3.1",
         "jest": "26.6.3",
         "putout": "15.3.1",
         "react": "^17.0.2",
