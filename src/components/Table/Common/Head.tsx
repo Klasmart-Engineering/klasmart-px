@@ -1,3 +1,4 @@
+import { SelectMode } from "./BaseTable";
 import BaseTableCheckboxDropdown,
 {
     CheckboxDropdownLocalization,
@@ -75,7 +76,7 @@ export interface TableColumn<T> {
     search?: CustomSearch<T>;
     sort?: CustomSort<T>;
     groupSort?: CustomGroupSort;
-    groups?: SubgroupTab<T>[];
+    groups?: SubgroupTab[];
     tooltip?: string;
     render?: (row: T) => ReactNode;
 }
@@ -85,6 +86,7 @@ export interface HeadLocalization {
 }
 
 interface Props<T> {
+    selectMode?: SelectMode;
     numSelected: number;
     onRequestSort: (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => void;
     onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
@@ -95,7 +97,7 @@ interface Props<T> {
     selected: (keyof T)[];
     columns: TableColumn<T>[];
     loading?: boolean;
-    showCheckboxes: boolean;
+    showSelectables: boolean;
     hasGroups: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;
@@ -103,10 +105,9 @@ interface Props<T> {
     onColumnChange: (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => void;
 }
 
-export default function BaseTableHead<T>(props: Props<T>) {
+export default function BaseTableHead<T> (props: Props<T>) {
     const {
-        onSelectAllClick,
-        onSelectAllPageClick,
+        selectMode,
         order,
         orderBy,
         numSelected,
@@ -115,11 +116,13 @@ export default function BaseTableHead<T>(props: Props<T>) {
         columns,
         selected,
         loading,
-        showCheckboxes,
+        showSelectables,
         hasGroups,
         checkboxDropdownLocalization,
         columnSelectorLocalization,
         localization,
+        onSelectAllClick,
+        onSelectAllPageClick,
         onColumnChange,
     } = props;
     const classes = useStyles();
@@ -132,9 +135,9 @@ export default function BaseTableHead<T>(props: Props<T>) {
     return (
         <TableHead>
             <TableRow className={classes.container}>
-                {showCheckboxes &&
+                {showSelectables &&
                     <TableCell padding="checkbox">
-                        <BaseTableCheckboxDropdown
+                        {selectMode === `multiple` && <BaseTableCheckboxDropdown
                             hasGroups={hasGroups}
                             disabled={loading}
                             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -142,7 +145,7 @@ export default function BaseTableHead<T>(props: Props<T>) {
                             localization={checkboxDropdownLocalization}
                             onSelectAllPageClick={onSelectAllPageClick}
                             onSelectAllClick={onSelectAllClick}
-                        />
+                        />}
                     </TableCell>
                 }
                 {columns

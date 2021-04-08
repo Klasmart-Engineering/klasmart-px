@@ -1,3 +1,4 @@
+import { SelectMode } from "./BaseTable";
 import { CheckboxDropdownLocalization, CheckboxDropdownValue } from "./CheckboxDropdown";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
 import { SubgroupTab } from "./GroupTabs";
@@ -22,7 +23,7 @@ export interface TableColumn<T> {
     search?: CustomSearch<T>;
     sort?: CustomSort<T>;
     groupSort?: CustomGroupSort;
-    groups?: SubgroupTab<T>[];
+    groups?: SubgroupTab[];
     tooltip?: string;
     render?: (row: T) => ReactNode;
 }
@@ -30,6 +31,7 @@ export interface HeadLocalization {
     hideColumnButton?: string;
 }
 interface Props<T> {
+    selectMode?: SelectMode;
     numSelected: number;
     onRequestSort: (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => void;
     onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
@@ -40,7 +42,7 @@ interface Props<T> {
     selected: (keyof T)[];
     columns: TableColumn<T>[];
     loading?: boolean;
-    showCheckboxes: boolean;
+    showSelectables: boolean;
     hasGroups: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;

@@ -43,7 +43,7 @@ export interface GroupSelectMenuItem<T> {
     id: keyof T;
 }
 
-export interface SubgroupTab<T> {
+export interface SubgroupTab {
     text: string;
     count?: number;
 }
@@ -59,13 +59,13 @@ interface Props<T> {
     groupBy?: keyof T;
     groups?: GroupSelectMenuItem<T>[];
     subgroupBy?: string;
-    subgroups?: SubgroupTab<T>[];
+    subgroups?: SubgroupTab[];
     localization?: GroupTabsLocalization;
-    onSelectGroup: (value: keyof T | undefined) => void;
+    onSelectGroup: (value: Extract<keyof T, string> | undefined) => void;
     onSelectSubgroup: (value: string | undefined) => void;
 }
 
-export default function BaseTableGroupTabs<T>(props: Props<T>) {
+export default function BaseTableGroupTabs<T> (props: Props<T>) {
     const {
         allCount,
         groupBy,
@@ -86,7 +86,7 @@ export default function BaseTableGroupTabs<T>(props: Props<T>) {
     };
 
     const handleGroupChange = (e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>, child: React.ReactNode) => {
-        const newGroup = e.target.value as "" | NonNullable<keyof T>;
+        const newGroup = e.target.value as "" | Extract<keyof T, string>;
         const newSubgroup = undefined;
         if (newSubgroup !== subgroupBy_) {
             setSubgroupBy(newSubgroup);

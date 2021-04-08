@@ -60,7 +60,7 @@ import React,
 
 const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
-function descendingComparator<T>(a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) {
+function descendingComparator<T> (a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) {
     if ((typeof a === `string` && typeof b === `string`) || (a instanceof String && b instanceof String)) {
         const aValue = a as Extract<T[keyof T], string>;
         const bValue = b as Extract<T[keyof T], string>;
@@ -72,13 +72,13 @@ function descendingComparator<T>(a: T[keyof T], b: T[keyof T], locale?: string, 
     return 0;
 }
 
-function getComparator<T>(order: Order, orderBy: keyof T, customSort?: CustomSort<T>, locale?: string, collatorOptions?: Intl.CollatorOptions): (a: T, b: T) => number {
+function getComparator<T> (order: Order, orderBy: keyof T, customSort?: CustomSort<T>, locale?: string, collatorOptions?: Intl.CollatorOptions): (a: T, b: T) => number {
     const reverseOrder = order === `desc` ? 1 : -1;
     const sort = customSort ?? descendingComparator;
     return (a, b) => reverseOrder * sort(a[orderBy], b[orderBy], locale, collatorOptions);
 }
 
-function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
+function stableSort<T> (array: T[], comparator: (a: T, b: T) => number) {
     const stabilizedThis = array.map((row, index) => [ row, index ] as [T, number]);
     const ROW = 0;
     const INDEX = 1;
@@ -90,7 +90,7 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
     return stabilizedThis.map((el) => el[ROW]);
 }
 
-function defaultSearch <T>(value: T[Extract<keyof T, string>], searchValue: string) {
+function defaultSearch <T> (value: T[Extract<keyof T, string>], searchValue: string) {
     const values = Array.isArray(value) ? value : [ value ];
     const regexp = new RegExp(escapeRegExp(searchValue.trim()), `gi`);
     return values.some((value) => {
@@ -99,14 +99,16 @@ function defaultSearch <T>(value: T[Extract<keyof T, string>], searchValue: stri
     });
 }
 
-function rowSearch <T>(searchableColumns: TableColumn<T>[], row: T, searchValue: string) {
+function rowSearch <T> (searchableColumns: TableColumn<T>[], row: T, searchValue: string) {
     if (searchValue.length === 0 || searchableColumns.length === 0) return true;
     return searchableColumns.some((column) => column.search?.(row[column.id], searchValue) ?? defaultSearch(row[column.id], searchValue));
 }
 
 const isValidGroup = <T,>(group: keyof T, groups?: GroupSelectMenuItem<T>[]) => !!(group && groups?.find((g) => g.id === group) ? group : undefined);
 
-const isValidSubgroup = <T,>(subgroup: string, subgroups?: SubgroupTab<T>[]) => (subgroup !== undefined && subgroups?.find((s) => s.text === subgroup) ? subgroup : undefined) !== undefined;
+const isValidSubgroup = <T,>(subgroup: string, subgroups?: SubgroupTab[]) => (subgroup !== undefined && subgroups?.find((s) => s.text === subgroup) ? subgroup : undefined) !== undefined;
+
+export type SelectMode = `single` | `multiple`;
 
 export interface TableLocalization {
     toolbar?: ToolbarLocalization;
@@ -136,9 +138,9 @@ export interface BaseTableData<T> {
 export interface BaseProps<T> {
     columns: TableColumn<T>[];
     idField: Extract<keyof T, string>;
-    orderBy?: Extract<keyof T, string>;
-    order?: Order;
-    groupBy?: keyof T;
+    orderBy?: string;
+    order?: string;
+    groupBy?: string;
     subgroupBy?: string;
     rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
@@ -146,7 +148,7 @@ export interface BaseProps<T> {
     rowsPerPage?: number;
     rowsPerPageOptions?: Array<number | { value: number; label: string }>;
     search?: string;
-    showCheckboxes?: boolean;
+    showSelectables?: boolean;
     primaryAction?: ToolbarAction;
     secondaryActions?: ToolbarAction[];
     selectActions?: ToolbarSelectAction<T>[];
@@ -155,6 +157,8 @@ export interface BaseProps<T> {
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
     total?: number;
+    hideSelectStatus?: boolean;
+    selectMode?: SelectMode;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
 }
 
@@ -165,7 +169,7 @@ export interface Props<T> extends BaseProps<T> {
     onChange: (baseTableData: BaseTableData<T>) => void;
 }
 
-export default function BaseTable<T>(props: Props<T>) {
+export default function BaseTable<T> (props: Props<T>) {
     const {
         columns,
         idField,
@@ -179,7 +183,8 @@ export default function BaseTable<T>(props: Props<T>) {
         localStartSlice,
         localEndSlice,
         search,
-        showCheckboxes,
+        showSelectables,
+        selectMode = `multiple`,
         primaryAction,
         rowActions,
         secondaryActions,
@@ -189,6 +194,7 @@ export default function BaseTable<T>(props: Props<T>) {
         locale,
         collatorOptions,
         total,
+        hideSelectStatus,
         PaginationComponent,
         onChange,
         onSelected,
@@ -204,12 +210,12 @@ export default function BaseTable<T>(props: Props<T>) {
         label,
     }));
 
-    const [ order_, setOrder ] = useState(order ?? `desc`);
-    const [ orderBy_, setOrderBy ] = useState(orderBy ?? idField);
-    const [ groupBy_, setGroupBy ] = useState(groupBy);
+    const [ order_, setOrder ] = useState<Order>([ `asc`, `desc` ].includes(order ?? ``) ? order as Order : `desc`);
+    const [ orderBy_, setOrderBy ] = useState(columns.find((column) => column.id === orderBy)?.id ?? idField);
+    const [ groupBy_, setGroupBy ] = useState(columns.find((column) => column.id === groupBy)?.id);
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
-    const [ selectedRows_, setSelectedRows ] = useState<T[Extract<keyof T, string>][]>(selectedRows);
-    const [ selectedColumns_, setSelectedColumns ] = useState(union(selectedColumnIds, persistentColumnIds));
+    const [ selectedRowIds_, setSelectedRowIds ] = useState<T[Extract<keyof T, string>][]>(selectedRows);
+    const [ selectedColumnIds_, setSelectedColumnIds ] = useState(union(selectedColumnIds, persistentColumnIds));
     const [ search_, setSearch ] = useState(search ?? ``);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => {
@@ -222,58 +228,62 @@ export default function BaseTable<T>(props: Props<T>) {
         switch (value) {
         case `all`: {
             const newSelecteds = filteredSortedRows.map((n) => n[idField]);
-            setSelectedRows(newSelecteds);
+            setSelectedRowIds(newSelecteds);
             return;
         }
         case `allPages`: {
             const newSelecteds = filteredSortedGroupedRows.map((n) => n[idField]);
-            setSelectedRows(selectedRows_.concat(newSelecteds));
+            setSelectedRowIds(selectedRowIds_.concat(newSelecteds));
             return;
         }
         case `none`: {
-            setSelectedRows([]);
+            setSelectedRowIds([]);
             return;
         }
         case `page`: {
             const pageRows = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
-            setSelectedRows(union(selectedRows_, pageRows));
+            setSelectedRowIds(union(selectedRowIds_, pageRows));
             return;
         }
         }
     };
 
     const handleSelectAllRowsPageClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const pageRows = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
+        const pageRowIds = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
         if (!event.target.checked) {
-            setSelectedRows(selectedRows_.filter((rowId) => !(pageRows).includes(rowId)));
+            setSelectedRowIds(selectedRowIds_.filter((rowId) => !(pageRowIds).includes(rowId)));
             return;
         }
-        setSelectedRows(union(selectedRows_, pageRows));
+        setSelectedRowIds(union(selectedRowIds_, pageRowIds));
     };
 
     const handleRowSelectClick = (event: React.MouseEvent<unknown>, rowId: T[Extract<keyof T, string>]) => {
-        const selectedIndex = selectedRows_.indexOf(rowId);
+        if (selectMode === `single`) {
+            setSelectedRowIds([ rowId ]);
+            return;
+        }
+        const selectedIndex = selectedRowIds_.indexOf(rowId);
         let newSelected: T[Extract<keyof T, string>][] = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selectedRows_, rowId);
+            newSelected = newSelected.concat(selectedRowIds_, rowId);
         } else {
-            newSelected = selectedRows_.filter((id) => id !== rowId);
+            newSelected = selectedRowIds_.filter((id) => id !== rowId);
         }
-        setSelectedRows(newSelected);
+        setSelectedRowIds(newSelected);
     };
 
     const handleColumnSelectClick = (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => {
-        const selectedIndex = selectedColumns_.indexOf(columnId);
+        const selectedIndex = selectedColumnIds_.indexOf(columnId);
         let newSelected: Extract<keyof T, string>[] = [];
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selectedColumns_, columnId);
+            newSelected = newSelected.concat(selectedColumnIds_, columnId);
         } else {
-            newSelected = selectedColumns_.filter((id) => id !== columnId);
+            newSelected = selectedColumnIds_.filter((id) => id !== columnId);
         }
-        setSelectedColumns(newSelected);
+        setSelectedColumnIds(newSelected);
     };
 
-    const handleSelectGroup = (group: keyof T | undefined) => {
+    const handleSelectGroup = (group: Extract<keyof T, string> | undefined) => {
         setGroupBy(group);
     };
 
@@ -285,10 +295,10 @@ export default function BaseTable<T>(props: Props<T>) {
         setSearch(value);
     };
 
-    const isColumnSelected = (column: Extract<keyof T, string>) => selectedColumns_.indexOf(column) !== -1;
+    const isColumnSelected = (column: Extract<keyof T, string>) => selectedColumnIds_.indexOf(column) !== -1;
 
     const filterRowsBySearch = (row: T) => search_ ? rowSearch(searchableColumns, row, search_) : true;
-    const filterRowsBySelected = (row: T) => selectedRows_.includes(row[idField]);
+    const filterRowsBySelected = (row: T) => selectedRowIds_.includes(row[idField]);
     const filterRowsBySubgroup = (group?: keyof T, subgroup?: string, customGroupText?: CustomGroup<T>) => (row: T) => {
         if (!group || subgroup === undefined) return false;
         const value = customGroupText?.(row[group]) ?? row[group];
@@ -300,11 +310,10 @@ export default function BaseTable<T>(props: Props<T>) {
     const customGroupText = columns[columns.findIndex((c) => c.id === groupBy_)]?.groupText;
 
     const filteredColumns = columns.filter(({ id }) => isColumnSelected(id));
-    const filteredColumnIds = filteredColumns.map(({ id }) => id);
 
     const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions)).filter(filterRowsBySearch);
 
-    const subgroups_ = useMemo<SubgroupTab<T>[]>(() => {
+    const subgroups_ = useMemo<SubgroupTab[]>(() => {
         const column = columns[columns.findIndex((c) => c.id === groupBy_)];
         return (column?.groups ?? stableSort(groupBy_ && isValidGroup(groupBy_, groupableColumns)
             ? uniq(rows.flatMap((row) => {
@@ -327,28 +336,31 @@ export default function BaseTable<T>(props: Props<T>) {
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
     const hasSearchColumns = !!searchableColumns?.length;
-    const showCheckboxes_ = !!(selectActions?.length || showCheckboxes);
+    const showSelectables_ = !!(selectActions?.length || showSelectables);
     const hasGroups = !!groupableColumns?.length;
-    const columnCount = columns.length + (showCheckboxes_ ? 1 : 0) + 1; // +1 for row actions column
+    const columnCount = columns.length + (showSelectables_ ? 1 : 0) + 1; // +1 for row actions column
 
     const showToolbar = !!localization?.toolbar?.title || !!primaryAction || !!secondaryActions?.length || !!selectActions?.length;
 
     useEffect(() => {
-        onSelected?.(selectedRows_);
-    }, [ selectedRows_ ]);
+        setSearch(search ?? ``);
+    }, [ search ]);
 
     useEffect(() => {
-        if (!loading) return;
-        if (isEqual(selectedRows, selectedRows_)) return;
-        setSelectedRows(selectedRows);
+        onSelected?.(selectedRowIds_);
+    }, [ selectedRowIds_ ]);
+
+    useEffect(() => {
+        if (isEqual(selectedRows, selectedRowIds_)) return;
+        setSelectedRowIds(selectedRows);
     }, [ selectedRows ]);
 
     useEffect(() => {
         if (loading) return;
         const tableData = {
-            columns: filteredColumnIds,
-            rows: filteredSortedGroupedRows.map((row) => pick(row, filteredColumnIds)),
-            selectedRows: selectedRows_,
+            columns: selectedColumnIds_,
+            rows: filteredSortedGroupedRows.map((row) => pick(row, selectedColumnIds_)),
+            selectedRows: selectedRowIds_,
             rowsPerPage: rowsPerPage,
             total: total ?? filteredSortedGroupedRows.length,
             search: search_,
@@ -359,9 +371,9 @@ export default function BaseTable<T>(props: Props<T>) {
         };
         onChange(tableData);
     }, [
-        columns,
+        selectedColumnIds_,
         rows,
-        selectedRows_,
+        selectedRowIds_,
         rowsPerPage,
         total,
         search_,
@@ -369,16 +381,18 @@ export default function BaseTable<T>(props: Props<T>) {
         orderBy_,
         groupBy_,
         subgroupBy_,
+        loading,
     ]);
 
     return (
         <>
             {showToolbar && <>
                 <BaseTableToolbar
+                    hideSelectStatus={hideSelectStatus}
                     primaryAction={primaryAction}
                     secondaryActions={secondaryActions}
                     selectActions={selectActions}
-                    selectedRows={selectedRows_}
+                    selectedRows={selectedRowIds_}
                     localization={localization?.toolbar}
                 />
                 <Divider />
@@ -407,14 +421,15 @@ export default function BaseTable<T>(props: Props<T>) {
             <TableContainer>
                 <Table>
                     <BaseTableHead
+                        selectMode={selectMode}
                         numSelected={filteredSortedGroupedSlicedSelectedRows.length}
                         order={order_}
                         orderBy={orderBy_}
                         rowCount={filteredSortedGroupedSlicedRows.length}
                         columns={columns}
                         loading={loading}
-                        selected={selectedColumns_}
-                        showCheckboxes={showCheckboxes_}
+                        selected={selectedColumnIds_}
+                        showSelectables={showSelectables_}
                         hasGroups={hasGroups}
                         localization={localization?.head}
                         checkboxDropdownLocalization={localization?.checkboxDropdown}
@@ -429,14 +444,15 @@ export default function BaseTable<T>(props: Props<T>) {
                         columnCount={columnCount}
                     />
                     <BaseTableBody
+                        selectMode={selectMode}
                         columns={filteredColumns}
                         columnCount={columnCount}
-                        showCheckboxes={showCheckboxes_}
+                        showSelectables={showSelectables_}
                         idField={idField}
                         loading={loading}
                         rows={filteredSortedGroupedSlicedRows}
                         rowActions={rowActions}
-                        selectedRows={selectedRows_}
+                        selectedRows={selectedRowIds_}
                         localization={localization?.body}
                         rowMoreMenuLocalization={localization?.rowMoreMenu}
                         onRowSelect={handleRowSelectClick}

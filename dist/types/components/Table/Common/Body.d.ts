@@ -1,13 +1,15 @@
 import { MenuAction, MoreMenuLocalization } from "../../MoreMenu";
+import { SelectMode } from "./BaseTable";
 import { TableColumn } from "./Head";
 import React from "react";
 export interface BodyLocalization {
     noData?: string;
 }
 interface Props<T> {
+    selectMode?: SelectMode;
     columns: TableColumn<T>[];
     columnCount: number;
-    showCheckboxes: boolean;
+    showSelectables: boolean;
     idField: Extract<keyof T, string>;
     loading?: boolean;
     rowActions?: (row: T) => MenuAction<T>[];

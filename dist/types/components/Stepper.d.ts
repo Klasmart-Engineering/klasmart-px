@@ -1,7 +1,8 @@
-/// <reference types="react" />
 import { SvgIconComponent } from "@material-ui/icons";
+import { ReactNode } from "react";
 export interface Step {
     label: string;
+    content?: ReactNode;
     icon?: SvgIconComponent;
     optional?: boolean;
     error?: string;

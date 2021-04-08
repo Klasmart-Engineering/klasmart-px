@@ -1,3 +1,3 @@
-export const nonAlphanumericRegex = /[^a-zA-Z0-9\s]/;
+export const alphanumericRegex = /^\w*$/;
 
-export default (errorMessage?: string) => (input: any) => !nonAlphanumericRegex.test(input) || (errorMessage ?? `Only alphanumeric characters are valid`);
+export default (errorMessage?: string) => (input: any) => alphanumericRegex.test(input ?? ``) || (errorMessage ?? `Only alphanumeric characters are valid`);

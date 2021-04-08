@@ -16,6 +16,7 @@ import clsx from "clsx";
 import { clamp } from "lodash";
 import React,
 {
+    ReactNode,
     useEffect,
     useState,
 } from "react";
@@ -103,14 +104,6 @@ interface OptionalLabelProps {
 
 const OptionalLabel = (props: OptionalLabelProps) => {
     const { step, optionalLabel } = props;
-    if (step.error) return (
-        <Typography
-            variant="caption"
-            color="error"
-        >
-            {step.error}
-        </Typography>
-    );
     if (step.optional) return (
         <Typography
             variant="caption"
@@ -124,6 +117,7 @@ const OptionalLabel = (props: OptionalLabelProps) => {
 
 export interface Step {
     label: string;
+    content?: ReactNode;
     icon?: SvgIconComponent;
     optional?: boolean;
     error?: string;

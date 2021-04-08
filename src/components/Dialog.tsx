@@ -19,20 +19,18 @@ import {
 import { Close as CloseIcon } from "@material-ui/icons";
 import React from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        closeButton: {
-            position: `absolute`,
-            top: 0,
-            right: 0,
-            margin: theme.spacing(1),
-        },
-        loading: {
-            opacity: 0,
-            position: `absolute`,
-        },
-    }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    closeButton: {
+        position: `absolute`,
+        top: 0,
+        right: 0,
+        margin: theme.spacing(1),
+    },
+    loading: {
+        opacity: 0,
+        position: `absolute`,
+    },
+}));
 
 export interface DialogAction {
     align?: "left" | "right";
@@ -42,10 +40,13 @@ export interface DialogAction {
     onClick: () => any;
 }
 
+export type DialogWidth = `sm` | `xs` | `md` | `lg` | `xl`;
+
 interface Props extends DialogProps {
     open: boolean;
     title: string;
     actions: DialogAction[];
+    width?: DialogWidth;
     onClose: ((event: unknown, reason?: "backdropClick" | "escapeKeyDown") => void) | undefined;
 }
 
@@ -55,6 +56,7 @@ export default function BaseDialog (props: Props) {
         open,
         title,
         actions,
+        width = `sm`,
         onClose,
     } = props;
     const classes = useStyles();
@@ -65,7 +67,7 @@ export default function BaseDialog (props: Props) {
             open={open}
             scroll="paper"
             aria-labelledby="scroll-dialog-title"
-            maxWidth="sm"
+            maxWidth={width}
             onClose={onClose}
         >
             <Tooltip title="Close dialog">
@@ -92,8 +94,7 @@ export default function BaseDialog (props: Props) {
                             disabled={action.disabled}
                             color={action.color}
                             onClick={action.onClick}
-                        />,
-                    )
+                        />)
                 }
                 <Box flex="1" />
                 {actions
@@ -105,8 +106,7 @@ export default function BaseDialog (props: Props) {
                             disabled={action.disabled}
                             color={action.color}
                             onClick={action.onClick}
-                        />,
-                    )
+                        />)
                 }
             </DialogActions>
         </Dialog>

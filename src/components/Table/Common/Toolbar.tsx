@@ -61,6 +61,7 @@ export interface ToolbarSelectAction<T>{
 }
 
 interface Props<T> {
+    hideSelectStatus?: boolean;
     primaryAction?: ToolbarAction;
     secondaryActions?: ToolbarAction[];
     selectActions?: ToolbarSelectAction<T>[];
@@ -71,6 +72,7 @@ interface Props<T> {
 export default function BaseTableToolbar<T>(props: Props<T>) {
     const classes = useStyles();
     const {
+        hideSelectStatus,
         primaryAction,
         secondaryActions,
         selectActions,
@@ -83,10 +85,10 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
     return (
         <Toolbar
             className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0,
+                [classes.highlight]: !hideSelectStatus && numSelected > 0,
             })}
         >
-            {numSelected > 0 ?
+            {!hideSelectStatus && numSelected > 0 ?
                 <>
                     <Typography
                         className={classes.title}

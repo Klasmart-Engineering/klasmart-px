@@ -2,11 +2,13 @@ import MoreMenu, {
     MenuAction,
     MoreMenuLocalization,
 } from "../../MoreMenu";
+import { SelectMode } from "./BaseTable";
 import { TableColumn } from "./Head";
 import {
     Checkbox,
     createStyles,
     makeStyles,
+    Radio,
     TableBody,
     TableCell,
     TableRow,
@@ -24,9 +26,10 @@ export interface BodyLocalization {
 }
 
 interface Props<T> {
+    selectMode?: SelectMode;
     columns: TableColumn<T>[];
     columnCount: number;
-    showCheckboxes: boolean;
+    showSelectables: boolean;
     idField: Extract<keyof T, string>;
     loading?: boolean;
     rowActions?: (row: T) => MenuAction<T>[];
@@ -37,11 +40,12 @@ interface Props<T> {
     onRowSelect: (event: React.MouseEvent<unknown>, rowId: T[Extract<keyof T, string>]) => void;
 }
 
-export default function BaseTableBody<T>(props: Props<T>) {
+export default function BaseTableBody<T> (props: Props<T>) {
     const {
+        selectMode,
         columns,
         columnCount,
-        showCheckboxes,
+        showSelectables,
         idField,
         loading,
         rowActions,
@@ -78,17 +82,25 @@ export default function BaseTableBody<T>(props: Props<T>) {
                             tabIndex={-1}
                             className={classes.row}
                         >
-                            {showCheckboxes &&
+                            {showSelectables &&
                                 <TableCell padding="checkbox">
-                                    <Checkbox
-                                        role="checkbox"
-                                        checked={isSelected}
-                                        disabled={loading}
-                                        inputProps={{
-                                            "aria-labelledby": labelId,
-                                        }}
-                                        onClick={(event) => onRowSelect(event, row[idField])}
-                                    />
+                                    {selectMode === `single`
+                                        ? <Radio
+                                            role="radio"
+                                            checked={isSelected}
+                                            disabled={loading}
+                                            onClick={(event) => onRowSelect(event, row[idField])}
+                                        />
+                                        : <Checkbox
+                                            role="checkbox"
+                                            checked={isSelected}
+                                            disabled={loading}
+                                            inputProps={{
+                                                "aria-labelledby": labelId,
+                                            }}
+                                            onClick={(event) => onRowSelect(event, row[idField])}
+                                        />
+                                    }
                                 </TableCell>
                             }
                             {columns.map((column, j) => {

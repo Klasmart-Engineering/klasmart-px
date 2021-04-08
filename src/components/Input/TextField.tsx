@@ -15,6 +15,8 @@ import React,
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
+const parseValue = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, type: InputType) => type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value;
+
 export type InputType = `text` | `number` | `password` | `date` | `datetime-local` | `email` | `time` | `month` | `tel` | `url` | `week`
 
 interface Props extends Input {
@@ -39,8 +41,7 @@ export default function TextField (props: Props) {
     const [ value_, setValue ] = useState(value ?? ``);
     const [ error_, setError ] = useState(getErrorText(value, validations));
 
-    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        const value =  type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value ;
+    const updateValue = (value: unknown) => {
         const error = getErrorText(value, validations);
         setValue(value);
         setError(error);
@@ -48,6 +49,16 @@ export default function TextField (props: Props) {
         onValidate?.(!error);
         onError?.(error);
     };
+
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const value = type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value;
+        updateValue(value);
+    };
+
+    useEffect(() => {
+        if (value === value_) return;
+        updateValue(value);
+    }, [ value ]);
 
     useEffect(() => {
         onChange?.(value_);

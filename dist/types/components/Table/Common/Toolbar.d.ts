@@ -17,6 +17,7 @@ export interface ToolbarSelectAction<T> {
     onClick: (rowIds: T[Extract<keyof T, string>][]) => void;
 }
 interface Props<T> {
+    hideSelectStatus?: boolean;
     primaryAction?: ToolbarAction;
     secondaryActions?: ToolbarAction[];
     selectActions?: ToolbarSelectAction<T>[];

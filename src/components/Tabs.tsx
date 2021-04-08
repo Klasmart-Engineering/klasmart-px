@@ -68,7 +68,7 @@ export default function Tabs (props: Props) {
     };
 
     useEffect(() => {
-        updateIfValid(value_);
+        updateIfValid(value_ ?? value);
     }, [ tabs ]);
 
     useEffect(() => {

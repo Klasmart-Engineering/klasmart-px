@@ -18,11 +18,19 @@ describe(`alphanumeric validation`, () => {
 
     test(`alphanumeric`, () => {
         expect(alphanumeric()(`k3wl`)).toBe(true);
-        expect(alphanumeric()(`Super nice input`)).toBe(true);
+        expect(alphanumeric()(`ABCDEFG123`)).toBe(true);
+        expect(alphanumeric()(`hellothere`)).toBe(true);
     });
 
     test(`alphanumeric with custom error message`, () => {
         expect(alphanumeric(errorMessage)(`n1c3`)).toBe(true);
         expect(alphanumeric(errorMessage)(`toodles`)).toBe(true);
+        expect(alphanumeric(errorMessage)(`OKIDOKI`)).toBe(true);
+    });
+
+    test(`empty`, () => {
+        expect(alphanumeric()(``)).toBe(true);
+        expect(alphanumeric()(undefined)).toBe(true);
+        expect(alphanumeric()(null)).toBe(true);
     });
 });

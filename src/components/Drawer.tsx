@@ -27,8 +27,14 @@ const useStyles = makeStyles((theme) => createStyles({
         marginRight: theme.direction === `rtl` ? undefined: theme.spacing(-1),
         marginLeft: theme.direction === `rtl` ? theme.spacing(-1) : undefined,
     },
-    sectionHeader: {
+    sectionHeaderContainer: {
         minHeight: 32,
+    },
+    sectionHeader: {
+        lineHeight: `36px`,
+        fontSize: `0.8em`,
+        fontWeight: 600,
+        textTransform: `uppercase`,
     },
 }));
 
@@ -42,8 +48,14 @@ function DrawerSection (props: DrawerSection) {
     const classes = useStyles();
     return (
         <Box py={1}>
-            {header && <Toolbar className={clsx(classes.toolbar, classes.sectionHeader)}>
-                <Typography variant="subtitle2">{header}</Typography>
+            {header && <Toolbar className={clsx(classes.toolbar, classes.sectionHeaderContainer)}>
+                <Typography
+                    variant="caption"
+                    color="textSecondary"
+                    className={classes.sectionHeader}
+                >
+                    {header}
+                </Typography>
             </Toolbar>}
             {content}
         </Box>

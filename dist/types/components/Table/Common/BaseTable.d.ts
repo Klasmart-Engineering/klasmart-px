@@ -8,6 +8,7 @@ import { PaginationLocalization } from "./Pagination/shared";
 import { SearchLocalization } from "./Search";
 import { ToolbarAction, ToolbarLocalization, ToolbarSelectAction } from "./Toolbar";
 import { ReactNode } from "react";
+export declare type SelectMode = `single` | `multiple`;
 export interface TableLocalization {
     toolbar?: ToolbarLocalization;
     search?: SearchLocalization;
@@ -34,9 +35,9 @@ export interface BaseTableData<T> {
 export interface BaseProps<T> {
     columns: TableColumn<T>[];
     idField: Extract<keyof T, string>;
-    orderBy?: Extract<keyof T, string>;
-    order?: Order;
-    groupBy?: keyof T;
+    orderBy?: string;
+    order?: string;
+    groupBy?: string;
     subgroupBy?: string;
     rowActions?: (row: T) => MenuAction<T>[];
     rows: T[];
@@ -47,7 +48,7 @@ export interface BaseProps<T> {
         label: string;
     }>;
     search?: string;
-    showCheckboxes?: boolean;
+    showSelectables?: boolean;
     primaryAction?: ToolbarAction;
     secondaryActions?: ToolbarAction[];
     selectActions?: ToolbarSelectAction<T>[];
@@ -56,6 +57,8 @@ export interface BaseProps<T> {
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
     total?: number;
+    hideSelectStatus?: boolean;
+    selectMode?: SelectMode;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
 }
 export interface Props<T> extends BaseProps<T> {

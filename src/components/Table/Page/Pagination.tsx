@@ -17,14 +17,12 @@ import {
 import { clamp } from "lodash";
 import React from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            flexShrink: 0,
-            marginLeft: theme.spacing(2.5),
-        },
-    }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    root: {
+        flexShrink: 0,
+        marginLeft: theme.spacing(2.5),
+    },
+}));
 
 interface Props {
     rowsPerPageOptions: Array<number | { value: number; label: string }>;
@@ -53,19 +51,19 @@ export default function PageTablePagination (props: Props) {
 
     const actions = () => {
         const handleFirstPageButtonClick = () => {
-            onChangePage(0);
+            onChangePage(clamp(0, 0, lastPage));
         };
 
         const handleBackButtonClick = () => {
-            onChangePage(page - 1);
+            onChangePage(clamp(page, 0, lastPage) - 1);
         };
 
         const handleNextButtonClick = () => {
-            onChangePage(page + 1);
+            onChangePage(clamp(page, 0, lastPage) + 1);
         };
 
         const handleLastPageButtonClick = () => {
-            onChangePage(Math.max(0, lastPage));
+            onChangePage(clamp(lastPage, 0, lastPage));
         };
         return (
             <div className={classes.root}>

@@ -13,7 +13,8 @@ import {
 } from "@material-ui/core";
 import { TransitionProps } from "@material-ui/core/transitions";
 import { Close as CloseIcon } from "@material-ui/icons";
-import React from "react";
+import React,
+{ cloneElement } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
     title: {
@@ -21,22 +22,22 @@ const useStyles = makeStyles((theme) => createStyles({
         flex: 1,
     },
     content: {
-        marginTop: 48 + theme.spacing(1),
+        marginTop: 48,
         [theme.breakpoints.up(`sm`)]: {
-            marginTop: 64 + theme.spacing(1),
+            marginTop: 64,
         },
     },
 }));
 
-const Motion = React.forwardRef((
-    props: TransitionProps & { children?: React.ReactElement },
-    ref: React.Ref<unknown>,
-) => <Grow
-    ref={ref}
-    style={{
-        transformOrigin: `100% 0 0`,
-    }}
-    {...props} />);
+const Motion = React.forwardRef((props: TransitionProps & { children?: React.ReactElement }, ref: React.Ref<unknown>) => (
+    <Grow
+        ref={ref}
+        style={{
+            transformOrigin: `100% 0 0`,
+        }}
+        {...props}
+    />
+));
 
 interface ToolbarAction {
     label: string;
@@ -48,6 +49,8 @@ interface Props extends DialogProps {
     open: boolean;
     title: string;
     action?: ToolbarAction;
+    header?: JSX.Element;
+    footer?: JSX.Element;
     onClose: () => void;
 }
 
@@ -56,6 +59,8 @@ export default function FullScreenDialog (props: Props) {
         open,
         action,
         title,
+        header: Header,
+        footer: Footer,
         children,
         onClose,
     } = props;
@@ -95,9 +100,15 @@ export default function FullScreenDialog (props: Props) {
                         }
                     </Toolbar>
                 </AppBar>
-                <DialogContent className={classes.content}>
+                {Header &&
+                    <div className={classes.content}>
+                        {Header}
+                    </div>
+                }
+                <DialogContent className={!Header ? classes.content : undefined}>
                     {children}
                 </DialogContent>
+                {Footer}
             </Dialog>
         </>
     );
