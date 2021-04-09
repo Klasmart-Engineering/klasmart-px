@@ -1,14 +1,22 @@
-import Item from "./Item";
 import {
     Box,
     createStyles,
+    lighten,
     makeStyles,
     Typography,
 } from "@material-ui/core";
 import { CloudUpload as CloudUploadIcon } from "@material-ui/icons";
+import clsx from "clsx";
 import React,
-{ useCallback } from "react";
-import { useDropzone } from "react-dropzone";
+{
+    useCallback,
+    useEffect,
+    useState,
+} from "react";
+import {
+    FileRejection,
+    useDropzone,
+} from "react-dropzone";
 
 const useStyles = makeStyles((theme) => createStyles({
     root: {
@@ -20,12 +28,26 @@ const useStyles = makeStyles((theme) => createStyles({
         cursor: `pointer`,
         borderRadius: theme.spacing(0.5),
         backgroundColor: theme.palette.grey[200],
-        backgroundImage: `url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='4' ry='4' stroke='%23${theme.palette.primary.main.slice(1)}' stroke-width='6' stroke-dasharray='32%2c 32' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");`,
+        backgroundImage: `url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23${theme.palette.primary.main.slice(1)}' stroke-width='4' stroke-dasharray='8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");`,
         transition: `background-color 0.4s ease-out`,
         "&:focus": {
             outline: `none`,
             backgroundColor: theme.palette.grey[300],
         },
+    },
+    dragFile: {
+        boxSizing: `border-box`,
+        backgroundImage: `none`,
+        borderWidth: 2,
+        borderStyle: `solid`,
+    },
+    dragFileAccept: {
+        backgroundColor: lighten(theme.palette.primary.light, 0.75),
+        borderColor: theme.palette.primary.main,
+    },
+    dragFileReject: {
+        backgroundColor: lighten(theme.palette.error.light, 0.75),
+        borderColor: theme.palette.error.main,
     },
     dropzoneIcon: {
         fontSize: 96,
@@ -33,73 +55,88 @@ const useStyles = makeStyles((theme) => createStyles({
 }));
 
 export interface Props {
-    dropzoneLabel?: string;
-    dropzoneLabelError?: string;
+    accept?: string;
+    maxSize?: number;
+    label?: string;
+    typeRejectedError?: string;
+    exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
+    onFileAdded: (file: File) => void;
+    onFileRejected: (file: File, error: string) => void;
 }
 
-export default function (props: Props) {
-    const { dropzoneLabel = `Drag and drop some files here, or click to select files`, dropzoneLabelError = `Something went wrong` } = props;
+export default function Dropzone (props: Props) {
+    const {
+        accept,
+        maxSize = Infinity,
+        label = `Drag and drop some files here, or click to select files`,
+        typeRejectedError = `File type is not supported`,
+        exceedsMaxSizeError = (fileSize: number, maxSize: number) => `File size (${(fileSize / 1000).toFixed(1)} Kb) exceeds max size (${(maxSize / 1000).toFixed(1)} Kb)`,
+        onFileAdded,
+        onFileRejected,
+    } = props;
     const classes = useStyles();
-    const onDrop = useCallback((acceptedFiles: File[]) => {
+
+    const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
         acceptedFiles.forEach((file) => {
             const reader = new FileReader();
-            reader.onabort = () => console.log(`file reading was aborted`);
-            reader.onerror = () => console.log(`file reading has failed`);
             reader.onload = () => {
-                const binaryStr = reader.result;
-                console.log(binaryStr);
+                onFileAdded(file);
             };
             reader.readAsArrayBuffer(file);
+        });
+        rejectedFiles.forEach((rejection) => {
+            const errorCode = rejection.errors[0].code;
+            const errorMessage = rejection.errors[0].message;
+            const fileSize = rejection.file.size;
+            switch (errorCode) {
+            case `file-invalid-type`:
+                onFileRejected(rejection.file, typeRejectedError);
+                break;
+            case `file-too-large`:
+                onFileRejected(rejection.file, exceedsMaxSizeError(fileSize, maxSize));
+                break;
+            default:
+                onFileRejected(rejection.file, errorMessage);
+            }
         });
     }, []);
     const {
         getInputProps,
         getRootProps,
-        isDragReject,
         isDragActive,
+        isDragReject,
+        isDragAccept,
     } = useDropzone({
+        accept,
+        maxSize,
         onDrop,
-        onDragOver: () => {
-            console.log(`onDragEnter`);
-        },
-        onDropAccepted: () => {
-            console.log(`onDropAccepted`);
-        },
-        onDropRejected: () => {
-            console.log(`onDropRejected`);
-        },
     });
-    console.log(`isDragReject`, isDragReject);
 
     return (
-        <>
-            <div style={{
-                height: 400,
-            }}>
-                <div
-                    className={classes.root}
-                    {...getRootProps()}
-                >
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        <CloudUploadIcon
-                            color="action"
-                            className={classes.dropzoneIcon}
-                        />
-                        {isDragReject
-                            ? <Typography color="error">{dropzoneLabelError}</Typography>
-                            : <Typography color="textSecondary">{dropzoneLabel}</Typography>
-                        }
-                        <input {...getInputProps()} />
-                    </Box>
-                </div>
-            </div>
-
-            <Item />
-        </>
+        <div
+            className={clsx(classes.root, {
+                [classes.dragFile]: isDragActive,
+                [classes.dragFileAccept]: isDragAccept,
+                [classes.dragFileReject]: isDragReject,
+            })}
+            {...getRootProps()}
+        >
+            <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+            >
+                <CloudUploadIcon
+                    color="action"
+                    className={classes.dropzoneIcon}
+                />
+                {isDragReject
+                    ? <Typography color="error">{typeRejectedError}</Typography>
+                    : <Typography color="textSecondary">{label}</Typography>
+                }
+            </Box>
+            <input {...getInputProps()} />
+        </div>
     );
 }

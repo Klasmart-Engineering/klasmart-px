@@ -25,7 +25,6 @@ interface Props {
     disabled?: boolean;
     color?: { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette];
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
-    onClickCancel?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 
 export default function IconButton (props: Props) {
@@ -35,7 +34,6 @@ export default function IconButton (props: Props) {
         disabled,
         color,
         onClick,
-        onClickCancel,
         className,
     } = props;
     const classes = useStyles();
@@ -55,22 +53,17 @@ export default function IconButton (props: Props) {
         if (error) throw error;
     };
 
-    const handleClickCancel = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setLoading(false);
-        throw Error(`cancelled`);
-    };
-
     return <Tooltip title={tooltip ?? ``}>
         <span>
             <IconBtn
                 disabled={disabled}
                 className={clsx(className, {
-                    [loadingClasses.buttonLoading]: loading && !onClickCancel,
+                    [loadingClasses.buttonLoading]: loading,
                 })}
                 style={{
                     color: (color && !disabled) ? theme.palette[color].main : undefined,
                 }}
-                onClick={loading && handleClickCancel ? handleClickCancel : handleClick}
+                onClick={handleClick}
             >
                 <Icon className={clsx({
                     [loadingClasses.buttonLoadingContent]: loading,

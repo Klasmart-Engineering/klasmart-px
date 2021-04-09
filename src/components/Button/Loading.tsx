@@ -3,6 +3,7 @@ import {
     createStyles,
     makeStyles,
 } from "@material-ui/core";
+import { Close as CloseIcon } from "@material-ui/icons";
 import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
@@ -28,16 +29,23 @@ export const useLoadingStyles = makeStyles((theme) => createStyles({
 }));
 
 interface Props {
+    showCancel?: boolean;
 }
 
 export default function (props: Props) {
+    const { showCancel } = props;
     const classes = useStyles();
     return (
-        <span className={classes.loadingContainer}>
-            <CircularProgress
-                size={24}
-                color="inherit"
-            />
-        </span>
+        <>
+            <span className={classes.loadingContainer}>
+                <CircularProgress
+                    size={24}
+                    color="inherit"
+                />
+            </span>
+            <span className={classes.loadingContainer}>
+                {showCancel && <CloseIcon fontSize="small" />}
+            </span>
+        </>
     );
 }
