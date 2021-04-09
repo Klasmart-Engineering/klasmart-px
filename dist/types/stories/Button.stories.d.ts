@@ -6,3 +6,4 @@ declare const _default: {
 };
 export default _default;
 export declare const Primary: Story<Props>;
+export declare const Secondary: Story<Props>;

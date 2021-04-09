@@ -68,7 +68,7 @@ export default function Dropzone (props: Props) {
     const {
         accept,
         maxSize = Infinity,
-        label = `Drag and drop some files here, or click to select files`,
+        label = `Drag and drop files here, or click to select files`,
         typeRejectedError = `File type is not supported`,
         exceedsMaxSizeError = (fileSize: number, maxSize: number) => `File size (${(fileSize / 1000).toFixed(1)} Kb) exceeds max size (${(maxSize / 1000).toFixed(1)} Kb)`,
         onFileAdded,
