@@ -13,6 +13,7 @@ const handleFileUpload = async (file: File) => {
     console.log(`start`, file.name);
     await sleep(2000);
     console.log(`stop`, file.name);
+    // throw Error(`Something happened yo`);
 };
 
 //👇 We create a “template” of how args map to rendering

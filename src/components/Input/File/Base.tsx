@@ -1,4 +1,3 @@
-import { sleep } from "../../../utils";
 import Dropzone from "./Dropzone";
 import SelectedFileRow from "./SelectedFileRow";
 import {
@@ -29,7 +28,7 @@ const useStyles = makeStyles((theme) => createStyles({
     },
     uploadableItem: {
         marginBottom: theme.spacing(1),
-        width: `calc(100% - ${2 * theme.spacing(2)}px)`,
+        width: `100%`,
         "&:last-child": {
             marginBottom: 0,
         },
@@ -50,6 +49,10 @@ export interface Props {
     locales?: string | string[];
     dropzoneLabel?: string;
     noItemsLabel?: string;
+    removeButtonTooltip?: string;
+    uploadButtonTooltip?: string;
+    uploadError?: string;
+    uploadSuccessMessage?: string;
     typeRejectedError?: string;
     exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
     onFileUpload: (file: File) => void;
@@ -62,6 +65,10 @@ export default function FileInput (props: Props) {
         locales,
         dropzoneLabel,
         noItemsLabel = `No files selected`,
+        removeButtonTooltip = `Remove file`,
+        uploadButtonTooltip = `Upload file`,
+        uploadError,
+        uploadSuccessMessage = `File successfully uploaded`,
         typeRejectedError,
         exceedsMaxSizeError,
         onFileUpload,
@@ -115,6 +122,10 @@ export default function FileInput (props: Props) {
                             file={selectedFile.file}
                             error={selectedFile.error}
                             locales={locales}
+                            removeButtonTooltip={removeButtonTooltip}
+                            uploadButtonTooltip={uploadButtonTooltip}
+                            uploadErrorMessage={uploadError}
+                            uploadSuccessMessage={uploadSuccessMessage}
                             onClickRemove={() => handleFileRemoved(i)}
                             onClickUpload={() => onFileUpload(selectedFile.file)}
                         />

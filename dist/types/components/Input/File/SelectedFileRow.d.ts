@@ -3,7 +3,10 @@ export interface Props {
     className?: string;
     file: File;
     error?: string;
-    disabled?: boolean;
+    removeButtonTooltip?: string;
+    uploadButtonTooltip?: string;
+    uploadErrorMessage?: string;
+    uploadSuccessMessage?: string;
     locales?: string | string[];
     onClickRemove?: () => void;
     onClickUpload: () => void | Promise<void>;

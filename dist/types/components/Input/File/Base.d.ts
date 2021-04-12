@@ -10,6 +10,10 @@ export interface Props {
     locales?: string | string[];
     dropzoneLabel?: string;
     noItemsLabel?: string;
+    removeButtonTooltip?: string;
+    uploadButtonTooltip?: string;
+    uploadError?: string;
+    uploadSuccessMessage?: string;
     typeRejectedError?: string;
     exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
     onFileUpload: (file: File) => void;

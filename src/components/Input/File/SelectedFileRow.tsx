@@ -1,16 +1,14 @@
-import { sleep } from "../../../utils";
 import IconButton from "../../Button/IconButton";
+import FileIcon from "./FileIcon";
 import {
     Box,
     createStyles,
     makeStyles,
     Paper,
     Typography,
-    useTheme,
 } from "@material-ui/core";
 import {
-    AttachFile as AttachFileIcon,
-    Check,
+    Check as CheckIcon,
     CloudUpload as CloudUploadIcon,
     Delete as DeleteIcon,
 } from "@material-ui/icons";
@@ -26,8 +24,12 @@ const useStyles = makeStyles((theme) => createStyles({
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(2),
     },
+    successText: {
+        color: theme.palette.success.main,
+    },
     successIcon: {
-        padding: theme.spacing(1.5),
+        margin: theme.spacing(1.5),
+        color: theme.palette.success.main,
     },
 }));
 
@@ -35,7 +37,10 @@ export interface Props {
     className?: string;
     file: File;
     error?: string;
-    disabled?: boolean;
+    removeButtonTooltip?: string;
+    uploadButtonTooltip?: string;
+    uploadErrorMessage?: string;
+    uploadSuccessMessage?: string;
     locales?: string | string[];
     onClickRemove?: () => void;
     onClickUpload: () => void | Promise<void>;
@@ -47,62 +52,73 @@ export default function SelectedFileRow (props: Props) {
         file,
         error,
         locales,
+        removeButtonTooltip = `Remove file`,
+        uploadButtonTooltip = `Upload file`,
+        uploadErrorMessage,
+        uploadSuccessMessage = `File successfully uploaded`,
         onClickRemove,
         onClickUpload,
     } = props;
     const classes = useStyles();
-    const theme = useTheme();
     const fileSize = (file.size / 1000).toFixed(1);
     const lastModified = Intl.DateTimeFormat(locales, {
         dateStyle: `long`,
     }).format(new Date(file.lastModified));
     const [ uploadSuccess, setUploadSuccess ] = useState(false);
+    const [ uploadError, setUploadError ] = useState(``);
     const [ uploadLoading, setUploadLoading ] = useState(false);
 
     const onClickUpload_ = async () => {
+        setUploadSuccess(false);
+        setUploadError(``);
         setUploadLoading(true);
-        let error;
+        let error: Error | undefined;
         try {
             await onClickUpload?.();
         } catch (err) {
             error = err;
         }
         setUploadLoading(false);
-        if (error) throw error;
+        if (error) {
+            setUploadError(error.message);
+            throw error;
+        }
         setUploadSuccess(true);
     };
 
+    const fileExtension = file.name.split(`.`).slice(-1)[0];
+
     return (
-        <Paper
-            className={clsx(classes.root, className)}
-            style={{
-                backgroundColor: uploadSuccess ? theme.palette.success.main : undefined,
-                color: uploadSuccess ? `white` : undefined,
-            }}
-        >
+        <Paper className={clsx(classes.root, className)}>
             <Box
                 display="flex"
                 flexDirection="row"
                 alignItems="center"
             >
-                <AttachFileIcon
-                    color="action"
-                    fontSize="small"
-                    className={classes.fileIcon}
-                />
+                <FileIcon fileType={fileExtension} />
                 <Box
                     display="flex"
                     flexDirection="column"
                 >
                     <Typography>{file.name}</Typography>
-                    {error
-                        ? <Typography
+                    {(error || uploadError)
+                        && <Typography
                             color="error"
                             variant="caption"
                         >
-                            {error}
+                            {error || uploadErrorMessage || uploadError }
                         </Typography>
-                        : <Typography
+                    }
+                    {uploadSuccess
+                        && <Typography
+                            className={classes.successText}
+                            variant="caption"
+                        >
+                            {uploadSuccessMessage}
+                        </Typography>
+                    }
+                    {!error && !uploadError && !uploadSuccess &&
+                        <Typography
                             color="textSecondary"
                             variant="caption"
                         >
@@ -114,20 +130,21 @@ export default function SelectedFileRow (props: Props) {
                 <Box
                     display="flex"
                     flexDirection="row"
+                    alignItems="center"
                 >
                     {onClickRemove && <IconButton
                         icon={DeleteIcon}
                         disabled={uploadLoading}
+                        tooltip={removeButtonTooltip}
                         onClick={onClickRemove} />
                     }
-                    {uploadSuccess ?
-                        <Check
-                            color="inherit"
-                            className={classes.successIcon} />
+                    {uploadSuccess
+                        ? <CheckIcon className={classes.successIcon} />
                         : <IconButton
                             icon={CloudUploadIcon}
                             color="primary"
-                            disabled={!!error || uploadLoading}
+                            disabled={!!error || uploadLoading || uploadSuccess}
+                            tooltip={uploadButtonTooltip}
                             onClick={onClickUpload_}
                         />
                     }

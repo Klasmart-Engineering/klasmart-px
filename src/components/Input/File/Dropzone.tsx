@@ -8,11 +8,7 @@ import {
 import { CloudUpload as CloudUploadIcon } from "@material-ui/icons";
 import clsx from "clsx";
 import React,
-{
-    useCallback,
-    useEffect,
-    useState,
-} from "react";
+{ useCallback } from "react";
 import {
     FileRejection,
     useDropzone,
