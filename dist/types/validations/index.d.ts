@@ -5,6 +5,7 @@ import equals from './equals';
 import letternumeric from './letternumeric';
 import max from './max';
 import min from './min';
+import notEquals from './notEquals';
 import phone from './phone';
 import required from './required';
 declare const validations: {
@@ -15,8 +16,9 @@ declare const validations: {
     letternumeric: (errorMessage?: string | undefined) => (input: any) => string | true;
     max: (max: number, errorMessage?: string | undefined) => (input: any) => string | true;
     min: (min: number, errorMessage?: string | undefined) => (input: any) => string | true;
+    notEquals: (value: any, errorMessage?: string | undefined) => (input: any) => string | true;
     phone: (errorMessage?: string | undefined) => (input: any) => string | true;
     required: (errorMessage?: string | undefined) => (input: any) => string | true;
 };
 export default validations;
-export { alphanumeric, email, emailOrPhone, equals, letternumeric, max, min, phone, required, };
+export { alphanumeric, email, emailOrPhone, equals, letternumeric, max, min, notEquals, phone, required, };
