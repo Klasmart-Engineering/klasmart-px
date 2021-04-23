@@ -62,7 +62,7 @@ interface Props<T> {
     onColumnChange: (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => void;
 }
 
-export default function BaseTableColumnSelector<T>(props: Props<T>) {
+export default function BaseTableColumnSelector<T> (props: Props<T>) {
     const {
         columns,
         selected,
@@ -117,7 +117,7 @@ export default function BaseTableColumnSelector<T>(props: Props<T>) {
             </Toolbar>
             <List className={classes.list}>
                 <Divider />
-                {columns.map((column, i) =>
+                {columns.filter((column) => !column.secret).map((column, i) =>
                     <Fragment key={`list-item-${i}`}>
                         {i !== 0 && <Divider />}
                         <ListItem

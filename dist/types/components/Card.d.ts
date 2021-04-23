@@ -1,4 +1,6 @@
-import React from 'react';
-export default function Card({ children }: {
-    children: React.ReactNode;
-}): JSX.Element;
+import { ReactNode } from 'react';
+interface Props {
+    children: ReactNode;
+}
+export default function Card(props: Props): JSX.Element;
+export {};

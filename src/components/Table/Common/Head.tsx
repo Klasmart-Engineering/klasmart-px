@@ -58,24 +58,20 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export type Order = "asc" | "desc";
 export type Align = TableCellProps["align"]
-export type CustomGroup<T> = (rowValue: T[keyof T]) => string
 export type CustomSearch<T> = (rowValue: T[Extract<keyof T, string>], searchValue: string) => boolean
 export type CustomSort<T> = (a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) => number
-export type CustomGroupSort = (a: string, b: string, locale?: string, collatorOptions?: Intl.CollatorOptions) => number
 
 export interface TableColumn<T> {
     id: Extract<keyof T, string>;
     label: string;
     align?: Align;
     persistent?: boolean;
-    groupable?: boolean;
     disableSearch?: boolean;
     disableSort?: boolean;
     hidden?: boolean;
-    groupText?: CustomGroup<T>;
+    secret?: boolean;
     search?: CustomSearch<T>;
     sort?: CustomSort<T>;
-    groupSort?: CustomGroupSort;
     groups?: SubgroupTab[];
     tooltip?: string;
     render?: (row: T) => ReactNode;
@@ -130,8 +126,6 @@ export default function BaseTableHead<T> (props: Props<T>) {
         onRequestSort(event, property);
     };
 
-    const isSelected = (column: keyof T) => selected.indexOf(column) !== -1;
-
     return (
         <TableHead>
             <TableRow className={classes.container}>
@@ -149,7 +143,8 @@ export default function BaseTableHead<T> (props: Props<T>) {
                     </TableCell>
                 }
                 {columns
-                    .filter((column) => isSelected(column.id))
+                    .filter((column) => selected.indexOf(column.id) !== -1)
+                    .filter((column) => !column.secret)
                     .map((column) => {
                         const hideButton = <IconButton
                             disabled={column.persistent}
@@ -161,11 +156,12 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                 : <CloseIcon fontSize="small" />
                             }
                         </IconButton>;
-                        const paddingStyle = column.align === `right` ? {
-                            paddingLeft: 0,
-                        } : {
-                            paddingRight: 0,
-                        };
+                        const paddingStyle = column.align === `right`
+                            ? {
+                                paddingLeft: 0,
+                            } : {
+                                paddingRight: 0,
+                            };
                         const flexDirection = column.align === `right` ? `row-reverse` : `row`;
                         const isAlignCenter = column.align === `center`;
                         return <TableCell
@@ -215,8 +211,7 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                 }
                             </Box>
                         </TableCell>;
-                    })
-                }
+                    })}
                 <TableCell padding="checkbox">
                     <BaseTableColumnSelector
                         columns={columns}

@@ -5,6 +5,7 @@ export interface GroupSelectMenuItem<T> {
 }
 export interface SubgroupTab {
     text: string;
+    value: string | number;
     count?: number;
 }
 export interface GroupTabsLocalization {

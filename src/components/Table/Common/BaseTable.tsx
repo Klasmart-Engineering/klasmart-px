@@ -17,7 +17,6 @@ import BaseTableGroupTabs,
 } from "./GroupTabs";
 import BaseTableHead,
 {
-    CustomGroup,
     CustomSort,
     HeadLocalization,
     Order,
@@ -48,7 +47,6 @@ import {
     isEqual,
     pick,
     union,
-    uniq,
 } from "lodash";
 import React,
 {
@@ -104,9 +102,7 @@ function rowSearch <T> (searchableColumns: TableColumn<T>[], row: T, searchValue
     return searchableColumns.some((column) => column.search?.(row[column.id], searchValue) ?? defaultSearch(row[column.id], searchValue));
 }
 
-const isValidGroup = <T,>(group: keyof T, groups?: GroupSelectMenuItem<T>[]) => !!(group && groups?.find((g) => g.id === group) ? group : undefined);
-
-const isValidSubgroup = <T,>(subgroup: string, subgroups?: SubgroupTab[]) => (subgroup !== undefined && subgroups?.find((s) => s.text === subgroup) ? subgroup : undefined) !== undefined;
+const isValidSubgroup = (subgroup: string, subgroups?: SubgroupTab[]) => (subgroup !== undefined && subgroups?.find((s) => s.value === subgroup) ? subgroup : undefined) !== undefined;
 
 export type SelectMode = `single` | `multiple`;
 
@@ -205,7 +201,7 @@ export default function BaseTable<T> (props: Props<T>) {
     const persistentColumnIds = columns.filter((c) => c.persistent).map(({ id }) => id);
     const selectedColumnIds = columns.filter(({ hidden }) => !hidden).map(({ id }) => id);
     const searchableColumns = columns.filter((c) => !c.disableSearch);
-    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter((c) => c.groupable || c.groupText || c.groupSort || c.groups).map(({ id, label }) => ({
+    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter((c) => c.groups).map(({ id, label }) => ({
         id,
         label,
     }));
@@ -299,39 +295,34 @@ export default function BaseTable<T> (props: Props<T>) {
 
     const filterRowsBySearch = (row: T) => search_ ? rowSearch(searchableColumns, row, search_) : true;
     const filterRowsBySelected = (row: T) => selectedRowIds_.includes(row[idField]);
-    const filterRowsBySubgroup = (group?: keyof T, subgroup?: string, customGroupText?: CustomGroup<T>) => (row: T) => {
+    const filterRowsBySubgroup = (group?: keyof T, subgroup?: string | number) => (row: T) => {
         if (!group || subgroup === undefined) return false;
-        const value = customGroupText?.(row[group]) ?? row[group];
+        const value = row[group];
         const groupedValues = Array.isArray(value) ? value as unknown as any[] : [ value ];
         return groupedValues.some((value) => value === subgroup);
     };
 
     const customSort = columns[columns.findIndex((c) => c.id === orderBy_)].sort;
-    const customGroupText = columns[columns.findIndex((c) => c.id === groupBy_)]?.groupText;
-
-    const filteredColumns = columns.filter(({ id }) => isColumnSelected(id));
-
+    const filteredColumns = columns.filter(({ id }) => isColumnSelected(id)).filter(({ secret }) => !secret);
     const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions)).filter(filterRowsBySearch);
 
     const subgroups_ = useMemo<SubgroupTab[]>(() => {
         const column = columns[columns.findIndex((c) => c.id === groupBy_)];
-        return (column?.groups ?? stableSort(groupBy_ && isValidGroup(groupBy_, groupableColumns)
-            ? uniq(rows.flatMap((row) => {
-                const value = customGroupText?.(row[groupBy_]) ?? row[groupBy_];
-                return Array.isArray(value) ? value : [ value ];
-            })).map((value) => ({
-                text: String(value),
-            }))
-            : [], getComparator(`asc`, `text`, column?.groupSort, locale, collatorOptions))).map(({ text }) => ({
+        return column?.groups?.map(({ text, value }) => ({
             text,
-            count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, text, customGroupText)).length,
-        }));
+            value,
+            count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, value)).length,
+        })) ?? [];
     }, [
         rows,
+        columns,
         groupBy_,
         search_,
     ]);
-    const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && isValidSubgroup(subgroupBy_, subgroups_)) ? filterRowsBySubgroup(groupBy_, subgroupBy_, customGroupText) : () => true);
+
+    const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && isValidSubgroup(subgroupBy_, subgroups_))
+        ? filterRowsBySubgroup(groupBy_, subgroupBy_)
+        : () => true);
     const filteredSortedGroupedSlicedRows = (localStartSlice || localEndSlice) ? filteredSortedGroupedRows.slice(localStartSlice, localEndSlice) : filteredSortedGroupedRows;
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 

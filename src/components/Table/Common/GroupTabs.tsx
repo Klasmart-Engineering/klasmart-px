@@ -45,6 +45,7 @@ export interface GroupSelectMenuItem<T> {
 
 export interface SubgroupTab {
     text: string;
+    value: string | number;
     count?: number;
 }
 
@@ -103,7 +104,7 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
         },
         ...subgroups.map((subgroup) => ({
             text: `${subgroup.text} (${subgroup.count ?? 0})`,
-            value: subgroup.text,
+            value: `${subgroup.value}`,
         })),
     ];
 
