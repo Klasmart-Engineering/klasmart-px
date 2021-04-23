@@ -1,6 +1,7 @@
 export { default as Button } from "./components/Button/Button";
 export { default as Fab } from "./components/Button/Fab";
 export { default as IconButton } from "./components/Button/IconButton";
+export { default as Card } from "./components/Card";
 export { default as ContentCard } from "./components/ContentCard";
 export { default as Dialog } from "./components/Dialog";
 export { useAlert } from "./components/Dialog/Alert/hooks";
