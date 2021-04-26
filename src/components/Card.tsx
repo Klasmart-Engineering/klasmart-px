@@ -4,6 +4,7 @@ import {
     makeStyles,
     Theme,
 } from "@material-ui/core/styles";
+import clsx from "clsx";
 import React,
 { ReactNode } from 'react';
 
@@ -20,11 +21,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 interface Props {
     children: ReactNode;
+    className?: string;
 }
 
 export default function Card (props: Props) {
     const classes = useStyles();
-    const { children } = props;
+    const { children, className } = props;
 
-    return <Paper className={classes.paperContainer}>{children}</Paper>;
+    return <Paper className={clsx(classes.paperContainer, className)}>{children}</Paper>;
 }
