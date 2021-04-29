@@ -1,0 +1,20 @@
+image: node:15.14.0
+pipelines:
+  pull-requests:
+    '**':
+      - parallel:
+        - step:
+            name: Test & Build
+            caches:
+              - node
+            script:
+              - npm install
+              - npm test
+              - npm run build
+        - step:
+            name: Code Linting
+            caches:
+              - node
+            script:
+              - npm install eslint
+              - npx eslint .

@@ -12,6 +12,11 @@ module.exports = {
         `plugin:@typescript-eslint/eslint-recommended`,
         `plugin:@typescript-eslint/recommended`,
     ],
+    settings: {
+        react: {
+            version: `detect`,
+        },
+    },
     parser: `@typescript-eslint/parser`,
     parserOptions: {
         ecmaFeatures: {
