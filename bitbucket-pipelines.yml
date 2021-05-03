@@ -4,17 +4,15 @@ pipelines:
     '**':
       - parallel:
         - step:
-            name: Test & Build
+            name: Test & Lint & Build
             caches:
               - node
+              - npm
             script:
-              - npm ci
+              - npm ci --prefer-offline --no-audit --cache .npm
+              - npx eslint .
               - npm test
               - npm run build
-        - step:
-            name: Code Linting
-            caches:
-              - node
-            script:
-              - npm ci
-              - npx eslint .
+definitions:
+  caches:
+    npm: .npm
