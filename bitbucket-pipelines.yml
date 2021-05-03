@@ -16,5 +16,5 @@ pipelines:
             caches:
               - node
             script:
-              - npm install eslint
+              - npm ci
               - npx eslint .
