@@ -4,7 +4,7 @@ const config: Config.InitialOptions = {
     verbose: false,
     preset: `ts-jest`,
     testEnvironment: `jsdom`,
-    testPathIgnorePatterns: [ `/node_modules/`, `<rootDir>/example/` ],
+    testPathIgnorePatterns: [ `/node_modules/` ],
     setupFilesAfterEnv: [ `<rootDir>/setupTests.ts` ],
 };
 
