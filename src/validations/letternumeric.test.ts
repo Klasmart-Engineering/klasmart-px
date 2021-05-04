@@ -14,7 +14,6 @@ describe(`letternumeric validation`, () => {
         expect(letternumeric(errorMessage)(`Nooice!!11`)).toBe(errorMessage);
         expect(letternumeric(errorMessage)(`^_^`)).toBe(errorMessage);
         expect(letternumeric(errorMessage)(`h@t`)).toBe(errorMessage);
-        expect(letternumeric(errorMessage)(`Max length 35 of characters and this is even longer.`)).toBe(errorMessage);
     });
 
     test(`letternumeric`, () => {
@@ -23,6 +22,7 @@ describe(`letternumeric validation`, () => {
         expect(letternumeric()(`안녕하세요`)).toBe(true);
         expect(letternumeric()(`你好`)).toBe(true);
         expect(letternumeric()(`hello there`)).toBe(true);
+        expect(letternumeric()(`Max length '35' of characters and this is even longer.`)).toBe(true);
     });
 
     test(`letternumeric with custom error message`, () => {
