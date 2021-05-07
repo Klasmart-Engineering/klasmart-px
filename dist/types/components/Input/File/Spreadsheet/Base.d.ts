@@ -1,13 +1,13 @@
 /// <reference types="react" />
-export interface SelectedFile {
-    key: string;
-    file: File;
-    error?: string;
+export declare type AcceptSpreadsheetTypes = ``;
+export interface SpreadsheetValidtionError {
+    row?: number;
+    column?: string;
+    message: string;
 }
 export interface Props {
     accept?: string | string[];
     maxSize?: number;
-    maxFiles?: number;
     locales?: string | string[];
     dropzoneLabel?: string;
     noItemsLabel?: string;
@@ -16,7 +16,9 @@ export interface Props {
     uploadError?: string;
     uploadSuccessMessage?: string;
     typeRejectedError?: string;
+    spreadsheetInvalidData?: string;
     exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
-    onFileUpload: (file: File) => void;
+    onFileUpload: (file: File) => Promise<void>;
+    onFileUploadError?: (error: any) => SpreadsheetValidtionError[];
 }
-export default function FileInput(props: Props): JSX.Element;
+export default function (props: Props): JSX.Element;

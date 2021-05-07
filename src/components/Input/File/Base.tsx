@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => createStyles({
         padding: theme.spacing(2),
         backgroundColor: theme.palette.grey[100],
     },
+    fileRowContainer: {
+        width: `100%`,
+    },
     noFilesText: {
         margin: theme.spacing(2, 0),
     },
@@ -44,8 +47,9 @@ export interface SelectedFile {
 }
 
 export interface Props {
-    accept?: string;
+    accept?: string | string[];
     maxSize?: number;
+    maxFiles?: number;
     locales?: string | string[];
     dropzoneLabel?: string;
     noItemsLabel?: string;
@@ -62,6 +66,7 @@ export default function FileInput (props: Props) {
     const {
         accept,
         maxSize,
+        maxFiles,
         locales,
         dropzoneLabel,
         noItemsLabel = `No files selected`,
@@ -103,6 +108,7 @@ export default function FileInput (props: Props) {
                 <Dropzone
                     accept={accept}
                     maxSize={maxSize}
+                    maxFiles={maxFiles}
                     label={dropzoneLabel}
                     typeRejectedError={typeRejectedError}
                     exceedsMaxSizeError={exceedsMaxSizeError}
@@ -116,19 +122,23 @@ export default function FileInput (props: Props) {
             >
                 {selectedFiles.length > 0
                     ? selectedFiles.map((selectedFile, i) => (
-                        <SelectedFileRow
+                        <Paper
                             key={selectedFile.key}
-                            className={classes.uploadableItem}
-                            file={selectedFile.file}
-                            error={selectedFile.error}
-                            locales={locales}
-                            removeButtonTooltip={removeButtonTooltip}
-                            uploadButtonTooltip={uploadButtonTooltip}
-                            uploadErrorMessage={uploadError}
-                            uploadSuccessMessage={uploadSuccessMessage}
-                            onClickRemove={() => handleFileRemoved(i)}
-                            onClickUpload={() => onFileUpload(selectedFile.file)}
-                        />
+                            className={classes.fileRowContainer}
+                        >
+                            <SelectedFileRow
+                                className={classes.uploadableItem}
+                                file={selectedFile.file}
+                                error={selectedFile.error}
+                                locales={locales}
+                                removeButtonTooltip={removeButtonTooltip}
+                                uploadButtonTooltip={uploadButtonTooltip}
+                                uploadErrorMessage={uploadError}
+                                uploadSuccessMessage={uploadSuccessMessage}
+                                onClickRemove={() => handleFileRemoved(i)}
+                                onClickUpload={() => onFileUpload(selectedFile.file)}
+                            />
+                        </Paper>
                     ))
                     : <Typography
                         color="textSecondary"

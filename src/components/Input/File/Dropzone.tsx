@@ -51,19 +51,21 @@ const useStyles = makeStyles((theme) => createStyles({
 }));
 
 export interface Props {
-    accept?: string;
+    accept?: string | string[];
     maxSize?: number;
+    maxFiles?: number;
     label?: string;
     typeRejectedError?: string;
     exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
-    onFileAdded: (file: File) => void;
-    onFileRejected: (file: File, error: string) => void;
+    onFileAdded?: (file: File) => void;
+    onFileRejected?: (file: File, error: string) => void;
 }
 
 export default function Dropzone (props: Props) {
     const {
         accept,
         maxSize = Infinity,
+        maxFiles = Infinity,
         label = `Drag and drop files here, or click to select files`,
         typeRejectedError = `File type is not supported`,
         exceedsMaxSizeError = (fileSize: number, maxSize: number) => `File size (${(fileSize / 1000).toFixed(1)} Kb) exceeds max size (${(maxSize / 1000).toFixed(1)} Kb)`,
@@ -76,7 +78,7 @@ export default function Dropzone (props: Props) {
         acceptedFiles.forEach((file) => {
             const reader = new FileReader();
             reader.onload = () => {
-                onFileAdded(file);
+                onFileAdded?.(file);
             };
             reader.readAsArrayBuffer(file);
         });
@@ -86,13 +88,13 @@ export default function Dropzone (props: Props) {
             const fileSize = rejection.file.size;
             switch (errorCode) {
             case `file-invalid-type`:
-                onFileRejected(rejection.file, typeRejectedError);
+                onFileRejected?.(rejection.file, typeRejectedError);
                 break;
             case `file-too-large`:
-                onFileRejected(rejection.file, exceedsMaxSizeError(fileSize, maxSize));
+                onFileRejected?.(rejection.file, exceedsMaxSizeError(fileSize, maxSize));
                 break;
             default:
-                onFileRejected(rejection.file, errorMessage);
+                onFileRejected?.(rejection.file, errorMessage);
             }
         });
     }, []);
@@ -105,6 +107,7 @@ export default function Dropzone (props: Props) {
     } = useDropzone({
         accept,
         maxSize,
+        maxFiles,
         onDrop,
     });
 

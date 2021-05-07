@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => createStyles({
         position: `relative`,
     },
     fileIcon: {
-        margin: theme.spacing(0, 1.5),
+        marginRight: theme.spacing(1.5),
         fontSize: 40,
     },
     fileExtensionLabel: {

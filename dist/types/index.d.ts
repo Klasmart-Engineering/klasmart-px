@@ -13,6 +13,7 @@ export { default as PromptDialogProvider } from "./components/Dialog/Prompt/Prov
 export { default as Drawer } from "./components/Drawer";
 export { default as FullScreenDialog } from "./components/FullScreenDialog";
 export { default as FileInput } from "./components/Input/File/Base";
+export { default as SpreadsheetFileInput } from "./components/Input/File/Spreadsheet/Base";
 export { default as Select } from "./components/Input/Select";
 export { default as TextField } from "./components/Input/TextField";
 export { default as LanguageSelect } from "./components/LanguageSelect";

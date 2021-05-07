@@ -80,7 +80,7 @@ export default function SelectedFileRow (props: Props) {
         }
         setUploadLoading(false);
         if (error) {
-            setUploadError(error.message);
+            setUploadError(error?.message);
             throw error;
         }
         setUploadSuccess(true);
@@ -89,67 +89,66 @@ export default function SelectedFileRow (props: Props) {
     const fileExtension = file.name.split(`.`).slice(-1)[0];
 
     return (
-        <Paper className={clsx(classes.root, className)}>
+        <Box
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            className={clsx(classes.root, className)}
+        >
+            <FileIcon fileType={fileExtension} />
             <Box
                 display="flex"
-                flexDirection="row"
-                alignItems="center"
+                flexDirection="column"
             >
-                <FileIcon fileType={fileExtension} />
-                <Box
-                    display="flex"
-                    flexDirection="column"
-                >
-                    <Typography>{file.name}</Typography>
-                    {(error || uploadError)
+                <Typography>{file.name}</Typography>
+                {(error || uploadError)
                         && <Typography
                             color="error"
                             variant="caption"
                         >
                             {error || uploadErrorMessage || uploadError }
                         </Typography>
-                    }
-                    {uploadSuccess
+                }
+                {uploadSuccess
                         && <Typography
                             className={classes.successText}
                             variant="caption"
                         >
                             {uploadSuccessMessage}
                         </Typography>
-                    }
-                    {!error && !uploadError && !uploadSuccess &&
+                }
+                {!error && !uploadError && !uploadSuccess &&
                         <Typography
                             color="textSecondary"
                             variant="caption"
                         >
                             {fileSize} Kb • {lastModified}
                         </Typography>
-                    }
-                </Box>
-                <Box flex={1} />
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    alignItems="center"
-                >
-                    {onClickRemove && <IconButton
-                        icon={DeleteIcon}
-                        disabled={uploadLoading}
-                        tooltip={removeButtonTooltip}
-                        onClick={onClickRemove} />
-                    }
-                    {uploadSuccess
-                        ? <CheckIcon className={classes.successIcon} />
-                        : <IconButton
-                            icon={CloudUploadIcon}
-                            color="primary"
-                            disabled={!!error || uploadLoading || uploadSuccess}
-                            tooltip={uploadButtonTooltip}
-                            onClick={onClickUpload_}
-                        />
-                    }
-                </Box>
+                }
             </Box>
-        </Paper>
+            <Box flex={1} />
+            <Box
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+            >
+                {onClickRemove && <IconButton
+                    icon={DeleteIcon}
+                    disabled={uploadLoading}
+                    tooltip={removeButtonTooltip}
+                    onClick={onClickRemove} />
+                }
+                {uploadSuccess
+                    ? <CheckIcon className={classes.successIcon} />
+                    : <IconButton
+                        icon={CloudUploadIcon}
+                        color="primary"
+                        disabled={!!error || uploadLoading}
+                        tooltip={uploadButtonTooltip}
+                        onClick={onClickUpload_}
+                    />
+                }
+            </Box>
+        </Box>
     );
 }

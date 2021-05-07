@@ -1,12 +1,12 @@
-import File,
+import FileInput,
 { Props } from '../components/Input/File/Base';
 import { sleep } from '../utils';
 import { Story } from '@storybook/react';
 import React from 'react';
 
 export default {
-    title: `File`,
-    component: File,
+    title: `FileInput`,
+    component: FileInput,
 };
 
 const handleFileUpload = async (file: File) => {
@@ -17,7 +17,7 @@ const handleFileUpload = async (file: File) => {
 };
 
 //👇 We create a “template” of how args map to rendering
-const Template: Story<Props> = (args) => <File
+const Template: Story<Props> = (args) => <FileInput
     {...args}
     onFileUpload={handleFileUpload}
 />;
