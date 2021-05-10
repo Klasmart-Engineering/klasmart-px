@@ -100,7 +100,7 @@ export default function ValidationDetails (props: Props) {
     const classes = useStyles();
     const [ expanded, setExpanded ] = useState(false);
 
-    const hasErrors = errors.length;
+    const hasErrors = !!errors.length;
 
     const handleChange = (newExpanded: boolean) => {
         setExpanded(hasErrors ? newExpanded : false);

@@ -23,7 +23,7 @@ const handleFileUpload = async (file: File) => {
                 code: `ERR_CSV_MISSING_REQUIRED`,
                 details: {
                     row: 1,
-                    column: `organization_name`,
+                    column: `organization_name_123`,
                     message: `organization name is required.`,
                 },
             },

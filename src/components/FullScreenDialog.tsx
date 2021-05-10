@@ -51,7 +51,7 @@ interface Props extends DialogProps {
     action?: ToolbarAction;
     header?: JSX.Element;
     footer?: JSX.Element;
-    onClose: () => void;
+    onClose: ((event: unknown, reason?: "backdropClick" | "escapeKeyDown") => void) | undefined;
 }
 
 export default function FullScreenDialog (props: Props) {
@@ -80,7 +80,8 @@ export default function FullScreenDialog (props: Props) {
                             edge="start"
                             color="inherit"
                             aria-label="close"
-                            onClick={() => onClose()}>
+                            onClick={onClose}
+                        >
                             <CloseIcon />
                         </IconButton>
                         <Typography
