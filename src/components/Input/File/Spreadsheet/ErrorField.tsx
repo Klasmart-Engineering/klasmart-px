@@ -5,24 +5,31 @@ import {
     makeStyles,
     Tooltip,
     Typography,
+    withStyles,
 } from "@material-ui/core";
 import { Error as ErrorIcon } from "@material-ui/icons";
 import React,
 { ReactNode } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
-    tooltip: {
+    errorIcon: {
         marginLeft: theme.spacing(1),
     },
 }));
 
+const WrappedTextTooltip = withStyles({
+    tooltip: {
+        whiteSpace: `pre-wrap`,
+    },
+})(Tooltip);
+
 interface Props {
     fieldText: ReactNode;
-    error: SpreadsheetValidtionError;
+    errors: SpreadsheetValidtionError[];
 }
 
 export default function ErrorField (props: Props) {
-    const { fieldText, error } = props;
+    const { fieldText, errors } = props;
     const classes = useStyles();
     return (
         <Box
@@ -32,12 +39,12 @@ export default function ErrorField (props: Props) {
             alignItems="center"
         >
             <Typography>{fieldText}</Typography>
-            <Tooltip title={error?.message}>
+            <WrappedTextTooltip title={errors.map((error) => error.message).join(`\n`)}>
                 <ErrorIcon
                     color="error"
-                    className={classes.tooltip}
+                    className={classes.errorIcon}
                 />
-            </Tooltip>
+            </WrappedTextTooltip>
         </Box>
     );
 }

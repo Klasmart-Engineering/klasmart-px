@@ -28,6 +28,14 @@ const handleFileUpload = async (file: File) => {
                 },
             },
             {
+                code: `ERR_CSV_MISSING_REQUIRED_FIELD`,
+                details: {
+                    row: 1,
+                    column: `organization_name_123`,
+                    message: `organization name is a required field.`,
+                },
+            },
+            {
                 code: `ERR_CSV_DUPLICATE_ENTITY`,
                 details: {
                     row: 4,

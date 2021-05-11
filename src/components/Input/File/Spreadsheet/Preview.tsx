@@ -54,20 +54,20 @@ const useStyles = makeStyles((theme) => createStyles({
 
 }));
 
-const hasRowError = (errors: SpreadsheetValidtionError[], row: number, columns: string[]) => {
-    return errors.find((error) => error.row === row && !columns?.includes(error.column ?? ``));
+const findRowErrors = (errors: SpreadsheetValidtionError[], row: number, columns: string[]) => {
+    return errors.filter((error) => error.row === row && !columns?.includes(error.column ?? ``));
 };
 
-const rowContainsError = (errors: SpreadsheetValidtionError[], row: number) => {
-    return errors.find((error) => error.row === row);
+const hasRowError = (errors: SpreadsheetValidtionError[], row: number) => {
+    return !!errors.find((error) => error.row === row);
 };
 
-const hasColumnError = (errors: SpreadsheetValidtionError[], column: string) => {
-    return errors.find((error) => error.column === column);
+const findColumnErrors = (errors: SpreadsheetValidtionError[], column: string) => {
+    return errors.filter((error) => error.column === column);
 };
 
-const hasFieldError = (errors: SpreadsheetValidtionError[], row: number, column: string) => {
-    return errors.find((error) => error.row === row && error.column === column);
+const findFieldErrors = (errors: SpreadsheetValidtionError[], row: number, column: string) => {
+    return errors.filter((error) => error.row === row && error.column === column);
 };
 
 interface Props {
@@ -99,11 +99,11 @@ export default function PreviewSpreadsheet (props: Props) {
     const columns = data?.slice(0, 1)[0]?.map((c) => c.trim()) ?? [];
     const rows = data?.slice(1) ?? [];
 
-    const buildField = (fieldText: ReactNode, error: SpreadsheetValidtionError | undefined) => {
-        if (error) return (
+    const buildField = (fieldText: ReactNode, errors: SpreadsheetValidtionError[]) => {
+        if (errors.length > 0) return (
             <ErrorField
                 fieldText={fieldText}
-                error={error}
+                errors={errors}
             />
         );
         return <Typography>{fieldText}</Typography>;
@@ -115,38 +115,41 @@ export default function PreviewSpreadsheet (props: Props) {
                 <thead>
                     <tr>
                         <th className={clsx(classes.cell, classes.header)} />
-                        {columns.map((columnName, i) => (
-                            <th
-                                key={`column-${i}`}
-                                className={clsx(classes.cell, classes.header, {
-                                    [classes.error]: hasColumnError(errors, columns[i]),
-                                })}
-                            >
-                                <Typography>{columnName}</Typography>
-                            </th>
-                        ))}
+                        {columns.map((columnName, i) => {
+                            const columnErrors = findColumnErrors(errors, columnName);
+                            return (
+                                <th
+                                    key={`column-${i}`}
+                                    className={clsx(classes.cell, classes.header, {
+                                        [classes.error]: columnErrors.length > 0,
+                                    })}
+                                >
+                                    <Typography>{columnName}</Typography>
+                                </th>
+                            );
+                        })}
                     </tr>
                 </thead>
                 <tbody>
                     {rows.map((row, i) => {
-                        const rowError = hasRowError(errors, i + 1, columns);
+                        const rowErrors = findRowErrors(errors, i + 1, columns);
                         return <tr key={`row-${i}`}>
                             <td
                                 className={clsx(classes.cell, classes.header, {
-                                    [classes.error]: rowContainsError(errors, i + 1),
+                                    [classes.error]: hasRowError(errors, i + 1),
                                 })}
                             >
-                                {buildField(i + 1, rowError)}
+                                {buildField(i + 1, rowErrors)}
                             </td>
                             {row.map((field, j) => {
-                                const fieldError = hasFieldError(errors, i + 1, columns[j]);
+                                const fieldErrors = findFieldErrors(errors, i + 1, columns[j]);
                                 return <td
                                     key={`field-${i}-${j}`}
                                     className={clsx(classes.cell, {
-                                        [classes.error]: (rowError && !fieldError) || fieldError,
+                                        [classes.error]: (rowErrors.length > 0 && fieldErrors.length === 0) || fieldErrors.length > 0,
                                     })}
                                 >
-                                    {buildField(field, fieldError)}
+                                    {buildField(field, fieldErrors)}
                                 </td>;
                             })}
                         </tr>;
