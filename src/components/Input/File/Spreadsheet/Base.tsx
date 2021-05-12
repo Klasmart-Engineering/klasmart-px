@@ -55,6 +55,8 @@ export interface Props {
     typeRejectedError?: string;
     spreadsheetInvalidData?: string;
     exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
+    allValidationsPassedMessage?: string;
+    numValidationsFailedMessage?: (num: number) => string;
     onFileUpload: (file: File) => Promise<void>;
     onFileUploadError?: (error: any) => SpreadsheetValidtionError[];
 }
@@ -70,6 +72,8 @@ export default function (props: Props) {
         uploadError,
         uploadSuccessMessage,
         spreadsheetInvalidData = `Spreadsheet has invalid data`,
+        allValidationsPassedMessage,
+        numValidationsFailedMessage,
         typeRejectedError,
         exceedsMaxSizeError,
         onFileUpload,
@@ -154,7 +158,11 @@ export default function (props: Props) {
                     onClickUpload={handleClickUpload}
                 />
                 <Divider />
-                <ValidationDetails errors={errors} />
+                <ValidationDetails
+                    errors={errors}
+                    allValidationsPassedMessage={allValidationsPassedMessage}
+                    numValidationsFailedMessage={numValidationsFailedMessage}
+                />
             </Paper>
             <PreviewSpreadsheet
                 className={classes.previewFile}

@@ -18,6 +18,8 @@ export interface Props {
     typeRejectedError?: string;
     spreadsheetInvalidData?: string;
     exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
+    allValidationsPassedMessage?: string;
+    numValidationsFailedMessage?: (num: number) => string;
     onFileUpload: (file: File) => Promise<void>;
     onFileUploadError?: (error: any) => SpreadsheetValidtionError[];
 }
