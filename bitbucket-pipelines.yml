@@ -22,6 +22,7 @@ pipelines:
   branches:
     master:
       - step:
+          name: Increment Version & Build
           script:
             - npm ci
             - VERSION=$(node -p -e "require('./package.json').version")
@@ -34,7 +35,6 @@ pipelines:
             - npm run build
             - git add .
             - git commit -m "Upgrade to $VERSION [skip ci]"
-            - git tag $VERSION
             - git push && git push --tags
 definitions:
   caches:
