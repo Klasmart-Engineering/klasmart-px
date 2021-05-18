@@ -19,7 +19,7 @@ const parseValue = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElem
 
 export type InputType = `text` | `number` | `password` | `date` | `datetime-local` | `email` | `time` | `month` | `tel` | `url` | `week`
 
-interface Props extends Input {
+export interface Props extends Input {
     type?: InputType;
     className?: string;
 }
