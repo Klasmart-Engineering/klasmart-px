@@ -1,4 +1,6 @@
 image: node:15.14.0
+clone:
+  lfs: true
 pipelines:
   pull-requests:
     '**':
