@@ -1,3 +1,5 @@
+export type PageChange = `first` | `previous` | `next` | `last`
+
 export interface PaginationLocalization {
   rowsPerPage?: string;
   fromToTotal?: (from: number, to: number, total: number) => string;

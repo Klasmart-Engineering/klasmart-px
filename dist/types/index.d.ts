@@ -39,3 +39,4 @@ export { default as utils } from "./utils";
 export { useWidth } from "./utils/layout";
 export { default as validations } from "./validations";
 export { useSnackbar } from "notistack";
+export { useDebounce, useDebouncedCallback, useThrottledCallback, } from "use-debounce";

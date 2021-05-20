@@ -102,7 +102,7 @@ function rowSearch <T> (searchableColumns: TableColumn<T>[], row: T, searchValue
     return searchableColumns.some((column) => column.search?.(row[column.id], searchValue) ?? defaultSearch(row[column.id], searchValue));
 }
 
-const isValidSubgroup = (subgroup: string, subgroups?: SubgroupTab[]) => (subgroup !== undefined && subgroups?.find((s) => s.value === subgroup) ? subgroup : undefined) !== undefined;
+const isValidSubgroup = (subgroup: string, subgroups: SubgroupTab[]) => subgroups.find((s) => String(s.value) === subgroup);
 
 export type SelectMode = `single` | `multiple`;
 
@@ -123,7 +123,7 @@ export interface BaseTableData<T> {
     rows: Partial<T>[];
     selectedRows: T[Extract<keyof T, string>][];
     search: string;
-    orderBy?: keyof T;
+    orderBy: keyof T;
     order: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
@@ -153,6 +153,7 @@ export interface BaseProps<T> {
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
     total?: number;
+    noGroupTotal?: number;
     hideSelectStatus?: boolean;
     selectMode?: SelectMode;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
@@ -160,8 +161,8 @@ export interface BaseProps<T> {
 
 export interface Props<T> extends BaseProps<T> {
     PaginationComponent?: ReactNode;
-    localStartSlice?: number;
-    localEndSlice?: number;
+    localPageStartSlice?: number;
+    localPageEndSlice?: number;
     onChange: (baseTableData: BaseTableData<T>) => void;
 }
 
@@ -175,9 +176,9 @@ export default function BaseTable<T> (props: Props<T>) {
         subgroupBy,
         rows = [],
         rowsPerPage = ROWS_PER_PAGE,
-        selectedRows = [],
-        localStartSlice,
-        localEndSlice,
+        selectedRows,
+        localPageStartSlice,
+        localPageEndSlice,
         search,
         showSelectables,
         selectMode = `multiple`,
@@ -190,6 +191,7 @@ export default function BaseTable<T> (props: Props<T>) {
         locale,
         collatorOptions,
         total,
+        noGroupTotal,
         hideSelectStatus,
         PaginationComponent,
         onChange,
@@ -210,7 +212,7 @@ export default function BaseTable<T> (props: Props<T>) {
     const [ orderBy_, setOrderBy ] = useState(columns.find((column) => column.id === orderBy)?.id ?? idField);
     const [ groupBy_, setGroupBy ] = useState(columns.find((column) => column.id === groupBy)?.id);
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
-    const [ selectedRowIds_, setSelectedRowIds ] = useState<T[Extract<keyof T, string>][]>(selectedRows);
+    const [ selectedRowIds_, setSelectedRowIds ] = useState<T[Extract<keyof T, string>][]>(selectedRows ?? []);
     const [ selectedColumnIds_, setSelectedColumnIds ] = useState(union(selectedColumnIds, persistentColumnIds));
     const [ search_, setSearch ] = useState(search ?? ``);
 
@@ -268,7 +270,7 @@ export default function BaseTable<T> (props: Props<T>) {
         setSelectedRowIds(newSelected);
     };
 
-    const handleColumnSelectClick = (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => {
+    const handleColumnSelectClick = (columnId: Extract<keyof T, string>) => {
         const selectedIndex = selectedColumnIds_.indexOf(columnId);
         let newSelected: Extract<keyof T, string>[] = [];
         if (selectedIndex === -1) {
@@ -295,11 +297,11 @@ export default function BaseTable<T> (props: Props<T>) {
 
     const filterRowsBySearch = (row: T) => search_ ? rowSearch(searchableColumns, row, search_) : true;
     const filterRowsBySelected = (row: T) => selectedRowIds_.includes(row[idField]);
-    const filterRowsBySubgroup = (group?: keyof T, subgroup?: string | number) => (row: T) => {
-        if (!group || subgroup === undefined) return false;
+    const filterRowsBySubgroup = (group?: keyof T, subgroup?: string | number | boolean) => (row: T) => {
+        if (!group || subgroup === undefined || !groupableColumns.find((column) => column.id === group)) return false;
         const value = row[group];
         const groupedValues = Array.isArray(value) ? value as unknown as any[] : [ value ];
-        return groupedValues.some((value) => value === subgroup);
+        return groupedValues.some((value) => String(value) === subgroup);
     };
 
     const customSort = columns[columns.findIndex((c) => c.id === orderBy_)].sort;
@@ -308,22 +310,23 @@ export default function BaseTable<T> (props: Props<T>) {
 
     const subgroups_ = useMemo<SubgroupTab[]>(() => {
         const column = columns[columns.findIndex((c) => c.id === groupBy_)];
-        return column?.groups?.map(({ text, value }) => ({
-            text,
-            value,
-            count: filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, value)).length,
+        return column?.groups?.map((group) => ({
+            text: group.text,
+            value: group.value,
+            count: group.count ?? filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, String(group.value))).length,
         })) ?? [];
     }, [
         rows,
         columns,
         groupBy_,
-        search_,
+        search,
     ]);
 
-    const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && isValidSubgroup(subgroupBy_, subgroups_))
+    const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && (!subgroups_.length || isValidSubgroup(subgroupBy_, subgroups_)))
         ? filterRowsBySubgroup(groupBy_, subgroupBy_)
         : () => true);
-    const filteredSortedGroupedSlicedRows = (localStartSlice || localEndSlice) ? filteredSortedGroupedRows.slice(localStartSlice, localEndSlice) : filteredSortedGroupedRows;
+
+    const filteredSortedGroupedSlicedRows = (localPageStartSlice || localPageEndSlice) ? filteredSortedGroupedRows.slice(localPageStartSlice, localPageEndSlice) : filteredSortedGroupedRows;
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
 
     const hasSearchColumns = !!searchableColumns?.length;
@@ -338,17 +341,32 @@ export default function BaseTable<T> (props: Props<T>) {
     }, [ search ]);
 
     useEffect(() => {
+        setSubgroupBy(subgroupBy);
+    }, [ subgroupBy ]);
+
+    useEffect(() => {
+        setGroupBy(columns.find((column) => column.id === groupBy)?.id);
+    }, [ groupBy ]);
+
+    useEffect(() => {
         onSelected?.(selectedRowIds_);
     }, [ selectedRowIds_ ]);
 
     useEffect(() => {
+        setOrder([ `asc`, `desc` ].includes(order ?? ``) ? order as Order : `asc`);
+    }, [ order ]);
+
+    useEffect(() => {
+        setOrderBy(columns.find((column) => column.id === orderBy)?.id ?? idField);
+    }, [ orderBy ]);
+
+    useEffect(() => {
         if (isEqual(selectedRows, selectedRowIds_)) return;
-        setSelectedRowIds(selectedRows);
+        setSelectedRowIds(selectedRows ?? []);
     }, [ selectedRows ]);
 
     useEffect(() => {
-        if (loading) return;
-        const tableData = {
+        onChange({
             columns: selectedColumnIds_,
             rows: filteredSortedGroupedRows.map((row) => pick(row, selectedColumnIds_)),
             selectedRows: selectedRowIds_,
@@ -359,20 +377,17 @@ export default function BaseTable<T> (props: Props<T>) {
             orderBy: orderBy_,
             groupBy: groupBy_,
             subgroupBy: subgroupBy_,
-        };
-        onChange(tableData);
+        });
     }, [
         selectedColumnIds_,
         rows,
         selectedRowIds_,
         rowsPerPage,
-        total,
         search_,
         order_,
         orderBy_,
         groupBy_,
         subgroupBy_,
-        loading,
     ]);
 
     return (
@@ -398,7 +413,7 @@ export default function BaseTable<T> (props: Props<T>) {
             </>}
             {hasGroups && <>
                 <BaseTableGroupTabs
-                    allCount={filteredSortedRows.length}
+                    allCount={noGroupTotal ?? filteredSortedRows.length}
                     groupBy={groupBy_}
                     groups={groupableColumns}
                     subgroupBy={subgroupBy_}

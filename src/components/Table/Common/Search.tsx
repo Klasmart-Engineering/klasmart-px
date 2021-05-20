@@ -1,19 +1,21 @@
+import IconButton from "../../Button/IconButton";
 import {
     Box,
     createStyles,
-    IconButton,
     makeStyles,
     TextField,
     Theme,
-    Tooltip,
 } from "@material-ui/core";
 import {
     Clear as ClearIcon,
     Search as SearchIcon,
 } from "@material-ui/icons";
-import { debounce } from "lodash";
 import React,
-{ useState } from "react";
+{
+    useEffect,
+    useState,
+} from "react";
+import { useDebounce } from "use-debounce";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
 }));
 
-const debouncedOnChange = debounce((value, onChange) => onChange(value), 100);
+const DEBOUNCE_DELAY = 300;
 
 export interface SearchLocalization {
     placeholder?: string;
@@ -68,7 +70,7 @@ export interface SearchLocalization {
 }
 
 interface Props {
-    value: string;
+    value?: string;
     localization?: SearchLocalization;
     onChange: (value: string) => void;
 }
@@ -80,11 +82,15 @@ export default function BaseTableSearch (props: Props) {
         onChange,
     } = props;
     const classes = useStyles();
-    const [ value_, setValue ] = useState(value);
+    const [ value_, setValue ] = useState(value ?? ``);
+    const [ debouncedValue ] = useDebounce(value_, DEBOUNCE_DELAY);
+
+    useEffect(() => {
+        onChange(debouncedValue);
+    }, [ debouncedValue ]);
 
     const handleOnChange = (value: string) => {
         setValue(value);
-        debouncedOnChange(value, onChange);
     };
 
     return (
@@ -100,16 +106,14 @@ export default function BaseTableSearch (props: Props) {
                 <div className={classes.iconContainer}>
                     <SearchIcon color="action" />
                 </div>
-                {value_ &&
-                    <Tooltip title={localization?.clear ?? `Clear search`}>
-                        <IconButton
-                            className={classes.actionIcon}
-                            onClick={() => handleOnChange(``)}
-                        >
-                            <ClearIcon color="action" />
-                        </IconButton>
-                    </Tooltip>
-                }
+                {value_ && (
+                    <IconButton
+                        className={classes.actionIcon}
+                        icon={ClearIcon}
+                        tooltip={localization?.clear ?? `Clear search`}
+                        onClick={() => handleOnChange(``)}
+                    />
+                )}
             </Box>
         </div>
     );

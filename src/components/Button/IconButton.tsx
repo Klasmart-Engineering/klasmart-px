@@ -16,11 +16,16 @@ import clsx from "clsx";
 import React,
 { useState } from "react";
 
-const useStyles = makeStyles((theme) => createStyles({}));
+const useStyles = makeStyles((theme) => createStyles({
+    tooltip: {
+        display: `flex`,
+    },
+}));
 
 interface Props {
     className?: string;
     icon: SvgIconComponent;
+    iconSize?: `inherit` | `default` | `small` | `large`;
     tooltip?: string;
     disabled?: boolean;
     color?: { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette];
@@ -30,6 +35,7 @@ interface Props {
 export default function IconButton (props: Props) {
     const {
         icon: Icon,
+        iconSize,
         tooltip,
         disabled,
         color,
@@ -53,23 +59,27 @@ export default function IconButton (props: Props) {
         if (error) throw error;
     };
 
-    return <Tooltip title={tooltip ?? ``}>
-        <span>
-            <IconBtn
-                disabled={disabled}
-                className={clsx(className, {
-                    [loadingClasses.buttonLoading]: loading,
-                })}
-                style={{
-                    color: (color && !disabled) ? theme.palette[color].main : undefined,
-                }}
-                onClick={handleClick}
-            >
-                <Icon className={clsx({
-                    [loadingClasses.buttonLoadingContent]: loading,
-                })} />
-                {loading && <Loading />}
-            </IconBtn>
-        </span>
-    </Tooltip>;
+    return (
+        <Tooltip title={tooltip ?? ``}>
+            <span className={classes.tooltip}>
+                <IconBtn
+                    disabled={disabled}
+                    className={clsx(className, {
+                        [loadingClasses.buttonLoading]: loading,
+                    })}
+                    style={{
+                        color: (color && !disabled) ? theme.palette[color].main : undefined,
+                    }}
+                    onClick={handleClick}
+                >
+                    <Icon
+                        fontSize={iconSize}
+                        className={clsx({
+                            [loadingClasses.buttonLoadingContent]: loading,
+                        })} />
+                    {loading && <Loading />}
+                </IconBtn>
+            </span>
+        </Tooltip>
+    );
 }

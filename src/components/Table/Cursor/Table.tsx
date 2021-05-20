@@ -4,18 +4,18 @@ import BaseTable,
     BaseTableData,
 } from "../Common/BaseTable";
 import { Order } from "../Common/Head";
-import { ROWS_PER_PAGE } from "../Common/Pagination/shared";
-import CursorTablePagination,
-{ Page } from "./Pagination";
+import {
+    PageChange,
+    ROWS_PER_PAGE,
+} from "../Common/Pagination/shared";
+import CursorTablePagination from "./Pagination";
 import {
     createStyles,
     makeStyles,
 } from "@material-ui/core";
+import { isEqual } from "lodash";
 import React,
-{
-    useEffect,
-    useState,
-} from "react";
+{ useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
@@ -30,7 +30,7 @@ interface Props<T> extends BaseTableProps<T> {
     startCursor: string | undefined;
     endCursor: string | undefined;
     onChange?: (tableData: CursorTableData<T>) => void;
-    onPageChange?: (page: Page, order: Order, cursor?: string) => void;
+    onPageChange?: (page: PageChange, order: Order, cursor: string | undefined, rowsPerPage: number) => void;
 }
 
 export default function CursorTable<T> (props: Props<T>) {
@@ -55,15 +55,36 @@ export default function CursorTable<T> (props: Props<T>) {
     const classes = useStyles();
     const [ cursor_, setCursor ] = useState(cursor);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage);
-    const [ prevBaseTableData, setPrevBaseTableData ] = useState<BaseTableData<T>>();
     const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>();
 
-    const handlePageChange = (direction: Page) => {
+    const searchWatchingFields: Extract<keyof BaseTableData<T>, string>[] = [
+        `order`,
+        `orderBy`,
+        `rowsPerPage`,
+        `search`,
+        `subgroupBy`,
+    ];
+
+    const handleTableChange = (tableData: BaseTableData<T>) => {
+        if (isEqual(tableData, baseTableData)) return;
+        const resetPage = searchWatchingFields.some((field) => !isEqual(tableData[field], baseTableData?.[field]));
+        setBaseTableData(tableData);
+        const newCursor = resetPage ? undefined : cursor_;
+        setCursor(newCursor);
+        onChange?.({
+            ...tableData,
+            cursor: newCursor,
+            rowsPerPage: rowsPerPage_,
+        });
+    };
+
+    const handlePageChange = (pageChange: PageChange) => {
         const order = baseTableData?.order ?? `desc`;
+        const rowsPerPage = baseTableData?.rowsPerPage ?? ROWS_PER_PAGE;
         let cursor;
-        switch (direction) {
-        case `start`:
-        case `end`:
+        switch (pageChange) {
+        case `first`:
+        case `last`:
             break;
         case `previous`:
             cursor = order === `asc` ? endCursor : startCursor;
@@ -73,24 +94,18 @@ export default function CursorTable<T> (props: Props<T>) {
             break;
         }
         setCursor(cursor);
-        onPageChange?.(direction, order, cursor);
+        onPageChange?.(pageChange, order, cursor, rowsPerPage);
     };
 
-    useEffect(() => {
-        setPrevBaseTableData(baseTableData);
+    const handleRowsPerPageChange = (rowsPerPage: number) => {
         if (!baseTableData) return;
-        if (baseTableData?.search !== prevBaseTableData?.search
-            || baseTableData?.subgroupBy !== prevBaseTableData?.subgroupBy
-            || baseTableData?.rowsPerPage !== prevBaseTableData?.rowsPerPage
-            || baseTableData?.order !== prevBaseTableData?.order) {
-            handlePageChange(`start`);
-            return;
-        }
+        setRowsPerPage(rowsPerPage);
         onChange?.({
             ...baseTableData,
             cursor: cursor_,
+            rowsPerPage,
         });
-    }, [ baseTableData, cursor_ ]);
+    };
 
     return (
         <BaseTable
@@ -103,13 +118,13 @@ export default function CursorTable<T> (props: Props<T>) {
                     rowsPerPageOptions={rowsPerPageOptions}
                     localization={localization?.pagination}
                     onChangePage={handlePageChange}
-                    onChangeRowsPerPage={setRowsPerPage}
+                    onChangeRowsPerPage={handleRowsPerPageChange}
                 />
             }
             rowsPerPage={rowsPerPage_}
             total={total}
             localization={localization}
-            onChange={setBaseTableData}
+            onChange={handleTableChange}
             {...other}
         />
     );

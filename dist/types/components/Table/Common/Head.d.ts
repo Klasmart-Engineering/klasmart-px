@@ -43,7 +43,7 @@ interface Props<T> {
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;
     localization?: HeadLocalization;
-    onColumnChange: (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => void;
+    onColumnChange: (columnId: Extract<keyof T, string>) => void;
 }
 export default function BaseTableHead<T>(props: Props<T>): JSX.Element;
 export {};

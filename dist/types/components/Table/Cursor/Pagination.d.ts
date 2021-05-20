@@ -1,6 +1,5 @@
 /// <reference types="react" />
-import { PaginationLocalization } from "../Common/Pagination/shared";
-export declare type Page = `start` | `previous` | `next` | `end`;
+import { PageChange, PaginationLocalization } from "../Common/Pagination/shared";
 interface Props {
     rowsPerPageOptions: Array<number | {
         value: number;
@@ -11,7 +10,7 @@ interface Props {
     localization?: PaginationLocalization;
     hasNextPage?: boolean;
     hasPreviousPage?: boolean;
-    onChangePage: (page: Page) => void;
+    onChangePage: (pageChange: PageChange) => void;
     onChangeRowsPerPage?: (rowsPerPage: number) => void;
 }
 export default function CursorTablePagination(props: Props): JSX.Element;

@@ -15,10 +15,7 @@ import {
     isEqual,
 } from "lodash";
 import React,
-{
-    useEffect,
-    useState,
-} from "react";
+{ useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 
@@ -26,7 +23,7 @@ export interface PageTableData<T> extends BaseTableData<T> {
     page: number;
 }
 
-interface Props<T> extends BaseTableProps<T> {
+export interface Props<T> extends BaseTableProps<T> {
     page?: number;
     onChange?: (tableData: PageTableData<T>) => void;
 }
@@ -50,7 +47,7 @@ export default function PageTable<T> (props: Props<T>) {
     const classes = useStyles();
     const [ page_, setPage ] = useState(page);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage);
-    const [ baseTableData_, setBaseTableData ] = useState<BaseTableData<T>>({
+    const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>({
         columns: other.columns.filter(({ hidden }) => !hidden).map(({ id }) => id),
         order: [ `asc`, `desc` ].includes(other.order ?? ``) ? other.order as Order : `desc`,
         rows: other.rows,
@@ -63,40 +60,33 @@ export default function PageTable<T> (props: Props<T>) {
         subgroupBy: other.subgroupBy,
     });
 
-    const lastPage = Math.ceil(baseTableData_?.total / rowsPerPage) - 1;
-
-    useEffect(() => {
-        // set start page when loading finishes
-        if (loading) return;
-        const newPage = clamp(page, 0, lastPage);
-        if (newPage === page_) return;
-        setPage(page);
-    }, [ page ]);
+    const lastPage = Math.ceil((total ?? baseTableData.total) / rowsPerPage) - 1;
+    const localPageStartSlice = total === undefined ? clamp(page_, 0, lastPage) * rowsPerPage_ : undefined;
+    const localPageEndSlice = total === undefined ? clamp(page_, 0, lastPage) * rowsPerPage_ + rowsPerPage_ : undefined;
 
     const handlePageChange = (page: number) => {
-        if (!baseTableData_) return;
         const newPage = clamp(page, 0, lastPage);
         setPage(newPage);
         onChange?.({
-            ...baseTableData_,
+            ...baseTableData,
             page: newPage,
             rowsPerPage: rowsPerPage_,
         });
     };
 
     const handleRowsPerPageChange = (rowsPerPage: number) => {
-        if (!baseTableData_) return;
         const newPage = 0;
         setRowsPerPage(rowsPerPage);
         setPage(newPage);
         onChange?.({
-            ...baseTableData_,
+            ...baseTableData,
             page: newPage,
             rowsPerPage,
         });
     };
 
-    const handleTableChange = (baseTableData: BaseTableData<T>) => {
+    const handleTableChange = (tableData: BaseTableData<T>) => {
+        if (isEqual(tableData, baseTableData)) return;
         const searchWatchingFields: Extract<keyof BaseTableData<T>, string>[] = [
             `order`,
             `orderBy`,
@@ -104,11 +94,11 @@ export default function PageTable<T> (props: Props<T>) {
             `search`,
             `subgroupBy`,
         ];
-        const resetPage = searchWatchingFields.some((field) => !isEqual(baseTableData[field], baseTableData_?.[field]));
-        if (resetPage) setPage(0);
-        setBaseTableData(baseTableData);
+        const resetPage = searchWatchingFields.some((field) => !isEqual(tableData[field], baseTableData[field]));
+        if (resetPage && page_ !== 0) setPage(0);
+        setBaseTableData(tableData);
         onChange?.({
-            ...baseTableData,
+            ...tableData,
             page: resetPage ? 0 : page_,
             rowsPerPage: rowsPerPage_,
         });
@@ -119,7 +109,7 @@ export default function PageTable<T> (props: Props<T>) {
             PaginationComponent={
                 <PageTablePagination
                     rowsPerPageOptions={rowsPerPageOptions}
-                    count={baseTableData_?.total ?? 0}
+                    count={total ?? baseTableData?.total ?? 0}
                     rowsPerPage={rowsPerPage_}
                     page={page_}
                     localization={localization?.pagination}
@@ -130,8 +120,8 @@ export default function PageTable<T> (props: Props<T>) {
             loading={loading}
             localization={localization}
             rowsPerPage={rowsPerPage_}
-            localStartSlice={clamp(page_, 0, lastPage) * rowsPerPage_}
-            localEndSlice={clamp(page_, 0, lastPage) * rowsPerPage_ + rowsPerPage_}
+            localPageStartSlice={localPageStartSlice}
+            localPageEndSlice={localPageEndSlice}
             total={total}
             onChange={handleTableChange}
             {...other}

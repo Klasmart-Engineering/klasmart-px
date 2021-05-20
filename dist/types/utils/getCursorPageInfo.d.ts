@@ -1,10 +1,13 @@
 import { Order } from "../components/Table/Common/Head";
-import { Page } from "../components/Table/Cursor/Pagination";
-export interface CursorPageInfo {
-    first: number | undefined;
-    last: number | undefined;
-    before: string | undefined;
-    after: string | undefined;
+import { PageChange } from "../components/Table/Common/Pagination/shared";
+export declare enum Direction {
+    FORWARD = "FORWARD",
+    BACKWARD = "BACKWARD"
 }
-declare const _default: (direction: Page, order: Order, cursor: string | undefined, rowsPerPage?: number) => CursorPageInfo;
+export interface CursorPageInfo {
+    direction: `FORWARD` | `BACKWARD`;
+    count: number | undefined;
+    cursor: string | undefined;
+}
+declare const _default: (pageChange: PageChange, order: Order, cursor: string | undefined, rowsPerPage?: number) => CursorPageInfo;
 export default _default;

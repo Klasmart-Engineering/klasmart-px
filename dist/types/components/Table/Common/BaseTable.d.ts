@@ -25,7 +25,7 @@ export interface BaseTableData<T> {
     rows: Partial<T>[];
     selectedRows: T[Extract<keyof T, string>][];
     search: string;
-    orderBy?: keyof T;
+    orderBy: keyof T;
     order: Order;
     groupBy?: keyof T;
     subgroupBy?: string;
@@ -57,14 +57,15 @@ export interface BaseProps<T> {
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
     total?: number;
+    noGroupTotal?: number;
     hideSelectStatus?: boolean;
     selectMode?: SelectMode;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
 }
 export interface Props<T> extends BaseProps<T> {
     PaginationComponent?: ReactNode;
-    localStartSlice?: number;
-    localEndSlice?: number;
+    localPageStartSlice?: number;
+    localPageEndSlice?: number;
     onChange: (baseTableData: BaseTableData<T>) => void;
 }
 export default function BaseTable<T>(props: Props<T>): JSX.Element;

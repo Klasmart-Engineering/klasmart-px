@@ -59,7 +59,7 @@ interface Props<T> {
     columns: TableColumn<T>[];
     selected: (keyof T)[];
     localization?: ColumnSelectorLocalization;
-    onColumnChange: (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => void;
+    onColumnChange: (columnId: Extract<keyof T, string>) => void;
 }
 
 export default function BaseTableColumnSelector<T> (props: Props<T>) {
@@ -122,7 +122,7 @@ export default function BaseTableColumnSelector<T> (props: Props<T>) {
                         {i !== 0 && <Divider />}
                         <ListItem
                             className={classes.columnItemContainer}
-                            onClick={!column.persistent ? (e) => onColumnChange(e, column.id) : undefined}
+                            onClick={!column.persistent ? () => onColumnChange(column.id) : undefined}
                         >
                             <Checkbox
                                 role="checkbox"

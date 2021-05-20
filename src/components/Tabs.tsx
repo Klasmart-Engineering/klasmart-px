@@ -55,29 +55,14 @@ export default function Tabs (props: Props) {
         onChange,
     } = props;
     const classes = useStyles();
-    const [ value_, setValue ] = useState(value);
 
     const handleChange = (event: React.ChangeEvent<{}>, value: any) => {
-        if (value === 0) value = undefined;
-        onChange?.(value);
+        onChange?.(value !== 0 ? value : undefined);
     };
-
-    const updateIfValid = (value: string | undefined) => {
-        const isValid = tabs.find((tab) => tab.value === value);
-        setValue(isValid ? value : undefined);
-    };
-
-    useEffect(() => {
-        updateIfValid(value_ ?? value);
-    }, [ tabs ]);
-
-    useEffect(() => {
-        updateIfValid(value);
-    }, [ value ]);
 
     return (
         <MaterialTabs
-            value={value_ ?? 0}
+            value={tabs.find((tab) => tab.value === value)?.value ?? 0}
             TabIndicatorProps={{
                 className: classes.tabIndicator,
             }}

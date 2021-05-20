@@ -1,4 +1,7 @@
-import { PaginationLocalization } from "../Common/Pagination/shared";
+import {
+    PageChange,
+    PaginationLocalization,
+} from "../Common/Pagination/shared";
 import {
     createStyles,
     IconButton,
@@ -23,8 +26,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
 }));
 
-export type Page = `start` | `previous` | `next` | `end`
-
 interface Props {
     rowsPerPageOptions: Array<number | { value: number; label: string }>;
     count: number;
@@ -32,7 +33,7 @@ interface Props {
     localization?: PaginationLocalization;
     hasNextPage?: boolean;
     hasPreviousPage?: boolean;
-    onChangePage: (page: Page) => void;
+    onChangePage: (pageChange: PageChange) => void;
     onChangeRowsPerPage?: (rowsPerPage: number) => void;
 }
 
@@ -50,9 +51,11 @@ export default function CursorTablePagination (props: Props) {
     const classes = useStyles();
     const theme = useTheme();
 
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => onChangeRowsPerPage?.(parseInt(event.target.value, 10));
+
     const actions = () => {
         const handleFirstPageButtonClick = () => {
-            onChangePage(`start`);
+            onChangePage(`first`);
         };
 
         const handleBackButtonClick = () => {
@@ -64,8 +67,9 @@ export default function CursorTablePagination (props: Props) {
         };
 
         const handleLastPageButtonClick = () => {
-            onChangePage(`end`);
+            onChangePage(`last`);
         };
+
         return (
             <div className={classes.root}>
                 <Tooltip title={localization?.firstPage ?? `First page`}>
@@ -126,7 +130,7 @@ export default function CursorTablePagination (props: Props) {
             page={0}
             ActionsComponent={actions}
             onChangePage={() => {return;}}
-            onChangeRowsPerPage={(event) => onChangeRowsPerPage?.(parseInt(event.target.value, 10))}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
         />
     );
 }

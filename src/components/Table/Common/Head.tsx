@@ -1,3 +1,4 @@
+import IconButton from "../../Button/IconButton";
 import { SelectMode } from "./BaseTable";
 import BaseTableCheckboxDropdown,
 {
@@ -11,7 +12,6 @@ import {
     Box,
     createStyles,
     fade,
-    IconButton,
     makeStyles,
     TableCell,
     TableCellProps,
@@ -98,7 +98,7 @@ interface Props<T> {
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;
     localization?: HeadLocalization;
-    onColumnChange: (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => void;
+    onColumnChange: (columnId: Extract<keyof T, string>) => void;
 }
 
 export default function BaseTableHead<T> (props: Props<T>) {
@@ -122,6 +122,7 @@ export default function BaseTableHead<T> (props: Props<T>) {
         onColumnChange,
     } = props;
     const classes = useStyles();
+
     const createSortHandler = (property: Extract<keyof T, string>) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
@@ -146,16 +147,6 @@ export default function BaseTableHead<T> (props: Props<T>) {
                     .filter((column) => selected.indexOf(column.id) !== -1)
                     .filter((column) => !column.secret)
                     .map((column) => {
-                        const hideButton = <IconButton
-                            disabled={column.persistent}
-                            className={classes.removeButton}
-                            onClick={(e) => onColumnChange(e, column.id)}
-                        >
-                            {column.persistent
-                                ? <LockIcon fontSize="small" />
-                                : <CloseIcon fontSize="small" />
-                            }
-                        </IconButton>;
                         const paddingStyle = column.align === `right`
                             ? {
                                 paddingLeft: 0,
@@ -203,12 +194,14 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                     </Box>
                                 </TableSortLabel>
                                 {isAlignCenter && <Box flex="1" />}
-                                {column.persistent
-                                    ? hideButton
-                                    : <Tooltip title={localization?.hideColumnButton ?? `Hide column`}>
-                                        {hideButton}
-                                    </Tooltip>
-                                }
+                                <IconButton
+                                    disabled={column.persistent}
+                                    className={classes.removeButton}
+                                    iconSize="small"
+                                    tooltip={!column.persistent ? localization?.hideColumnButton ?? `Hide column` : undefined}
+                                    icon={column.persistent ? LockIcon : CloseIcon}
+                                    onClick={() => onColumnChange(column.id)}
+                                />
                             </Box>
                         </TableCell>;
                     })}

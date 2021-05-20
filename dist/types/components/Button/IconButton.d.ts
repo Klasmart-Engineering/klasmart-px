@@ -4,6 +4,7 @@ import React from "react";
 interface Props {
     className?: string;
     icon: SvgIconComponent;
+    iconSize?: `inherit` | `default` | `small` | `large`;
     tooltip?: string;
     disabled?: boolean;
     color?: {
