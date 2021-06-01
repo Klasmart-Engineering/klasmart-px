@@ -8,6 +8,7 @@ import {
     Divider,
     makeStyles,
     Paper,
+    Typography,
 } from "@material-ui/core";
 import Papa from "papaparse";
 import React,
@@ -32,6 +33,11 @@ const useStyles = makeStyles((theme) => createStyles({
     previewFile: {
         flex: 1,
     },
+    previewNotAvailble: {
+        flex: 1,
+        width: `100%`,
+        backgroundColor: theme.palette.grey[200],
+    },
 }));
 
 export type AcceptSpreadsheetTypes = ``
@@ -54,8 +60,9 @@ export interface Props {
     uploadSuccessMessage?: string;
     typeRejectedError?: string;
     spreadsheetInvalidData?: string;
-    exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
     allValidationsPassedMessage?: string;
+    previewNotAvailableMessage?: string;
+    exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
     numValidationsFailedMessage?: (num: number) => string;
     onFileUpload: (file: File) => Promise<void>;
     onFileUploadError?: (error: any) => SpreadsheetValidtionError[];
@@ -73,8 +80,9 @@ export default function (props: Props) {
         uploadSuccessMessage,
         spreadsheetInvalidData = `Spreadsheet has invalid data`,
         allValidationsPassedMessage,
-        numValidationsFailedMessage,
         typeRejectedError,
+        previewNotAvailableMessage = `Preview is not available`,
+        numValidationsFailedMessage,
         exceedsMaxSizeError,
         onFileUpload,
         onFileUploadError,
@@ -157,19 +165,38 @@ export default function (props: Props) {
                     onClickRemove={() => setFile(undefined)}
                     onClickUpload={handleClickUpload}
                 />
-                <Divider />
-                <ValidationDetails
-                    errors={errors}
-                    allValidationsPassedMessage={allValidationsPassedMessage}
-                    numValidationsFailedMessage={numValidationsFailedMessage}
-                />
+                {!fileError && (
+                    <>
+                        <Divider />
+                        <ValidationDetails
+                            errors={errors}
+                            allValidationsPassedMessage={allValidationsPassedMessage}
+                            numValidationsFailedMessage={numValidationsFailedMessage}
+                        />
+                    </>
+                )}
             </Paper>
-            <PreviewSpreadsheet
-                className={classes.previewFile}
-                file={file}
-                errors={errors}
-                onParseFile={handleParsingCsv}
-            />
+            {fileError
+                ? (
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="center"
+                        alignItems="center"
+                        className={classes.previewNotAvailble}
+                    >
+                        <Typography color="textSecondary">{previewNotAvailableMessage}</Typography>
+                    </Box>
+                )
+                : (
+                    <PreviewSpreadsheet
+                        className={classes.previewFile}
+                        file={file}
+                        errors={errors}
+                        onParseFile={handleParsingCsv}
+                    />
+                )
+            }
         </Box>
     );
 }
