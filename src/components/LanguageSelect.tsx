@@ -107,7 +107,7 @@ export default function LanguageSelect(props: Props) {
     const localeParam = url.searchParams.get(`iso`);
     const [ cookies, setCookies ] = useCookies([ `locale` ]);
 
-    const locale = localeParam || cookies.locale || getDefaultLanguageCode();
+    const locale = cookies.locale || localeParam || getDefaultLanguageCode();
 
     if (!cookies.locale) {
         setCookies(`locale`, locale, {
