@@ -1,4 +1,6 @@
+import afterDate from './afterDate';
 import alphanumeric from './alphanumeric';
+import beforeDate from './beforeDate';
 import email from './email';
 import emailOrPhone from './emailOrPhone';
 import equals from './equals';
@@ -20,12 +22,16 @@ const validations = {
     notEquals,
     phone,
     required,
+    afterDate,
+    beforeDate,
 };
 
 export default validations;
 
 export {
+    afterDate,
     alphanumeric,
+    beforeDate,
     email,
     emailOrPhone,
     equals,

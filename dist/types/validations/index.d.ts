@@ -1,4 +1,6 @@
+import afterDate from './afterDate';
 import alphanumeric from './alphanumeric';
+import beforeDate from './beforeDate';
 import email from './email';
 import emailOrPhone from './emailOrPhone';
 import equals from './equals';
@@ -19,6 +21,8 @@ declare const validations: {
     notEquals: (value: any, errorMessage?: string | undefined) => (input: any) => string | true;
     phone: (errorMessage?: string | undefined) => (input: any) => string | true;
     required: (errorMessage?: string | undefined) => (input: any) => string | true;
+    afterDate: (min: Date, errorMessage: string) => (date: string | Date | undefined) => string | true;
+    beforeDate: (max: Date, errorMessage: string) => (date: string | Date | undefined) => string | true;
 };
 export default validations;
-export { alphanumeric, email, emailOrPhone, equals, letternumeric, max, min, notEquals, phone, required, };
+export { afterDate, alphanumeric, beforeDate, email, emailOrPhone, equals, letternumeric, max, min, notEquals, phone, required, };
