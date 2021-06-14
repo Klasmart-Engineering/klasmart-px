@@ -1,5 +1,6 @@
 import getCursorPageInfo from './getCursorPageInfo';
 import nameToInitials from './nameToInitials';
+import { trimStrings } from './objectCleaner';
 import sleep from './sleep';
 import stringToColor from './stringToColor';
 
@@ -8,6 +9,7 @@ const utils = {
     nameToInitials,
     stringToColor,
     sleep,
+    trimStrings,
 };
 
 export default utils;
@@ -17,4 +19,5 @@ export {
     nameToInitials,
     sleep,
     stringToColor,
+    trimStrings,
 };
