@@ -1,5 +1,6 @@
 import getCursorPageInfo from './getCursorPageInfo';
 import nameToInitials from './nameToInitials';
+import { trimStrings } from './objectCleaner';
 import sleep from './sleep';
 import stringToColor from './stringToColor';
 declare const utils: {
@@ -7,6 +8,7 @@ declare const utils: {
     nameToInitials: (name: string, maxLength?: number) => string;
     stringToColor: (str: string, settings?: import("./stringToColor").ColorSettings | undefined) => string;
     sleep: (ms: number) => Promise<void>;
+    trimStrings: (input: any) => any;
 };
 export default utils;
-export { getCursorPageInfo, nameToInitials, sleep, stringToColor, };
+export { getCursorPageInfo, nameToInitials, sleep, stringToColor, trimStrings, };

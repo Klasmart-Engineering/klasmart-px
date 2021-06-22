@@ -47,6 +47,7 @@ interface Props extends DialogProps {
     title: string;
     actions: DialogAction[];
     width?: DialogWidth;
+    contentClassName?: string;
     onClose: ((event: unknown, reason?: "backdropClick" | "escapeKeyDown") => void) | undefined;
 }
 
@@ -57,6 +58,7 @@ export default function BaseDialog (props: Props) {
         title,
         actions,
         width = `sm`,
+        contentClassName,
         onClose,
     } = props;
     const classes = useStyles();
@@ -81,7 +83,10 @@ export default function BaseDialog (props: Props) {
             <DialogTitle id="scroll-dialog-title">
                 {title}
             </DialogTitle>
-            <DialogContent dividers>
+            <DialogContent
+                dividers
+                className={contentClassName}
+            >
                 {children}
             </DialogContent>
             <DialogActions>

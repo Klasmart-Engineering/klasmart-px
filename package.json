@@ -96,6 +96,7 @@
         "react-color": "2.19.3",
         "react-cookie": "^4.0.3",
         "react-dropzone": "^11.3.2",
+        "react-easy-crop": "^3.5.1",
         "typeface-nanum-square-round": "^1.0.2",
         "use-debounce": "^6.0.1"
     }

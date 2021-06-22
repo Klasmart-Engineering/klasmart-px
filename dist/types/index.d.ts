@@ -1,5 +1,6 @@
 export { default as Button } from "./components/Button/Button";
 export { default as Fab } from "./components/Button/Fab";
+export { default as FileInputButton } from "./components/Button/FileInputButton";
 export { default as IconButton } from "./components/Button/IconButton";
 export { default as Card } from "./components/Card";
 export { default as ContentCard } from "./components/ContentCard";
@@ -12,6 +13,7 @@ export { usePrompt } from "./components/Dialog/Prompt/hooks";
 export { default as PromptDialogProvider } from "./components/Dialog/Prompt/Provider";
 export { default as Drawer } from "./components/Drawer";
 export { default as FullScreenDialog } from "./components/FullScreenDialog";
+export { default as ImagePicker } from "./components/ImagePicker/ImagePicker";
 export { default as ColorPicker } from "./components/Input/ColorPicker";
 export { default as FileInput } from "./components/Input/File/Base";
 export { default as SpreadsheetFileInput } from "./components/Input/File/Spreadsheet/Base";
