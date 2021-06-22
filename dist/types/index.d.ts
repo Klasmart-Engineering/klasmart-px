@@ -12,6 +12,7 @@ export { usePrompt } from "./components/Dialog/Prompt/hooks";
 export { default as PromptDialogProvider } from "./components/Dialog/Prompt/Provider";
 export { default as Drawer } from "./components/Drawer";
 export { default as FullScreenDialog } from "./components/FullScreenDialog";
+export { default as ColorPicker } from "./components/Input/ColorPicker";
 export { default as FileInput } from "./components/Input/File/Base";
 export { default as SpreadsheetFileInput } from "./components/Input/File/Spreadsheet/Base";
 export { default as Select } from "./components/Input/Select";

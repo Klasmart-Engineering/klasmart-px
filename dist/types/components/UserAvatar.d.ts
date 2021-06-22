@@ -5,6 +5,7 @@ interface Props {
     maxInitialsLength?: number;
     size?: `small` | `medium` | `large`;
     className?: string;
+    color?: string;
 }
 export default function UserAvatar(props: Props): JSX.Element;
 export {};

@@ -1,8 +1,13 @@
+import { ReactNode } from "react";
+
 export interface Input {
     value: unknown;
     label?: string;
     hideHelperText?: boolean;
     disabled?: boolean;
+    readOnly?: boolean;
+    prependInner?: ReactNode;
+    appendInner?: ReactNode;
     fullWidth?: boolean;
     variant?: "filled" | "standard" | "outlined";
     autoFocus?: boolean;

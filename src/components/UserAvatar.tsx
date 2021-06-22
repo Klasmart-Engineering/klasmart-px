@@ -41,6 +41,7 @@ interface Props {
     maxInitialsLength?: number;
     size?: `small` | `medium` | `large`;
     className?: string;
+    color?: string;
 }
 
 export default function UserAvatar (props: Props) {
@@ -50,6 +51,7 @@ export default function UserAvatar (props: Props) {
         src,
         size = `medium`,
         className,
+        color,
     } = props;
     const classes = useStyles();
     return (
@@ -64,7 +66,7 @@ export default function UserAvatar (props: Props) {
                         [classes.avatarLarge]: size === `large`,
                     })}
                     style={{
-                        backgroundColor: stringToColor(name || ``),
+                        backgroundColor: color ?? stringToColor(name || ``),
                     }}
                 >
                     {name

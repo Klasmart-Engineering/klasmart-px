@@ -5,14 +5,11 @@ import {
     Button as Btn,
     createStyles,
     makeStyles,
+    Theme,
     Tooltip,
     Typography,
     useTheme,
 } from "@material-ui/core";
-import {
-    Palette,
-    PaletteColor,
-} from "@material-ui/core/styles/createPalette";
 import { SvgIconComponent } from "@material-ui/icons";
 import clsx from "clsx";
 import React,
@@ -27,16 +24,52 @@ const useStyles = makeStyles((theme) => createStyles({
     },
 }));
 
+const getTextColor = (color: string | undefined, variant: Variant | undefined, theme: Theme) => {
+    if (variant === `contained`) {
+        if (!color) return `white`;
+        if (COLORS.includes(color as Color)) return theme.palette[color as Color].contrastText;
+        return theme.palette.getContrastText(color);
+    }
+    if (!color) return `black`;
+    if (COLORS.includes(color as Color)) return theme.palette[color as Color].main;
+    return color;
+};
+
+const getBackgroundColor = (color: string | undefined, variant: Variant | undefined, theme: Theme) => {
+    if (!color || variant !== `contained`) return;
+    if (COLORS.includes(color as Color)) return theme.palette[color as Color].main;
+    return color;
+};
+
+const getBorderColor = (color: string | undefined, variant: Variant | undefined, theme: Theme) => {
+    if (!color || variant !== `outlined`) return;
+    if (COLORS.includes(color as Color)) return theme.palette[color as Color].main;
+    return color;
+};
+
+const COLORS = [
+    `primary`,
+    `secondary`,
+    `error`,
+    `warning`,
+    `info`,
+    `success`,
+] as const;
+
+// export type Color = { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette]
+export type Color = typeof COLORS[number]
+export type Variant = "text" | "outlined" | "contained"
+
 export interface Props {
     className?: string;
     label: React.ReactNode;
     icon?: SvgIconComponent;
     type?: "submit" | "reset" | "button";
-    variant?: "text" | "outlined" | "contained";
+    variant?: Variant;
     size?: "small" | "medium" | "large";
     rounded?: boolean;
     fullWidth?: boolean;
-    color?: { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette];
+    color?: string;
     disabled?: boolean;
     tooltip?: string;
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
@@ -61,8 +94,11 @@ export default function Button (props: Props) {
     const theme = useTheme();
     const [ loading, setLoading ] = useState(false);
 
-    const textColor = color ? theme.palette[color][ variant === `contained` ? `contrastText` : `main` ] : undefined;
-    const backgroundColor = (color && variant === `contained`) ? theme.palette[color].main : undefined;
+    const textColor_ = getTextColor(color, variant, theme);
+    const backgroundColor_ = getBackgroundColor(color, variant, theme);
+    const borderColor_ = getBorderColor(color, variant, theme);
+
+    color && COLORS.includes(color as Color) ? theme.palette[color as Color].main : color;
 
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setLoading(true);
@@ -82,8 +118,9 @@ export default function Button (props: Props) {
                 variant={variant}
                 type={type}
                 style={{
-                    color: !disabled ? textColor : undefined,
-                    backgroundColor: !disabled ? backgroundColor : undefined,
+                    color: !disabled ? textColor_ : undefined,
+                    backgroundColor: !disabled ? backgroundColor_ : undefined,
+                    borderColor: !disabled ? borderColor_ : undefined,
                 }}
                 disabled={disabled}
                 className={clsx(className, {

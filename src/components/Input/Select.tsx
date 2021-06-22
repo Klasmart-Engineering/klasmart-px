@@ -69,6 +69,9 @@ export default function Select<T> (props: Props<T>) {
         itemText = (item) => String(item),
         itemValue = (item) => String(item),
         variant = `outlined`,
+        readOnly,
+        prependInner,
+        appendInner,
         onBlur,
         onFocus,
         onChange,
@@ -196,6 +199,11 @@ export default function Select<T> (props: Props<T>) {
             variant={variant}
             helperText={hideHelperText ? undefined : (error_ ?? ` `)}
             error={!!error_}
+            InputProps={{
+                readOnly,
+                startAdornment: prependInner,
+                endAdornment: appendInner,
+            }}
             SelectProps={{
                 multiple,
                 renderValue: Array.isArray(value_) && !value_.includes(``)

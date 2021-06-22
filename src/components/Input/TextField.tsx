@@ -7,15 +7,18 @@ import {
     makeStyles,
     TextField as TxtField,
 } from "@material-ui/core";
+import clsx from "clsx";
 import React,
 {
     useEffect,
     useState,
 } from "react";
 
-const useStyles = makeStyles((theme) => createStyles({}));
-
-const parseValue = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, type: InputType) => type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value;
+const useStyles = makeStyles((theme) => createStyles({
+    disabledText: {
+        color: theme.palette.action.active,
+    },
+}));
 
 export type InputType = `text` | `number` | `password` | `date` | `datetime-local` | `email` | `time` | `month` | `tel` | `url` | `week`
 
@@ -34,6 +37,9 @@ export default function TextField (props: Props) {
         onValidate,
         className,
         type,
+        readOnly,
+        prependInner,
+        appendInner,
         variant = `outlined`,
         ...rest
     } = props;
@@ -73,6 +79,14 @@ export default function TextField (props: Props) {
         error={!!error_}
         helperText={hideHelperText ? undefined : (error_ ?? ` `)}
         type={type}
+        InputProps={{
+            className: clsx({
+                [classes.disabledText]: readOnly,
+            }),
+            readOnly,
+            startAdornment: prependInner,
+            endAdornment: appendInner,
+        }}
         onChange={handleChange}
         {...rest}
     />;
