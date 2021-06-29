@@ -90,6 +90,10 @@ export default function Controls(props: Props) {
     const classes = useStyles();
     const zoomMarks = [
         {
+            value: 0.1,
+            label: `0.1x`,
+        },
+        {
             value: 1,
             label: `1x`,
         },
