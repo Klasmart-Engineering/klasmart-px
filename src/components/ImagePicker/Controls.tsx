@@ -126,7 +126,7 @@ export default function Controls(props: Props) {
                     control: (
                         <Slider
                             value={zoom}
-                            min={1}
+                            min={0.1}
                             max={3}
                             step={0.1}
                             marks={zoomMarks}

@@ -43,6 +43,7 @@ export default function ImageCropper (props: Props) {
     return (
         <div className={classes.cropContainer}>
             <Cropper
+                restrictPosition={false}
                 image={img}
                 crop={crop}
                 zoom={zoom}
