@@ -1,6 +1,6 @@
 {
     "name": "kidsloop-px",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "KidsLoop Product Experience UI Library",
     "main": "./dist/main.js",
     "types": "dist/types/index.d.ts",
