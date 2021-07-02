@@ -1,7 +1,7 @@
 import { Order } from "../components/Table/Common/Head";
 import {
+    DEFAULT_ROWS_PER_PAGE,
     PageChange,
-    ROWS_PER_PAGE,
 } from "../components/Table/Common/Pagination/shared";
 
 export enum Direction {
@@ -14,15 +14,9 @@ export interface CursorPageInfo {
     cursor: string | undefined;
 }
 
-export default (pageChange: PageChange, order: Order, cursor: string | undefined, rowsPerPage = ROWS_PER_PAGE): CursorPageInfo => {
-    const direction = order === `desc`
-        ? ([ `first`, `next` ].includes(pageChange)
-            ? Direction.FORWARD
-            : Direction.BACKWARD
-        ) : ([ `last`, `previous` ].includes(pageChange)
-            ? Direction.FORWARD
-            : Direction.BACKWARD
-        );
+export default (pageChange: PageChange, cursor: string | undefined, rowsPerPage = DEFAULT_ROWS_PER_PAGE): CursorPageInfo => {
+    const direction = [ `first`, `next` ].includes(pageChange) ? Direction.FORWARD : Direction.BACKWARD;
+
     return {
         direction,
         cursor,

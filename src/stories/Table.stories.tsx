@@ -3,6 +3,7 @@ import {
     Order,
     TableColumn,
 } from '../components/Table/Common/Head';
+import CursorTable from '../components/Table/Cursor/Table';
 import PageTable from '../components/Table/Page/Table';
 import { sleep } from '../utils';
 import {
@@ -108,22 +109,20 @@ interface LoadDataPageRequest extends LoadDataRequest {
     orderBy: keyof StarWarsRow;
 }
 
+interface LoadDataCursorRequest extends LoadDataRequest {
+    cursor: string;
+    rowsPerPage: number;
+    order: Order;
+    orderBy: keyof StarWarsRow;
+    page?: string;
+}
+
 interface LoadDataRequest {
     search?: string;
 }
 
-const loadData = async (request: LoadDataPageRequest) => {
-    const {
-        page,
-        rowsPerPage,
-        subgroupBy,
-        search,
-        order,
-        orderBy,
-    } = request;
-    await sleep(500);
-    const filteredData = data
-        .filter((d) => subgroupBy ? Object.values(d).some((value) => String(value) === String(subgroupBy)) : true)
+const dataSearchSort = (data:StarWarsRow[], orderBy: keyof StarWarsRow, order: string, search?: string) => {
+    return data
         .filter((d) => search ? Object.values(d).some((value) => String(value).includes(String(search))) : true)
         .sort((a, b) => {
             const aValue = a[orderBy];
@@ -139,9 +138,67 @@ const loadData = async (request: LoadDataPageRequest) => {
                     : -1
                 );
         });
+};
+
+const loadData = async (request: LoadDataPageRequest) => {
+    const {
+        page,
+        rowsPerPage,
+        subgroupBy,
+        search,
+        order,
+        orderBy,
+    } = request;
+    await sleep(500);
+    let filteredData = data
+        .filter((d) => subgroupBy ? Object.values(d).some((value) => String(value) === String(subgroupBy)) : true);
+    filteredData = dataSearchSort(filteredData, orderBy, order, search);
+
     return {
         items: filteredData.slice(rowsPerPage * page, rowsPerPage * (page + 1)),
         total: filteredData.length,
+    };
+};
+
+const loadCursorData = async (request: LoadDataCursorRequest) => {
+    const {
+        cursor,
+        rowsPerPage,
+        search,
+        order,
+        orderBy,
+        page,
+    } = request;
+    await sleep(500);
+    const filteredData = dataSearchSort(data, orderBy, order, search);
+
+    let index = cursor ? filteredData.findIndex(d => d.id === cursor) : 0;
+
+    switch(page) {
+    case `previous`: {
+        index = index - rowsPerPage >= 0 ? index - rowsPerPage : 0;
+        break;
+    }
+    case `last`: {
+        index = filteredData.length % rowsPerPage ? filteredData.length - (filteredData.length % rowsPerPage) : filteredData.length - rowsPerPage;
+        break;
+    }
+    case `first`: {
+        index = 0;
+    }
+    }
+
+    const endCursor = filteredData.length > index + rowsPerPage ? filteredData[index + rowsPerPage].id : filteredData[filteredData.length - 1].id;
+    const items = filteredData.slice(index, index + rowsPerPage);
+    return {
+        items: items,
+        total: filteredData.length,
+        paginationInfo: {
+            startCursor: filteredData[index].id,
+            endCursor,
+            hasNextPage: filteredData.length - 1 > index + rowsPerPage,
+            hasPreviousPage: index > 0,
+        },
     };
 };
 
@@ -385,6 +442,153 @@ export const PageTableLocal = () => {
             rows={data}
             rowsPerPage={ROWS_PER_PAGE}
             rowsPerPageOptions={[ ROWS_PER_PAGE ]}
+        />
+    );
+};
+
+export const CursorTableServer = () => {
+    const [ startCursor, setStartCursor ] = useState(``);
+    const [ endCursor, setEndCursor ] = useState(``);
+    const [ loadingData, setLoadingData ] = useState(false);
+    const [ loadingGroups, setLoadingGroups ] = useState(false);
+    const [ total, setTotal ] = useState(0);
+    const [ noGroupTotal, setNoGroupTotal ] = useState(0);
+    const [ yearGroups, setYearGroups ] = useState<SubgroupTab[]>([]);
+    const [ happyEndingGroups, setHappyEndingGroups ] = useState<SubgroupTab[]>([]);
+    const [ trilogyGroups, setTrilogyGroups ] = useState<SubgroupTab[]>([]);
+    const [ rows, setRows ] = useState<StarWarsRow[]>([]);
+    const [ subgroupBy, setSubgroupBy ] = useState<string>();
+    const [ search, setSearch ] = useState(``);
+    const [ order, setOrder ] = useState<Order>(`desc`);
+    const [ orderBy, setOrderBy ] = useState<keyof StarWarsRow>(`id`);
+    const [ hasPreviousPage, setHasPreviousPage ] = useState(false);
+    const [ hasNextPage, setHasNextPage ] = useState(false);
+
+    const columns: TableColumn<StarWarsRow>[] = [
+        {
+            id: `id`,
+            label: `ID`,
+        },
+        {
+            id: `movieTitle`,
+            label: `Title`,
+        },
+        {
+            id: `trilogy`,
+            label: `Trilogy`,
+            groups: trilogyGroups,
+            render: (row) => `${row.trilogy.slice(0, 1).toUpperCase()}${row.trilogy.slice(1).toLowerCase()}`,
+        },
+        {
+            id: `happyEnding`,
+            label: `Happy Ending`,
+            groups: happyEndingGroups,
+            render: (row) => row.happyEnding ? <Check color="action" /> : <Close color="error" />,
+        },
+        {
+            id: `realeaseYear`,
+            label: `Year`,
+            groups: yearGroups,
+        },
+    ];
+
+    const fetch = async (page?: string) => {
+        setLoadingData(true);
+        const {
+            items,
+            total,
+            paginationInfo,
+        } = await loadCursorData({
+            cursor: startCursor,
+            rowsPerPage: ROWS_PER_PAGE,
+            search,
+            order,
+            orderBy,
+            page: page ?? `next`,
+        });
+        setStartCursor(paginationInfo.startCursor);
+        setEndCursor(paginationInfo.endCursor);
+        setRows(items);
+        setTotal(total);
+        setLoadingData(false);
+        setHasNextPage(paginationInfo.hasNextPage);
+        setHasPreviousPage(paginationInfo.hasPreviousPage);
+    };
+
+    useEffect(() => {
+        fetch();
+    }, [
+        startCursor,
+        subgroupBy,
+        search,
+        order,
+        orderBy,
+    ]);
+
+    const updatePage = (page: string) => {
+        if (page === `next`) {
+            setStartCursor(endCursor);
+        } else {
+            fetch(page);
+        }
+    };
+
+    useEffect(() => {
+        (async () => {
+            setLoadingGroups(true);
+            const {
+                yearGroups,
+                happyEndingGroups,
+                trilogyGroups,
+                noGroupTotal,
+            } = await loadGroups({
+                search,
+            });
+            setYearGroups(yearGroups.map((group) => ({
+                ...group,
+                text: group.value.toString().toUpperCase(),
+            })));
+            setHappyEndingGroups(happyEndingGroups.map((group) => ({
+                ...group,
+                text: group.value ? `Yes` : `No`,
+            })));
+            setTrilogyGroups(trilogyGroups.map((group) => ({
+                ...group,
+                text: group.value.toString().toUpperCase(),
+            })));
+            setNoGroupTotal(noGroupTotal);
+            setLoadingGroups(false);
+        })();
+    }, [ search ]);
+
+    return (
+        <CursorTable
+            idField="id"
+            loading={loadingData || loadingGroups}
+            columns={columns}
+            hasNextPage={hasNextPage}
+            hasPreviousPage={hasPreviousPage}
+            rows={rows}
+            startCursor={startCursor}
+            endCursor={endCursor}
+            cursor={endCursor}
+            total={total}
+            noGroupTotal={noGroupTotal}
+            search={search}
+            subgroupBy={subgroupBy}
+            order={order}
+            orderBy={orderBy}
+            rowsPerPage={ROWS_PER_PAGE}
+            rowsPerPageOptions={[ ROWS_PER_PAGE ]}
+            onChange={(tableData) => {
+                setOrder(tableData.order);
+                setSubgroupBy(tableData.subgroupBy);
+                setSearch(tableData.search);
+                setOrderBy(tableData.orderBy);
+            }}
+            onPageChange={(tableData) => {
+                updatePage(tableData);
+            }}
         />
     );
 };

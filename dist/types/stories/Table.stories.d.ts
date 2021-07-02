@@ -7,3 +7,4 @@ declare const _default: {
 export default _default;
 export declare const PageTableServer: () => JSX.Element;
 export declare const PageTableLocal: () => JSX.Element;
+export declare const CursorTableServer: () => JSX.Element;

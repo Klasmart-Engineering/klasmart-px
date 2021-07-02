@@ -8,4 +8,5 @@ export interface PaginationLocalization {
     firstPage?: string;
     lastPage?: string;
 }
-export declare const ROWS_PER_PAGE = 10;
+export declare const DEFAULT_ROWS_PER_PAGE = 10;
+export declare const DEFAULT_SORT_ORDER = "asc";

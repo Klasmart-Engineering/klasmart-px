@@ -24,8 +24,9 @@ import BaseTableHead,
 } from "./Head";
 import BaseTableLoading from "./Loading";
 import {
+    DEFAULT_ROWS_PER_PAGE,
+    DEFAULT_SORT_ORDER,
     PaginationLocalization,
-    ROWS_PER_PAGE,
 } from "./Pagination/shared";
 import BaseTableSearch,
 { SearchLocalization } from "./Search";
@@ -175,7 +176,7 @@ export default function BaseTable<T> (props: Props<T>) {
         groupBy,
         subgroupBy,
         rows = [],
-        rowsPerPage = ROWS_PER_PAGE,
+        rowsPerPage = DEFAULT_ROWS_PER_PAGE,
         selectedRows,
         localPageStartSlice,
         localPageEndSlice,
@@ -306,7 +307,7 @@ export default function BaseTable<T> (props: Props<T>) {
 
     const customSort = columns[columns.findIndex((c) => c.id === orderBy_)].sort;
     const filteredColumns = columns.filter(({ id }) => isColumnSelected(id)).filter(({ secret }) => !secret);
-    const filteredSortedRows = stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions)).filter(filterRowsBySearch);
+    const filteredSortedRows = total ? rows : stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions)).filter(filterRowsBySearch);
 
     const subgroups_ = useMemo<SubgroupTab[]>(() => {
         const column = columns[columns.findIndex((c) => c.id === groupBy_)];
@@ -322,9 +323,11 @@ export default function BaseTable<T> (props: Props<T>) {
         search,
     ]);
 
-    const filteredSortedGroupedRows = filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && (!subgroups_.length || isValidSubgroup(subgroupBy_, subgroups_)))
-        ? filterRowsBySubgroup(groupBy_, subgroupBy_)
-        : () => true);
+    const filteredSortedGroupedRows = total
+        ? filteredSortedRows
+        : filteredSortedRows.filter((groupBy_ && subgroupBy_ !== undefined && (!subgroups_.length || isValidSubgroup(subgroupBy_, subgroups_)))
+            ? filterRowsBySubgroup(groupBy_, subgroupBy_)
+            : () => true);
 
     const filteredSortedGroupedSlicedRows = (localPageStartSlice || localPageEndSlice) ? filteredSortedGroupedRows.slice(localPageStartSlice, localPageEndSlice) : filteredSortedGroupedRows;
     const filteredSortedGroupedSlicedSelectedRows = filteredSortedGroupedSlicedRows.filter(filterRowsBySelected);
@@ -353,7 +356,7 @@ export default function BaseTable<T> (props: Props<T>) {
     }, [ selectedRowIds_ ]);
 
     useEffect(() => {
-        setOrder([ `asc`, `desc` ].includes(order ?? ``) ? order as Order : `asc`);
+        setOrder([ `asc`, `desc` ].includes(order ?? ``) ? order as Order : DEFAULT_SORT_ORDER);
     }, [ order ]);
 
     useEffect(() => {
@@ -368,7 +371,7 @@ export default function BaseTable<T> (props: Props<T>) {
     useEffect(() => {
         onChange({
             columns: selectedColumnIds_,
-            rows: filteredSortedGroupedRows.map((row) => pick(row, selectedColumnIds_)),
+            rows: total ? rows : filteredSortedGroupedRows.map((row) => pick(row, selectedColumnIds_)),
             selectedRows: selectedRowIds_,
             rowsPerPage: rowsPerPage,
             total: total ?? filteredSortedGroupedRows.length,
