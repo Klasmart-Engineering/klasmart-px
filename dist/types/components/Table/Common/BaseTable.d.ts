@@ -2,6 +2,7 @@ import { MenuAction, MoreMenuLocalization } from "../../MoreMenu";
 import { BodyLocalization } from "./Body";
 import { CheckboxDropdownLocalization } from "./CheckboxDropdown";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
+import { Filter, TableFilter } from './Filter/Filters';
 import { GroupTabsLocalization } from "./GroupTabs";
 import { HeadLocalization, Order, TableColumn } from "./Head";
 import { PaginationLocalization } from "./Pagination/shared";
@@ -31,6 +32,7 @@ export interface BaseTableData<T> {
     subgroupBy?: string;
     rowsPerPage: number;
     total: number;
+    filters?: Filter[];
 }
 export interface BaseProps<T> {
     columns: TableColumn<T>[];
@@ -61,6 +63,7 @@ export interface BaseProps<T> {
     hideSelectStatus?: boolean;
     selectMode?: SelectMode;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
+    filters?: TableFilter<T>[];
 }
 export interface Props<T> extends BaseProps<T> {
     PaginationComponent?: ReactNode;

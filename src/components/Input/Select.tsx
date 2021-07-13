@@ -213,7 +213,7 @@ export default function Select<T> (props: Props<T>) {
                         return itemText(item);
                     }).join(`, `)
                     : undefined,
-                value: value_,
+                value: multiple && !Array.isArray(value_) ? [ value_ ] : value_,
                 onBlur,
                 onChange: handleChange,
                 onFocus,

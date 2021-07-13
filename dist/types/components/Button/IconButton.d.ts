@@ -5,6 +5,7 @@ interface Props {
     className?: string;
     icon: SvgIconComponent;
     iconSize?: `inherit` | `default` | `small` | `large`;
+    size?: "small" | "medium";
     tooltip?: string;
     disabled?: boolean;
     color?: {

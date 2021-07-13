@@ -9,6 +9,11 @@ import {
     CheckboxDropdownValue,
 } from "./CheckboxDropdown";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
+import BaseTableFilter,
+{
+    Filter,
+    TableFilter,
+} from './Filter/Filters';
 import BaseTableGroupTabs,
 {
     GroupSelectMenuItem,
@@ -130,6 +135,7 @@ export interface BaseTableData<T> {
     subgroupBy?: string;
     rowsPerPage: number;
     total: number;
+    filters?: Filter[];
 }
 
 export interface BaseProps<T> {
@@ -158,6 +164,7 @@ export interface BaseProps<T> {
     hideSelectStatus?: boolean;
     selectMode?: SelectMode;
     onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
+    filters?: TableFilter<T>[];
 }
 
 export interface Props<T> extends BaseProps<T> {
@@ -197,6 +204,7 @@ export default function BaseTable<T> (props: Props<T>) {
         PaginationComponent,
         onChange,
         onSelected,
+        filters,
     } = props;
 
     const classes = useStyles();
@@ -216,6 +224,7 @@ export default function BaseTable<T> (props: Props<T>) {
     const [ selectedRowIds_, setSelectedRowIds ] = useState<T[Extract<keyof T, string>][]>(selectedRows ?? []);
     const [ selectedColumnIds_, setSelectedColumnIds ] = useState(union(selectedColumnIds, persistentColumnIds));
     const [ search_, setSearch ] = useState(search ?? ``);
+    const [ filters_, setFilters ] = useState<Filter[]>([]);
 
     const handleRequestSort = (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => {
         const isAsc = orderBy_ === property && order_ === `asc`;
@@ -380,6 +389,7 @@ export default function BaseTable<T> (props: Props<T>) {
             orderBy: orderBy_,
             groupBy: groupBy_,
             subgroupBy: subgroupBy_,
+            filters: filters_,
         });
     }, [
         selectedColumnIds_,
@@ -391,6 +401,7 @@ export default function BaseTable<T> (props: Props<T>) {
         orderBy_,
         groupBy_,
         subgroupBy_,
+        filters_,
     ]);
 
     return (
@@ -411,6 +422,13 @@ export default function BaseTable<T> (props: Props<T>) {
                     value={search_}
                     localization={localization?.search}
                     onChange={handleChangeSearch}
+                />
+                <Divider />
+            </>}
+            {filters?.length && <>
+                <BaseTableFilter
+                    filters={filters}
+                    onChange={setFilters}
                 />
                 <Divider />
             </>}

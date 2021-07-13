@@ -26,6 +26,7 @@ interface Props {
     className?: string;
     icon: SvgIconComponent;
     iconSize?: `inherit` | `default` | `small` | `large`;
+    size?: "small" | "medium";
     tooltip?: string;
     disabled?: boolean;
     color?: { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette];
@@ -41,6 +42,7 @@ export default function IconButton (props: Props) {
         color,
         onClick,
         className,
+        size,
     } = props;
     const classes = useStyles();
     const loadingClasses = useLoadingStyles();
@@ -70,6 +72,7 @@ export default function IconButton (props: Props) {
                     style={{
                         color: (color && !disabled) ? theme.palette[color].main : undefined,
                     }}
+                    size={size}
                     onClick={handleClick}
                 >
                     <Icon
