@@ -5,6 +5,7 @@ import {
     Box,
     createStyles,
     Fab as FabButton,
+    FabProps,
     makeStyles,
     Tooltip,
     Typography,
@@ -34,7 +35,7 @@ interface Props {
     disabled?: boolean;
     label?: string;
     tooltip?: string;
-    variant?: "extended" | "round";
+    variant?: FabProps["variant"];
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 
@@ -57,8 +58,8 @@ export default function Fab (props: Props) {
     const breakpoint = useWidth();
     const [ loading, setLoading ] = useState(false);
 
-    const variant_ = variant ?? ((responsiveExtended?.includes(breakpoint)) ? `extended` : `round`);
-    const tooltip_ = tooltip ?? (variant_ === `round` ? (label ?? ``) : ``);
+    const variant_ = variant ?? ((responsiveExtended?.includes(breakpoint)) ? `extended` : `circular`);
+    const tooltip_ = tooltip ?? (variant_ === `circular` ? (label ?? ``) : ``);
 
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setLoading(true);

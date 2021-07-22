@@ -1,9 +1,9 @@
 import { TableColumn } from "./Head";
 import {
+    alpha,
     Checkbox,
     createStyles,
     Divider,
-    fade,
     IconButton,
     List,
     ListItem,
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles ({
         paddingTop: 0,
         paddingBottom: 0,
         minHeight: 56,
-        backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
+        backgroundColor: theme.palette.type === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
     },
     title: {
         fontWeight: 600,

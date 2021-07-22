@@ -253,7 +253,7 @@ export default function TableFilterMenu<T>(props: Props<T>) {
                 <Grid
                     container
                     spacing={1}
-                    justify="flex-end"
+                    justifyContent="flex-end"
                     className={classes.actionsContainer}
                 >
                     <Grid item>

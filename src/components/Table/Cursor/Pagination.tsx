@@ -129,8 +129,8 @@ export default function CursorTablePagination (props: Props) {
             rowsPerPage={rowsPerPage}
             page={0}
             ActionsComponent={actions}
-            onChangePage={() => {return;}}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
+            onPageChange={() => {return;}}
+            onRowsPerPageChange={handleChangeRowsPerPage}
         />
     );
 }

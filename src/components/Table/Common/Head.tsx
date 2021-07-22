@@ -9,9 +9,9 @@ import BaseTableColumnSelector,
 { ColumnSelectorLocalization } from "./ColumnSelector";
 import { SubgroupTab } from "./GroupTabs";
 import {
+    alpha,
     Box,
     createStyles,
-    fade,
     makeStyles,
     TableCell,
     TableCellProps,
@@ -32,13 +32,13 @@ import React,
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     container: {
-        backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
+        backgroundColor: theme.palette.type === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
     },
     hoverHeader: {
         height: 53,
         padding: theme.spacing(0, 2),
         "&:hover": {
-            backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
+            backgroundColor: theme.palette.type === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
         },
     },
     removeButton: {
