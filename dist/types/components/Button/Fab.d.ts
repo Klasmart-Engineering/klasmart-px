@@ -1,3 +1,4 @@
+import { FabProps } from "@material-ui/core";
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
 import { SvgIconComponent } from "@material-ui/icons";
@@ -12,7 +13,7 @@ interface Props {
     disabled?: boolean;
     label?: string;
     tooltip?: string;
-    variant?: "extended" | "round";
+    variant?: FabProps["variant"];
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 export default function Fab(props: Props): JSX.Element;
