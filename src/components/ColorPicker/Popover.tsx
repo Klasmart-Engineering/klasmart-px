@@ -10,8 +10,9 @@ import React from "react";
 const POPOVER_WIDTH = 216;
 
 const useStyles = makeStyles((theme) => createStyles({
-    popoverRoot: {
+    root: {
         width: POPOVER_WIDTH,
+        overflow: `hidden`,
     },
     swatchesAddon: {
         paddingTop: 0,
@@ -54,7 +55,7 @@ export default function (props: Props) {
             }}
             onClose={onClose}
         >
-            <div className={classes.popoverRoot}>
+            <div className={classes.root}>
                 {!hideCanvas && (
                     <SaturationPicker
                         width={POPOVER_WIDTH}
