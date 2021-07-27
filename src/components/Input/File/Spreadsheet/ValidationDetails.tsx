@@ -1,4 +1,5 @@
-import { SpreadsheetValidtionError } from './Base';
+import CircularProgress from '../../../Progress/CircularProgress';
+import { SpreadsheetValidationError } from './Base';
 import {
     Box,
     Chip,
@@ -12,7 +13,9 @@ import {
     lighten,
     withStyles,
 } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { ClassNameMap } from '@material-ui/core/styles/withStyles';
+import Typography,
+{ TypographyProps } from '@material-ui/core/Typography';
 import {
     Check as CheckIcon,
     Error as ErrorIcon,
@@ -45,6 +48,24 @@ const useStyles = makeStyles((theme) => createStyles({
         marginLeft: theme.spacing(1),
     },
 }));
+
+type ValidationFailedCallback = (num: number) => string
+
+export const validationStatuses = [
+    `in-progress`,
+    `passed`,
+    `failed`,
+] as const;
+
+export type ValidationStatus = typeof validationStatuses[number];
+
+export interface Props {
+    errors: SpreadsheetValidationError[];
+    status: ValidationStatus;
+    allValidationsPassedMessage?: string;
+    validationInProgressMessage?: string;
+    numValidationsFailedMessage?: ValidationFailedCallback;
+}
 
 const Accordion = withStyles({
     root: {
@@ -85,16 +106,112 @@ const AccordionDetails = withStyles((theme) => ({
     },
 }))(MuiAccordionDetails);
 
-interface Props {
-    errors: SpreadsheetValidtionError[];
-    allValidationsPassedMessage?: string;
-    numValidationsFailedMessage?: (num: number) => string;
+interface StatusInfoProps {
+    Icon: React.ReactNode;
+    message: {
+        className: string;
+        color: TypographyProps["color"];
+        text: string;
+    };
 }
+
+const StatusInfo = ({
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    Icon, message,
+}: StatusInfoProps) => {
+    return (
+        <Box
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+        >
+            {Icon}
+            <Typography
+                color={message.color}
+                className={message.className}
+            >
+                {message.text}
+            </Typography>
+        </Box>
+    );
+};
+
+interface ValidationStatusInfoOptions {
+    status: ValidationStatus;
+    classes: ClassNameMap;
+    allValidationsPassedMessage: string;
+    validationInProgressMessage: string;
+    numValidationsFailedMessage: ValidationFailedCallback;
+    totalErrors: number;
+}
+
+const buildValidationStatusInfo = (validationStatusInfoOptions: ValidationStatusInfoOptions) => {
+    const {
+        status,
+        classes,
+        allValidationsPassedMessage,
+        validationInProgressMessage,
+        numValidationsFailedMessage,
+        totalErrors,
+    } = validationStatusInfoOptions;
+    switch (status) {
+    case `in-progress`: {
+        return (
+            <StatusInfo
+                Icon={<CircularProgress
+                    disableCentered
+                    className={classes.statusIcon}
+                    color={`action`}
+                />}
+                message={{
+                    text: validationInProgressMessage,
+                    color: `textSecondary`,
+                    className: classes.validationLabel,
+                }}
+            />
+        );
+    }
+    case `passed`: {
+        return (
+            <StatusInfo
+                Icon={<CheckIcon
+                    className={clsx(
+                        classes.statusIcon,
+                        classes.successText,
+                    )}
+                />}
+                message={{
+                    text: allValidationsPassedMessage,
+                    color: `textSecondary`,
+                    className: classes.validationLabel,
+                }}
+            />
+        );
+    }
+    case `failed`: {
+        return (
+            <StatusInfo
+                Icon={<ErrorIcon
+                    className={classes.statusIcon}
+                    color="error"
+                />}
+                message={{
+                    text: numValidationsFailedMessage(totalErrors),
+                    color: `error`,
+                    className: classes.validationLabel,
+                }}
+            />
+        );
+    }
+    }
+};
 
 export default function ValidationDetails (props: Props) {
     const {
         errors,
+        status,
         allValidationsPassedMessage = `All validations passed`,
+        validationInProgressMessage = `Validation in progress`,
         numValidationsFailedMessage = (count: number) => `${count} validations failed`,
     } = props;
     const classes = useStyles();
@@ -108,31 +225,19 @@ export default function ValidationDetails (props: Props) {
 
     return (
         <Accordion
+            data-testid="validation-details"
             expanded={expanded}
             onChange={(event, newExpanded) => handleChange(newExpanded)}
         >
             <AccordionSummary expandIcon={hasErrors && <ExpandMoreIcon />}>
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    alignItems="center"
-                >
-                    {!hasErrors
-                        ? <CheckIcon className={clsx(classes.statusIcon, classes.successText)} />
-                        : (
-                            <ErrorIcon
-                                className={classes.statusIcon}
-                                color="error"
-                            />
-                        )
-                    }
-                    <Typography
-                        color={hasErrors ? `error` : `textSecondary`}
-                        className={classes.validationLabel}
-                    >
-                        {errors.length ? numValidationsFailedMessage(errors.length) : allValidationsPassedMessage}
-                    </Typography>
-                </Box>
+                {buildValidationStatusInfo({
+                    status,
+                    classes,
+                    allValidationsPassedMessage,
+                    validationInProgressMessage,
+                    numValidationsFailedMessage,
+                    totalErrors: errors.length,
+                })}
             </AccordionSummary>
             <AccordionDetails>
                 <Box

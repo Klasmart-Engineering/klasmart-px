@@ -56,6 +56,7 @@ export interface Props {
     maxFiles?: number;
     label?: string;
     typeRejectedError?: string;
+    maxFilesError?: string;
     exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
     onFileAdded?: (file: File) => void;
     onFileRejected?: (file: File, error: string) => void;
@@ -68,6 +69,7 @@ export default function Dropzone (props: Props) {
         maxFiles = Infinity,
         label = `Drag and drop files here, or click to select files`,
         typeRejectedError = `File type is not supported`,
+        maxFilesError = `Only ${maxFiles} file${maxFiles === 1 ? `` : `s`} can be uploaded at a time`,
         exceedsMaxSizeError = (fileSize: number, maxSize: number) => `File size (${(fileSize / 1000).toFixed(1)} Kb) exceeds max size (${(maxSize / 1000).toFixed(1)} Kb)`,
         onFileAdded,
         onFileRejected,
@@ -93,6 +95,9 @@ export default function Dropzone (props: Props) {
             case `file-too-large`:
                 onFileRejected?.(rejection.file, exceedsMaxSizeError(fileSize, maxSize));
                 break;
+            case `too-many-files`:
+                onFileRejected?.(rejection.file, maxFilesError);
+                break;
             default:
                 onFileRejected?.(rejection.file, errorMessage);
             }
@@ -113,6 +118,7 @@ export default function Dropzone (props: Props) {
 
     return (
         <div
+            data-testid="dropzone"
             className={clsx(classes.root, {
                 [classes.dragFile]: isDragActive,
                 [classes.dragFileAccept]: isDragAccept,

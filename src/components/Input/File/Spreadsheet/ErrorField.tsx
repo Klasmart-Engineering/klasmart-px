@@ -1,4 +1,4 @@
-import { SpreadsheetValidtionError } from "./Base";
+import { SpreadsheetValidationError } from "./errors";
 import {
     Box,
     createStyles,
@@ -25,7 +25,7 @@ const WrappedTextTooltip = withStyles({
 
 interface Props {
     fieldText: ReactNode;
-    errors: SpreadsheetValidtionError[];
+    errors: SpreadsheetValidationError[];
 }
 
 export default function ErrorField (props: Props) {

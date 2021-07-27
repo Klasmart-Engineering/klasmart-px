@@ -1,5 +1,6 @@
-import Loading,
-{ useLoadingStyles } from "./Loading";
+import { useIsMounted } from "../../hooks";
+import CircularProgress from "../Progress/CircularProgress";
+import { useButtonLoadingStyles } from "../Progress/utils";
 import {
     createStyles,
     IconButton as IconBtn,
@@ -45,9 +46,10 @@ export default function IconButton (props: Props) {
         size,
     } = props;
     const classes = useStyles();
-    const loadingClasses = useLoadingStyles();
+    const loadingClasses = useButtonLoadingStyles();
     const [ loading, setLoading ] = useState(false);
     const theme = useTheme();
+    const isMounted = useIsMounted();
 
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setLoading(true);
@@ -57,7 +59,7 @@ export default function IconButton (props: Props) {
         } catch (err) {
             error = err;
         }
-        setLoading(false);
+        if (isMounted()) {setLoading(false);}
         if (error) throw error;
     };
 
@@ -80,7 +82,7 @@ export default function IconButton (props: Props) {
                         className={clsx({
                             [loadingClasses.buttonLoadingContent]: loading,
                         })} />
-                    {loading && <Loading />}
+                    {loading && <CircularProgress />}
                 </IconBtn>
             </span>
         </Tooltip>

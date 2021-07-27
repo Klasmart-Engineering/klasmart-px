@@ -1,6 +1,6 @@
 import { useWidth } from "../../utils/layout";
-import Loading,
-{ useLoadingStyles } from "./Loading";
+import CircularProgress from "../Progress/CircularProgress";
+import { useButtonLoadingStyles } from "../Progress/utils";
 import {
     Box,
     createStyles,
@@ -53,7 +53,7 @@ export default function Fab (props: Props) {
     } = props;
 
     const classes = useStyles();
-    const loadingClasses = useLoadingStyles();
+    const loadingClasses = useButtonLoadingStyles();
     const theme = useTheme();
     const breakpoint = useWidth();
     const [ loading, setLoading ] = useState(false);
@@ -114,7 +114,7 @@ export default function Fab (props: Props) {
                         />
                         : <span />
                 }
-                {loading && <Loading />}
+                {loading && <CircularProgress />}
             </FabButton>
         </span>
     </Tooltip>;

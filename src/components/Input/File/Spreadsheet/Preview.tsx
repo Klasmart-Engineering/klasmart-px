@@ -1,5 +1,5 @@
-import { SpreadsheetValidtionError } from "./Base";
 import ErrorField from "./ErrorField";
+import { SpreadsheetValidationError } from "./errors";
 import {
     createStyles,
     lighten,
@@ -54,26 +54,30 @@ const useStyles = makeStyles((theme) => createStyles({
 
 }));
 
-const findRowErrors = (errors: SpreadsheetValidtionError[], row: number, columns: string[]) => {
+const findGeneralErrors = (errors: SpreadsheetValidationError[]) => {
+    return errors.filter((error) => error.row === undefined && error.column === undefined);
+};
+
+const findRowErrors = (errors: SpreadsheetValidationError[], row: number, columns: string[]) => {
     return errors.filter((error) => error.row === row && !columns?.includes(error.column ?? ``));
 };
 
-const hasRowError = (errors: SpreadsheetValidtionError[], row: number) => {
+const hasRowError = (errors: SpreadsheetValidationError[], row: number) => {
     return !!errors.find((error) => error.row === row);
 };
 
-const findColumnErrors = (errors: SpreadsheetValidtionError[], column: string) => {
+const findColumnErrors = (errors: SpreadsheetValidationError[], column: string) => {
     return errors.filter((error) => error.column === column);
 };
 
-const findFieldErrors = (errors: SpreadsheetValidtionError[], row: number, column: string) => {
+const findFieldErrors = (errors: SpreadsheetValidationError[], row: number, column: string) => {
     return errors.filter((error) => error.row === row && error.column === column);
 };
 
 interface Props {
     className?: string;
     file: File;
-    errors: SpreadsheetValidtionError[];
+    errors: SpreadsheetValidationError[];
     onParseFile: (file: File) => Promise<string[][]>;
 }
 
@@ -99,7 +103,7 @@ export default function PreviewSpreadsheet (props: Props) {
     const columns = data?.slice(0, 1)[0]?.map((c) => c.trim()) ?? [];
     const rows = data?.slice(1) ?? [];
 
-    const buildField = (fieldText: ReactNode, errors: SpreadsheetValidtionError[]) => {
+    const buildField = (fieldText: ReactNode, errors: SpreadsheetValidationError[]) => {
         if (errors.length > 0) return (
             <ErrorField
                 fieldText={fieldText}
@@ -109,12 +113,20 @@ export default function PreviewSpreadsheet (props: Props) {
         return <Typography>{fieldText}</Typography>;
     };
 
+    const generalErrors = findGeneralErrors(errors);
+
     return (
-        <div className={clsx(className, classes.root)}>
+        <div
+            data-testid="preview"
+            className={clsx(className, classes.root)}>
             <table className={classes.table}>
                 <thead>
                     <tr>
-                        <th className={clsx(classes.cell, classes.header)} />
+                        <th className={clsx(classes.cell, classes.header, {
+                            [classes.error]: generalErrors.length > 0,
+                        })} >
+                            {buildField(``, generalErrors)}
+                        </th>
                         {columns.map((columnName, i) => {
                             const columnErrors = findColumnErrors(errors, columnName);
                             return (
@@ -124,7 +136,7 @@ export default function PreviewSpreadsheet (props: Props) {
                                         [classes.error]: columnErrors.length > 0,
                                     })}
                                 >
-                                    <Typography>{columnName}</Typography>
+                                    {buildField(columnName, columnErrors)}
                                 </th>
                             );
                         })}

@@ -10,7 +10,8 @@
         "build:types": "tsc --emitDeclarationOnly",
         "build:sb": "build-storybook",
         "start:sb": "start-storybook -p 6006",
-        "test": "jest"
+        "test": "jest",
+        "lint": "eslint . --fix"
     },
     "repository": {
         "type": "git",
@@ -49,6 +50,7 @@
         "@storybook/theming": "^6.2.0-rc.8",
         "@testing-library/jest-dom": "5.11.9",
         "@testing-library/react": "11.2.6",
+        "@testing-library/react-hooks": "^7.0.1",
         "@testing-library/user-event": "13.1.8",
         "@types/jest": "26.0.23",
         "@types/lodash": "4.14.168",

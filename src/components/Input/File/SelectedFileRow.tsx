@@ -37,6 +37,7 @@ export interface Props {
     className?: string;
     file: File;
     error?: string;
+    areActionsDisabled?: boolean;
     removeButtonTooltip?: string;
     uploadButtonTooltip?: string;
     uploadErrorMessage?: string;
@@ -51,6 +52,7 @@ export default function SelectedFileRow (props: Props) {
         className,
         file,
         error,
+        areActionsDisabled,
         locales,
         removeButtonTooltip = `Remove file`,
         uploadButtonTooltip = `Upload file`,
@@ -81,9 +83,9 @@ export default function SelectedFileRow (props: Props) {
         setUploadLoading(false);
         if (error) {
             setUploadError(error?.message);
-            throw error;
+        } else {
+            setUploadSuccess(true);
         }
-        setUploadSuccess(true);
     };
 
     const fileExtension = file.name.split(`.`).slice(-1)[0];
@@ -134,16 +136,18 @@ export default function SelectedFileRow (props: Props) {
             >
                 {onClickRemove && <IconButton
                     icon={DeleteIcon}
-                    disabled={uploadLoading}
+                    disabled={areActionsDisabled || uploadLoading}
                     tooltip={removeButtonTooltip}
                     onClick={onClickRemove} />
                 }
                 {uploadSuccess
-                    ? <CheckIcon className={classes.successIcon} />
+                    ? <CheckIcon
+                        data-testid="upload-success-icon"
+                        className={classes.successIcon} />
                     : <IconButton
                         icon={CloudUploadIcon}
                         color="primary"
-                        disabled={!!error || uploadLoading}
+                        disabled={areActionsDisabled || !!error || uploadLoading}
                         tooltip={uploadButtonTooltip}
                         onClick={onClickUpload_}
                     />

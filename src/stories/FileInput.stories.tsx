@@ -25,6 +25,6 @@ const Template: Story<Props> = (args) => <FileInput
 export const Main = Template.bind({});
 
 Main.args = {
-    maxSize: 500000,
+    maxFileSize: 500_000,
     accept: `text/csv`,
 };

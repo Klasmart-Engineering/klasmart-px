@@ -1,5 +1,5 @@
-import Loading,
-{ useLoadingStyles } from "./Loading";
+import CircularProgress from "../Progress/CircularProgress";
+import { useButtonLoadingStyles } from "../Progress/utils";
 import {
     Box,
     Button as Btn,
@@ -90,7 +90,7 @@ export default function Button (props: Props) {
         ...rest
     } = props;
     const classes = useStyles();
-    const loadingClasses = useLoadingStyles();
+    const loadingClasses = useButtonLoadingStyles();
     const theme = useTheme();
     const [ loading, setLoading ] = useState(false);
 
@@ -149,7 +149,7 @@ export default function Button (props: Props) {
                         {label}
                     </Typography>
                 </Box>
-                {loading && <Loading />}
+                {loading && <CircularProgress />}
             </Btn>
         </span>
     </Tooltip>;

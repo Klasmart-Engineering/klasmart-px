@@ -48,7 +48,7 @@ export interface SelectedFile {
 
 export interface Props {
     accept?: string | string[];
-    maxSize?: number;
+    maxFileSize?: number;
     maxFiles?: number;
     locales?: string | string[];
     dropzoneLabel?: string;
@@ -65,7 +65,7 @@ export interface Props {
 export default function FileInput (props: Props) {
     const {
         accept,
-        maxSize,
+        maxFileSize,
         maxFiles,
         locales,
         dropzoneLabel,
@@ -107,7 +107,7 @@ export default function FileInput (props: Props) {
             <div className={classes.dropzoneContainer}>
                 <Dropzone
                     accept={accept}
-                    maxSize={maxSize}
+                    maxSize={maxFileSize}
                     maxFiles={maxFiles}
                     label={dropzoneLabel}
                     typeRejectedError={typeRejectedError}
