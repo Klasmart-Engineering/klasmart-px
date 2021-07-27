@@ -1,11 +1,11 @@
-import getCursorPageInfo from './getCursorPageInfo';
+import getContrastColor from './getContrastColor';
 import nameToInitials from './nameToInitials';
 import { trimStrings } from './objectCleaner';
 import sleep from './sleep';
 import stringToColor from './stringToColor';
 
 const utils = {
-    getCursorPageInfo,
+    getContrastColor,
     nameToInitials,
     stringToColor,
     sleep,
@@ -15,7 +15,7 @@ const utils = {
 export default utils;
 
 export {
-    getCursorPageInfo,
+    getContrastColor,
     nameToInitials,
     sleep,
     stringToColor,
