@@ -1,8 +1,8 @@
-import { SpreadsheetValidtionError } from "./Base";
+import { SpreadsheetValidationError } from "./errors";
 import { ReactNode } from "react";
 interface Props {
     fieldText: ReactNode;
-    errors: SpreadsheetValidtionError[];
+    errors: SpreadsheetValidationError[];
 }
 export default function ErrorField(props: Props): JSX.Element;
 export {};

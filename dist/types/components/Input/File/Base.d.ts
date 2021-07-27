@@ -6,7 +6,7 @@ export interface SelectedFile {
 }
 export interface Props {
     accept?: string | string[];
-    maxSize?: number;
+    maxFileSize?: number;
     maxFiles?: number;
     locales?: string | string[];
     dropzoneLabel?: string;

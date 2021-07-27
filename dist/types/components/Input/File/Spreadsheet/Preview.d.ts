@@ -1,9 +1,9 @@
 /// <reference types="react" />
-import { SpreadsheetValidtionError } from "./Base";
+import { SpreadsheetValidationError } from "./errors";
 interface Props {
     className?: string;
     file: File;
-    errors: SpreadsheetValidtionError[];
+    errors: SpreadsheetValidationError[];
     onParseFile: (file: File) => Promise<string[][]>;
 }
 export default function PreviewSpreadsheet(props: Props): JSX.Element;

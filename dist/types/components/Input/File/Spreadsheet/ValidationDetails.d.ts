@@ -1,9 +1,14 @@
 /// <reference types="react" />
-import { SpreadsheetValidtionError } from './Base';
-interface Props {
-    errors: SpreadsheetValidtionError[];
+import { SpreadsheetValidationError } from './Base';
+declare type ValidationFailedCallback = (num: number) => string;
+export declare const validationStatuses: readonly ["in-progress", "passed", "failed"];
+export declare type ValidationStatus = typeof validationStatuses[number];
+export interface Props {
+    errors: SpreadsheetValidationError[];
+    status: ValidationStatus;
     allValidationsPassedMessage?: string;
-    numValidationsFailedMessage?: (num: number) => string;
+    validationInProgressMessage?: string;
+    numValidationsFailedMessage?: ValidationFailedCallback;
 }
 export default function ValidationDetails(props: Props): JSX.Element;
 export {};

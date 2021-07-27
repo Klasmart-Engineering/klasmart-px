@@ -3,6 +3,7 @@ export interface Props {
     className?: string;
     file: File;
     error?: string;
+    areActionsDisabled?: boolean;
     removeButtonTooltip?: string;
     uploadButtonTooltip?: string;
     uploadErrorMessage?: string;

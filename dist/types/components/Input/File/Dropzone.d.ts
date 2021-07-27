@@ -5,6 +5,7 @@ export interface Props {
     maxFiles?: number;
     label?: string;
     typeRejectedError?: string;
+    maxFilesError?: string;
     exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
     onFileAdded?: (file: File) => void;
     onFileRejected?: (file: File, error: string) => void;

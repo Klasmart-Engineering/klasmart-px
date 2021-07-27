@@ -13,7 +13,7 @@ import required from './required';
 declare const validations: {
     alphanumeric: (errorMessage?: string | undefined) => (input: any) => string | true;
     email: (errorMessage?: string | undefined) => (input: any) => string | true;
-    emailOrPhone: (errorMessage?: string | undefined) => (input: any) => string | true;
+    emailOrPhone: (emailErrorMessage?: string | undefined, phoneErrorMessage?: string | undefined) => (input: any) => string | true;
     equals: (value: any, errorMessage?: string | undefined) => (input: any) => string | true;
     letternumeric: (errorMessage?: string | undefined) => (input: any) => string | true;
     max: (max: number, errorMessage?: string | undefined) => (input: any) => string | true;

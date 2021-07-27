@@ -1,13 +1,11 @@
 /// <reference types="react" />
-export declare type AcceptSpreadsheetTypes = ``;
-export interface SpreadsheetValidtionError {
-    row?: number;
-    column?: string;
-    message: string;
-}
+import { SpreadsheetValidationError } from "./errors";
+import { Column } from "./types";
+import { ValidationLocalization } from "./validate";
+export { Column, SpreadsheetValidationError, };
 export interface Props {
     accept?: string | string[];
-    maxSize?: number;
+    maxFileSize?: number;
     locales?: string | string[];
     dropzoneLabel?: string;
     noItemsLabel?: string;
@@ -16,12 +14,17 @@ export interface Props {
     uploadError?: string;
     uploadSuccessMessage?: string;
     typeRejectedError?: string;
+    maxFilesError?: string;
     spreadsheetInvalidData?: string;
     allValidationsPassedMessage?: string;
+    validationInProgressMessage?: string;
     previewNotAvailableMessage?: string;
+    isDryRunEnabled?: boolean;
+    columns?: Column[];
+    validationLocalization?: ValidationLocalization;
     exceedsMaxSizeError?: (fileSize: number, maxSize: number) => string;
     numValidationsFailedMessage?: (num: number) => string;
-    onFileUpload: (file: File) => Promise<void>;
-    onFileUploadError?: (error: any) => SpreadsheetValidtionError[];
+    onFileUpload: (file: File, isDryRun: boolean) => Promise<void>;
+    onFileUploadError?: (error: any, isDryRun: boolean) => SpreadsheetValidationError[];
 }
 export default function (props: Props): JSX.Element;
