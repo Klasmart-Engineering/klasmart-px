@@ -1,5 +1,5 @@
 import ErrorField from "./ErrorField";
-import { SpreadsheetValidationError } from "./errors";
+import { SpreadsheetValidationError } from "./types";
 import {
     createStyles,
     lighten,

@@ -1,4 +1,4 @@
-import { SpreadsheetValidationError } from "./errors";
+import { SpreadsheetValidationError } from "./types";
 import {
     Box,
     createStyles,

@@ -3,9 +3,11 @@ import {
     ColumnLocalize,
     DuplicateColumnError,
     MissingColumnError,
-    SpreadsheetValidationError,
 } from "./errors";
-import { Column } from "./types";
+import {
+    Column,
+    SpreadsheetValidationError,
+} from "./types";
 
 export interface ValidationLocalization {
     emptyFileError?: string;

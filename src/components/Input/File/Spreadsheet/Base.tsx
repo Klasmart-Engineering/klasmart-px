@@ -1,9 +1,11 @@
 import CircularProgress from "../../../Progress/CircularProgress";
 import Dropzone from "../Dropzone";
 import SelectedFileRow from "../SelectedFileRow";
-import { SpreadsheetValidationError } from "./errors";
 import PreviewSpreadsheet from "./Preview";
-import { Column } from "./types";
+import {
+    Column,
+    SpreadsheetValidationError,
+} from "./types";
 import {
     validateData,
     validateFile,
