@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
             minHeight: 32,
             height: `inherit`,
             "& > .MuiChip-label": {
-                padding: theme.spacing(1, 1.5),
+                padding: theme.spacing(7/8, 1.5),
             },
         },
         addChip: {
