@@ -87,10 +87,8 @@ export default function TableFilterMenu<T>(props: Props<T>) {
     const operators = tableFilter?.operators ?? [];
 
     const operator = tableFilter?.operators.find((operator) => operator.value === filter.operatorValue);
-    console.log(`selectValues`, selectValues, `operator.multipleValues`, operator?.multipleValues);
 
     const handleColumnChange = (columnId: string) => {
-        console.log(`handleColumnChange`, columnId);
         const tableFilter = tableFilters.find((tableFilter) => tableFilter.id === columnId);
         const operator = tableFilter?.operators[0];
         const operatorValue = operator?.value ?? ``;
@@ -112,7 +110,6 @@ export default function TableFilterMenu<T>(props: Props<T>) {
     };
 
     const handleOperatorChange = (operatorValue: string) => {
-        console.log(`handleOperatorChange`, operatorValue);
         setFilter({
             ...filter,
             operatorValue,
@@ -128,7 +125,6 @@ export default function TableFilterMenu<T>(props: Props<T>) {
     };
 
     const handleSelectValueChange = (value: string) => {
-        console.log(`handleSelectValueChange`, value);
         setSelectValue(value);
         setFilter({
             ...filter,
@@ -137,7 +133,6 @@ export default function TableFilterMenu<T>(props: Props<T>) {
     };
 
     const handleSelectValuesChange = (values: string[]) => {
-        console.log(`handleSelectValuesChange`, values);
         setSelectValues(values);
         setFilter({
             ...filter,
@@ -146,7 +141,6 @@ export default function TableFilterMenu<T>(props: Props<T>) {
     };
 
     const handleFreeTextValueChange = (value: string) => {
-        console.log(`handleFreeTextValueChange`, value);
         setTextFieldValue(value);
         setFilter({
             ...filter,
