@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => createStyles({
         "& .MuiTab-root": {
             backgroundColor: `transparent !important`,
         },
+        "& .Mui-selected": {
+            color: theme.palette.primary.contrastText,
+        },
     },
 }));
 
@@ -67,7 +70,6 @@ export default function Tabs (props: Props) {
                 className: classes.tabIndicator,
             }}
             indicatorColor="primary"
-            textColor="primary"
             variant="scrollable"
             scrollButtons="auto"
             className={clsx(classes.tabsContainer, className)}

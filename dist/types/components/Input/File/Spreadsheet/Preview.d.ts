@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { SpreadsheetValidationError } from "./errors";
+import { SpreadsheetValidationError } from "./types";
 interface Props {
     className?: string;
     file: File;

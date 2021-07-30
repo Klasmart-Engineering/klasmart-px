@@ -1,6 +1,5 @@
 /// <reference types="react" />
-import { SpreadsheetValidationError } from "./errors";
-import { Column } from "./types";
+import { Column, SpreadsheetValidationError } from "./types";
 import { ValidationLocalization } from "./validate";
 export { Column, SpreadsheetValidationError, };
 export interface Props {

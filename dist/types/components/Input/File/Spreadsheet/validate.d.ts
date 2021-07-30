@@ -1,5 +1,5 @@
-import { ColumnLocalize, SpreadsheetValidationError } from "./errors";
-import { Column } from "./types";
+import { ColumnLocalize } from "./errors";
+import { Column, SpreadsheetValidationError } from "./types";
 export interface ValidationLocalization {
     emptyFileError?: string;
     duplicateColumnError?: ColumnLocalize;

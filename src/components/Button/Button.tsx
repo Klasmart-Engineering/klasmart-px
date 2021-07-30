@@ -26,12 +26,22 @@ const useStyles = makeStyles((theme) => createStyles({
 
 const getTextColor = (color: string | undefined, variant: Variant | undefined, theme: Theme) => {
     if (variant === `contained`) {
-        if (!color) return `white`;
-        if (COLORS.includes(color as Color)) return theme.palette[color as Color].contrastText;
-        return theme.palette.getContrastText(color);
+        if (!color || !COLORS.includes(color as Color)) return `white`;
+
+        return theme.palette[color as Color].main !== theme.palette[color as Color].contrastText
+            ? theme.palette[color as Color].contrastText
+            : `white`;
     }
+
+    if (variant === `outlined`) {
+        if (!color) return `black`;
+        if (!COLORS.includes(color as Color)) return color;
+
+        return theme.palette[color as Color].contrastText;
+    }
+
     if (!color) return `black`;
-    if (COLORS.includes(color as Color)) return theme.palette[color as Color].main;
+    if (COLORS.includes(color as Color)) return theme.palette[color as Color].contrastText;
     return color;
 };
 

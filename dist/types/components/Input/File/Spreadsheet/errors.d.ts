@@ -1,8 +1,4 @@
-export interface SpreadsheetValidationError {
-    row?: number;
-    column?: string;
-    message: string;
-}
+import { SpreadsheetValidationError } from "./types";
 interface GeneralError extends SpreadsheetValidationError {
     message: string;
 }

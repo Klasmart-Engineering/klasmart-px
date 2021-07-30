@@ -1,4 +1,4 @@
-import { SpreadsheetValidationError } from "./errors";
+import { SpreadsheetValidationError } from "./types";
 import { ReactNode } from "react";
 interface Props {
     fieldText: ReactNode;
