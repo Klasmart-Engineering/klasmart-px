@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => createStyles({
 
 const MAX_INITIALS_LENGTH = 3;
 
-interface Props {
+export interface Props {
     name: string;
     src?: string;
     maxInitialsLength?: number;
@@ -71,7 +71,7 @@ export default function UserAvatar (props: Props) {
                 >
                     {name
                         ? nameToInitials(name, maxInitialsLength)
-                        : <Person fontSize={size === `medium` ? `default` : size} />
+                        : <Person fontSize={size} />
                     }
                 </Avatar>
             </span>

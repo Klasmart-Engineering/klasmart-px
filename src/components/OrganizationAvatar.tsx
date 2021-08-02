@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => createStyles({
 
 const MAX_INITIALS_LENGTH = 4;
 
-interface Props {
+export interface Props {
     name: string;
     src?: string;
     maxInitialsLength?: number;
@@ -71,7 +71,7 @@ export default function OrganizationAvatar (props: Props) {
                 >
                     {name
                         ? nameToInitials(name, maxInitialsLength)
-                        : <Business fontSize={size === `medium` ? `default` : size} />
+                        : <Business fontSize={size} />
                     }
                 </Avatar>
             </span>
