@@ -357,6 +357,7 @@ export const PageTableServer = () => {
 
     return (
         <PageTable
+            hideNoGroupOption
             idField="id"
             loading={loadingData || loadingGroups}
             columns={columns}
@@ -436,10 +437,12 @@ export const PageTableLocal = () => {
                 {
                     text: `1977`,
                     value: 1977,
+                    count: true,
                 },
                 {
                     text: `1999`,
                     value: 1999,
+                    count: true,
                 },
             ],
         },
@@ -447,6 +450,9 @@ export const PageTableLocal = () => {
 
     return (
         <PageTable
+            hideNoGroupOption
+            hideSelectAll
+            showSelectables
             idField="id"
             columns={columns}
             rows={data}

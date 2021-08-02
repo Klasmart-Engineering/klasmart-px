@@ -156,6 +156,9 @@ export interface BaseProps<T> {
     secondaryActions?: ToolbarAction[];
     selectActions?: ToolbarSelectAction<T>[];
     loading?: boolean;
+    hideSelectAll?: boolean;
+    hideAllGroupTab?: boolean;
+    hideNoGroupOption?: boolean;
     localization?: TableLocalization;
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;
@@ -195,6 +198,9 @@ export default function BaseTable<T> (props: Props<T>) {
         secondaryActions,
         selectActions,
         loading,
+        hideSelectAll,
+        hideAllGroupTab,
+        hideNoGroupOption,
         localization,
         locale,
         collatorOptions,
@@ -209,6 +215,7 @@ export default function BaseTable<T> (props: Props<T>) {
 
     const classes = useStyles();
 
+    const fallbackGroupBy = hideNoGroupOption ? columns.find((column) => column.groups)?.id : undefined;
     const persistentColumnIds = columns.filter((c) => c.persistent).map(({ id }) => id);
     const selectedColumnIds = columns.filter(({ hidden }) => !hidden).map(({ id }) => id);
     const searchableColumns = columns.filter((c) => !c.disableSearch);
@@ -219,8 +226,9 @@ export default function BaseTable<T> (props: Props<T>) {
 
     const [ order_, setOrder ] = useState<Order>([ `asc`, `desc` ].includes(order ?? ``) ? order as Order : `desc`);
     const [ orderBy_, setOrderBy ] = useState(columns.find((column) => column.id === orderBy)?.id ?? idField);
-    const [ groupBy_, setGroupBy ] = useState(columns.find((column) => column.id === groupBy)?.id);
-    const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
+    const [ groupBy_, setGroupBy ] = useState(columns.find((column) => column.id === groupBy)?.id ?? fallbackGroupBy);
+    const fallbackSubgroupBy = hideAllGroupTab ? columns.find((column) => column.id === groupBy_)?.groups?.[0]?.value?.toString() : undefined;
+    const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy ?? fallbackSubgroupBy);
     const [ selectedRowIds_, setSelectedRowIds ] = useState<T[Extract<keyof T, string>][]>(selectedRows ?? []);
     const [ selectedColumnIds_, setSelectedColumnIds ] = useState(union(selectedColumnIds, persistentColumnIds));
     const [ search_, setSearch ] = useState(search ?? ``);
@@ -234,21 +242,21 @@ export default function BaseTable<T> (props: Props<T>) {
 
     const handleSelectAllRowsClick = (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => {
         switch (value) {
-        case `all`: {
+        case CheckboxDropdownValue.ALL: {
             const newSelecteds = filteredSortedRows.map((n) => n[idField]);
             setSelectedRowIds(newSelecteds);
             return;
         }
-        case `allPages`: {
+        case CheckboxDropdownValue.ALL_PAGES: {
             const newSelecteds = filteredSortedGroupedRows.map((n) => n[idField]);
             setSelectedRowIds(selectedRowIds_.concat(newSelecteds));
             return;
         }
-        case `none`: {
+        case CheckboxDropdownValue.NONE: {
             setSelectedRowIds([]);
             return;
         }
-        case `page`: {
+        case CheckboxDropdownValue.PAGE: {
             const pageRows = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
             setSelectedRowIds(union(selectedRowIds_, pageRows));
             return;
@@ -323,7 +331,7 @@ export default function BaseTable<T> (props: Props<T>) {
         return column?.groups?.map((group) => ({
             text: group.text,
             value: group.value,
-            count: group.count ?? filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, String(group.value))).length,
+            count: group.count === true ? filteredSortedRows.filter(filterRowsBySubgroup(groupBy_, String(group.value))).length : group.count,
         })) ?? [];
     }, [
         rows,
@@ -353,11 +361,16 @@ export default function BaseTable<T> (props: Props<T>) {
     }, [ search ]);
 
     useEffect(() => {
-        setSubgroupBy(subgroupBy);
-    }, [ subgroupBy ]);
+        if (loading) return;
+        setSubgroupBy(subgroupBy ?? fallbackSubgroupBy);
+    }, [
+        subgroupBy,
+        groupBy_,
+        columns,
+    ]);
 
     useEffect(() => {
-        setGroupBy(columns.find((column) => column.id === groupBy)?.id);
+        setGroupBy(columns.find((column) => column.id === groupBy)?.id ?? fallbackGroupBy);
     }, [ groupBy ]);
 
     useEffect(() => {
@@ -435,6 +448,8 @@ export default function BaseTable<T> (props: Props<T>) {
             {hasGroups && <>
                 <BaseTableGroupTabs
                     allCount={noGroupTotal ?? filteredSortedRows.length}
+                    hideAllGroupTab={hideAllGroupTab}
+                    hideNoGroupOption={hideNoGroupOption}
                     groupBy={groupBy_}
                     groups={groupableColumns}
                     subgroupBy={subgroupBy_}
@@ -458,6 +473,7 @@ export default function BaseTable<T> (props: Props<T>) {
                         selected={selectedColumnIds_}
                         showSelectables={showSelectables_}
                         hasGroups={hasGroups}
+                        hideSelectAll={hideSelectAll}
                         localization={localization?.head}
                         checkboxDropdownLocalization={localization?.checkboxDropdown}
                         columnSelectorLocalization={localization?.columnSelector}

@@ -95,6 +95,7 @@ interface Props<T> {
     loading?: boolean;
     showSelectables: boolean;
     hasGroups: boolean;
+    hideSelectAll?: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;
     localization?: HeadLocalization;
@@ -116,6 +117,7 @@ export default function BaseTableHead<T> (props: Props<T>) {
         hasGroups,
         checkboxDropdownLocalization,
         columnSelectorLocalization,
+        hideSelectAll,
         localization,
         onSelectAllClick,
         onSelectAllPageClick,
@@ -132,15 +134,18 @@ export default function BaseTableHead<T> (props: Props<T>) {
             <TableRow className={classes.container}>
                 {showSelectables &&
                     <TableCell padding="checkbox">
-                        {selectMode === `multiple` && <BaseTableCheckboxDropdown
-                            hasGroups={hasGroups}
-                            disabled={loading}
-                            indeterminate={numSelected > 0 && numSelected < rowCount}
-                            checked={rowCount > 0 && numSelected === rowCount}
-                            localization={checkboxDropdownLocalization}
-                            onSelectAllPageClick={onSelectAllPageClick}
-                            onSelectAllClick={onSelectAllClick}
-                        />}
+                        {selectMode === `multiple` && (
+                            <BaseTableCheckboxDropdown
+                                hasGroups={hasGroups}
+                                hideSelectAll={hideSelectAll}
+                                disabled={loading}
+                                indeterminate={numSelected > 0 && numSelected < rowCount}
+                                checked={rowCount > 0 && numSelected === rowCount}
+                                localization={checkboxDropdownLocalization}
+                                onSelectAllPageClick={onSelectAllPageClick}
+                                onSelectAllClick={onSelectAllClick}
+                            />
+                        )}
                     </TableCell>
                 }
                 {columns

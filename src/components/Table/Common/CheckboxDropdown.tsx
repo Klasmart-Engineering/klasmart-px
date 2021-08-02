@@ -22,7 +22,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
 }));
 
-export type CheckboxDropdownValue = "all" | "allPages" | "none" | "page"
+export enum CheckboxDropdownValue {
+    ALL = `all`,
+    ALL_PAGES = `all-pages`,
+    NONE = `none`,
+    PAGE = `page`,
+}
 
 export interface CheckboxDropdownAction {
     label: string;
@@ -40,6 +45,7 @@ interface Props {
     indeterminate: boolean;
     checked: boolean;
     hasGroups: boolean;
+    hideSelectAll?: boolean;
     disabled?: boolean;
     localization?: CheckboxDropdownLocalization;
     onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
@@ -52,6 +58,7 @@ export default function BaseTableCheckboxDropdown(props: Props) {
         checked,
         disabled,
         hasGroups,
+        hideSelectAll,
         localization,
         onSelectAllClick,
         onSelectAllPageClick,
@@ -60,24 +67,28 @@ export default function BaseTableCheckboxDropdown(props: Props) {
     const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const standardActions: CheckboxDropdownAction[] = [
-        {
-            label: localization?.allPages ?? `All pages`,
-            value: `allPages`,
-        },
+        ...hideSelectAll ? [] : [
+            {
+                label: localization?.allPages ?? `All pages`,
+                value: CheckboxDropdownValue.ALL_PAGES,
+            },
+        ],
         {
             label: localization?.thisPage ?? `This page`,
-            value: `page`,
+            value: CheckboxDropdownValue.PAGE,
         },
         {
             label: localization?.none ?? `None`,
-            value: `none`,
+            value: CheckboxDropdownValue.NONE,
         },
     ];
     const actions: CheckboxDropdownAction[] = hasGroups ? [
-        {
-            label: localization?.allGroupsPages ?? `All groups & pages`,
-            value: `all`,
-        },
+        ...hideSelectAll ? [] : [
+            {
+                label: localization?.allGroupsPages ?? `All groups & pages`,
+                value: CheckboxDropdownValue.ALL,
+            },
+        ],
         ...standardActions,
     ] : standardActions;
 
