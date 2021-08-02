@@ -12,6 +12,8 @@ export { default as ConfirmDialogProvider } from "./components/Dialog/Confirm/Pr
 export { usePrompt } from "./components/Dialog/Prompt/hooks";
 export { default as PromptDialogProvider } from "./components/Dialog/Prompt/Provider";
 export { default as Drawer } from "./components/Drawer";
+export { default as FileCounterIconButton } from "./components/File/CounterIconButton";
+export { default as FileTypeIcon } from "./components/File/TypeIcon";
 export { default as FullScreenDialog } from "./components/FullScreenDialog";
 export { default as ImagePicker } from "./components/ImagePicker/ImagePicker";
 export { default as ColorPicker } from "./components/Input/ColorPicker";

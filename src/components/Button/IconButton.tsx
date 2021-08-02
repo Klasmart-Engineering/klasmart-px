@@ -1,17 +1,21 @@
 import { useIsMounted } from "../../hooks";
+import {
+    ActionColor,
+    BaseColor,
+    CommonColor,
+    StatusColor,
+    ThemeColor,
+} from "../../types/colors";
 import CircularProgress from "../Progress/CircularProgress";
 import { useButtonLoadingStyles } from "../Progress/utils";
 import {
     createStyles,
     IconButton as IconBtn,
     makeStyles,
+    Theme,
     Tooltip,
     useTheme,
 } from "@material-ui/core";
-import {
-    Palette,
-    PaletteColor,
-} from "@material-ui/core/styles/createPalette";
 import { SvgIconComponent } from "@material-ui/icons";
 import clsx from "clsx";
 import React,
@@ -23,14 +27,64 @@ const useStyles = makeStyles((theme) => createStyles({
     },
 }));
 
-interface Props {
+type IconButtonColor = BaseColor | CommonColor | ThemeColor | StatusColor | ActionColor | undefined;
+
+const buildStyling = (color: IconButtonColor, theme: Theme) => {
+    switch(color) {
+    case `action`: return {
+        style: {
+            color: theme.palette.action.active,
+        },
+    };
+    case `disabled`: return {
+        style: {
+            color: theme.palette.action.disabled,
+        },
+    };
+    case `white`: return {
+        style: {
+            color: theme.palette.common.white,
+        },
+    };
+    case `black`: return {
+        style: {
+            color: theme.palette.common.black,
+        },
+    };
+    case `info`: return {
+        style: {
+            color: theme.palette.info.main,
+        },
+    };
+    case `success`: return {
+        style: {
+            color: theme.palette.success.main,
+        },
+    };
+    case `warning`: return {
+        style: {
+            color: theme.palette.warning.main,
+        },
+    };
+    case `error`: return {
+        style: {
+            color: theme.palette.error.main,
+        },
+    };
+    default: return {
+        color,
+    };
+    }
+};
+
+export interface Props {
     className?: string;
     icon: SvgIconComponent;
     iconSize?: `inherit` | `default` | `small` | `large`;
     size?: "small" | "medium";
     tooltip?: string;
     disabled?: boolean;
-    color?: { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette];
+    color?: IconButtonColor;
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 
@@ -50,6 +104,8 @@ export default function IconButton (props: Props) {
     const [ loading, setLoading ] = useState(false);
     const theme = useTheme();
     const isMounted = useIsMounted();
+
+    const styling = buildStyling(color, theme);
 
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setLoading(true);
@@ -71,11 +127,9 @@ export default function IconButton (props: Props) {
                     className={clsx(className, {
                         [loadingClasses.buttonLoading]: loading,
                     })}
-                    style={{
-                        color: (color && !disabled) ? theme.palette[color].main : undefined,
-                    }}
                     size={size}
                     onClick={handleClick}
+                    {...styling}
                 >
                     <Icon
                         fontSize={iconSize}

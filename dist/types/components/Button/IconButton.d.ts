@@ -1,16 +1,15 @@
-import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
+import { ActionColor, BaseColor, CommonColor, StatusColor, ThemeColor } from "../../types/colors";
 import { SvgIconComponent } from "@material-ui/icons";
 import React from "react";
-interface Props {
+declare type IconButtonColor = BaseColor | CommonColor | ThemeColor | StatusColor | ActionColor | undefined;
+export interface Props {
     className?: string;
     icon: SvgIconComponent;
     iconSize?: `inherit` | `default` | `small` | `large`;
     size?: "small" | "medium";
     tooltip?: string;
     disabled?: boolean;
-    color?: {
-        [P in keyof Palette]: Palette[P] extends PaletteColor ? P : never;
-    }[keyof Palette];
+    color?: IconButtonColor;
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 export default function IconButton(props: Props): JSX.Element;

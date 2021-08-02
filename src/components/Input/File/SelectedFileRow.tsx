@@ -1,10 +1,9 @@
 import IconButton from "../../Button/IconButton";
-import FileIcon from "./FileIcon";
+import FileTypeIcon from "../../File/TypeIcon";
 import {
     Box,
     createStyles,
     makeStyles,
-    Paper,
     Typography,
 } from "@material-ui/core";
 import {
@@ -97,36 +96,36 @@ export default function SelectedFileRow (props: Props) {
             alignItems="center"
             className={clsx(classes.root, className)}
         >
-            <FileIcon fileType={fileExtension} />
+            <FileTypeIcon fileType={fileExtension} />
             <Box
                 display="flex"
                 flexDirection="column"
             >
                 <Typography>{file.name}</Typography>
-                {(error || uploadError)
-                        && <Typography
-                            color="error"
-                            variant="caption"
-                        >
-                            {error || uploadErrorMessage || uploadError }
-                        </Typography>
-                }
-                {uploadSuccess
-                        && <Typography
-                            className={classes.successText}
-                            variant="caption"
-                        >
-                            {uploadSuccessMessage}
-                        </Typography>
-                }
-                {!error && !uploadError && !uploadSuccess &&
-                        <Typography
-                            color="textSecondary"
-                            variant="caption"
-                        >
-                            {fileSize} Kb • {lastModified}
-                        </Typography>
-                }
+                {error || uploadError && (
+                    <Typography
+                        color="error"
+                        variant="caption"
+                    >
+                        {error || uploadErrorMessage || uploadError }
+                    </Typography>
+                )}
+                {uploadSuccess && (
+                    <Typography
+                        className={classes.successText}
+                        variant="caption"
+                    >
+                        {uploadSuccessMessage}
+                    </Typography>
+                )}
+                {!error && !uploadError && !uploadSuccess && (
+                    <Typography
+                        color="textSecondary"
+                        variant="caption"
+                    >
+                        {fileSize} Kb • {lastModified}
+                    </Typography>
+                )}
             </Box>
             <Box flex={1} />
             <Box
