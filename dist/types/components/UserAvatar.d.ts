@@ -1,5 +1,5 @@
 /// <reference types="react" />
-interface Props {
+export interface Props {
     name: string;
     src?: string;
     maxInitialsLength?: number;
@@ -8,4 +8,3 @@ interface Props {
     color?: string;
 }
 export default function UserAvatar(props: Props): JSX.Element;
-export {};

@@ -55,6 +55,9 @@ export interface BaseProps<T> {
     secondaryActions?: ToolbarAction[];
     selectActions?: ToolbarSelectAction<T>[];
     loading?: boolean;
+    hideSelectAll?: boolean;
+    hideAllGroupTab?: boolean;
+    hideNoGroupOption?: boolean;
     localization?: TableLocalization;
     locale?: string;
     collatorOptions?: Intl.CollatorOptions;

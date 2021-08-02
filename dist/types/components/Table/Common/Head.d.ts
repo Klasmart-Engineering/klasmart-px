@@ -40,6 +40,7 @@ interface Props<T> {
     loading?: boolean;
     showSelectables: boolean;
     hasGroups: boolean;
+    hideSelectAll?: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;
     localization?: HeadLocalization;

@@ -1,5 +1,10 @@
 import React from "react";
-export declare type CheckboxDropdownValue = "all" | "allPages" | "none" | "page";
+export declare enum CheckboxDropdownValue {
+    ALL = "all",
+    ALL_PAGES = "all-pages",
+    NONE = "none",
+    PAGE = "page"
+}
 export interface CheckboxDropdownAction {
     label: string;
     value: CheckboxDropdownValue;
@@ -14,6 +19,7 @@ interface Props {
     indeterminate: boolean;
     checked: boolean;
     hasGroups: boolean;
+    hideSelectAll?: boolean;
     disabled?: boolean;
     localization?: CheckboxDropdownLocalization;
     onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
