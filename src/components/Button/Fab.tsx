@@ -58,6 +58,7 @@ export default function Fab (props: Props) {
     const breakpoint = useWidth();
     const [ loading, setLoading ] = useState(false);
 
+    const textColor_ = (color && !disabled) ? (theme.palette[color].main !== theme.palette[color].contrastText ? theme.palette[color].contrastText : `white`) : undefined;
     const variant_ = variant ?? ((responsiveExtended?.includes(breakpoint)) ? `extended` : `circular`);
     const tooltip_ = tooltip ?? (variant_ === `circular` ? (label ?? ``) : ``);
 
@@ -83,7 +84,7 @@ export default function Fab (props: Props) {
                 })}
                 style={{
                     backgroundColor: (color && !disabled) ? theme.palette[color].main : undefined,
-                    color: (color && !disabled) ? theme.palette[color].contrastText : undefined,
+                    color: !disabled ? textColor_ : undefined,
                 }}
                 onClick={handleClick}
             >
