@@ -67,14 +67,18 @@ const hasRowError = (errors: SpreadsheetValidationError[], row: number) => {
 };
 
 const findColumnErrors = (errors: SpreadsheetValidationError[], column: string) => {
-    return errors.filter((error) => error.column === column);
+    return errors.filter((error) => error.column === column && !error.row);
+};
+
+const hasColumnError = (errors: SpreadsheetValidationError[], column: string) => {
+    return !!errors.find((error) => error.column === column);
 };
 
 const findFieldErrors = (errors: SpreadsheetValidationError[], row: number, column: string) => {
     return errors.filter((error) => error.row === row && error.column === column);
 };
 
-interface Props {
+export interface Props {
     className?: string;
     file: File;
     errors: SpreadsheetValidationError[];
@@ -133,7 +137,7 @@ export default function PreviewSpreadsheet (props: Props) {
                                 <th
                                     key={`column-${i}`}
                                     className={clsx(classes.cell, classes.header, {
-                                        [classes.error]: columnErrors.length > 0,
+                                        [classes.error]: hasColumnError(errors, columnName),
                                     })}
                                 >
                                     {buildField(columnName, columnErrors)}

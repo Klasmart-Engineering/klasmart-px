@@ -8,7 +8,7 @@ import { Story } from "@storybook/react";
 import React from "react";
 
 export default {
-    title: `ValidationDetails`,
+    title: `Spreadsheet/ValidationDetails`,
     component: ValidationDetails,
     argTypes: {
         status: {

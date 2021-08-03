@@ -5,7 +5,12 @@ import Base,
     SpreadsheetValidationError,
 } from "./Base";
 import {
-    queryAllByRole,
+    expectHasErrorIcon,
+    expectPreviewData,
+    hasErrorStyling,
+    waitForPreviewToParse,
+} from "./Preview.test";
+import {
     render as actualRender,
     screen,
     waitFor,
@@ -157,12 +162,6 @@ const upload = (container: Document | Element, files?: FileStub | FileStub[]) =>
     userEvent.upload(node, toUpload);
 };
 
-const waitForSpreadsheetToLoad = async () => {
-    return waitFor(() => {
-        expect(document.querySelectorAll(`tbody tr`).length).toBeGreaterThan(0);
-    });
-};
-
 async function waitForPreview() {
     const { container } = render();
 
@@ -171,7 +170,7 @@ async function waitForPreview() {
     const preview = await screen.findByTestId(`preview`);
     expect(preview).toBeInTheDocument();
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 }
 
 function waitForUploadToFinish() {
@@ -215,18 +214,6 @@ function expectIsUploading() {
     expect(removeButton()).toBeDisabled();
 }
 
-const hasErrorStyling = (el: Element) => {
-    return Array.from(el.classList).some(cls => cls.startsWith(`makeStyles-error`));
-};
-
-function expectHasError(el: Element, errorMessage: string) {
-    expect(hasErrorStyling(el)).toBe(true);
-    const errorIcon = el.querySelector(`svg`);
-    if (errorIcon === null) throw Error(`Expected error icon`);
-    // SVGElement doesn't define a `title` property, but it can be accessed from it's attributes instead
-    expect(errorIcon.attributes.getNamedItem(`title`)?.value).toBe(errorMessage);
-}
-
 function expectPreviewErrors() {
     expect(screen.getByText(`Invalid data`)).toBeInTheDocument();
     expect(screen.getByText(`3 validations failed`)).toBeInTheDocument();
@@ -249,11 +236,11 @@ function expectPreviewErrors() {
         false,
     ]);
 
-    expectHasError(table.rows[1].cells[1], `Too short`);
+    expectHasErrorIcon(table.rows[1].cells[1], `Too short`);
 
     // Row level error
     expect(Array.from(table.rows[2].cells).every(hasErrorStyling)).toBe(true);
-    expectHasError(table.rows[2].cells[0], `Row level error`);
+    expectHasErrorIcon(table.rows[2].cells[0], `Row level error`);
 
     // 100% valid row
     expect(Array.from(table.rows[3].cells).some(hasErrorStyling)).toBe(false);
@@ -355,27 +342,6 @@ function expectValidationFailed() {
     expectPreviewErrors();
 }
 
-const rowNumbers = (length: number) => Array.from({
-    length: length - 1,
-// eslint-disable-next-line @typescript-eslint/naming-convention
-}, (_, i) => (i+1).toString());
-
-function expectPreviewData(spreadsheetData: string[][]) {
-    const preview = screen.getByTestId(`preview`);
-
-    expect(queryAllByRole(preview, `row`)).toHaveLength(spreadsheetData.length);
-
-    // Row indexes
-    expect(Array.from(preview.querySelectorAll(`td:first-child`)).map(node => node.textContent)).toEqual(rowNumbers(spreadsheetData.length));
-
-    const data = Array.from(preview.querySelectorAll(`tr`)).map(row =>
-        // Ignore first column
-        [ ...row.cells ].filter((cell, i) => i !== 0).map(cell => cell.textContent),
-    );
-
-    expect(data).toEqual(spreadsheetData);
-}
-
 const resetOnFileUploadMock = () => (props.onFileUpload as jest.MockedFunction<Props["onFileUpload"]>).mockClear();
 
 const removeButton = () => {
@@ -420,7 +386,7 @@ test(`displays blank lines in the preview`, async() => {
     const preview = await screen.findByTestId(`preview`);
     expect(preview).toBeInTheDocument();
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expect(document.querySelectorAll(`tbody tr`)).toHaveLength(4);
 
@@ -533,7 +499,7 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
         const preview = await screen.findByTestId(`preview`);
         expect(preview).toBeInTheDocument();
 
-        await waitForSpreadsheetToLoad();
+        await waitForPreviewToParse();
 
         expect(screen.getByText(`Invalid data`)).toBeInTheDocument();
         expect(screen.getByText(`1 validations failed`)).toBeInTheDocument();
@@ -544,7 +510,7 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
         if (table === null) throw new AssertionError({
             message: `Preview table not found`,
         });
-        expectHasError(table.rows[0].cells[0], `Missing column Email`);
+        expectHasErrorIcon(table.rows[0].cells[0], `Missing column Email`);
 
         expect(props.onFileUpload).not.toBeCalled();
     });
@@ -561,7 +527,7 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
         const preview = await screen.findByTestId(`preview`);
         expect(preview).toBeInTheDocument();
 
-        await waitForSpreadsheetToLoad();
+        await waitForPreviewToParse();
 
         expect(screen.getByText(`Invalid data`)).toBeInTheDocument();
         expect(screen.getByText(`1 validations failed`)).toBeInTheDocument();
@@ -597,7 +563,7 @@ test(`when extra columns are duplicated, validation passes`, async() => {
     const preview = await screen.findByTestId(`preview`);
     expect(preview).toBeInTheDocument();
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectValidationPassed(data);
 });
@@ -620,7 +586,7 @@ test(`when optional columns are missing, validation passes`, async() => {
     const preview = await screen.findByTestId(`preview`);
     expect(preview).toBeInTheDocument();
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectValidationPassed();
 });
@@ -643,7 +609,7 @@ test(`on successful upload calls the 'onFileUpload' callback`, async () => {
 
     await waitForUploadToFinish();
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectSuccessfulUpload();
 });
@@ -655,13 +621,13 @@ test(`on failed upload calls the 'onFileUploadError' callback and displays error
 
     upload(container);
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     userEvent.click(uploadButton() as HTMLElement);
 
     await waitForUploadToFinish();
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectPreviewData(defaultData);
 
@@ -685,7 +651,7 @@ test(`if isDryRunEnabled, uploads immediately after loading a valid spreadsheet`
 
     await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectIsUploading();
 
@@ -694,7 +660,7 @@ test(`if isDryRunEnabled, uploads immediately after loading a valid spreadsheet`
     const preview = await screen.findByTestId(`preview`);
     expect(preview).toBeInTheDocument();
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectSuccessfulDryRun();
 
@@ -709,7 +675,7 @@ test(`after a successful dryrun, can be manually uploaded`, async() => {
 
     await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectIsUploading();
 
@@ -736,7 +702,7 @@ test(`after a failed dryrun, upload is disabled`, async() => {
 
     await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectIsUploading();
 
@@ -772,7 +738,7 @@ test(`after a successful dryrun, a manual upload can fail`, async() => {
 
     await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectIsUploading();
 
@@ -784,7 +750,7 @@ test(`after a successful dryrun, a manual upload can fail`, async() => {
 
     await waitForUploadToFinish();
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectPreviewData(defaultData);
 
@@ -813,7 +779,7 @@ test(`on failed dryrun and no SpreadsheetValidationErrors are returned from the 
 
     await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
 
-    await waitForSpreadsheetToLoad();
+    await waitForPreviewToParse();
 
     expectIsUploading();
 
