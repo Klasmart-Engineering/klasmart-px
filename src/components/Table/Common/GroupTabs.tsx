@@ -117,7 +117,7 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
             },
         ] : [],
         ...subgroups.map((subgroup) => ({
-            text: `${subgroup.text}${subgroup.count ? ` (${subgroup.count})` : ``}`,
+            text: `${subgroup.text}${typeof subgroup.count === `number` ? ` (${subgroup.count})` : ``}`,
             value: `${subgroup.value}`,
         })),
     ];
