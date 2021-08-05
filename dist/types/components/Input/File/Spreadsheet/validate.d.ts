@@ -1,9 +1,9 @@
-import { ColumnLocalize } from "./errors";
+import { ColumnLocalize, FilenameLocalize } from "./errors";
 import { Column, SpreadsheetValidationError } from "./types";
 export interface ValidationLocalization {
-    emptyFileError?: string;
+    emptyFileError?: FilenameLocalize;
     duplicateColumnError?: ColumnLocalize;
     missingColumnError?: ColumnLocalize;
 }
-export declare function validateFile(data: string[][], localization?: ValidationLocalization): string;
+export declare function validateFile(file: File, data: string[][], localization?: ValidationLocalization): SpreadsheetValidationError | undefined;
 export declare function validateData(data: string[][], localization?: ValidationLocalization, columns?: Column[]): SpreadsheetValidationError[];
