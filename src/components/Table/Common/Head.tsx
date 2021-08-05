@@ -8,6 +8,7 @@ import BaseTableCheckboxDropdown,
 import BaseTableColumnSelector,
 { ColumnSelectorLocalization } from "./ColumnSelector";
 import { SubgroupTab } from "./GroupTabs";
+import { DEFAULT_SORT_ORDER } from "./Pagination/shared";
 import {
     alpha,
     Box,
@@ -176,7 +177,7 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                 <TableSortLabel
                                     disabled={column.disableSort}
                                     active={orderBy === column.id}
-                                    direction={order}
+                                    direction={orderBy === column.id ? order : DEFAULT_SORT_ORDER}
                                     style={{
                                         flexDirection,
                                     }}
