@@ -291,6 +291,7 @@ export const PageTableServer = () => {
             id: `happyEnding`,
             label: `Happy Ending`,
             groups: happyEndingGroups,
+            align: `center`,
             render: (row) => row.happyEnding ? <Check color="action" /> : <Close color="error" />,
         },
         {

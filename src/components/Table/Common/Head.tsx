@@ -173,7 +173,16 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                 justifyContent="space-between"
                                 flexDirection={flexDirection}
                             >
-                                {isAlignCenter && <Box flex="1" />}
+                                {isAlignCenter && (
+                                    <>
+                                        <span
+                                            style={{
+                                                width: 44, // width of column remove button
+                                            }}
+                                        />
+                                        <Box flex="1" />
+                                    </>
+                                )}
                                 <TableSortLabel
                                     disabled={column.disableSort}
                                     active={orderBy === column.id}
