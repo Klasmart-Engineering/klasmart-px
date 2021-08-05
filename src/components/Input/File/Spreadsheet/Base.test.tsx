@@ -68,7 +68,7 @@ const props: Required<Props> = {
         required: true,
     };}),
     validationLocalization: {
-        emptyFileError: `File is empty`,
+        emptyFileError: jest.fn((fileName: string) => `${fileName} is empty`),
         duplicateColumnError: jest.fn((columnName: string) => `Duplicate column ${columnName}`),
         missingColumnError: jest.fn((columnName: string) => `Missing column ${columnName}`),
     },
@@ -478,7 +478,9 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
 
         expectPreviewUnavailable();
 
-        expect(screen.getByText(`File is empty`)).toBeInTheDocument();
+        expect(props.validationLocalization.emptyFileError).toBeCalledWith(`test.csv`);
+
+        expect(screen.getByText(`test.csv is empty`)).toBeInTheDocument();
 
         expect(props.onFileUpload).not.toBeCalled();
     });

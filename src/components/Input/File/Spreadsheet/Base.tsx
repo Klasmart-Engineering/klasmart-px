@@ -189,9 +189,9 @@ export default function (props: Props) {
         Papa.parse<string[]>(file, {
             complete: (results) => {
                 const { data } = results;
-                const fileErr = validateFile(data, validationLocalization);
+                const fileErr = validateFile(file, data, validationLocalization);
                 if (fileErr) {
-                    setFileError(fileErr);
+                    setFileError(fileErr.message);
                 } else {
                     // File is OK, so we can move onto data level validation
                     setErrors(validateData(data, validationLocalization, columns));

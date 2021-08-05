@@ -2,6 +2,8 @@
 import {
     ColumnLocalize,
     DuplicateColumnError,
+    EmptyFileError,
+    FilenameLocalize,
     MissingColumnError,
 } from "./errors";
 import {
@@ -10,7 +12,7 @@ import {
 } from "./types";
 
 export interface ValidationLocalization {
-    emptyFileError?: string;
+    emptyFileError?: FilenameLocalize;
     duplicateColumnError?: ColumnLocalize;
     missingColumnError?: ColumnLocalize;
 }
@@ -24,11 +26,10 @@ const findMissingValues = (target: Set<string>, actual: string[]) => {
     return [ ...target ].filter(column => !actualSet.has(column));
 };
 
-export function validateFile(data: string[][], localization?: ValidationLocalization): string {
+export function validateFile(file: File, data: string[][], localization?: ValidationLocalization): SpreadsheetValidationError | undefined {
     if (isSpreadsheetEmpty(data)) {
-        return localization?.emptyFileError ?? `File must contain at least one data row` ;
+        return new EmptyFileError(file.name, localization?.emptyFileError);
     }
-    return ``;
 }
 
 export function validateData(data: string[][], localization?: ValidationLocalization, columns?: Column[]): SpreadsheetValidationError[] {
