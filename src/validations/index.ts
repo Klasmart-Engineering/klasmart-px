@@ -11,6 +11,8 @@ import notEquals from './notEquals';
 import phone from './phone';
 import required from './required';
 
+export type Validator = ((input: unknown) => true | string)
+
 const validations = {
     alphanumeric,
     email,

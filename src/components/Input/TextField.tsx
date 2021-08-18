@@ -5,7 +5,7 @@ import {
 import {
     createStyles,
     makeStyles,
-    TextField as TxtField,
+    TextField as MUITextField,
 } from "@material-ui/core";
 import clsx from "clsx";
 import React,
@@ -25,6 +25,7 @@ export type InputType = `text` | `number` | `password` | `date` | `datetime-loca
 export interface Props extends Input {
     type?: InputType;
     className?: string;
+    error?: string;
 }
 
 export default function TextField (props: Props) {
@@ -32,6 +33,7 @@ export default function TextField (props: Props) {
         hideHelperText,
         value,
         validations,
+        error: controlledError,
         onChange,
         onError,
         onValidate,
@@ -44,40 +46,53 @@ export default function TextField (props: Props) {
         ...rest
     } = props;
     const classes = useStyles();
+
+    const isControlledError = () => controlledError !== undefined;
+
+    const getErrorState = () => controlledError ?? getErrorText(value, validations);
+
     const [ value_, setValue ] = useState(value ?? ``);
     const [ error_, setError ] = useState(getErrorText(value, validations));
 
     const updateValue = (value: unknown) => {
-        const error = getErrorText(value, validations);
+        const validationError = getErrorText(value, validations);
         setValue(value);
-        setError(error);
+        if (!isControlledError()) {
+            setError(validationError);
+        }
+        const masterError = getErrorState();
         onChange?.(value);
-        onValidate?.(!error);
-        onError?.(error);
+        onValidate?.(!masterError);
+        onError?.(masterError);
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        const value = type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value;
-        updateValue(value);
+        const newValue = type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value;
+        updateValue(newValue);
     };
 
     useEffect(() => {
-        if (value === value_) return;
-        updateValue(value);
-    }, [ value ]);
-
-    useEffect(() => {
         onChange?.(value_);
-        onValidate?.(!error_);
-        onError?.(error_);
     }, []);
 
-    return <TxtField
+    useEffect(() => {
+        const masterError = getErrorState();
+        onValidate?.(!masterError);
+        onError?.(masterError);
+    }, [ controlledError ]);
+
+    useEffect(() => {
+        if (value !== value_) {
+            updateValue(value);
+        }
+    }, [ value ]);
+
+    return <MUITextField
         className={className}
         variant={variant}
         value={value_}
-        error={!!error_}
-        helperText={hideHelperText ? undefined : (error_ ?? ` `)}
+        error={isControlledError() ? true : !!error_}
+        helperText={hideHelperText ? undefined : isControlledError() ? controlledError : error_ ?? ` `}
         type={type}
         InputProps={{
             className: clsx({
@@ -91,3 +106,4 @@ export default function TextField (props: Props) {
         {...rest}
     />;
 }
+TextField.displayName = `pxTextField`;
