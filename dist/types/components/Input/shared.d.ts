@@ -1,3 +1,4 @@
+import { Validator } from "../../validations";
 import { ReactNode } from "react";
 export interface Input {
     value: unknown;
@@ -11,7 +12,8 @@ export interface Input {
     variant?: "filled" | "standard" | "outlined";
     autoFocus?: boolean;
     placeholder?: string;
-    validations?: ((input: unknown) => true | string)[];
+    validations?: Validator[];
+    id?: string;
     onBlur?: () => void;
     onChange?: (value: any) => void;
     onFocus?: () => void;

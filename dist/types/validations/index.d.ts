@@ -10,6 +10,7 @@ import min from './min';
 import notEquals from './notEquals';
 import phone from './phone';
 import required from './required';
+export declare type Validator = ((input: unknown) => true | string);
 declare const validations: {
     alphanumeric: (errorMessage?: string | undefined) => (input: any) => string | true;
     email: (errorMessage?: string | undefined) => (input: any) => string | true;

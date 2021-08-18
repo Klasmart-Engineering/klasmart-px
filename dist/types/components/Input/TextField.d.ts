@@ -4,5 +4,10 @@ export declare type InputType = `text` | `number` | `password` | `date` | `datet
 export interface Props extends Input {
     type?: InputType;
     className?: string;
+    error?: string;
 }
-export default function TextField(props: Props): JSX.Element;
+declare function TextField(props: Props): JSX.Element;
+declare namespace TextField {
+    var displayName: string;
+}
+export default TextField;
