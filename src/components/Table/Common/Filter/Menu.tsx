@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     select: {
         margin: theme.spacing(0.5),
         minWidth: 160,
-        maxWith: 160,
+        maxWidth: 160,
     },
     actionButton: {
         marginLeft: theme.spacing(2),
