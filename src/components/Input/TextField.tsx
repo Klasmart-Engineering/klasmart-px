@@ -1,3 +1,4 @@
+import LoadingIndicator from "./LoadingIndicator";
 import {
     getErrorText,
     Input,
@@ -20,12 +21,27 @@ const useStyles = makeStyles((theme) => createStyles({
     },
 }));
 
-export type InputType = `text` | `number` | `password` | `date` | `datetime-local` | `email` | `time` | `month` | `tel` | `url` | `week`
+export const inputTypes = [
+    `text`,
+    `number`,
+    `password`,
+    `date`,
+    `datetime-local`,
+    `email`,
+    `time`,
+    `month`,
+    `tel`,
+    `url`,
+    `week`,
+] as const;
+
+export type InputType = typeof inputTypes[number];
 
 export interface Props extends Input {
     type?: InputType;
     className?: string;
     error?: string;
+    loading?: boolean;
 }
 
 export default function TextField (props: Props) {
@@ -43,6 +59,7 @@ export default function TextField (props: Props) {
         prependInner,
         appendInner,
         variant = `outlined`,
+        loading,
         ...rest
     } = props;
     const classes = useStyles();
@@ -87,23 +104,33 @@ export default function TextField (props: Props) {
         }
     }, [ value ]);
 
-    return <MUITextField
-        className={className}
-        variant={variant}
-        value={value_}
-        error={isControlledError() ? true : !!error_}
-        helperText={hideHelperText ? undefined : isControlledError() ? controlledError : error_ ?? ` `}
-        type={type}
-        InputProps={{
-            className: clsx({
-                [classes.disabledText]: readOnly,
-            }),
-            readOnly,
-            startAdornment: prependInner,
-            endAdornment: appendInner,
-        }}
-        onChange={handleChange}
-        {...rest}
-    />;
+    return <>
+        <MUITextField
+            className={className}
+            variant={variant}
+            value={value_}
+            error={isControlledError() ? true : !!error_}
+            helperText={hideHelperText ? undefined : isControlledError() ? controlledError : error_ ?? ` `}
+            type={type}
+            InputProps={{
+                className: clsx({
+                    [classes.disabledText]: readOnly,
+                }),
+                readOnly,
+                startAdornment: prependInner,
+                endAdornment: (
+                    <>
+                        {appendInner}
+                        <LoadingIndicator
+                            loading={loading}
+                            variant={variant}
+                        />
+                    </>
+                ),
+            }}
+            onChange={handleChange}
+            {...rest}
+        />
+    </>;
 }
 TextField.displayName = `pxTextField`;

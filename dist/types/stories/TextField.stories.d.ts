@@ -11,4 +11,6 @@ export declare const Standard: Story<Props>;
 export declare const Filled: Story<Props>;
 export declare const Number: Story<Props>;
 export declare const Password: Story<Props>;
+export declare const StandardLoading: Story<Props>;
+export declare const OutlineLoading: Story<Props>;
 export declare const ExampleInForm: () => JSX.Element;

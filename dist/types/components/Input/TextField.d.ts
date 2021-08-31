@@ -5,6 +5,7 @@ export interface Props extends Input {
     type?: InputType;
     className?: string;
     error?: string;
+    loading?: boolean;
 }
 declare function TextField(props: Props): JSX.Element;
 declare namespace TextField {

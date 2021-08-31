@@ -1,3 +1,4 @@
+import LoadingIndicator from "./LoadingIndicator";
 import {
     getErrorText,
     Input,
@@ -42,7 +43,7 @@ export interface Section<T> {
     ignoreSelectAll?: boolean;
 }
 
-interface Props<T> extends Input {
+export interface Props<T> extends Input {
     value: string | string[];
     className?: string;
     items: T[];
@@ -52,6 +53,7 @@ interface Props<T> extends Input {
     multiple?: boolean;
     itemText?: (item: T) => string;
     itemValue?: (item: T) => string;
+    loading?: boolean;
 }
 
 export default function Select<T> (props: Props<T>) {
@@ -77,6 +79,7 @@ export default function Select<T> (props: Props<T>) {
         onChange,
         onError,
         onValidate,
+        loading,
         ...rest
     } = props;
     const classes = useStyles();
@@ -202,7 +205,15 @@ export default function Select<T> (props: Props<T>) {
             InputProps={{
                 readOnly,
                 startAdornment: prependInner,
-                endAdornment: appendInner,
+                endAdornment: (
+                    <>
+                        {appendInner}
+                        <LoadingIndicator
+                            loading={loading}
+                            variant={variant}
+                        />
+                    </>
+                ),
             }}
             SelectProps={{
                 multiple,
