@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => createStyles({
         },
         "& .MuiListItemText-root": {
             margin: 0,
+            overflow: `hidden`,
         },
     },
     sectionHeader: {
