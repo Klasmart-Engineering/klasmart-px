@@ -1,6 +1,7 @@
 /// <reference types="react" />
 import { Input } from "./shared";
-export declare type InputType = `text` | `number` | `password` | `date` | `datetime-local` | `email` | `time` | `month` | `tel` | `url` | `week`;
+export declare const inputTypes: readonly ["text", "number", "password", "date", "datetime-local", "email", "time", "month", "tel", "url", "week"];
+export declare type InputType = typeof inputTypes[number];
 export interface Props extends Input {
     type?: InputType;
     className?: string;

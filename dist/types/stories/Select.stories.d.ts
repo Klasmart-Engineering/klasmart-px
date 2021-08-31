@@ -6,8 +6,5 @@ declare const _default: {
     component: typeof Select;
 };
 export default _default;
-export declare const Outline: Story<Props<string>>;
-export declare const OutlineLoading: Story<Props<string>>;
-export declare const Standard: Story<Props<string>>;
-export declare const StandardLoading: Story<Props<string>>;
+export declare const Primary: Story<Props<string>>;
 export declare const ExampleInFormLoading: () => JSX.Element;
