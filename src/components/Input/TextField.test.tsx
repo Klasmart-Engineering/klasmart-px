@@ -6,7 +6,10 @@ import {
 } from "../../validations/__mocks__";
 import TextField,
 { Props } from "./TextField";
-import { render } from "@testing-library/react";
+import {
+    render,
+    screen,
+} from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import React from "react";
 
@@ -337,4 +340,25 @@ test(`falls back to failing validation after error is cleared on rerender`, () =
     });
 
     expectOnErrorChange(validationError);
+});
+
+test.each([ [ `me@company.com`, true ], [ `not-an-email`, false ] ])(`input %s calls onValidate with "%s"`, (value, result) => {
+    const props = {
+        value: ``,
+        label: `Email`,
+        id: `Email`,
+        validations: [ email(`Invalid email`) ],
+        ...mockHandlers,
+    };
+
+    render(<TextField {...props} />);
+
+    clearMockHandlers();
+
+    userEvent.type(screen.getByLabelText(props.label, {
+        selector: `input`,
+    }), value);
+
+    expect(mockHandlers.onValidate).toHaveBeenCalledTimes(value.length);
+    expect(mockHandlers.onValidate).toHaveBeenCalledWith(result);
 });

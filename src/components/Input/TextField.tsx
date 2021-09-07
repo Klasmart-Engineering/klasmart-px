@@ -1,3 +1,4 @@
+import { Validator } from "../../validations";
 import LoadingIndicator from "./LoadingIndicator";
 import {
     getErrorText,
@@ -66,7 +67,7 @@ export default function TextField (props: Props) {
 
     const isControlledError = () => controlledError !== undefined;
 
-    const getErrorState = () => controlledError ?? getErrorText(value, validations);
+    const getErrorState = (value: unknown, validations: Validator[] | undefined) => controlledError ?? getErrorText(value, validations);
 
     const [ value_, setValue ] = useState(value ?? ``);
     const [ error_, setError ] = useState(getErrorText(value, validations));
@@ -77,7 +78,7 @@ export default function TextField (props: Props) {
         if (!isControlledError()) {
             setError(validationError);
         }
-        const masterError = getErrorState();
+        const masterError = getErrorState(value, validations);
         onChange?.(value);
         onValidate?.(!masterError);
         onError?.(masterError);
@@ -93,7 +94,7 @@ export default function TextField (props: Props) {
     }, []);
 
     useEffect(() => {
-        const masterError = getErrorState();
+        const masterError = getErrorState(value, validations);
         onValidate?.(!masterError);
         onError?.(masterError);
     }, [ controlledError ]);
@@ -110,7 +111,7 @@ export default function TextField (props: Props) {
             variant={variant}
             value={value_}
             error={isControlledError() ? true : !!error_}
-            helperText={hideHelperText ? undefined : isControlledError() ? controlledError : error_ ?? ` `}
+            helperText={hideHelperText ? undefined : (isControlledError() ? controlledError : error_) || ` `}
             type={type}
             InputProps={{
                 className: clsx({
