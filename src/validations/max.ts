@@ -5,7 +5,7 @@ export default (max: number, errorMessage?: string) => (input: any) => {
     } else if (typeof input === `number`) {
         inputMax = input;
     } else {
-        inputMax = String(input).length;
+        inputMax = String(input.trim()).length;
     }
     return inputMax <= max || (errorMessage ?? `Maximum ${max}`);
 };
