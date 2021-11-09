@@ -190,6 +190,7 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                     style={{
                                         flexDirection,
                                     }}
+                                    data-testid={`${column.id}SortHandler`}
                                     onClick={createSortHandler(column.id)}
                                 >
                                     <Box

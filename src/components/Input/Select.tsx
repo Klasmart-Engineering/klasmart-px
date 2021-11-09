@@ -198,12 +198,14 @@ export default function Select<T> (props: Props<T>) {
     return <>
         <TextField
             select
+            data-testid={`${label}SelectTextField`}
             className={clsx(className, classes.root)}
             label={label}
             variant={variant}
             helperText={hideHelperText ? undefined : (error_ ?? ` `)}
             error={!!error_}
-            InputProps={{
+            inputProps={{
+                "data-testid": `${label}SelectTextInput`,
                 readOnly,
                 startAdornment: prependInner,
                 endAdornment: (

@@ -81,6 +81,7 @@ export default function BaseTableBody<T> (props: Props<T>) {
                             hover
                             tabIndex={-1}
                             className={classes.row}
+                            data-testid="tableRow"
                         >
                             {showSelectables &&
                                 <TableCell padding="checkbox">

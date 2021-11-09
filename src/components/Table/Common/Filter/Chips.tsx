@@ -124,6 +124,7 @@ export default function TableFilterChips<T>(props: Props<T>) {
                             </Typography>
                         )}
                         className={classes.chip}
+                        data-testid={`${filter.columnId}ChipLabel`}
                         onClick={(event) => onClick(event, filter)}
                         onDelete={() => onDelete(filter)}
                     />

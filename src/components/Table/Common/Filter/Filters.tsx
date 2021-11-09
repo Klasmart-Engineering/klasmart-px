@@ -159,6 +159,7 @@ export default function BaseTableFilter<T>(props: Props<T>) {
                             className={classes.clearIcon}
                             icon={ClearIcon}
                             tooltip={localization?.clearAll ?? `Clear filters`}
+                            data-testid="clearFilters"
                             onClick={handleClearFilters}
                         />
                     )}

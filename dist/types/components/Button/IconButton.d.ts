@@ -10,6 +10,7 @@ export interface Props {
     tooltip?: string;
     disabled?: boolean;
     color?: IconButtonColor;
+    "data-testid"?: string;
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 export default function IconButton(props: Props): JSX.Element;

@@ -85,6 +85,7 @@ export interface Props {
     tooltip?: string;
     disabled?: boolean;
     color?: IconButtonColor;
+    "data-testid"?: string;
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 
@@ -98,6 +99,7 @@ export default function IconButton (props: Props) {
         onClick,
         className,
         size,
+        "data-testid": dataTestId,
     } = props;
     const classes = useStyles();
     const loadingClasses = useButtonLoadingStyles();
@@ -128,6 +130,7 @@ export default function IconButton (props: Props) {
                         [loadingClasses.buttonLoading]: loading,
                     })}
                     size={size}
+                    data-testid={dataTestId}
                     onClick={handleClick}
                     {...styling}
                 >
