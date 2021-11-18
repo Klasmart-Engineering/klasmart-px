@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/no-node-access */
 import { gif } from "../../../../../test/image";
 import Base,
 {
@@ -73,10 +74,10 @@ const props: Required<Props> = {
         missingColumnError: jest.fn((columnName: string) => `Missing column ${columnName}`),
     },
     exceedsMaxSizeError: jest.fn((fileSize: number, maxSize: number) => `${fileSize} larger than max ${maxSize}`),
-    numValidationsFailedMessage: jest.fn((num: number) =>  `${num} validations failed`),
+    numValidationsFailedMessage: jest.fn((num: number) => `${num} validations failed`),
     // All fileUpload handlers must have at least some delay, otherwise we will skip the validation `in-progress` state
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onFileUpload: jest.fn(async (file: File, isDryRun: boolean) => new Promise(resolve => setTimeout(resolve, 50))),
+    onFileUpload: jest.fn((file: File, isDryRun: boolean) => new Promise(resolve => setTimeout(resolve, 50))),
     onFileUploadError: defaultOnFileUploadError,
 };
 
@@ -86,12 +87,12 @@ const failingFileUpload = jest.fn(async (file: File, isDryRun: boolean) => {
     throw new CustomError(`Plan to fail`);
 });
 
-function toCSV(rows: string[][]) {
+function toCSV (rows: string[][]) {
     return rows.map((row) => row.join()).join(`\n`);
 }
 
 class CustomError extends Error {
-    constructor(message: any) {
+    constructor (message: any) {
         super(message);
         this.name = `CustomError`;
     }
@@ -121,9 +122,12 @@ const defaultFile: Required<FileStub> = {
 };
 
 const render = (overrideProps?: Partial<Props>) => {
-    return actualRender(<Base
-        {...props}
-        {...overrideProps}/>);
+    return actualRender((
+        <Base
+            {...props}
+            {...overrideProps}
+        />
+    ));
 };
 
 const hydrateFileStub = (stub?: FileStub) => {
@@ -137,7 +141,7 @@ const hydrateFileStub = (stub?: FileStub) => {
     });
     // Mock `size` property to the desired value
     Object.defineProperty(fileObj, `size`, {
-        get() {
+        get () {
             return fileOpts.size;
         },
     });
@@ -162,7 +166,7 @@ const upload = (container: Document | Element, files?: FileStub | FileStub[]) =>
     userEvent.upload(node, toUpload);
 };
 
-async function waitForPreview() {
+async function waitForPreview () {
     const { container } = render();
 
     upload(container);
@@ -173,7 +177,7 @@ async function waitForPreview() {
     await waitForPreviewToParse();
 }
 
-function waitForUploadToFinish() {
+function waitForUploadToFinish () {
     const loadingOverlay = document.querySelector(`[data-testid='uploading-overlay'`) as HTMLElement;
     if (loadingOverlay === null) throw new AssertionError({
         message: `Expected upload overlay to be present`,
@@ -194,7 +198,7 @@ function expectEmptyFilepicker () {
     expect(screen.getByText(props.dropzoneLabel)).toBeInTheDocument();
 }
 
-function expectPreviewUnavailable() {
+function expectPreviewUnavailable () {
     expect(screen.queryByTestId(`validation-details`)).not.toBeInTheDocument();
     expect(screen.queryByTestId(`preview`)).not.toBeInTheDocument();
     expect(screen.getByText(`Preview unavailable`)).toBeInTheDocument();
@@ -203,7 +207,7 @@ function expectPreviewUnavailable() {
     expect(removeButton()).toBeEnabled();
 }
 
-function expectIsUploading() {
+function expectIsUploading () {
     expect(screen.getByTestId(`preview`)).toBeInTheDocument();
     expect(screen.getByTestId(`validation-details`)).toBeInTheDocument();
     expect(screen.getByText(`Validation in progress`)).toBeInTheDocument();
@@ -214,7 +218,7 @@ function expectIsUploading() {
     expect(removeButton()).toBeDisabled();
 }
 
-function expectPreviewErrors() {
+function expectPreviewErrors () {
     expect(screen.getByText(`Invalid data`)).toBeInTheDocument();
     expect(screen.getByText(`3 validations failed`)).toBeInTheDocument();
     expect(props.numValidationsFailedMessage).toHaveBeenCalled();
@@ -246,7 +250,7 @@ function expectPreviewErrors() {
     expect(Array.from(table.rows[3].cells).some(hasErrorStyling)).toBe(false);
 }
 
-function expectFileUploadCalled({ dryRun, uploadHandler }: {dryRun: boolean; uploadHandler?: Props["onFileUpload"]}) {
+function expectFileUploadCalled ({ dryRun, uploadHandler }: {dryRun: boolean; uploadHandler?: Props["onFileUpload"]}) {
 
     if (typeof uploadHandler === `undefined`) {
         uploadHandler = props.onFileUpload;
@@ -254,7 +258,7 @@ function expectFileUploadCalled({ dryRun, uploadHandler }: {dryRun: boolean; upl
 
     const onUploadMock = (uploadHandler as jest.MockedFunction<Props["onFileUpload"]>).mock;
 
-    expect(uploadHandler).toBeCalledTimes(1);
+    expect(uploadHandler).toHaveBeenCalledTimes(1);
 
     const call = onUploadMock.calls[0];
     // Jest mock captures the File object, but can't seem to check the content (returns empty string)
@@ -263,13 +267,13 @@ function expectFileUploadCalled({ dryRun, uploadHandler }: {dryRun: boolean; upl
     expect(call[1]).toBe(dryRun);
 }
 
-function expectUpload() {
-    expect(props.onFileUploadError).not.toBeCalled();
+function expectUpload () {
+    expect(props.onFileUploadError).not.toHaveBeenCalled();
     expect(screen.queryByText(`Upload failed`)).not.toBeInTheDocument();
     expect(screen.queryByText(`Invalid data`)).not.toBeInTheDocument();
 }
 
-function expectSuccessfulUpload(uploadHandler?: Props["onFileUpload"]) {
+function expectSuccessfulUpload (uploadHandler?: Props["onFileUpload"]) {
     expectUpload();
 
     expectFileUploadCalled({
@@ -281,7 +285,7 @@ function expectSuccessfulUpload(uploadHandler?: Props["onFileUpload"]) {
     expect(screen.getByTestId(`upload-success-icon`)).toBeInTheDocument();
 }
 
-function expectSuccessfulDryRun(uploadHandler?: Props["onFileUpload"]) {
+function expectSuccessfulDryRun (uploadHandler?: Props["onFileUpload"]) {
     expectUpload();
 
     expectFileUploadCalled({
@@ -299,7 +303,7 @@ interface FailedUploadOptions {
     errorHandler?: jest.MockedFunction<Required<Props>["onFileUploadError"]>;
 }
 
-function expectFailedUpload({
+function expectFailedUpload ({
     dryRun, uploadHandler = failingFileUpload, errorHandler = defaultOnFileUploadError,
 }: FailedUploadOptions) {
     const call = uploadHandler.mock.calls[uploadHandler.mock.calls.length - 1];
@@ -307,19 +311,16 @@ function expectFailedUpload({
     expect((call[0] as FileWithPath).path).toBe(`test.csv`);
     expect(call[1]).toBe(dryRun);
 
-    expect(errorHandler).toBeCalledWith(
-        expect.objectContaining({
-            name: `CustomError`,
-            message: `Plan to fail`,
-        }),
-        dryRun,
-    );
+    expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
+        name: `CustomError`,
+        message: `Plan to fail`,
+    }), dryRun);
 
     expect(screen.queryByText(`Upload succeeded`)).not.toBeInTheDocument();
     expect(screen.queryByTestId(`upload-success-icon`)).not.toBeInTheDocument();
 }
 
-function expectValidationPassed(data?: string[][]) {
+function expectValidationPassed (data?: string[][]) {
     const validationDetails = screen.getByTestId(`validation-details`);
     expect(validationDetails).toBeInTheDocument();
 
@@ -333,7 +334,7 @@ function expectValidationPassed(data?: string[][]) {
     expectPreviewData(data || defaultData);
 }
 
-function expectValidationFailed() {
+function expectValidationFailed () {
     expect(screen.getByTestId(`validation-details`)).toBeInTheDocument();
     expect(screen.getByTestId(`preview`)).toBeInTheDocument();
 
@@ -345,15 +346,15 @@ function expectValidationFailed() {
 const resetOnFileUploadMock = () => (props.onFileUpload as jest.MockedFunction<Props["onFileUpload"]>).mockClear();
 
 const removeButton = () => {
-    const container = screen.queryByTitle(props.removeButtonTooltip);
-    if (container === null) return null;
-    return container.querySelector(`button`);
+    const tooltip = screen.queryByTitle(props.removeButtonTooltip);
+    if (tooltip === null) return null;
+    return tooltip.querySelector(`button`);
 };
 
 const uploadButton = () => {
-    const container = screen.queryByTitle(props.uploadButtonTooltip);
-    if (container === null) return null;
-    return container.querySelector(`button`);
+    const tooltip = screen.queryByTitle(props.uploadButtonTooltip);
+    if (tooltip === null) return null;
+    return tooltip.querySelector(`button`);
 };
 
 test(`shows an empty filepicker when initialised`, () => {
@@ -362,13 +363,13 @@ test(`shows an empty filepicker when initialised`, () => {
     expectEmptyFilepicker();
 });
 
-test(`shows a preview of the selected file`, async() => {
+test(`shows a preview of the selected file`, async () => {
     await waitForPreview();
 
     expectValidationPassed();
 });
 
-test(`displays blank lines in the preview`, async() => {
+test(`displays blank lines in the preview`, async () => {
     const { container } = render();
 
     const data = [
@@ -394,7 +395,7 @@ test(`displays blank lines in the preview`, async() => {
 });
 
 each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (isDryRunEnabled) => {
-    test(`when the file is bigger than 'maxFileSize'`, async() => {
+    test(`when the file is bigger than 'maxFileSize'`, async () => {
         const { container } = render({
             isDryRunEnabled,
         });
@@ -413,7 +414,7 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
 
         expect(screen.getByText(`test.csv`)).toBeInTheDocument();
 
-        expect(props.onFileUpload).not.toBeCalled();
+        expect(props.onFileUpload).not.toHaveBeenCalled();
     });
 
     test(`when an unsupported filetype has been dropped`, async () => {
@@ -435,10 +436,10 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
 
         expect(screen.getByText(`cat.gif`)).toBeInTheDocument();
 
-        expect(props.onFileUpload).not.toBeCalled();
+        expect(props.onFileUpload).not.toHaveBeenCalled();
     });
 
-    test(`when more than 'maxFiles' files have been dropped`, async() => {
+    test(`when more than 'maxFiles' files have been dropped`, async () => {
         const { container } = render();
 
         upload(container, [
@@ -459,10 +460,10 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
         // Filename of the second file (i.e. last element in `acceptedFiles` array) is shown
         expect(screen.getByText(`test2.csv`)).toBeInTheDocument();
 
-        expect(props.onFileUpload).not.toBeCalled();
+        expect(props.onFileUpload).not.toHaveBeenCalled();
     });
 
-    each([ ``, defaultColumns.join() ]).test(`when the file contains %s`, async(data) => {
+    test.each([ ``, defaultColumns.join() ])(`when the file contains %s`, async (data) => {
         const { container } = render();
 
         upload(container, {
@@ -474,18 +475,18 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
 
         await screen.findByTestId(`preview`);
 
-        await waitForElementToBeRemoved(screen.getByTestId(`preview`));
+        await waitForElementToBeRemoved(screen.queryByTestId(`preview`));
 
         expectPreviewUnavailable();
 
-        expect(props.validationLocalization.emptyFileError).toBeCalledWith(`test.csv`);
+        expect(props.validationLocalization.emptyFileError).toHaveBeenCalledWith(`test.csv`);
 
         expect(screen.getByText(`test.csv is empty`)).toBeInTheDocument();
 
-        expect(props.onFileUpload).not.toBeCalled();
+        expect(props.onFileUpload).not.toHaveBeenCalled();
     });
 
-    test(`when required columns are missing`, async() => {
+    test(`when required columns are missing`, async () => {
         const { container } = render();
 
         const data = [
@@ -514,10 +515,10 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
         });
         expectHasErrorIcon(table.rows[0].cells[0], `Missing column Email`);
 
-        expect(props.onFileUpload).not.toBeCalled();
+        expect(props.onFileUpload).not.toHaveBeenCalled();
     });
 
-    test(`when expected columns are duplicated`, async() => {
+    test(`when expected columns are duplicated`, async () => {
         const { container } = render();
 
         const data = defaultData.map(row => [ ...row, row[row.length - 1] ]);
@@ -536,11 +537,11 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
         expect(screen.getByText(`Duplicate column Email`)).toBeInTheDocument();
         expect(props.validationLocalization.duplicateColumnError).toHaveBeenCalledTimes(1);
 
-        expect(props.onFileUpload).not.toBeCalled();
+        expect(props.onFileUpload).not.toHaveBeenCalled();
     });
 });
 
-test(`when extra columns are duplicated, validation passes`, async() => {
+test(`when extra columns are duplicated, validation passes`, async () => {
     const { container } = render();
 
     const data = [
@@ -570,7 +571,7 @@ test(`when extra columns are duplicated, validation passes`, async() => {
     expectValidationPassed(data);
 });
 
-test(`when optional columns are missing, validation passes`, async() => {
+test(`when optional columns are missing, validation passes`, async () => {
     const { container } = render({
         columns: defaultColumns.map(text => {return {
             text,
@@ -593,7 +594,7 @@ test(`when optional columns are missing, validation passes`, async() => {
     expectValidationPassed();
 });
 
-test(`reverts to an empty filepicker when delete is clicked`, async() => {
+test(`reverts to an empty filepicker when delete is clicked`, async () => {
     await waitForPreview();
 
     const btn = removeButton();
@@ -651,7 +652,7 @@ test(`if isDryRunEnabled, uploads immediately after loading a valid spreadsheet`
 
     upload(container);
 
-    await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
+    await waitForElementToBeRemoved(screen.queryByTestId(`dropzone`));
 
     await waitForPreviewToParse();
 
@@ -668,14 +669,14 @@ test(`if isDryRunEnabled, uploads immediately after loading a valid spreadsheet`
 
 });
 
-test(`after a successful dryrun, can be manually uploaded`, async() => {
+test(`after a successful dryrun, can be manually uploaded`, async () => {
     const { container } = render({
         isDryRunEnabled: true,
     });
 
     upload(container);
 
-    await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
+    await waitForElementToBeRemoved(screen.queryByTestId(`dropzone`));
 
     await waitForPreviewToParse();
 
@@ -694,7 +695,7 @@ test(`after a successful dryrun, can be manually uploaded`, async() => {
     expectSuccessfulUpload();
 });
 
-test(`after a failed dryrun, upload is disabled`, async() => {
+test(`after a failed dryrun, upload is disabled`, async () => {
     const { container } = render({
         isDryRunEnabled: true,
         onFileUpload: failingFileUpload,
@@ -702,7 +703,7 @@ test(`after a failed dryrun, upload is disabled`, async() => {
 
     upload(container);
 
-    await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
+    await waitForElementToBeRemoved(screen.queryByTestId(`dropzone`));
 
     await waitForPreviewToParse();
 
@@ -721,13 +722,13 @@ test(`after a failed dryrun, upload is disabled`, async() => {
     expect(uploadButton()).toBeDisabled();
 });
 
-test(`after a successful dryrun, a manual upload can fail`, async() => {
+test(`after a successful dryrun, a manual upload can fail`, async () => {
     const succeedThenFailFileUpload = jest.fn()
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .mockImplementationOnce(async (file: File, isDryRun?: boolean) => {
+        .mockImplementationOnce((file: File, isDryRun?: boolean) => {
             return new Promise(resolve => setTimeout(resolve, 50));
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        }).mockImplementationOnce(async (file: File, isDryRun?: boolean) => {
+        }).mockImplementationOnce((file: File, isDryRun?: boolean) => {
             throw new CustomError(`Plan to fail`);
         });
 
@@ -738,7 +739,7 @@ test(`after a successful dryrun, a manual upload can fail`, async() => {
 
     upload(container);
 
-    await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
+    await waitForElementToBeRemoved(screen.queryByTestId(`dropzone`));
 
     await waitForPreviewToParse();
 
@@ -767,7 +768,7 @@ test(`after a successful dryrun, a manual upload can fail`, async() => {
 
 });
 
-test(`on failed dryrun and no SpreadsheetValidationErrors are returned from the error handler, the error's message is shown`, async() => {
+test(`on failed dryrun and no SpreadsheetValidationErrors are returned from the error handler, the error's message is shown`, async () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const noValidationErrorFileUploadErrorHandler = jest.fn((errors: any, isDryRun: boolean) => []);
 
@@ -779,7 +780,7 @@ test(`on failed dryrun and no SpreadsheetValidationErrors are returned from the 
 
     upload(container);
 
-    await waitForElementToBeRemoved(screen.getByTestId(`dropzone`));
+    await waitForElementToBeRemoved(screen.queryByTestId(`dropzone`));
 
     await waitForPreviewToParse();
 

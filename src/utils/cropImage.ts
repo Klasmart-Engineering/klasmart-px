@@ -9,7 +9,7 @@ const createImage = (url: string) =>
         image.src = url;
     });
 
-function getRadianAngle(degreeValue: number) {
+function getRadianAngle (degreeValue: number) {
     return (degreeValue * Math.PI) / 180;
 }
 
@@ -19,7 +19,7 @@ function getRadianAngle(degreeValue: number) {
  * @param {Object} pixelCrop - pixelCrop Object provided by react-easy-crop
  * @param {number} rotation - optional rotation parameter
  */
-export default async function getCroppedImg(imageSrc: string, pixelCrop: Area, rotation = 0) {
+export default async function getCroppedImg (imageSrc: string, pixelCrop: Area, rotation = 0) {
     const image: HTMLImageElement = await createImage(imageSrc);
     const canvas = document.createElement(`canvas`);
     const ctx = canvas.getContext(`2d`);
@@ -41,11 +41,7 @@ export default async function getCroppedImg(imageSrc: string, pixelCrop: Area, r
         ctx.translate(-safeArea / 2, -safeArea / 2);
 
         // draw rotated image and store data.
-        ctx.drawImage(
-            image,
-            safeArea / 2 - image.width * 0.5,
-            safeArea / 2 - image.height * 0.5,
-        );
+        ctx.drawImage(image, safeArea / 2 - image.width * 0.5, safeArea / 2 - image.height * 0.5);
         const data = ctx.getImageData(0, 0, safeArea, safeArea);
 
         // set canvas width to final desired crop size - this will clear existing context
@@ -53,11 +49,7 @@ export default async function getCroppedImg(imageSrc: string, pixelCrop: Area, r
         canvas.height = pixelCrop.height;
 
         // paste generated rotate image with correct offsets for x,y crop values.
-        ctx.putImageData(
-            data,
-            Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x),
-            Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y),
-        );
+        ctx.putImageData(data, Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x), Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y));
     }
 
     const base64 = canvas.toDataURL(`image/jpeg`);

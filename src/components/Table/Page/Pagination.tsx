@@ -83,7 +83,8 @@ export default function PageTablePagination (props: Props) {
                         <IconButton
                             disabled={page === 0}
                             aria-label="previous page"
-                            onClick={handleBackButtonClick}>
+                            onClick={handleBackButtonClick}
+                        >
                             {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
                         </IconButton>
                     </span>

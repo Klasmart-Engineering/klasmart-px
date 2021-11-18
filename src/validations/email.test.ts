@@ -34,4 +34,5 @@ const tests = (regex: (errorMessage?: string | undefined) => (input: any) => str
 
 tests(email);
 
+// eslint-disable-next-line jest/no-export
 export default tests;

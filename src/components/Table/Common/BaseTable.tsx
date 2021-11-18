@@ -419,47 +419,55 @@ export default function BaseTable<T> (props: Props<T>) {
 
     return (
         <>
-            {showToolbar && <>
-                <BaseTableToolbar
-                    hideSelectStatus={hideSelectStatus}
-                    primaryAction={primaryAction}
-                    secondaryActions={secondaryActions}
-                    selectActions={selectActions}
-                    selectedRows={selectedRowIds_}
-                    localization={localization?.toolbar}
-                />
-                <Divider />
-            </>}
-            {hasSearchColumns && <>
-                <BaseTableSearch
-                    value={search_}
-                    localization={localization?.search}
-                    onChange={handleChangeSearch}
-                />
-                <Divider />
-            </>}
-            {filters?.length && <>
-                <BaseTableFilter
-                    filters={filters}
-                    onChange={setFilters}
-                />
-                <Divider />
-            </>}
-            {hasGroups && <>
-                <BaseTableGroupTabs
-                    allCount={noGroupTotal ?? filteredSortedRows.length}
-                    hideAllGroupTab={hideAllGroupTab}
-                    hideNoGroupOption={hideNoGroupOption}
-                    groupBy={groupBy_}
-                    groups={groupableColumns}
-                    subgroupBy={subgroupBy_}
-                    subgroups={subgroups_}
-                    localization={localization?.groupTabs}
-                    onSelectGroup={handleSelectGroup}
-                    onSelectSubgroup={handleSelectSubgroup}
-                />
-                <Divider />
-            </>}
+            {showToolbar && (
+                <>
+                    <BaseTableToolbar
+                        hideSelectStatus={hideSelectStatus}
+                        primaryAction={primaryAction}
+                        secondaryActions={secondaryActions}
+                        selectActions={selectActions}
+                        selectedRows={selectedRowIds_}
+                        localization={localization?.toolbar}
+                    />
+                    <Divider />
+                </>
+            )}
+            {hasSearchColumns && (
+                <>
+                    <BaseTableSearch
+                        value={search_}
+                        localization={localization?.search}
+                        onChange={handleChangeSearch}
+                    />
+                    <Divider />
+                </>
+            )}
+            {filters?.length && (
+                <>
+                    <BaseTableFilter
+                        filters={filters}
+                        onChange={setFilters}
+                    />
+                    <Divider />
+                </>
+            )}
+            {hasGroups && (
+                <>
+                    <BaseTableGroupTabs
+                        allCount={noGroupTotal ?? filteredSortedRows.length}
+                        hideAllGroupTab={hideAllGroupTab}
+                        hideNoGroupOption={hideNoGroupOption}
+                        groupBy={groupBy_}
+                        groups={groupableColumns}
+                        subgroupBy={subgroupBy_}
+                        subgroups={subgroups_}
+                        localization={localization?.groupTabs}
+                        onSelectGroup={handleSelectGroup}
+                        onSelectSubgroup={handleSelectSubgroup}
+                    />
+                    <Divider />
+                </>
+            )}
             <TableContainer>
                 <Table>
                     <BaseTableHead

@@ -26,7 +26,7 @@ export default function FileInputButton (props: Props) {
         label,
         variant = `outlined`,
         size = `large`,
-        color =  `primary`,
+        color = `primary`,
         fileSizeLimitInKB = 2097152,
         errorMessages = {
             noFileError: `No File Found`,

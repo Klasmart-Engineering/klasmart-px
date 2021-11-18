@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import Select,
 { Props } from '../components/Input/Select';
 import { sleep } from '../utils';
@@ -77,20 +78,27 @@ export const ExampleInFormLoading = () => {
         }, 5000);
     })();
 
-    return <form
-        style={{
-            display: `grid`,
-            gridGap: `10px`,
-        }}
-        onSubmit={handleSubmit}><Select
-            label={`Value`}
-            value={value}
-            items={items}
-            loading={loading}
-            onChange={handleChange}
-            onValidate={setIsValid}/>
-        <Button
-            label={`Submit`}
-            type={`submit`}
-            disabled={!isValid}/></form>;
+    return (
+        <form
+            style={{
+                display: `grid`,
+                gridGap: `10px`,
+            }}
+            onSubmit={handleSubmit}
+        >
+            <Select
+                label={`Value`}
+                value={value}
+                items={items}
+                loading={loading}
+                onChange={handleChange}
+                onValidate={setIsValid}
+            />
+            <Button
+                label={`Submit`}
+                type={`submit`}
+                disabled={!isValid}
+            />
+        </form>
+    );
 };

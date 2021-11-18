@@ -73,18 +73,13 @@ export default function SelectedFileRow (props: Props) {
         setUploadSuccess(false);
         setUploadError(``);
         setUploadLoading(true);
-        let error: Error | undefined;
         try {
             await onClickUpload?.();
-        } catch (err) {
-            error = err;
+            setUploadSuccess(true);
+        } catch (err: any) {
+            setUploadError(err?.message);
         }
         setUploadLoading(false);
-        if (error) {
-            setUploadError(error?.message);
-        } else {
-            setUploadSuccess(true);
-        }
     };
 
     const fileExtension = file.name.split(`.`).slice(-1)[0];
@@ -133,23 +128,31 @@ export default function SelectedFileRow (props: Props) {
                 flexDirection="row"
                 alignItems="center"
             >
-                {onClickRemove && <IconButton
-                    icon={DeleteIcon}
-                    disabled={areActionsDisabled || uploadLoading}
-                    tooltip={removeButtonTooltip}
-                    onClick={onClickRemove} />
+                {onClickRemove && (
+                    <IconButton
+                        icon={DeleteIcon}
+                        disabled={areActionsDisabled || uploadLoading}
+                        tooltip={removeButtonTooltip}
+                        onClick={onClickRemove}
+                    />
+                )
                 }
                 {uploadSuccess
-                    ? <CheckIcon
-                        data-testid="upload-success-icon"
-                        className={classes.successIcon} />
-                    : <IconButton
-                        icon={CloudUploadIcon}
-                        color="primary"
-                        disabled={areActionsDisabled || !!error || uploadLoading}
-                        tooltip={uploadButtonTooltip}
-                        onClick={onClickUpload_}
-                    />
+                    ? (
+                        <CheckIcon
+                            data-testid="upload-success-icon"
+                            className={classes.successIcon}
+                        />
+                    )
+                    : (
+                        <IconButton
+                            icon={CloudUploadIcon}
+                            color="primary"
+                            disabled={areActionsDisabled || !!error || uploadLoading}
+                            tooltip={uploadButtonTooltip}
+                            onClick={onClickUpload_}
+                        />
+                    )
                 }
             </Box>
         </Box>

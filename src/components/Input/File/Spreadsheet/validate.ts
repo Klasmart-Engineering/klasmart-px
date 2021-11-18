@@ -26,13 +26,13 @@ const findMissingValues = (target: Set<string>, actual: string[]) => {
     return [ ...target ].filter(column => !actualSet.has(column));
 };
 
-export function validateFile(file: File, data: string[][], localization?: ValidationLocalization): SpreadsheetValidationError | undefined {
+export function validateFile (file: File, data: string[][], localization?: ValidationLocalization): SpreadsheetValidationError | undefined {
     if (isSpreadsheetEmpty(data)) {
         return new EmptyFileError(file.name, localization?.emptyFileError);
     }
 }
 
-export function validateData(data: string[][], localization?: ValidationLocalization, columns?: Column[]): SpreadsheetValidationError[] {
+export function validateData (data: string[][], localization?: ValidationLocalization, columns?: Column[]): SpreadsheetValidationError[] {
     if (!columns) {
         return [];
     }

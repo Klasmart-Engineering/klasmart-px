@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import IconButton from "./Button/IconButton";
 import {
     Box,
@@ -48,15 +49,17 @@ function DrawerSection (props: DrawerSection) {
     const classes = useStyles();
     return (
         <Box py={1}>
-            {header && <Toolbar className={clsx(classes.toolbar, classes.sectionHeaderContainer)}>
-                <Typography
-                    variant="caption"
-                    color="textSecondary"
-                    className={classes.sectionHeader}
-                >
-                    {header}
-                </Typography>
-            </Toolbar>}
+            {header && (
+                <Toolbar className={clsx(classes.toolbar, classes.sectionHeaderContainer)}>
+                    <Typography
+                        variant="caption"
+                        color="textSecondary"
+                        className={classes.sectionHeader}
+                    >
+                        {header}
+                    </Typography>
+                </Toolbar>
+            )}
             {content}
         </Box>
     );
@@ -86,25 +89,27 @@ export default function Drawer (props: Props) {
             open={open}
             onClose={onClose}
         >
-            {title && <>
-                <Toolbar className={classes.toolbar}>
-                    <Box
-                        display="flex"
-                        flexDirection={theme.direction === `rtl` ? `row-reverse` : `row`}
-                        alignItems="center"
-                        flex={1}
-                    >
-                        <Typography variant="h6">{title}</Typography>
-                        <Box flex="1" />
-                        <IconButton
-                            className={classes.closeButton}
-                            icon={CloseIcon}
-                            onClick={() => onClose({}, `escapeKeyDown`)}
-                        />
-                    </Box>
-                </Toolbar>
-                <Divider />
-            </>}
+            {title && (
+                <>
+                    <Toolbar className={classes.toolbar}>
+                        <Box
+                            display="flex"
+                            flexDirection={theme.direction === `rtl` ? `row-reverse` : `row`}
+                            alignItems="center"
+                            flex={1}
+                        >
+                            <Typography variant="h6">{title}</Typography>
+                            <Box flex="1" />
+                            <IconButton
+                                className={classes.closeButton}
+                                icon={CloseIcon}
+                                onClick={() => onClose({}, `escapeKeyDown`)}
+                            />
+                        </Box>
+                    </Toolbar>
+                    <Divider />
+                </>
+            )}
             {sections.map((section, i) => (
                 <React.Fragment key={`section-${i}`}>
                     <DrawerSection

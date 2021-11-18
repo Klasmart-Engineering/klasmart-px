@@ -69,7 +69,7 @@ interface Props<T> {
     localization?: ToolbarLocalization;
 }
 
-export default function BaseTableToolbar<T>(props: Props<T>) {
+export default function BaseTableToolbar<T> (props: Props<T>) {
     const classes = useStyles();
     const {
         hideSelectStatus,
@@ -100,21 +100,25 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                     </Typography>
                     {selectActions?.map((action, i) =>
                         action.icon
-                            ? <IconButton
-                                key={`select-action-${i}`}
-                                icon={action.icon}
-                                tooltip={action.label}
-                                color="primary"
-                                disabled={action.disabled}
-                                onClick={() => action.onClick(selectedRows)}
-                            />
-                            : <Button
-                                key={`select-action-${i}`}
-                                label={action.label}
-                                color="primary"
-                                disabled={action.disabled}
-                                onClick={() => action.onClick(selectedRows)}
-                            />)}
+                            ? (
+                                <IconButton
+                                    key={`select-action-${i}`}
+                                    icon={action.icon}
+                                    tooltip={action.label}
+                                    color="primary"
+                                    disabled={action.disabled}
+                                    onClick={() => action.onClick(selectedRows)}
+                                />
+                            )
+                            : (
+                                <Button
+                                    key={`select-action-${i}`}
+                                    label={action.label}
+                                    color="primary"
+                                    disabled={action.disabled}
+                                    onClick={() => action.onClick(selectedRows)}
+                                />
+                            ))}
                 </> :
                 <>
                     <Typography
@@ -127,21 +131,25 @@ export default function BaseTableToolbar<T>(props: Props<T>) {
                     </Typography>
                     {secondaryActions?.map((action, i) =>
                         action.icon
-                            ? <IconButton
-                                key={`secondary-action-${i}`}
-                                icon={action.icon}
-                                tooltip={action.label}
-                                color="primary"
-                                disabled={action.disabled}
-                                onClick={action.onClick}
-                            />
-                            : <Button
-                                key={`secondary-action-${i}`}
-                                label={action.label}
-                                color="primary"
-                                disabled={action.disabled}
-                                onClick={action.onClick}
-                            />)}
+                            ? (
+                                <IconButton
+                                    key={`secondary-action-${i}`}
+                                    icon={action.icon}
+                                    tooltip={action.label}
+                                    color="primary"
+                                    disabled={action.disabled}
+                                    onClick={action.onClick}
+                                />
+                            )
+                            : (
+                                <Button
+                                    key={`secondary-action-${i}`}
+                                    label={action.label}
+                                    color="primary"
+                                    disabled={action.disabled}
+                                    onClick={action.onClick}
+                                />
+                            ))}
                     {primaryAction &&
                         <Fab
                             responsiveExtended={[

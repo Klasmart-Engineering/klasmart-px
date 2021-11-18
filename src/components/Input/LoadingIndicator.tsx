@@ -31,9 +31,12 @@ export default function InputLoadingIndicator (props: Props) {
     const classes = useStyles();
     return (
         <>
-            {loading && <LinearProgress className={clsx(classes.loading, {
-                [classes.loadingOutlined]: variant === `outlined`,
-            })}/>}
+            {loading && (
+                <LinearProgress className={clsx(classes.loading, {
+                    [classes.loadingOutlined]: variant === `outlined`,
+                })}
+                />
+            )}
         </>
     );
 }

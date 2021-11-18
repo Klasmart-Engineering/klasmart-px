@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-mocks-import */
 import {
     mockFile,
     mockOnParseFile,
@@ -23,7 +24,8 @@ const Template: Story<Omit<Props, "file" | "onParseFile">> = (args) => (
     <Preview
         file={mockFile}
         onParseFile={mockOnParseFile}
-        {...args}></Preview>
+        {...args}
+    />
 );
 
 export const Valid = Template.bind({});

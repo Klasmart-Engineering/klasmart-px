@@ -58,7 +58,7 @@ interface Props<T> {
     onClose: (filter?: Filter) => void;
 }
 
-export default function TableFilterMenu<T>(props: Props<T>) {
+export default function TableFilterMenu<T> (props: Props<T>) {
     const {
         anchorEl,
         isOpen,

@@ -18,7 +18,7 @@ const defaultContrastColorOptions: DefaultContrastColorOptions = {
     lightColor: `#fff`,
 };
 
-export default function getContrastColor(background: string, options?: ContrastColorOptions) {
+export default function getContrastColor (background: string, options?: ContrastColorOptions) {
     const contrastColorOptions = {
         ...defaultContrastColorOptions,
         ...options,

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import CircularProgress from '../../../Progress/CircularProgress';
 import { SpreadsheetValidationError } from './Base';
 import {
@@ -158,11 +159,13 @@ const buildValidationStatusInfo = (validationStatusInfoOptions: ValidationStatus
     case `in-progress`: {
         return (
             <StatusInfo
-                Icon={<CircularProgress
-                    disableCentered
-                    className={classes.statusIcon}
-                    color={`action`}
-                />}
+                Icon={(
+                    <CircularProgress
+                        disableCentered
+                        className={classes.statusIcon}
+                        color={`action`}
+                    />
+                )}
                 message={{
                     text: validationInProgressMessage,
                     color: `textSecondary`,
@@ -174,12 +177,11 @@ const buildValidationStatusInfo = (validationStatusInfoOptions: ValidationStatus
     case `passed`: {
         return (
             <StatusInfo
-                Icon={<CheckIcon
-                    className={clsx(
-                        classes.statusIcon,
-                        classes.successText,
-                    )}
-                />}
+                Icon={(
+                    <CheckIcon
+                        className={clsx(classes.statusIcon, classes.successText)}
+                    />
+                )}
                 message={{
                     text: allValidationsPassedMessage,
                     color: `textSecondary`,
@@ -191,10 +193,12 @@ const buildValidationStatusInfo = (validationStatusInfoOptions: ValidationStatus
     case `failed`: {
         return (
             <StatusInfo
-                Icon={<ErrorIcon
-                    className={classes.statusIcon}
-                    color="error"
-                />}
+                Icon={(
+                    <ErrorIcon
+                        className={classes.statusIcon}
+                        color="error"
+                    />
+                )}
                 message={{
                     text: numValidationsFailedMessage(totalErrors),
                     color: `error`,

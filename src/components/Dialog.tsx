@@ -77,7 +77,7 @@ export default function BaseDialog (props: Props) {
                     className={classes.closeButton}
                     onClick={onClose}
                 >
-                    <CloseIcon/>
+                    <CloseIcon />
                 </IconButton>
             </Tooltip>
             <DialogTitle id="scroll-dialog-title">
@@ -92,26 +92,28 @@ export default function BaseDialog (props: Props) {
             <DialogActions>
                 {actions
                     ?.filter((a) => a.align === `left`)
-                    ?.map((action, i) =>
+                    ?.map((action, i) => (
                         <Button
                             key={`action-${i}`}
                             label={action.label}
                             disabled={action.disabled}
                             color={action.color}
                             onClick={action.onClick}
-                        />)
+                        />
+                    ))
                 }
                 <Box flex="1" />
                 {actions
                     ?.filter((a) => a.align !== `left`)
-                    ?.map((action, i) =>
+                    ?.map((action, i) => (
                         <Button
                             key={`action-${i}`}
                             label={action.label}
                             disabled={action.disabled}
                             color={action.color}
                             onClick={action.onClick}
-                        />)
+                        />
+                    ))
                 }
             </DialogActions>
         </Dialog>

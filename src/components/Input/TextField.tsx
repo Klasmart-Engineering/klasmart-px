@@ -105,7 +105,7 @@ export default function TextField (props: Props) {
         }
     }, [ value ]);
 
-    return <>
+    return (
         <MUITextField
             className={className}
             variant={variant}
@@ -132,6 +132,6 @@ export default function TextField (props: Props) {
             onChange={handleChange}
             {...rest}
         />
-    </>;
+    );
 }
 TextField.displayName = `pxTextField`;

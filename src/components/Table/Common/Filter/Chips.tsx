@@ -32,8 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
         chipText: {
             whiteSpace: `break-spaces`,
         },
-    }),
-);
+    }));
 
 interface Props<T> {
     localization?: FilterLocalization;
@@ -43,7 +42,7 @@ interface Props<T> {
     onDelete: (filterChip: Filter) => void;
 }
 
-export default function TableFilterChips<T>(props: Props<T>) {
+export default function TableFilterChips<T> (props: Props<T>) {
     const {
         localization,
         filters,

@@ -52,7 +52,7 @@ interface Props {
     onSelectAllPageClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function BaseTableCheckboxDropdown(props: Props) {
+export default function BaseTableCheckboxDropdown (props: Props) {
     const {
         indeterminate,
         checked,
@@ -118,7 +118,7 @@ export default function BaseTableCheckboxDropdown(props: Props) {
                 className={classes.menuButton}
                 onClick={handleClick}
             >
-                <ArrowDropDown color="action"/>
+                <ArrowDropDown color="action" />
             </Button>
             <Popover
                 keepMounted
@@ -135,7 +135,7 @@ export default function BaseTableCheckboxDropdown(props: Props) {
                 onClose={handleClose}
             >
                 <MenuList>
-                    {actions.map((action, i) =>
+                    {actions.map((action, i) => (
                         <MenuItem
                             key={`menu-item-${i}`}
                             onClick={(e) => {
@@ -144,7 +144,8 @@ export default function BaseTableCheckboxDropdown(props: Props) {
                             }}
                         >
                             <Typography variant="body2">{action.label}</Typography>
-                        </MenuItem>)}
+                        </MenuItem>
+                    ))}
                 </MenuList>
             </Popover>
         </Box>

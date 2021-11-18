@@ -138,7 +138,8 @@ export default function IconButton (props: Props) {
                         fontSize={iconSize}
                         className={clsx({
                             [loadingClasses.buttonLoadingContent]: loading,
-                        })} />
+                        })}
+                    />
                     {loading && <CircularProgress />}
                 </IconBtn>
             </span>

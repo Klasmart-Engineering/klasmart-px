@@ -83,71 +83,74 @@ export default function BaseTableColumnSelector<T> (props: Props<T>) {
 
     const isSelected = (column: keyof T) => selected.indexOf(column) !== -1;
 
-    return <>
-        <Tooltip title={localization?.addButton ?? `Add columns`}>
-            <IconButton
-                aria-label={localization?.addButton ?? `Add columns`}
-                aria-haspopup="true"
-                onClick={handleClick}
-            >
-                <AddIcon />
-            </IconButton>
-        </Tooltip>
-        <Popover
-            keepMounted
-            anchorEl={anchorEl}
-            open={open}
-            anchorOrigin={{
-                vertical: `bottom`,
-                horizontal: `left`,
-            }}
-            transformOrigin={{
-                vertical: `top`,
-                horizontal: `left`,
-            }}
-            onClose={handleClose}
-        >
-            <Toolbar className={classes.toolbar}>
-                <Typography
-                    variant="body2"
-                    className={classes.title}
+    return (
+        <>
+            <Tooltip title={localization?.addButton ?? `Add columns`}>
+                <IconButton
+                    aria-label={localization?.addButton ?? `Add columns`}
+                    aria-haspopup="true"
+                    onClick={handleClick}
                 >
-                    {localization?.listTitle ?? `Select columns`}
-                </Typography>
-            </Toolbar>
-            <List className={classes.list}>
-                <Divider />
-                {columns.filter((column) => !column.secret).map((column, i) =>
-                    <Fragment key={`list-item-${i}`}>
-                        {i !== 0 && <Divider />}
-                        <ListItem
-                            className={classes.columnItemContainer}
-                            onClick={!column.persistent ? () => onColumnChange(column.id) : undefined}
-                        >
-                            <Checkbox
-                                role="checkbox"
-                                checked={isSelected(column.id)}
-                                disabled={column.persistent}
-                            />
-                            <Typography
-                                variant="body2"
-                                className={clsx({
-                                    [classes.persistentText]: column.persistent,
-                                })}
+                    <AddIcon />
+                </IconButton>
+            </Tooltip>
+            <Popover
+                keepMounted
+                anchorEl={anchorEl}
+                open={open}
+                anchorOrigin={{
+                    vertical: `bottom`,
+                    horizontal: `left`,
+                }}
+                transformOrigin={{
+                    vertical: `top`,
+                    horizontal: `left`,
+                }}
+                onClose={handleClose}
+            >
+                <Toolbar className={classes.toolbar}>
+                    <Typography
+                        variant="body2"
+                        className={classes.title}
+                    >
+                        {localization?.listTitle ?? `Select columns`}
+                    </Typography>
+                </Toolbar>
+                <List className={classes.list}>
+                    <Divider />
+                    {columns.filter((column) => !column.secret).map((column, i) => (
+                        <Fragment key={`list-item-${i}`}>
+                            {i !== 0 && <Divider />}
+                            <ListItem
+                                className={classes.columnItemContainer}
+                                onClick={!column.persistent ? () => onColumnChange(column.id) : undefined}
                             >
-                                {column.label}
-                            </Typography>
-                            {column.persistent &&
+                                <Checkbox
+                                    role="checkbox"
+                                    checked={isSelected(column.id)}
+                                    disabled={column.persistent}
+                                />
+                                <Typography
+                                    variant="body2"
+                                    className={clsx({
+                                        [classes.persistentText]: column.persistent,
+                                    })}
+                                >
+                                    {column.label}
+                                </Typography>
+                                {column.persistent &&
                                 <ListItemSecondaryAction>
                                     <LockIcon
                                         className={classes.persistentIcon}
                                         fontSize="small"
                                     />
                                 </ListItemSecondaryAction>
-                            }
-                        </ListItem>
-                    </Fragment>)}
-            </List>
-        </Popover>
-    </>;
+                                }
+                            </ListItem>
+                        </Fragment>
+                    ))}
+                </List>
+            </Popover>
+        </>
+    );
 }

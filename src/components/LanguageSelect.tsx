@@ -33,23 +33,21 @@ interface Props {
     noIcon?: boolean;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        expand: {
-            transform: `rotate(0deg)`,
-            transition: theme.transitions.create(`transform`, {
-                duration: theme.transitions.duration.shortest,
-            }),
-        },
-        expandOpen: {
-            transform: `rotate(180deg)`,
-        },
-        language: {
-            margin: theme.spacing(0, 1),
-            display: `block`,
-        },
-    }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    expand: {
+        transform: `rotate(0deg)`,
+        transition: theme.transitions.create(`transform`, {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: `rotate(180deg)`,
+    },
+    language: {
+        margin: theme.spacing(0, 1),
+        display: `block`,
+    },
+}));
 
 const StyledMenu = withStyles({})((props: MenuProps) => (
     <Menu
@@ -67,14 +65,13 @@ const StyledMenu = withStyles({})((props: MenuProps) => (
     />
 ));
 
-export default function LanguageSelect(props: Props) {
+export default function LanguageSelect (props: Props) {
     const classes = useStyles();
     let { languages } = props;
     const {
         cookieDomain,
         localization,
         noIcon,
-        ...other
     } = props;
 
     if (languages.length === 0) {
@@ -87,7 +84,7 @@ export default function LanguageSelect(props: Props) {
     }
     const localeCodes = languages.map(l => l.code);
 
-    function getDefaultLanguageCode() {
+    function getDefaultLanguageCode () {
         const browserLanguages = navigator.languages || [
             (navigator as any).language,
             (navigator as any).browerLanguage,
@@ -123,7 +120,7 @@ export default function LanguageSelect(props: Props) {
     const [ languageText, setLanguageText ] = useState<string>(language.text);
     const [ languageMenuElement, setLanguageMenuElement ] = useState<null | HTMLElement>(null);
 
-    function languageSelect(language: Language) {
+    function languageSelect (language: Language) {
         setCookies(`locale`, language.code, {
             path: `/`,
             domain: cookieDomain || `kidsloop.net`,
@@ -136,7 +133,8 @@ export default function LanguageSelect(props: Props) {
         <React.Fragment>
             <Tooltip
                 title={localization?.tooltip ?? `Change Language`}
-                enterDelay={300}>
+                enterDelay={300}
+            >
                 <Button
                     color="inherit"
                     aria-owns={languageMenuElement ? `language-menu` : undefined}

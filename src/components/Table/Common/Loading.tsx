@@ -34,7 +34,7 @@ export default function BaseTableLoading (props: Props) {
         <thead className={classes.loadingContainer}>
             <tr>
                 <th colSpan={columnCount}>
-                    {loading && <LinearProgress className={classes.loading}/>}
+                    {loading && <LinearProgress className={classes.loading} />}
                 </th>
             </tr>
         </thead>

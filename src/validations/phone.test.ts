@@ -40,4 +40,5 @@ const tests = (regex: (errorMessage?: string | undefined) => (input: any) => str
 
 tests(phone);
 
+// eslint-disable-next-line jest/no-export
 export default tests;

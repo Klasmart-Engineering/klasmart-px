@@ -1,3 +1,5 @@
+/* eslint-disable testing-library/no-node-access */
+/* eslint-disable jest/no-mocks-import */
 import { email } from "../../validations";
 import {
     failingValidation,
@@ -19,13 +21,13 @@ const mockHandlers = {
     onError: jest.fn(),
 };
 
-function clearMockHandlers() {
+function clearMockHandlers () {
     Object.values(mockHandlers).forEach(mock => mock.mockClear());
 }
 
 beforeEach(clearMockHandlers);
 
-function expectOnValueChange(value: Props["value"]) {
+function expectOnValueChange (value: Props["value"]) {
     const {
         onChange,
         onValidate,
@@ -39,7 +41,7 @@ function expectOnValueChange(value: Props["value"]) {
     expect(onError).toHaveBeenCalledWith(undefined);
 }
 
-function expectOnValueChangeWithError({ value, error }: {
+function expectOnValueChangeWithError ({ value, error }: {
     value: Props["value"];
     error: string;
 }) {
@@ -57,7 +59,7 @@ function expectOnValueChangeWithError({ value, error }: {
     expect(onError).toHaveBeenCalledWith(error);
 }
 
-function expectOnErrorChange(error: string | undefined) {
+function expectOnErrorChange (error: string | undefined) {
     const {
         onChange,
         onValidate,
@@ -70,7 +72,7 @@ function expectOnErrorChange(error: string | undefined) {
     expect(onError).toHaveBeenCalledWith(error);
 }
 
-function expectError({ container, error }: { container: HTMLElement; error: string}) {
+function expectError ({ container, error }: { container: HTMLElement; error: string}) {
     expect(container.querySelector(`.MuiInputBase-root`)).toHaveClass(`Mui-error`);
 
     const helperText = container.querySelector(`.MuiFormHelperText-root`);
@@ -79,26 +81,29 @@ function expectError({ container, error }: { container: HTMLElement; error: stri
     expect(helperText).toHaveClass(`Mui-error`);
 }
 
-function expectNoError(container: HTMLElement) {
+function expectNoError (container: HTMLElement) {
     expect(container.querySelector(`.MuiInputBase-root`)).not.toHaveClass(`Mui-error`);
     expect(container.querySelector(`.MuiFormHelperText-root`)).toHaveTextContent(`\u200b`);
 }
 
-function expectValue({ container, value }: {container: HTMLElement; value: string}) {
+function expectValue ({ container, value }: {container: HTMLElement; value: string}) {
     expect(container.querySelector(`input`)).toHaveValue(value);
 }
 
-function expectErrorWithoutHelperText(container: HTMLElement) {
+function expectErrorWithoutHelperText (container: HTMLElement) {
     expect(container.querySelector(`.MuiInputBase-root`)).toHaveClass(`Mui-error`);
 
     expect(container.querySelector(`.MuiFormHelperText-root`)).not.toBeInTheDocument();
 }
 
 test.each([ undefined, false ])(`displays validation errors when hideHelperText=%s`, (hideHelperText) => {
-    const { container } = render(<TextField
-        value="Test"
-        validations={[ failingValidation ]}
-        hideHelperText={hideHelperText}/>);
+    const { container } = render((
+        <TextField
+            value="Test"
+            validations={[ failingValidation ]}
+            hideHelperText={hideHelperText}
+        />
+    ));
 
     expectError({
         container,
@@ -107,10 +112,13 @@ test.each([ undefined, false ])(`displays validation errors when hideHelperText=
 });
 
 test(`doesn't show validation errors if hideHelperText=true`, () => {
-    const { container } = render(<TextField
-        hideHelperText
-        value="Test"
-        validations={[ failingValidation ]}/>);
+    const { container } = render((
+        <TextField
+            hideHelperText
+            value="Test"
+            validations={[ failingValidation ]}
+        />
+    ));
 
     expectErrorWithoutHelperText(container);
 });
@@ -121,11 +129,13 @@ test.each([
     [ failingValidation ],
 ])(`overrides validations=%s if error is specified`, (validations) => {
     const error = `Incorrect`;
-    const { container } = render(<TextField
-        value="Test"
-        validations={validations}
-        error={error}
-    />);
+    const { container } = render((
+        <TextField
+            value="Test"
+            validations={validations}
+            error={error}
+        />
+    ));
 
     expectError({
         container,
@@ -136,10 +146,13 @@ test.each([
 test(`calls onChange, onValidate and onError on mount`, () => {
     const value = `1`;
 
-    render(<TextField
-        value={value}
-        validations={[ failingValidation ]}
-        {...mockHandlers}/>);
+    render((
+        <TextField
+            value={value}
+            validations={[ failingValidation ]}
+            {...mockHandlers}
+        />
+    ));
 
     expectOnValueChangeWithError({
         value,
@@ -151,11 +164,14 @@ test(`calls onChange, onValidate and onError with error prop on mount`, () => {
     const value = `1`;
     const error = `Incorrect`;
 
-    render(<TextField
-        value={value}
-        error={error}
-        validations={[ failingValidation ]}
-        {...mockHandlers}/>);
+    render((
+        <TextField
+            value={value}
+            error={error}
+            validations={[ failingValidation ]}
+            {...mockHandlers}
+        />
+    ));
 
     expectOnValueChangeWithError({
         value,
@@ -166,10 +182,13 @@ test(`calls onChange, onValidate and onError with error prop on mount`, () => {
 test(`calls onChange with a number if type='number'`, () => {
     const value = `1`;
 
-    render(<TextField
-        value={value}
-        type={`number`}
-        {...mockHandlers}/>);
+    render((
+        <TextField
+            value={value}
+            type={`number`}
+            {...mockHandlers}
+        />
+    ));
 
     clearMockHandlers();
 
@@ -179,23 +198,25 @@ test(`calls onChange with a number if type='number'`, () => {
 });
 
 test(`updates value and helperText, and calls onChange, onValidate and onError on rerender`, () => {
-    const { container, rerender } = render(
+    const { container, rerender } = render((
         <TextField
             value="1"
             validations={[ failingValidation ]}
-            {...mockHandlers}/>,
-    );
+            {...mockHandlers}
+        />
+    ));
 
     clearMockHandlers();
 
     const newValue = `2`;
 
-    rerender(
+    rerender((
         <TextField
             validations={[ failingValidation ]}
             value={newValue}
-            {...mockHandlers}/>,
-    );
+            {...mockHandlers}
+        />
+    ));
 
     expectError({
         container,
@@ -216,25 +237,27 @@ test(`updates value and helperText, and calls onChange, onValidate and onError o
 test(`does not update helperText, but calls onChange, onValidate and onError on rerender, when error is provided`, () => {
     const error = `Invalid`;
 
-    const { container, rerender } = render(
+    const { container, rerender } = render((
         <TextField
             value="1"
             error={error}
             validations={[ failingValidation ]}
-            {...mockHandlers}/>,
-    );
+            {...mockHandlers}
+        />
+    ));
 
     clearMockHandlers();
 
     const newValue = `2`;
 
-    rerender(
+    rerender((
         <TextField
             validations={[ failingValidation ]}
             value={newValue}
             error={error}
-            {...mockHandlers}/>,
-    );
+            {...mockHandlers}
+        />
+    ));
 
     expectValue({
         container,
@@ -259,7 +282,7 @@ test(`falls back to passing validation after error is cleared on rerender`, () =
         ...mockHandlers,
     };
 
-    const { container, rerender } = render(<TextField {...props}/>);
+    const { container, rerender } = render(<TextField {...props} />);
 
     expectNoError(container);
 
@@ -269,11 +292,12 @@ test(`falls back to passing validation after error is cleared on rerender`, () =
 
     const error = `Invalid`;
 
-    rerender(
+    rerender((
         <TextField
             {...props}
-            error={error}/>,
-    );
+            error={error}
+        />
+    ));
 
     expectError({
         container,
@@ -284,10 +308,11 @@ test(`falls back to passing validation after error is cleared on rerender`, () =
 
     clearMockHandlers();
 
-    rerender(
+    rerender((
         <TextField
-            {...props}/>,
-    );
+            {...props}
+        />
+    ));
 
     expectNoError(container);
 
@@ -303,7 +328,7 @@ test(`falls back to failing validation after error is cleared on rerender`, () =
         ...mockHandlers,
     };
 
-    const { container, rerender } = render(<TextField {...props}/>);
+    const { container, rerender } = render(<TextField {...props} />);
 
     expectOnValueChangeWithError({
         value: props.value,
@@ -314,11 +339,12 @@ test(`falls back to failing validation after error is cleared on rerender`, () =
 
     const error = `Invalid`;
 
-    rerender(
+    rerender((
         <TextField
             {...props}
-            error={error}/>,
-    );
+            error={error}
+        />
+    ));
 
     expectError({
         container,
@@ -329,10 +355,11 @@ test(`falls back to failing validation after error is cleared on rerender`, () =
 
     clearMockHandlers();
 
-    rerender(
+    rerender((
         <TextField
-            {...props}/>,
-    );
+            {...props}
+        />
+    ));
 
     expectError({
         container,

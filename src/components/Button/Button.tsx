@@ -122,45 +122,47 @@ export default function Button (props: Props) {
         if (error) throw error;
     };
 
-    return <Tooltip title={tooltip ?? ``}>
-        <span>
-            <Btn
-                variant={variant}
-                type={type}
-                style={{
-                    color: !disabled ? textColor_ : undefined,
-                    backgroundColor: !disabled ? backgroundColor_ : undefined,
-                    borderColor: !disabled ? borderColor_ : undefined,
-                }}
-                disabled={disabled}
-                className={clsx(className, {
-                    [loadingClasses.buttonLoading]: loading,
-                    [classes.rounded]: rounded,
-                })}
-                onClick={handleClick}
-                {...rest}
-            >
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    className={clsx({
-                        [loadingClasses.buttonLoadingContent]: loading,
+    return (
+        <Tooltip title={tooltip ?? ``}>
+            <span>
+                <Btn
+                    variant={variant}
+                    type={type}
+                    style={{
+                        color: !disabled ? textColor_ : undefined,
+                        backgroundColor: !disabled ? backgroundColor_ : undefined,
+                        borderColor: !disabled ? borderColor_ : undefined,
+                    }}
+                    disabled={disabled}
+                    className={clsx(className, {
+                        [loadingClasses.buttonLoading]: loading,
+                        [classes.rounded]: rounded,
                     })}
+                    onClick={handleClick}
+                    {...rest}
                 >
-
-                    {Icon && <Icon />}
-                    <Typography
-                        noWrap
-                        variant="inherit"
+                    <Box
+                        display="flex"
+                        flexDirection="row"
                         className={clsx({
-                            [classes.extendedText]: Icon && label,
+                            [loadingClasses.buttonLoadingContent]: loading,
                         })}
                     >
-                        {label}
-                    </Typography>
-                </Box>
-                {loading && <CircularProgress />}
-            </Btn>
-        </span>
-    </Tooltip>;
+
+                        {Icon && <Icon />}
+                        <Typography
+                            noWrap
+                            variant="inherit"
+                            className={clsx({
+                                [classes.extendedText]: Icon && label,
+                            })}
+                        >
+                            {label}
+                        </Typography>
+                    </Box>
+                    {loading && <CircularProgress />}
+                </Btn>
+            </span>
+        </Tooltip>
+    );
 }

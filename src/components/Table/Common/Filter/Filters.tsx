@@ -91,7 +91,7 @@ interface Props<T> {
     onChange: Dispatch<SetStateAction<Filter[]>>;
 }
 
-export default function BaseTableFilter<T>(props: Props<T>) {
+export default function BaseTableFilter<T> (props: Props<T>) {
     const {
         localization,
         onChange,
@@ -137,7 +137,7 @@ export default function BaseTableFilter<T>(props: Props<T>) {
             <div className={classes.root}>
                 <Box className={classes.iconRowContainer}>
                     <div className={classes.iconContainer}>
-                        <FilterListIcon color="action"/>
+                        <FilterListIcon color="action" />
                     </div>
                     <div className={classes.chipsContainer}>
                         <TableFilterChips

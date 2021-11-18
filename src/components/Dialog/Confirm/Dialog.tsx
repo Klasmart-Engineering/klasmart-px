@@ -44,7 +44,7 @@ export default function ConfirmDialog (props: Props & Openable<boolean>) {
                     variant={variant}
                     hideIcon={hideIcon}
                 />
-                <DialogContent content={content}/>
+                <DialogContent content={content} />
                 <DialogActions>
                     <Button
                         label={cancelLabel}

@@ -1,3 +1,7 @@
+/* eslint-disable testing-library/no-node-access */
+/* eslint-disable jest/no-export */
+/* eslint-disable jest/no-mocks-import */
+
 import {
     mockData,
     mockFile,
@@ -16,10 +20,13 @@ import React from "react";
 
 const render = ({ errors }: {errors: Props["errors"]} = {
     errors: [],
-}) => actualRender(<Preview
-    file={mockFile}
-    errors={errors}
-    onParseFile={mockOnParseFile}></Preview>);
+}) => actualRender((
+    <Preview
+        file={mockFile}
+        errors={errors}
+        onParseFile={mockOnParseFile}
+    />
+));
 
 const getTable = () => screen.getByRole(`table`) as HTMLTableElement;
 
@@ -28,7 +35,7 @@ const rowNumbers = (length: number) => Array.from({
 // eslint-disable-next-line @typescript-eslint/naming-convention
 }, (_, i) => (i+1).toString());
 
-export function expectPreviewData(spreadsheetData: string[][]) {
+export function expectPreviewData (spreadsheetData: string[][]) {
     const preview = screen.getByTestId(`preview`);
 
     expect(preview.querySelector(`table`)?.rows).toHaveLength(spreadsheetData.length);
@@ -38,8 +45,7 @@ export function expectPreviewData(spreadsheetData: string[][]) {
 
     const data = Array.from(preview.querySelectorAll(`tr`)).map(row =>
         // Ignore first column
-        [ ...row.cells ].filter((cell, i) => i !== 0).map(cell => cell.textContent),
-    );
+        [ ...row.cells ].filter((cell, i) => i !== 0).map(cell => cell.textContent));
 
     expect(data).toEqual(spreadsheetData);
 }
@@ -50,7 +56,7 @@ export const hasErrorStyling = (el: Element) => {
 
 const expectHasErrorStyling = (el: Element) => expect(hasErrorStyling(el)).toBe(true);
 
-export function expectHasErrorIcon(el: Element, errorMessage: string) {
+export function expectHasErrorIcon (el: Element, errorMessage: string) {
     expectHasErrorStyling(el);
     const errorIcon = el.querySelector(`svg`);
     if (errorIcon === null) throw Error(`Expected error icon`);
@@ -58,11 +64,11 @@ export function expectHasErrorIcon(el: Element, errorMessage: string) {
     expect(errorIcon.attributes.getNamedItem(`title`)?.value).toBe(errorMessage);
 }
 
-function expectHasNoErrorIcon(el: Element) {
+function expectHasNoErrorIcon (el: Element) {
     expect(el.querySelector(`svg`)).not.toBeInTheDocument();
 }
 
-export const waitForPreviewToParse = async () => {
+export const waitForPreviewToParse = () => {
     return waitFor(() => {
         expect(document.querySelectorAll(`tbody tr`).length).toBeGreaterThan(0);
     });
@@ -93,10 +99,7 @@ test(`displays column errors in column header`, async () => {
 
     await waitForPreviewToParse();
 
-    expectHasErrorIcon(
-        getTable().rows[0].cells[previewColumnIndex(validationErrors.column.column)],
-        validationErrors.column.message,
-    );
+    expectHasErrorIcon(getTable().rows[0].cells[previewColumnIndex(validationErrors.column.column)], validationErrors.column.message);
 });
 
 test(`displays row errors in the row number and highlights the row red`, async () => {
@@ -108,10 +111,7 @@ test(`displays row errors in the row number and highlights the row red`, async (
 
     const errorRow = getTable().rows[validationErrors.row.row];
 
-    expectHasErrorIcon(
-        errorRow.cells[0],
-        validationErrors.row.message,
-    );
+    expectHasErrorIcon(errorRow.cells[0], validationErrors.row.message);
 
     expect(Array.from(errorRow.cells).every(hasErrorStyling)).toBe(true);
 });
@@ -127,10 +127,7 @@ test(`displays field errors in the row/column co-ordinate and highlights the row
 
     const table = getTable();
 
-    expectHasErrorIcon(
-        table.rows[validationErrors.field.row].cells[columnIndex],
-        validationErrors.field.message,
-    );
+    expectHasErrorIcon(table.rows[validationErrors.field.row].cells[columnIndex], validationErrors.field.message);
 
     const columnHeader = table.rows[0].cells[columnIndex];
     const rowNumber = table.rows[validationErrors.field.row].cells[0];

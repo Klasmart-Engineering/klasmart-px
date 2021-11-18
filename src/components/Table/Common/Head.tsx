@@ -161,65 +161,69 @@ export default function BaseTableHead<T> (props: Props<T>) {
                             };
                         const flexDirection = column.align === `right` ? `row-reverse` : `row`;
                         const isAlignCenter = column.align === `center`;
-                        return <TableCell
-                            key={column.id}
-                            align={column.align}
-                            sortDirection={orderBy === column.id ? order : false}
-                            className={classes.hoverHeader}
-                            style={paddingStyle}
-                        >
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                flexDirection={flexDirection}
+                        return ((
+                            <TableCell
+                                key={column.id}
+                                align={column.align}
+                                sortDirection={orderBy === column.id ? order : false}
+                                className={classes.hoverHeader}
+                                style={paddingStyle}
                             >
-                                {isAlignCenter && (
-                                    <>
-                                        <span
-                                            style={{
-                                                width: 44, // width of column remove button
-                                            }}
-                                        />
-                                        <Box flex="1" />
-                                    </>
-                                )}
-                                <TableSortLabel
-                                    disabled={column.disableSort}
-                                    active={orderBy === column.id}
-                                    direction={orderBy === column.id ? order : DEFAULT_SORT_ORDER}
-                                    style={{
-                                        flexDirection,
-                                    }}
-                                    data-testid={`${column.id}SortHandler`}
-                                    onClick={createSortHandler(column.id)}
+                                <Box
+                                    display="flex"
+                                    justifyContent="space-between"
+                                    flexDirection={flexDirection}
                                 >
-                                    <Box
-                                        display="flex"
-                                        flexDirection={flexDirection}
-                                    >
-                                        {column.label}
-                                        {column.tooltip && <Tooltip title={column.tooltip}>
-                                            <InfoIcon
-                                                color="action"
-                                                className={clsx({
-                                                    [classes.infoIcon]: column.align !== `right`,
-                                                    [classes.infoIconReverse]: column.align === `right`,
-                                                })}
+                                    {isAlignCenter && (
+                                        <>
+                                            <span
+                                                style={{
+                                                    width: 44, // width of column remove button
+                                                }}
                                             />
-                                        </Tooltip>}
-                                    </Box>
-                                </TableSortLabel>
-                                {isAlignCenter && <Box flex="1" />}
-                                <IconButton
-                                    disabled={column.persistent}
-                                    className={classes.removeButton}
-                                    iconSize="small"
-                                    tooltip={!column.persistent ? localization?.hideColumnButton ?? `Hide column` : undefined}
-                                    icon={column.persistent ? LockIcon : CloseIcon}
-                                    onClick={() => onColumnChange(column.id)}
-                                />
-                            </Box>
-                        </TableCell>;
+                                            <Box flex="1" />
+                                        </>
+                                    )}
+                                    <TableSortLabel
+                                        disabled={column.disableSort}
+                                        active={orderBy === column.id}
+                                        direction={orderBy === column.id ? order : DEFAULT_SORT_ORDER}
+                                        style={{
+                                            flexDirection,
+                                        }}
+                                        data-testid={`${column.id}SortHandler`}
+                                        onClick={createSortHandler(column.id)}
+                                    >
+                                        <Box
+                                            display="flex"
+                                            flexDirection={flexDirection}
+                                        >
+                                            {column.label}
+                                            {column.tooltip && (
+                                                <Tooltip title={column.tooltip}>
+                                                    <InfoIcon
+                                                        color="action"
+                                                        className={clsx({
+                                                            [classes.infoIcon]: column.align !== `right`,
+                                                            [classes.infoIconReverse]: column.align === `right`,
+                                                        })}
+                                                    />
+                                                </Tooltip>
+                                            )}
+                                        </Box>
+                                    </TableSortLabel>
+                                    {isAlignCenter && <Box flex="1" />}
+                                    <IconButton
+                                        disabled={column.persistent}
+                                        className={classes.removeButton}
+                                        iconSize="small"
+                                        tooltip={!column.persistent ? localization?.hideColumnButton ?? `Hide column` : undefined}
+                                        icon={column.persistent ? LockIcon : CloseIcon}
+                                        onClick={() => onColumnChange(column.id)}
+                                    />
+                                </Box>
+                            </TableCell>
+                        ));
                     })}
                 <TableCell padding="checkbox">
                     <BaseTableColumnSelector
