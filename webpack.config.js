@@ -4,6 +4,8 @@ const CopyPlugin = require(`copy-webpack-plugin`);
 const ForkTsCheckerWebpackPlugin = require(`fork-ts-checker-webpack-plugin`);
 const nodeExternals = require(`webpack-node-externals`);
 
+// no longer using this file
+
 module.exports = {
     mode: `production`,
     target: `node`,
