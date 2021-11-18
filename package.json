@@ -13,7 +13,6 @@
         "start:sb": "start-storybook -p 6006",
         "test": "jest",
         "lint": "eslint .",
-        "preversion": "git checkout master && git pull origin master && npm ci",
         "version": "npm run build && git add -A dist",
         "postversion": "git push && git push --tags"
     },
