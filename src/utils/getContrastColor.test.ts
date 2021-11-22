@@ -2,7 +2,7 @@ import getContrastColor from './getContrastColor';
 
 describe(`getContrastColor`, () => {
     test(`receive no color`, () => {
-        expect(getContrastColor).toThrow(`Cannot read property 'type' of undefined`);
+        expect(getContrastColor).toThrow(`Cannot read properties of undefined (reading 'type')`);
     });
 
     test(`receive a non hex value`, () => {
