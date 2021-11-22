@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/no-node-access */
 import '@testing-library/jest-dom';
 import {
     columns,
@@ -30,23 +31,19 @@ const defaultProps = {
 describe(`Cursor Table`, () => {
     describe(`Render`, () => {
         test(`default props`, async () => {
-            const component = <CursorTable
-                {...defaultProps}
-            />;
+            const component = <CursorTable {...defaultProps} />;
 
             render(component);
 
             await waitFor(() => {
-                expect(screen.queryByText(`John`)).toBeInTheDocument();
+                expect(screen.getByText(`John`)).toBeInTheDocument();
             });
         });
     });
 
     describe(`Interact`, () => {
-        test(`add filter`, async() => {
-            const component = <CursorTable
-                {...defaultProps}
-            />;
+        test(`add filter`, async () => {
+            const component = <CursorTable {...defaultProps} />;
 
             render(component);
 
@@ -56,14 +53,16 @@ describe(`Cursor Table`, () => {
 
             fireEvent.mouseDown(screen.getAllByRole(`button`)[0]);
 
-            expect(screen.getByRole(`listbox`)).not.toEqual(null);
+            expect(screen.getByRole(`listbox`)).not.toBeNull();
 
             const columnOptions = screen.getAllByRole(`option`);
             fireEvent.click(columnOptions[1]);
 
             await waitFor(() => {
                 expect(columnSelectInput.value).toEqual(`status`);
-                expect(screen.queryAllByText(`Status`, {
+            });
+            await waitFor(() => {
+                expect(screen.getAllByText(`Status`, {
                     selector: `span`,
                 })).toHaveLength(1);
             });
@@ -74,7 +73,9 @@ describe(`Cursor Table`, () => {
             fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toEqual(null);
+                expect(screen.getByRole(`listbox`)).not.toBeNull();
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -85,6 +86,8 @@ describe(`Cursor Table`, () => {
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`active`);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -97,10 +100,8 @@ describe(`Cursor Table`, () => {
             });
         });
 
-        test(`edit filter`, async() => {
-            const component = <CursorTable
-                {...defaultProps}
-            />;
+        test(`edit filter`, async () => {
+            const component = <CursorTable {...defaultProps} />;
 
             render(component);
 
@@ -110,13 +111,15 @@ describe(`Cursor Table`, () => {
 
             fireEvent.mouseDown(screen.getAllByRole(`button`)[0]);
 
-            expect(screen.getByRole(`listbox`)).not.toEqual(null);
+            expect(screen.getByRole(`listbox`)).not.toBeNull();
 
             const columnOptions = screen.getAllByRole(`option`);
             fireEvent.click(columnOptions[1]);
 
             await waitFor(() => {
                 expect(columnSelectInput.value).toEqual(`status`);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -128,7 +131,9 @@ describe(`Cursor Table`, () => {
             fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toEqual(null);
+                expect(screen.getByRole(`listbox`)).not.toBeNull();
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -139,6 +144,8 @@ describe(`Cursor Table`, () => {
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`active`);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -158,7 +165,9 @@ describe(`Cursor Table`, () => {
             fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toEqual(null);
+                expect(screen.getByRole(`listbox`)).not.toBeNull();
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
                 })).toHaveLength(2);
@@ -169,6 +178,8 @@ describe(`Cursor Table`, () => {
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`inactive`);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Inactive`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -181,10 +192,8 @@ describe(`Cursor Table`, () => {
             });
         });
 
-        test(`remove filter`, async() => {
-            const component = <CursorTable
-                {...defaultProps}
-            />;
+        test(`remove filter`, async () => {
+            const component = <CursorTable {...defaultProps} />;
 
             render(component);
 
@@ -194,13 +203,15 @@ describe(`Cursor Table`, () => {
 
             fireEvent.mouseDown(screen.getAllByRole(`button`)[0]);
 
-            expect(screen.getByRole(`listbox`)).not.toEqual(null);
+            expect(screen.getByRole(`listbox`)).not.toBeNull();
 
             const columnOptions = screen.getAllByRole(`option`);
             fireEvent.click(columnOptions[1]);
 
             await waitFor(() => {
                 expect(columnSelectInput.value).toEqual(`status`);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -212,7 +223,9 @@ describe(`Cursor Table`, () => {
             fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toEqual(null);
+                expect(screen.getByRole(`listbox`)).not.toBeNull();
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -223,6 +236,8 @@ describe(`Cursor Table`, () => {
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`active`);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -236,27 +251,27 @@ describe(`Cursor Table`, () => {
 
             const deleteIcon = document.querySelector(`.MuiChip-deleteIcon`) as HTMLElement;
 
-            await waitFor(() => {
-                fireEvent.click(deleteIcon);
-            });
+            fireEvent.click(deleteIcon);
 
             await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
                 })).toHaveLength(0);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`equals`, {
                     selector: `span`,
                 })).toHaveLength(0);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`"Active"`, {
                     selector: `span`,
                 })).toHaveLength(0);
             });
         });
 
-        test(`clear all filters`, async() => {
-            const component = <CursorTable
-                {...defaultProps}
-            />;
+        test(`clear all filters`, async () => {
+            const component = <CursorTable {...defaultProps} />;
 
             render(component);
 
@@ -266,13 +281,15 @@ describe(`Cursor Table`, () => {
 
             fireEvent.mouseDown(screen.getAllByRole(`button`)[0]);
 
-            expect(screen.getByRole(`listbox`)).not.toEqual(null);
+            expect(screen.getByRole(`listbox`)).not.toBeNull();
 
             const columnOptions = screen.getAllByRole(`option`);
             fireEvent.click(columnOptions[1]);
 
             await waitFor(() => {
                 expect(columnSelectInput.value).toEqual(`status`);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -284,7 +301,9 @@ describe(`Cursor Table`, () => {
             fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toEqual(null);
+                expect(screen.getByRole(`listbox`)).not.toBeNull();
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -295,6 +314,8 @@ describe(`Cursor Table`, () => {
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`active`);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
                 })).toHaveLength(1);
@@ -312,19 +333,21 @@ describe(`Cursor Table`, () => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
                 })).toHaveLength(0);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`equals`, {
                     selector: `span`,
                 })).toHaveLength(0);
+            });
+            await waitFor(() => {
                 expect(screen.queryAllByText(`"Active"`, {
                     selector: `span`,
                 })).toHaveLength(0);
             });
         });
 
-        test(`input search text`, async() => {
-            const component = <CursorTable
-                {...defaultProps}
-            />;
+        test(`input search text`, async () => {
+            const component = <CursorTable {...defaultProps} />;
 
             render(component);
 
@@ -341,10 +364,8 @@ describe(`Cursor Table`, () => {
             });
         });
 
-        test(`clear search text`, async() => {
-            const component = <CursorTable
-                {...defaultProps}
-            />;
+        test(`clear search text`, async () => {
+            const component = <CursorTable {...defaultProps} />;
 
             render(component);
 
@@ -362,9 +383,7 @@ describe(`Cursor Table`, () => {
         });
 
         test(`sort asc to desc`, async () => {
-            const component = <CursorTable
-                {...defaultProps}
-            />;
+            const component = <CursorTable {...defaultProps} />;
 
             render(component);
 
@@ -383,7 +402,11 @@ describe(`Cursor Table`, () => {
                     exact: false,
                 });
                 expect(userRowsInTable).toHaveLength(4);
+            });
+            await waitFor(() => {
                 expect(userRowsInTable[0]).toHaveTextContent(`Stephen`);
+            });
+            await waitFor(() => {
                 expect(userRowsInTable[1]).toHaveTextContent(`Mike`);
             });
         });
@@ -394,9 +417,7 @@ describe(`Cursor Table`, () => {
                 order: `desc`,
             };
 
-            const component = <CursorTable
-                {...mockedProps}
-            />;
+            const component = <CursorTable {...mockedProps} />;
 
             render(component);
 
@@ -415,7 +436,8 @@ describe(`Cursor Table`, () => {
                     exact: false,
                 });
                 expect(userRowsInTable).toHaveLength(4);
-                expect(userRowsInTable[0]).toHaveTextContent(`Andres`);
+            });
+            await waitFor(() => {
                 expect(userRowsInTable[1]).toHaveTextContent(`John`);
             });
         });

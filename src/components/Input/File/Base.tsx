@@ -140,12 +140,14 @@ export default function FileInput (props: Props) {
                             />
                         </Paper>
                     ))
-                    : <Typography
-                        color="textSecondary"
-                        className={classes.noFilesText}
-                    >
-                        {noItemsLabel}
-                    </Typography>
+                    : (
+                        <Typography
+                            color="textSecondary"
+                            className={classes.noFilesText}
+                        >
+                            {noItemsLabel}
+                        </Typography>
+                    )
                 }
             </Paper>
         </>

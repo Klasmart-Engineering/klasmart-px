@@ -55,22 +55,26 @@ export default function DialogTitle (props: Props) {
     const theme = useTheme();
     const Icon = typeToIcon(variant);
 
-    return <Title
-        style={{
-            color: variant ? `white` : undefined,
-            backgroundColor: variant ? theme.palette[variant].main : undefined,
-        }}
-        {...rest}
-    >
-        {variant && !hideIcon && typeof title === `string`
-            ? <Box
-                display="flex"
-                alignItems="center"
-            >
-                <Icon className={classes.typeIcon}/>
-                {title}
-            </Box>
-            : title
-        }
-    </Title>;
+    return (
+        <Title
+            style={{
+                color: variant ? `white` : undefined,
+                backgroundColor: variant ? theme.palette[variant].main : undefined,
+            }}
+            {...rest}
+        >
+            {variant && !hideIcon && typeof title === `string`
+                ? (
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                    >
+                        <Icon className={classes.typeIcon} />
+                        {title}
+                    </Box>
+                )
+                : title
+            }
+        </Title>
+    );
 }

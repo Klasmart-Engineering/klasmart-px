@@ -42,7 +42,7 @@ export interface Props {
     onError: (error: string) => void;
 }
 
-export default function ImagePicker(props: Props) {
+export default function ImagePicker (props: Props) {
     const {
         isZoomDisabled,
         isRotationDisabled,
@@ -76,14 +76,10 @@ export default function ImagePicker(props: Props) {
 
     const getCroppedImage = useCallback(async () => {
         try {
-            const croppedImages = await getCroppedImg(
-                imageToBeCropped,
-                croppedAreaPixels,
-                rotation,
-            );
+            const croppedImages = await getCroppedImg(imageToBeCropped, croppedAreaPixels, rotation);
             setDialogOpen(false);
             return croppedImages;
-        } catch (e) {
+        } catch (e: any) {
             onError(e);
         }
     }, [ croppedAreaPixels ]);

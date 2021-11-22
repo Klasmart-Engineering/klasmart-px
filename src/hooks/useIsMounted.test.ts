@@ -4,7 +4,7 @@ import {
     renderHook,
 } from "@testing-library/react-hooks";
 
-function mount() {
+function mount () {
     const { result, unmount } = renderHook(() => useIsMounted());
     return {
         isMounted: result.current,

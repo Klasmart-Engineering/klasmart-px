@@ -22,7 +22,7 @@ describe(`getContrastColor`, () => {
     });
 
     describe(`custom options`, () => {
-        const options  = {
+        const options = {
             contrastThreshold: 3,
             darkColor: `#121F1F`,
             lightColor: `#CFD2D2`,

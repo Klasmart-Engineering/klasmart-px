@@ -1,7 +1,6 @@
 /// <reference types="react" />
 import { Column, SpreadsheetValidationError } from "./types";
 import { ValidationLocalization } from "./validate";
-export { Column, SpreadsheetValidationError, };
 export interface Props {
     accept?: string | string[];
     maxFileSize?: number;

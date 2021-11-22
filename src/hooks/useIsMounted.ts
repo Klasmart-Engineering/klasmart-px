@@ -4,7 +4,7 @@ import {
     useRef,
 } from "react";
 
-export default function useIsMounted() {
+export default function useIsMounted () {
     const ref = useRef(false);
 
     useEffect(() => {

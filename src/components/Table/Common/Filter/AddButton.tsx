@@ -35,7 +35,7 @@ interface Props {
     onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export default function AddButton(props: Props) {
+export default function AddButton (props: Props) {
     const {
         localization,
         filters,

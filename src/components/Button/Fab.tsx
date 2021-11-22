@@ -74,49 +74,55 @@ export default function Fab (props: Props) {
         if (error) throw error;
     };
 
-    return <Tooltip title={tooltip_}>
-        <span>
-            <FabButton
-                variant={variant_}
-                disabled={disabled}
-                className={clsx(className, {
-                    [loadingClasses.buttonLoading]: loading,
-                })}
-                style={{
-                    backgroundColor: (color && !disabled) ? theme.palette[color].main : undefined,
-                    color: !disabled ? textColor_ : undefined,
-                }}
-                onClick={handleClick}
-            >
-                {variant_ === `extended`
-                    ? <Box
-                        display="flex"
-                        flexDirection="row"
-                        className={clsx({
-                            [loadingClasses.buttonLoadingContent]: loading,
-                        })}
-                    >
-                        {Icon && <Icon />}
-                        <Typography
-                            noWrap
-                            variant="button"
-                            className={clsx({
-                                [classes.extendedText]: Icon && label,
-                            })}
-                        >
-                            {label}
-                        </Typography>
-                    </Box>
-                    : Icon
-                        ? <Icon
-                            className={clsx({
-                                [loadingClasses.buttonLoadingContent]: loading,
-                            })}
-                        />
-                        : <span />
-                }
-                {loading && <CircularProgress />}
-            </FabButton>
-        </span>
-    </Tooltip>;
+    return (
+        <Tooltip title={tooltip_}>
+            <span>
+                <FabButton
+                    variant={variant_}
+                    disabled={disabled}
+                    className={clsx(className, {
+                        [loadingClasses.buttonLoading]: loading,
+                    })}
+                    style={{
+                        backgroundColor: (color && !disabled) ? theme.palette[color].main : undefined,
+                        color: !disabled ? textColor_ : undefined,
+                    }}
+                    onClick={handleClick}
+                >
+                    {variant_ === `extended`
+                        ? (
+                            <Box
+                                display="flex"
+                                flexDirection="row"
+                                className={clsx({
+                                    [loadingClasses.buttonLoadingContent]: loading,
+                                })}
+                            >
+                                {Icon && <Icon />}
+                                <Typography
+                                    noWrap
+                                    variant="button"
+                                    className={clsx({
+                                        [classes.extendedText]: Icon && label,
+                                    })}
+                                >
+                                    {label}
+                                </Typography>
+                            </Box>
+                        )
+                        : Icon
+                            ? (
+                                <Icon
+                                    className={clsx({
+                                        [loadingClasses.buttonLoadingContent]: loading,
+                                    })}
+                                />
+                            )
+                            : <span />
+                    }
+                    {loading && <CircularProgress />}
+                </FabButton>
+            </span>
+        </Tooltip>
+    );
 }

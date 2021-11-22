@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import Button from "./Button/Button";
 import {
     AppBar,
@@ -13,8 +14,7 @@ import {
 } from "@material-ui/core";
 import { TransitionProps } from "@material-ui/core/transitions";
 import { Close as CloseIcon } from "@material-ui/icons";
-import React,
-{ cloneElement } from "react";
+import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
     title: {
@@ -67,30 +67,29 @@ export default function FullScreenDialog (props: Props) {
     const classes = useStyles();
 
     return (
-        <>
-            <Dialog
-                fullScreen
-                TransitionComponent={Motion}
-                open={open}
-                onClose={onClose}
-            >
-                <AppBar>
-                    <Toolbar>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="close"
-                            onClick={onClose}
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography
-                            variant="h6"
-                            className={classes.title}
-                        >
-                            {title}
-                        </Typography>
-                        {action &&
+        <Dialog
+            fullScreen
+            TransitionComponent={Motion}
+            open={open}
+            onClose={onClose}
+        >
+            <AppBar>
+                <Toolbar>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="close"
+                        onClick={onClose}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    <Typography
+                        variant="h6"
+                        className={classes.title}
+                    >
+                        {title}
+                    </Typography>
+                    {action &&
                             <Button
                                 label={action.label}
                                 variant="contained"
@@ -98,19 +97,18 @@ export default function FullScreenDialog (props: Props) {
                                 disabled={action.disabled}
                                 onClick={action.onClick}
                             />
-                        }
-                    </Toolbar>
-                </AppBar>
-                {Header &&
+                    }
+                </Toolbar>
+            </AppBar>
+            {Header &&
                     <div className={classes.content}>
                         {Header}
                     </div>
-                }
-                <DialogContent className={!Header ? classes.content : undefined}>
-                    {children}
-                </DialogContent>
-                {Footer}
-            </Dialog>
-        </>
+            }
+            <DialogContent className={!Header ? classes.content : undefined}>
+                {children}
+            </DialogContent>
+            {Footer}
+        </Dialog>
     );
 }

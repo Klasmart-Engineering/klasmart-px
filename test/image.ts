@@ -1,4 +1,4 @@
-export function b64toBlob(b64Data: string, contentType: string, sliceSize?: number) {
+export function b64toBlob (b64Data: string, contentType: string, sliceSize?: number) {
     sliceSize = sliceSize || 512;
 
     const byteCharacters = atob(b64Data);

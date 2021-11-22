@@ -36,7 +36,7 @@ interface Props<T> {
     localization?: MoreMenuLocalization;
 }
 
-export default function MoreMenu<T>(props: Props<T>) {
+export default function MoreMenu<T> (props: Props<T>) {
     const {
         actions,
         item,
@@ -54,48 +54,50 @@ export default function MoreMenu<T>(props: Props<T>) {
         setAnchorEl(null);
     };
 
-    return <>
-        <Tooltip title={localization?.moreMenuButton ?? `More actions`}>
-            <IconButton
-                aria-label={localization?.moreMenuButton ?? `More actions`}
-                aria-haspopup="true"
-                onClick={handleClick}
+    return (
+        <>
+            <Tooltip title={localization?.moreMenuButton ?? `More actions`}>
+                <IconButton
+                    aria-label={localization?.moreMenuButton ?? `More actions`}
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                >
+                    <MoreVertIcon />
+                </IconButton>
+            </Tooltip>
+            <Popover
+                anchorEl={anchorEl}
+                open={open}
+                anchorOrigin={{
+                    vertical: `bottom`,
+                    horizontal: `left`,
+                }}
+                transformOrigin={{
+                    vertical: `top`,
+                    horizontal: `left`,
+                }}
+                onClose={handleClose}
             >
-                <MoreVertIcon />
-            </IconButton>
-        </Tooltip>
-        <Popover
-            anchorEl={anchorEl}
-            open={open}
-            anchorOrigin={{
-                vertical: `bottom`,
-                horizontal: `left`,
-            }}
-            transformOrigin={{
-                vertical: `top`,
-                horizontal: `left`,
-            }}
-            onClose={handleClose}
-        >
-            <MenuList>
-                {actions?.length && actions.map((action, i) =>
-                    <MenuItem
-                        key={`menu-item-${i}`}
-                        disabled={action.disabled}
-                        onClick={() => {
-                            action.onClick(item);
-                            handleClose();
-                        }}
-                    >
-                        {action.icon &&
+                <MenuList>
+                    {actions?.length && actions.map((action, i) => (
+                        <MenuItem
+                            key={`menu-item-${i}`}
+                            disabled={action.disabled}
+                            onClick={() => {
+                                action.onClick(item);
+                                handleClose();
+                            }}
+                        >
+                            {action.icon &&
                             <ListItemIcon>
                                 <action.icon />
                             </ListItemIcon>
-                        }
-                        <Typography variant="body2">{action.label}</Typography>
-                    </MenuItem>,
-                )}
-            </MenuList>
-        </Popover>
-    </>;
+                            }
+                            <Typography variant="body2">{action.label}</Typography>
+                        </MenuItem>
+                    ))}
+                </MenuList>
+            </Popover>
+        </>
+    );
 }

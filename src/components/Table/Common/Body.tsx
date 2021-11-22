@@ -86,44 +86,50 @@ export default function BaseTableBody<T> (props: Props<T>) {
                             {showSelectables &&
                                 <TableCell padding="checkbox">
                                     {selectMode === `single`
-                                        ? <Radio
-                                            role="radio"
-                                            checked={isSelected}
-                                            disabled={loading}
-                                            onClick={(event) => onRowSelect(event, row[idField])}
-                                        />
-                                        : <Checkbox
-                                            role="checkbox"
-                                            checked={isSelected}
-                                            disabled={loading}
-                                            inputProps={{
-                                                "aria-labelledby": labelId,
-                                            }}
-                                            onClick={(event) => onRowSelect(event, row[idField])}
-                                        />
+                                        ? (
+                                            <Radio
+                                                role="radio"
+                                                checked={isSelected}
+                                                disabled={loading}
+                                                onClick={(event) => onRowSelect(event, row[idField])}
+                                            />
+                                        )
+                                        : (
+                                            <Checkbox
+                                                role="checkbox"
+                                                checked={isSelected}
+                                                disabled={loading}
+                                                inputProps={{
+                                                    "aria-labelledby": labelId,
+                                                }}
+                                                onClick={(event) => onRowSelect(event, row[idField])}
+                                            />
+                                        )
                                     }
                                 </TableCell>
                             }
                             {columns.map((column, j) => {
                                 const render = column.render?.(row);
                                 const element = render ?? row[column.id];
-                                return <TableCell
-                                    key={`rowCell-${i}-${j}`}
-                                    id={labelId}
-                                    scope="row"
-                                    align={column.align}
-                                >
-                                    {element}
-                                </TableCell>;
+                                return (
+                                    <TableCell
+                                        key={`rowCell-${i}-${j}`}
+                                        id={labelId}
+                                        scope="row"
+                                        align={column.align}
+                                    >
+                                        {element}
+                                    </TableCell>
+                                );
                             })}
                             <TableCell padding="checkbox">
-                                {rowActions && rowActions(row).length > 0 &&
+                                {rowActions && rowActions(row).length > 0 && (
                                     <MoreMenu
                                         item={row}
                                         actions={rowActions(row)}
                                         localization={rowMoreMenuLocalization}
                                     />
-                                }
+                                )}
                             </TableCell>
                         </TableRow>
                     );

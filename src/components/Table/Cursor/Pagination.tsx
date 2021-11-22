@@ -88,7 +88,8 @@ export default function CursorTablePagination (props: Props) {
                         <IconButton
                             disabled={!hasPreviousPage}
                             aria-label="previous page"
-                            onClick={handleBackButtonClick}>
+                            onClick={handleBackButtonClick}
+                        >
                             {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
                         </IconButton>
                     </span>

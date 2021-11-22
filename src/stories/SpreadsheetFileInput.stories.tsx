@@ -1,7 +1,6 @@
-import SpreadsheetFileInput, {
-    Props,
-    SpreadsheetValidationError,
-} from "../components/Input/File/Spreadsheet/Base";
+import SpreadsheetFileInput,
+{ Props } from "../components/Input/File/Spreadsheet/Base";
+import { SpreadsheetValidationError } from "../components/Input/File/Spreadsheet/types";
 import { sleep } from "../utils";
 import { Story } from "@storybook/react";
 import React from "react";
@@ -117,9 +116,7 @@ type ErrorCode =
     | `ERR_CSV_INVALID_LENGTH`
     | `ERR_CSV_MISSING_REQUIRED_COLUMN`;
 
-const handleFileUploadError = (
-    error: ServerError,
-): SpreadsheetValidationError[] => {
+const handleFileUploadError = (error: ServerError): SpreadsheetValidationError[] => {
     const errors = error.errors;
     return errors.map((error) => ({
         message: error.details.message,

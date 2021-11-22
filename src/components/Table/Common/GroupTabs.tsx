@@ -152,30 +152,32 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
                     )}
                 {groups.length > 1 && (
                     <>
-                        <Divider orientation="vertical"/>
+                        <Divider orientation="vertical" />
                         <Select
                             displayEmpty
                             value={groupBy_}
                             className={classes.select}
                             renderValue={
-                                groupBy_ !== `` ? undefined : () =>
+                                groupBy_ !== `` ? undefined : () => (
                                     <Typography
                                         variant="body1"
                                         className={classes.selectPlaceholderText}
                                     >
                                         {localization?.selectLabel ?? `Group by`}
                                     </Typography>
+                                )
                             }
                             onChange={handleGroupChange}
                         >
                             {!hideNoGroupOption && <MenuItem value="">{localization?.selectNone ?? `None`}</MenuItem>}
-                            {groups?.map((group, i) =>
+                            {groups?.map((group, i) => (
                                 <MenuItem
                                     key={`group-${i}`}
                                     value={group.id as Extract<keyof T, "string">}
                                 >
                                     {group.label}
-                                </MenuItem>)}
+                                </MenuItem>
+                            ))}
                         </Select>
                     </>
                 )}

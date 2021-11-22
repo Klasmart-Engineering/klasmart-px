@@ -5,10 +5,7 @@ import {
     Tabs as MaterialTabs,
 } from "@material-ui/core";
 import clsx from "clsx";
-import React, {
-    useEffect,
-    useState,
-} from "react";
+import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
     tabRoot: {

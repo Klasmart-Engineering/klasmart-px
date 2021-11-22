@@ -29,11 +29,6 @@ import React,
     useState,
 } from "react";
 
-export {
-    Column,
-    SpreadsheetValidationError,
-};
-
 const useStyles = makeStyles((theme) => createStyles({
     root: {
         height: `100%`,
@@ -148,7 +143,7 @@ export default function (props: Props) {
         setStatus(`validating`);
         try {
             await onFileUpload(file, true);
-        } catch(err) {
+        } catch (err: any) {
             const errors = onFileUploadError?.(err, true) ?? [];
             setErrors(errors);
             setDryRunError(err?.message);
@@ -288,7 +283,8 @@ export default function (props: Props) {
                         <Fade in={(status === `uploading` || status === `validating`)}>
                             <div
                                 className={classes.uploadInProgress}
-                                data-testid="uploading-overlay">
+                                data-testid="uploading-overlay"
+                            >
                                 <CircularProgress
                                     size={64}
                                     color={`white`}

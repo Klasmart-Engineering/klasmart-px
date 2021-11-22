@@ -18,10 +18,12 @@ export default function DialogContent (props: Props) {
     const { content } = props;
     const classes = useStyles();
 
-    return <Content>
-        {typeof content === `string`
-            ? <DialogContentText>{content}</DialogContentText>
-            : content
-        }
-    </Content>;
+    return (
+        <Content>
+            {typeof content === `string`
+                ? <DialogContentText>{content}</DialogContentText>
+                : content
+            }
+        </Content>
+    );
 }

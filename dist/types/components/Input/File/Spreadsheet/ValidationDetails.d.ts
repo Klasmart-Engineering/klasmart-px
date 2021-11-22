@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { SpreadsheetValidationError } from './Base';
+import { SpreadsheetValidationError } from './types';
 declare type ValidationFailedCallback = (num: number) => string;
 export declare const validationStatuses: readonly ["in-progress", "passed", "failed"];
 export declare type ValidationStatus = typeof validationStatuses[number];

@@ -38,7 +38,7 @@ export default function PromptDialogProvider (props: Props) {
     });
     const [ resolves, setResolve ] = useState<PromiseResolve[]>([]);
 
-    const prompt = useCallback((options: DialogOptions): Promise<boolean | undefined> =>  {
+    const prompt = useCallback((options: DialogOptions): Promise<boolean | undefined> => {
         const dialogOptions = {
             ...DEFAULT_OPTIONS,
             ...userDefaultOptions,

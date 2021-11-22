@@ -40,7 +40,7 @@ export default function ConfirmDialogProvider (props: Props) {
     });
     const [ resolves, setResolve ] = useState<PromiseResolve[]>([]);
 
-    const confirm = useCallback((options: DialogOptions): Promise<boolean | undefined> =>  {
+    const confirm = useCallback((options: DialogOptions): Promise<boolean | undefined> => {
         const dialogOptions = {
             ...DEFAULT_OPTIONS,
             ...userDefaultOptions,

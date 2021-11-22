@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import { TableFilter } from '../components/Table/Common/Filter/Filters';
 import { SubgroupTab } from '../components/Table/Common/GroupTabs';
 import {
@@ -131,7 +132,7 @@ interface LoadDataRequest {
     search?: string;
 }
 
-const dataSearchSort = (data:StarWarsRow[], orderBy: keyof StarWarsRow, order: string, search?: string) => {
+const dataSearchSort = (data: StarWarsRow[], orderBy: keyof StarWarsRow, order: string, search?: string) => {
     return data
         .filter((d) => search ? Object.values(d).some((value) => String(value).includes(String(search))) : true)
         .sort((a, b) => {
@@ -640,8 +641,7 @@ const useStyles = makeStyles((theme) =>
         chip: {
             margin: theme.spacing(0.25),
         },
-    }),
-);
+    }));
 
 const programsRows = [
     {
@@ -1094,18 +1094,13 @@ const loadProgramsData = async (request: LoadProgramsDataPageRequest) => {
     const filteredData = programsRows
         .filter((d) =>
             subgroupBy
-                ? Object.values(d).some(
-                    (value) => String(value) === String(subgroupBy),
-                )
-                : true,
-        )
+                ? Object.values(d).some((value) => String(value) === String(subgroupBy))
+                : true)
         .filter((d) =>
             search
                 ? Object.values(d).some((value) =>
-                    String(value).includes(String(search)),
-                )
-                : true,
-        )
+                    String(value).includes(String(search)))
+                : true)
         .sort((a, b) => {
             const aValue = a[orderBy];
             const bValue = b[orderBy];
@@ -1316,3 +1311,4 @@ export const PageTableFilter = () => {
         />
     );
 };
+/* eslint-disable react/no-multi-comp */

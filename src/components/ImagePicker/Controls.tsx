@@ -74,7 +74,7 @@ export interface Props {
     onRotationChange: (rotation: number) => void;
 }
 
-export default function Controls(props: Props) {
+export default function Controls (props: Props) {
     const {
         zoom,
         rotation,

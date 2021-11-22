@@ -17,10 +17,12 @@ const handleFileUpload = async (file: File) => {
 };
 
 //👇 We create a “template” of how args map to rendering
-const Template: Story<Props> = (args) => <FileInput
-    {...args}
-    onFileUpload={handleFileUpload}
-/>;
+const Template: Story<Props> = (args) => (
+    <FileInput
+        {...args}
+        onFileUpload={handleFileUpload}
+    />
+);
 
 export const Main = Template.bind({});
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import {
     CircularProgress as MUICircularProgress,
     CircularProgressProps,
@@ -49,7 +50,7 @@ const buildStyling = (color: CircularProgressColor, theme: Theme) => {
     }
 };
 
-function CenterWrapper({ disableCentered, children }: {disableCentered?: boolean; children: React.ReactNode}) {
+function CenterWrapper ({ disableCentered, children }: {disableCentered?: boolean; children: React.ReactNode}) {
     const classes = useStyles();
 
     if (disableCentered) {
@@ -58,7 +59,7 @@ function CenterWrapper({ disableCentered, children }: {disableCentered?: boolean
     return <span className={classes.loadingContainer}>{children}</span>;
 }
 
-export default function CircularProgress(props: Props) {
+export default function CircularProgress (props: Props) {
     const {
         className,
         showCancel,

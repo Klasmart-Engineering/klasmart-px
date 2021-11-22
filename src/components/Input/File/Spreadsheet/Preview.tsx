@@ -122,13 +122,15 @@ export default function PreviewSpreadsheet (props: Props) {
     return (
         <div
             data-testid="preview"
-            className={clsx(className, classes.root)}>
+            className={clsx(className, classes.root)}
+        >
             <table className={classes.table}>
                 <thead>
                     <tr>
                         <th className={clsx(classes.cell, classes.header, {
                             [classes.error]: generalErrors.length > 0,
-                        })} >
+                        })}
+                        >
                             {buildField(``, generalErrors)}
                         </th>
                         {columns.map((columnName, i) => {
@@ -149,26 +151,30 @@ export default function PreviewSpreadsheet (props: Props) {
                 <tbody>
                     {rows.map((row, i) => {
                         const rowErrors = findRowErrors(errors, i + 1, columns);
-                        return <tr key={`row-${i}`}>
-                            <td
-                                className={clsx(classes.cell, classes.header, {
-                                    [classes.error]: hasRowError(errors, i + 1),
-                                })}
-                            >
-                                {buildField(i + 1, rowErrors)}
-                            </td>
-                            {row.map((field, j) => {
-                                const fieldErrors = findFieldErrors(errors, i + 1, columns[j]);
-                                return <td
-                                    key={`field-${i}-${j}`}
-                                    className={clsx(classes.cell, {
-                                        [classes.error]: (rowErrors.length > 0 && fieldErrors.length === 0) || fieldErrors.length > 0,
+                        return (
+                            <tr key={`row-${i}`}>
+                                <td
+                                    className={clsx(classes.cell, classes.header, {
+                                        [classes.error]: hasRowError(errors, i + 1),
                                     })}
                                 >
-                                    {buildField(field, fieldErrors)}
-                                </td>;
-                            })}
-                        </tr>;
+                                    {buildField(i + 1, rowErrors)}
+                                </td>
+                                {row.map((field, j) => {
+                                    const fieldErrors = findFieldErrors(errors, i + 1, columns[j]);
+                                    return (
+                                        <td
+                                            key={`field-${i}-${j}`}
+                                            className={clsx(classes.cell, {
+                                                [classes.error]: (rowErrors.length > 0 && fieldErrors.length === 0) || fieldErrors.length > 0,
+                                            })}
+                                        >
+                                            {buildField(field, fieldErrors)}
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        );
                     })}
                 </tbody>
             </table>
