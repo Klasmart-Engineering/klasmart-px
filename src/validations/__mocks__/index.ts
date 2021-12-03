@@ -1,4 +1,4 @@
-import { Validator } from "..";
+import { Validator } from "../";
 
 export const VALIDATION_FAILED_MESSAGE = `Validation Failed`;
 

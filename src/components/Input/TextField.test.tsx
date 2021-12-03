@@ -27,36 +27,32 @@ function clearMockHandlers () {
 
 beforeEach(clearMockHandlers);
 
-function expectOnValueChange (value: Props["value"]) {
+function expectOnValueChange ({ error, value }: {
+    value?: Props["value"];
+    error?: string;
+} = {}) {
     const {
         onChange,
         onValidate,
         onError,
     } = mockHandlers;
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith(value);
-    expect(onValidate).toHaveBeenCalledTimes(1);
-    expect(onValidate).toHaveBeenCalledWith(true);
-    expect(onError).toHaveBeenCalledTimes(1);
-    expect(onError).toHaveBeenCalledWith(undefined);
-}
-
-function expectOnValueChangeWithError ({ value, error }: {
-    value: Props["value"];
-    error: string;
-}) {
-
-    const {
-        onChange,
-        onValidate,
-        onError,
-    } = mockHandlers;
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith(value);
-    expect(onValidate).toHaveBeenCalledTimes(1);
-    expect(onValidate).toHaveBeenCalledWith(false);
-    expect(onError).toHaveBeenCalledTimes(1);
-    expect(onError).toHaveBeenCalledWith(error);
+    if (value) {
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith(value);
+    } else {
+        expect(onChange).toHaveBeenCalledTimes(0);
+    }
+    if (error) {
+        expect(onValidate).toHaveBeenCalledTimes(1);
+        expect(onValidate).toHaveBeenCalledWith(false);
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect(onError).toHaveBeenCalledWith(error);
+    } else {
+        expect(onValidate).toHaveBeenCalledTimes(1);
+        expect(onValidate).toHaveBeenCalledWith(true);
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect(onError).toHaveBeenCalledWith(undefined);
+    }
 }
 
 function expectOnErrorChange (error: string | undefined) {
@@ -143,7 +139,7 @@ test.each([
     });
 });
 
-test(`calls onChange, onValidate and onError on mount`, () => {
+test(`calls onValidate and onError on mount`, () => {
     const value = `1`;
 
     render((
@@ -154,13 +150,12 @@ test(`calls onChange, onValidate and onError on mount`, () => {
         />
     ));
 
-    expectOnValueChangeWithError({
-        value,
+    expectOnValueChange({
         error: VALIDATION_FAILED_MESSAGE,
     });
 });
 
-test(`calls onChange, onValidate and onError with error prop on mount`, () => {
+test(`calls onValidate and onError with error prop on mount`, () => {
     const value = `1`;
     const error = `Incorrect`;
 
@@ -173,8 +168,7 @@ test(`calls onChange, onValidate and onError with error prop on mount`, () => {
         />
     ));
 
-    expectOnValueChangeWithError({
-        value,
+    expectOnValueChange({
         error,
     });
 });
@@ -228,7 +222,7 @@ test(`updates value and helperText, and calls onChange, onValidate and onError o
         value: newValue,
     });
 
-    expectOnValueChangeWithError({
+    expectOnValueChange({
         value: newValue,
         error: VALIDATION_FAILED_MESSAGE,
     });
@@ -269,7 +263,7 @@ test(`does not update helperText, but calls onChange, onValidate and onError on 
         error,
     });
 
-    expectOnValueChangeWithError({
+    expectOnValueChange({
         value: newValue,
         error,
     });
@@ -286,7 +280,7 @@ test(`falls back to passing validation after error is cleared on rerender`, () =
 
     expectNoError(container);
 
-    expectOnValueChange(props.value);
+    expectOnValueChange();
 
     clearMockHandlers();
 
@@ -330,8 +324,7 @@ test(`falls back to failing validation after error is cleared on rerender`, () =
 
     const { container, rerender } = render(<TextField {...props} />);
 
-    expectOnValueChangeWithError({
-        value: props.value,
+    expectOnValueChange({
         error: validationError,
     });
 

@@ -9,6 +9,7 @@ import {
     makeStyles,
     TextField as MUITextField,
 } from "@material-ui/core";
+import { InputProps } from "@material-ui/core/Input";
 import clsx from "clsx";
 import React,
 {
@@ -16,11 +17,12 @@ import React,
     useState,
 } from "react";
 
-const useStyles = makeStyles((theme) => createStyles({
-    disabledText: {
-        color: theme.palette.action.active,
-    },
-}));
+const useStyles = makeStyles((theme) =>
+    createStyles({
+        disabledText: {
+            color: theme.palette.action.active,
+        },
+    }));
 
 export const inputTypes = [
     `text`,
@@ -39,10 +41,11 @@ export const inputTypes = [
 export type InputType = typeof inputTypes[number];
 
 export interface Props extends Input {
-    type?: InputType;
-    className?: string;
-    error?: string;
-    loading?: boolean;
+  type?: InputType;
+  className?: string;
+  error?: string;
+  loading?: boolean;
+  InputProps?: Partial<InputProps>;
 }
 
 export default function TextField (props: Props) {
@@ -61,13 +64,15 @@ export default function TextField (props: Props) {
         appendInner,
         variant = `outlined`,
         loading,
+        InputProps,
         ...rest
     } = props;
     const classes = useStyles();
 
     const isControlledError = () => controlledError !== undefined;
 
-    const getErrorState = (value: unknown, validations: Validator[] | undefined) => controlledError ?? getErrorText(value, validations);
+    const getErrorState = (value: unknown,
+        validations: Validator[] | undefined) => controlledError ?? getErrorText(value, validations);
 
     const [ value_, setValue ] = useState(value ?? ``);
     const [ error_, setError ] = useState(getErrorText(value, validations));
@@ -90,6 +95,7 @@ export default function TextField (props: Props) {
     };
 
     useEffect(() => {
+        if (value === value_) return;
         onChange?.(value_);
     }, []);
 
@@ -100,9 +106,8 @@ export default function TextField (props: Props) {
     }, [ controlledError ]);
 
     useEffect(() => {
-        if (value !== value_) {
-            updateValue(value);
-        }
+        if (value === value_) return;
+        updateValue(value);
     }, [ value ]);
 
     return (
@@ -111,23 +116,37 @@ export default function TextField (props: Props) {
             variant={variant}
             value={value_}
             error={isControlledError() ? true : !!error_}
-            helperText={hideHelperText ? undefined : (isControlledError() ? controlledError : error_) || ` `}
+            helperText={
+                hideHelperText
+                    ? undefined
+                    : (isControlledError() ? controlledError : error_) || ` `
+            }
             type={type}
             InputProps={{
-                className: clsx({
-                    [classes.disabledText]: readOnly,
-                }),
-                readOnly,
-                startAdornment: prependInner,
-                endAdornment: (
-                    <>
-                        {appendInner}
-                        <LoadingIndicator
-                            loading={loading}
-                            variant={variant}
-                        />
-                    </>
-                ),
+                ...InputProps,
+                ...{
+                    className: clsx({
+                        [classes.disabledText]: readOnly,
+                    }, InputProps?.className),
+
+                    readOnly,
+                    startAdornment: InputProps?.startAdornment ?? prependInner,
+                    endAdornment: (
+                        <>
+                            {InputProps?.endAdornment ?? appendInner}
+                            <LoadingIndicator
+                                loading={loading}
+                                variant={variant}
+                            />
+                        </>
+                    ),
+                },
+            }}
+            FormHelperTextProps={{
+                // https://github.com/microsoft/TypeScript/issues/28960
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                "data-testid": `helper-text-root`,
             }}
             onChange={handleChange}
             {...rest}
