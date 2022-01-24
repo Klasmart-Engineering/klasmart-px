@@ -1,22 +1,24 @@
 import { useWidth } from "../../utils/layout";
 import CircularProgress from "../Progress/CircularProgress";
 import { useButtonLoadingStyles } from "../Progress/utils";
+import { SvgIconComponent } from "@mui/icons-material";
 import {
     Box,
-    createStyles,
     Fab as FabButton,
     FabProps,
-    makeStyles,
     Tooltip,
     Typography,
     useTheme,
-} from "@material-ui/core";
-import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
+} from "@mui/material";
 import {
+    Breakpoint,
     Palette,
     PaletteColor,
-} from "@material-ui/core/styles/createPalette";
-import { SvgIconComponent } from "@material-ui/icons";
+} from '@mui/material/styles';
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 { useState } from "react";

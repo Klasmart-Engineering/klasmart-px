@@ -1,10 +1,12 @@
+import { Check as CheckIcon } from "@mui/icons-material";
 import {
     ButtonBase,
+    useTheme,
+} from "@mui/material";
+import {
     createStyles,
     makeStyles,
-    useTheme,
-} from "@material-ui/core";
-import { Check as CheckIcon } from "@material-ui/icons";
+} from '@mui/styles';
 import clsx from "clsx";
 import React from "react";
 

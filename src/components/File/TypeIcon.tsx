@@ -1,10 +1,10 @@
 import { stringToColor } from "../../utils";
+import { InsertDriveFile as InsertDriveFileIcon } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 import {
     createStyles,
     makeStyles,
-    Typography,
-} from "@material-ui/core";
-import { InsertDriveFile as InsertDriveFileIcon } from "@material-ui/icons";
+} from '@mui/styles';
 import clsx from "clsx";
 import React from "react";
 

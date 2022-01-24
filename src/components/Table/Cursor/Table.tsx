@@ -1,3 +1,4 @@
+
 import BaseTable,
 {
     BaseProps as BaseTableProps,
@@ -13,7 +14,7 @@ import CursorTablePagination from "./Pagination";
 import {
     createStyles,
     makeStyles,
-} from "@material-ui/core";
+} from '@mui/styles';
 import { isEqual } from "lodash";
 import React,
 { useState } from "react";

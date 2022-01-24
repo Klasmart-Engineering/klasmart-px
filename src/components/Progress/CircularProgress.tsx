@@ -1,12 +1,12 @@
 /* eslint-disable react/no-multi-comp */
+import { Close as CloseIcon } from "@mui/icons-material";
 import {
     CircularProgress as MUICircularProgress,
     CircularProgressProps,
-    makeStyles,
     Theme,
     useTheme,
-} from "@material-ui/core";
-import { Close as CloseIcon } from "@material-ui/icons";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import React from "react";
 
 const useStyles = makeStyles({

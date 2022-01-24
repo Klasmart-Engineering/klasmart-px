@@ -1,5 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 /* eslint-disable jest/no-mocks-import */
+import { render } from '../../../test/themeProviderRender';
 import { email } from "../../validations";
 import {
     failingValidation,
@@ -8,10 +9,7 @@ import {
 } from "../../validations/__mocks__";
 import TextField,
 { Props } from "./TextField";
-import {
-    render,
-    screen,
-} from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import React from "react";
 

@@ -1,16 +1,19 @@
+
+import { ArrowDropDown } from "@mui/icons-material";
 import {
     Box,
     Button,
     Checkbox,
-    createStyles,
-    makeStyles,
     MenuItem,
     MenuList,
     Popover,
     Theme,
     Typography,
-} from "@material-ui/core";
-import { ArrowDropDown } from "@material-ui/icons";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React,
 { useState } from "react";
 

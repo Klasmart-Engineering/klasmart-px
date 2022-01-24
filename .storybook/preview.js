@@ -1,3 +1,5 @@
+import ThemeDecorator from '../src/theme/themeDecorator';
+const { addDecorator } = require('@storybook/react');
 
 export const parameters = {
     actions: { argTypesRegex: "^on[A-Z].*" },
@@ -8,3 +10,6 @@ export const parameters = {
         },
     },
 }
+
+// Add our project theme, add a global stylesheet
+addDecorator(ThemeDecorator);

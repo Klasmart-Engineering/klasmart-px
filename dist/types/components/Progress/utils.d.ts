@@ -1,1 +1,1 @@
-export declare const useButtonLoadingStyles: (props?: any) => import("@material-ui/styles").ClassNameMap<"buttonLoading" | "buttonLoadingContent">;
+export declare const useButtonLoadingStyles: (props?: any) => import("@mui/styles").ClassNameMap<"buttonLoading" | "buttonLoadingContent">;

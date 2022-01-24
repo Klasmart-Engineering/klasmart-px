@@ -7,7 +7,7 @@ import {
     STATUS_COLORS,
     THEME_COLORS,
 } from '../types/colors';
-import { Home } from '@material-ui/icons';
+import { Home } from '@mui/icons-material';
 import { Story } from '@storybook/react';
 import React from 'react';
 
@@ -16,7 +16,11 @@ export default {
     component: IconButton,
 };
 
-const Template: Story<Props> = (args) => <IconButton {...args} />;
+const Template: Story<Props> = (args) => (
+    <IconButton
+        {...args}
+        size="medium"
+    />);
 
 export const Primary = Template.bind({});
 

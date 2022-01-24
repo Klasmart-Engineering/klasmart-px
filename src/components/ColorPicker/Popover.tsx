@@ -1,10 +1,10 @@
 import ColorSwatches from "../ColorPicker/ColorSwatches";
 import SaturationPicker from "../ColorPicker/SaturationPicker";
+import { Popover } from "@mui/material";
 import {
     createStyles,
     makeStyles,
-    Popover,
-} from "@material-ui/core";
+} from '@mui/styles';
 import React from "react";
 
 const POPOVER_WIDTH = 216;
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => createStyles({
 
 export interface Props {
     open: boolean;
-    anchorEl: HTMLButtonElement | null;
+    anchorEl: HTMLDivElement | null;
     hideCanvas?: boolean;
     color?: string;
     colors?: string[];

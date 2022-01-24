@@ -1,11 +1,13 @@
+import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
 import {
     Box,
-    createStyles,
     lighten,
-    makeStyles,
     Typography,
-} from "@material-ui/core";
-import { CloudUpload as CloudUploadIcon } from "@material-ui/icons";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 { useCallback } from "react";

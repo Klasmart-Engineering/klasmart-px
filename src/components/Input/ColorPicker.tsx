@@ -4,11 +4,11 @@ import ColorPickerPopover,
 { Props as ColorPopoverInput } from "../ColorPicker/Popover";
 import { Input } from "./shared";
 import TextField from "./TextField";
+import { Box } from "@mui/material";
 import {
-    Box,
     createStyles,
     makeStyles,
-} from "@material-ui/core";
+} from '@mui/styles';
 import React,
 {
     useEffect,
@@ -50,7 +50,7 @@ export default function (props: Props) {
     } = props;
 
     const [ color_, setColor ] = useState(color);
-    const [ anchorEl, setAnchorEl ] = React.useState<HTMLButtonElement | null>(null);
+    const [ anchorEl, setAnchorEl ] = React.useState<HTMLDivElement | null>(null);
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -58,7 +58,7 @@ export default function (props: Props) {
 
     const open = Boolean(anchorEl);
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -73,7 +73,10 @@ export default function (props: Props) {
     const classes = useStyles();
     return (
         <>
-            <Box onClick={handleClick}>
+            <Box
+                component="div"
+                onClick={handleClick}
+            >
                 <TextField
                     readOnly
                     hideHelperText={hideHelperText}

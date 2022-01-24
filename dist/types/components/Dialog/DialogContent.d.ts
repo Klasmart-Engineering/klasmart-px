@@ -1,4 +1,4 @@
-import { DialogContentProps } from "@material-ui/core";
+import { DialogContentProps } from "@mui/material";
 import { ReactNode } from "react";
 interface Props extends DialogContentProps {
     content: ReactNode;

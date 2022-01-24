@@ -1,13 +1,15 @@
 import { SpreadsheetValidationError } from "./types";
+import { Error as ErrorIcon } from "@mui/icons-material";
 import {
     Box,
-    createStyles,
-    makeStyles,
     Tooltip,
     Typography,
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
     withStyles,
-} from "@material-ui/core";
-import { Error as ErrorIcon } from "@material-ui/icons";
+} from '@mui/styles';
 import React,
 { ReactNode } from "react";
 

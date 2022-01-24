@@ -3,6 +3,11 @@ import {
     stringToColor,
 } from "../utils";
 import {
+    Category as CategoryIcon,
+    Help as HelpIcon,
+    Subscriptions as SubscriptionsIcon,
+} from "@mui/icons-material";
+import {
     Avatar,
     Box,
     Card,
@@ -12,19 +17,16 @@ import {
     CardMedia,
     CardProps,
     Checkbox,
-    createStyles,
     IconButton,
-    makeStyles,
     SvgIconProps,
     Theme,
     Tooltip,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
-    Category as CategoryIcon,
-    Help as HelpIcon,
-    Subscriptions as SubscriptionsIcon,
-} from "@material-ui/icons";
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React,
 {
     ChangeEvent,
@@ -75,7 +77,7 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 10,
         },
         authorName: {
-            marginLeft: `${theme.spacing(1.5)}px !important`,
+            marginLeft: `${theme.spacing(1.5)} !important`,
         },
         cardContent: {
             padding: theme.spacing(1, 1),
@@ -91,7 +93,7 @@ const useStyles = makeStyles((theme: Theme) =>
             overflow: `hidden`,
         },
         actionButton: {
-            marginLeft: `${theme.spacing(0.5)}px !important`,
+            marginLeft: `${theme.spacing(0.5)} !important`,
         },
     }));
 

@@ -1,16 +1,16 @@
-import Button from "@material-ui/core/Button";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LanguageIcon from "@mui/icons-material/Translate";
+import Button from "@mui/material/Button";
 import Menu,
-{ MenuProps } from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+{ MenuProps } from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { Theme } from "@mui/material/styles";
+import Tooltip from "@mui/material/Tooltip";
 import {
     createStyles,
     makeStyles,
-    Theme,
     withStyles,
-} from "@material-ui/core/styles";
-import Tooltip from "@material-ui/core/Tooltip";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import LanguageIcon from "@material-ui/icons/Translate";
+} from '@mui/styles';
 import clsx from "clsx";
 import { useState } from "react";
 import * as React from "react";
@@ -52,7 +52,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 const StyledMenu = withStyles({})((props: MenuProps) => (
     <Menu
         elevation={4}
-        getContentAnchorEl={null}
         anchorOrigin={{
             vertical: `bottom`,
             horizontal: `center`,

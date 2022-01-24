@@ -1,22 +1,24 @@
 import {
-    Box,
-    createStyles,
-    DialogTitle as Title,
-    DialogTitleProps,
-    makeStyles,
-    useTheme,
-} from "@material-ui/core";
-import {
-    Palette,
-    PaletteColor,
-} from "@material-ui/core/styles/createPalette";
-import {
     Check as CheckIcon,
     Error as ErrorIcon,
     Help as HelpIcon,
     Info as InfoIcon,
     Warning as WarningIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
+import {
+    Box,
+    DialogTitle as Title,
+    DialogTitleProps,
+    useTheme,
+} from "@mui/material";
+import {
+    Palette,
+    PaletteColor,
+} from '@mui/material/styles';
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React,
 { ReactNode } from "react";
 

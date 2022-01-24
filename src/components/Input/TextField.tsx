@@ -5,11 +5,13 @@ import {
     Input,
 } from "./shared";
 import {
+    InputProps,
+    TextField as MUITextField,
+} from "@mui/material";
+import {
     createStyles,
     makeStyles,
-    TextField as MUITextField,
-} from "@material-ui/core";
-import { InputProps } from "@material-ui/core/Input";
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 {

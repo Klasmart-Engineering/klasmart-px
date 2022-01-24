@@ -3,7 +3,7 @@ import ValidationDetails,
     Props,
     validationStatuses,
 } from "../components/Input/File/Spreadsheet/ValidationDetails";
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 import { Story } from "@storybook/react";
 import React from "react";
 

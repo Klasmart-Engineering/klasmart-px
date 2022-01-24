@@ -20,7 +20,7 @@ import {
     red,
     teal,
     yellow,
-} from '@material-ui/core/colors';
+} from '@mui/material/colors';
 import { Story } from '@storybook/react';
 import React from 'react';
 

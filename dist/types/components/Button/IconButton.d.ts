@@ -1,11 +1,11 @@
 import { ActionColor, BaseColor, CommonColor, StatusColor, ThemeColor } from "../../types/colors";
-import { SvgIconComponent } from "@material-ui/icons";
+import { SvgIconComponent } from "@mui/icons-material";
 import React from "react";
 declare type IconButtonColor = BaseColor | CommonColor | ThemeColor | StatusColor | ActionColor | undefined;
 export interface Props {
     className?: string;
     icon: SvgIconComponent;
-    iconSize?: `inherit` | `default` | `small` | `large`;
+    iconSize?: `inherit` | `medium` | `small` | `large`;
     size?: "small" | "medium";
     tooltip?: string;
     disabled?: boolean;

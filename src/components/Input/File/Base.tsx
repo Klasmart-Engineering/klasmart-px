@@ -1,11 +1,13 @@
 import Dropzone from "./Dropzone";
 import SelectedFileRow from "./SelectedFileRow";
 import {
-    createStyles,
-    makeStyles,
     Paper,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React,
 { useState } from "react";
 

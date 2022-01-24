@@ -1,3 +1,4 @@
+
 import {
     MenuAction,
     MoreMenuLocalization,
@@ -41,13 +42,15 @@ import BaseTableToolbar, {
     ToolbarSelectAction,
 } from "./Toolbar";
 import {
-    createStyles,
     Divider,
-    makeStyles,
     Table,
     TableContainer,
     Theme,
-} from "@material-ui/core";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import {
     escapeRegExp,
     isEqual,

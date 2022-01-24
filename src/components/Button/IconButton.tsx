@@ -8,15 +8,17 @@ import {
 } from "../../types/colors";
 import CircularProgress from "../Progress/CircularProgress";
 import { useButtonLoadingStyles } from "../Progress/utils";
+import { SvgIconComponent } from "@mui/icons-material";
 import {
-    createStyles,
     IconButton as IconBtn,
-    makeStyles,
     Theme,
     Tooltip,
     useTheme,
-} from "@material-ui/core";
-import { SvgIconComponent } from "@material-ui/icons";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 { useState } from "react";
@@ -80,7 +82,7 @@ const buildStyling = (color: IconButtonColor, theme: Theme) => {
 export interface Props {
     className?: string;
     icon: SvgIconComponent;
-    iconSize?: `inherit` | `default` | `small` | `large`;
+    iconSize?: `inherit` | `medium` | `small` | `large`;
     size?: "small" | "medium";
     tooltip?: string;
     disabled?: boolean;

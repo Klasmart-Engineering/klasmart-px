@@ -1,24 +1,27 @@
+
 import { TableColumn } from "./Head";
+import {
+    Add as AddIcon,
+    Lock as LockIcon,
+} from "@mui/icons-material";
 import {
     alpha,
     Checkbox,
-    createStyles,
     Divider,
     IconButton,
     List,
     ListItem,
     ListItemSecondaryAction,
-    makeStyles,
     Popover,
     Theme,
     Toolbar,
     Tooltip,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
-    Add as AddIcon,
-    Lock as LockIcon,
-} from "@material-ui/icons";
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React, {
     Fragment,
@@ -30,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles ({
         paddingTop: 0,
         paddingBottom: 0,
         minHeight: 56,
-        backgroundColor: theme.palette.type === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
+        backgroundColor: theme.palette.mode === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
     },
     title: {
         fontWeight: 600,
@@ -89,6 +92,7 @@ export default function BaseTableColumnSelector<T> (props: Props<T>) {
                 <IconButton
                     aria-label={localization?.addButton ?? `Add columns`}
                     aria-haspopup="true"
+                    size="large"
                     onClick={handleClick}
                 >
                     <AddIcon />
@@ -151,6 +155,5 @@ export default function BaseTableColumnSelector<T> (props: Props<T>) {
                     ))}
                 </List>
             </Popover>
-        </>
-    );
+        </>);
 }

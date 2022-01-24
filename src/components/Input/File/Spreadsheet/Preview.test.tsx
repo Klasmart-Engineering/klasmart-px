@@ -1,7 +1,8 @@
+
 /* eslint-disable testing-library/no-node-access */
 /* eslint-disable jest/no-export */
 /* eslint-disable jest/no-mocks-import */
-
+import { render as actualRender } from '../../../../../test/themeProviderRender';
 import {
     mockData,
     mockFile,
@@ -12,7 +13,6 @@ import {
 import Preview,
 { Props } from "./Preview";
 import {
-    render as actualRender,
     screen,
     waitFor,
 } from "@testing-library/react";
@@ -61,7 +61,7 @@ export function expectHasErrorIcon (el: Element, errorMessage: string) {
     const errorIcon = el.querySelector(`svg`);
     if (errorIcon === null) throw Error(`Expected error icon`);
     // SVGElement doesn't define a `title` property, but it can be accessed from it's attributes instead
-    expect(errorIcon.attributes.getNamedItem(`title`)?.value).toBe(errorMessage);
+    expect(errorIcon.attributes.getNamedItem(`aria-label`)?.value).toBe(errorMessage);
 }
 
 function expectHasNoErrorIcon (el: Element) {

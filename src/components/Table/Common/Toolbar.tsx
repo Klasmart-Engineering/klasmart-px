@@ -1,15 +1,18 @@
+
 import Button from "../../Button/Button";
 import Fab from "../../Button/Fab";
 import IconButton from "../../Button/IconButton";
+import { SvgIconComponent } from "@mui/icons-material";
 import {
-    createStyles,
     lighten,
-    makeStyles,
     Theme,
     Toolbar,
     Typography,
-} from "@material-ui/core";
-import { SvgIconComponent } from "@material-ui/icons";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React from "react";
 
@@ -24,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
             marginRight: theme.direction === `rtl` ? theme.spacing(2) : undefined,
         },
     },
-    highlight: theme.palette.type === `light`
+    highlight: theme.palette.mode === `light`
         ? {
             color: theme.palette.secondary.main,
             backgroundColor: lighten(theme.palette.secondary.light, 0.85),
@@ -100,25 +103,24 @@ export default function BaseTableToolbar<T> (props: Props<T>) {
                     </Typography>
                     {selectActions?.map((action, i) =>
                         action.icon
-                            ? (
-                                <IconButton
-                                    key={`select-action-${i}`}
-                                    icon={action.icon}
-                                    tooltip={action.label}
-                                    color="primary"
-                                    disabled={action.disabled}
-                                    onClick={() => action.onClick(selectedRows)}
-                                />
-                            )
-                            : (
-                                <Button
-                                    key={`select-action-${i}`}
-                                    label={action.label}
-                                    color="primary"
-                                    disabled={action.disabled}
-                                    onClick={() => action.onClick(selectedRows)}
-                                />
-                            ))}
+                            ?
+                            <IconButton
+                                key={`select-action-${i}`}
+                                icon={action.icon}
+                                tooltip={action.label}
+                                color="primary"
+                                disabled={action.disabled}
+                                size="medium"
+                                onClick={() => action.onClick(selectedRows)}
+                            />
+                            :
+                            <Button
+                                key={`select-action-${i}`}
+                                label={action.label}
+                                color="primary"
+                                disabled={action.disabled}
+                                onClick={() => action.onClick(selectedRows)}
+                            />)}
                 </> :
                 <>
                     <Typography
@@ -131,25 +133,24 @@ export default function BaseTableToolbar<T> (props: Props<T>) {
                     </Typography>
                     {secondaryActions?.map((action, i) =>
                         action.icon
-                            ? (
-                                <IconButton
-                                    key={`secondary-action-${i}`}
-                                    icon={action.icon}
-                                    tooltip={action.label}
-                                    color="primary"
-                                    disabled={action.disabled}
-                                    onClick={action.onClick}
-                                />
-                            )
-                            : (
-                                <Button
-                                    key={`secondary-action-${i}`}
-                                    label={action.label}
-                                    color="primary"
-                                    disabled={action.disabled}
-                                    onClick={action.onClick}
-                                />
-                            ))}
+                            ?
+                            <IconButton
+                                key={`secondary-action-${i}`}
+                                icon={action.icon}
+                                tooltip={action.label}
+                                color="primary"
+                                disabled={action.disabled}
+                                size="medium"
+                                onClick={action.onClick}
+                            />
+                            :
+                            <Button
+                                key={`secondary-action-${i}`}
+                                label={action.label}
+                                color="primary"
+                                disabled={action.disabled}
+                                onClick={action.onClick}
+                            />)}
                     {primaryAction &&
                         <Fab
                             responsiveExtended={[

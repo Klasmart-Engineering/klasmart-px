@@ -2,11 +2,13 @@ import Button,
 { Props } from '../components/Button/Button';
 import getContrastColor from '../utils/getContrastColor';
 import {
+    adaptV4Theme,
     createTheme,
     darken,
     lighten,
+    StyledEngineProvider,
     ThemeProvider,
-} from '@material-ui/core/styles';
+} from '@mui/material/styles';
 import { Story } from '@storybook/react';
 import React from 'react';
 
@@ -37,12 +39,16 @@ const palette = {
     },
 };
 
-const theme = createTheme({
+const theme = createTheme(adaptV4Theme({
     palette,
-});
+}));
 
 //👇 We create a “template” of how args map to rendering
-const Template: Story<Props> = (args) => <ThemeProvider theme={theme}><Button {...args} /></ThemeProvider>;
+const Template: Story<Props> = (args) => (
+    <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}><Button {...args} /></ThemeProvider>
+    </StyledEngineProvider>
+);
 
 export const Primary = Template.bind({});
 

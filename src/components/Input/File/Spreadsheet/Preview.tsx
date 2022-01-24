@@ -1,11 +1,13 @@
 import ErrorField from "./ErrorField";
 import { SpreadsheetValidationError } from "./types";
 import {
-    createStyles,
     lighten,
-    makeStyles,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 {
@@ -97,7 +99,7 @@ export default function PreviewSpreadsheet (props: Props) {
 
     const loadSpreadsheet = async () => {
         const parsedData = await onParseFile(file);
-        setData((data) => [ ...data ? data : [], ...parsedData ]);
+        setData((data) => [ ...(data ? data : []), ...parsedData ]);
     };
 
     useEffect(() => {

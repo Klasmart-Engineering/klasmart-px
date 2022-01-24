@@ -5,7 +5,7 @@ import ImageCropper from './Cropper';
 import {
     createStyles,
     makeStyles,
-} from "@material-ui/core";
+} from '@mui/styles';
 import React,
 {
     useCallback,

@@ -1,15 +1,18 @@
+
 import IconButton from "../../Button/IconButton";
-import {
-    Box,
-    createStyles,
-    makeStyles,
-    TextField,
-    Theme,
-} from "@material-ui/core";
 import {
     Clear as ClearIcon,
     Search as SearchIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
+import {
+    Box,
+    TextField,
+    Theme,
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React,
 {
     useEffect,
@@ -37,6 +40,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
             height: `inherit`,
             padding: 0,
             margin: theme.spacing(0, 8),
+        },
+        "& .MuiOutlinedInput-notchedOutline": {
+            border: `none`,
         },
     },
     iconRowContainer: {
@@ -97,6 +103,7 @@ export default function BaseTableSearch (props: Props) {
         <div className={classes.root}>
             <TextField
                 fullWidth
+                variant="standard"
                 className={classes.textField}
                 placeholder={localization?.placeholder ?? `Search`}
                 value={value_}
@@ -111,6 +118,7 @@ export default function BaseTableSearch (props: Props) {
                         className={classes.actionIcon}
                         icon={ClearIcon}
                         tooltip={localization?.clear ?? `Clear search`}
+                        size="medium"
                         onClick={() => handleOnChange(``)}
                     />
                 )}

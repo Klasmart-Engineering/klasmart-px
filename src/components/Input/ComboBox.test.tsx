@@ -1,8 +1,8 @@
+import { render } from '../../../test/themeProviderRender';
 import BADA_CHARACTERS from "../../stories/assets/testdata/BADA_CHARACTERS";
 import ComboBox from "./ComboBox";
 import {
     fireEvent,
-    render,
     screen,
     waitFor,
 } from "@testing-library/react";

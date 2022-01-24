@@ -9,12 +9,14 @@ import {
     Openable,
 } from "../shared";
 import {
-    createStyles,
     Dialog,
     DialogActions,
     DialogContent as Content,
+} from "@mui/material";
+import {
+    createStyles,
     makeStyles,
-} from "@material-ui/core";
+} from '@mui/styles';
 import React,
 {
     useEffect,

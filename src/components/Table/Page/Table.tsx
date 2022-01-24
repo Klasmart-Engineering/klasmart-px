@@ -1,3 +1,4 @@
+
 import BaseTable,
 {
     BaseProps as BaseTableProps,
@@ -9,7 +10,7 @@ import PageTablePagination from "./Pagination";
 import {
     createStyles,
     makeStyles,
-} from "@material-ui/core";
+} from '@mui/styles';
 import {
     clamp,
     isEqual,

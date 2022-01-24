@@ -1,9 +1,11 @@
 import {
-    createStyles,
-    makeStyles,
     Tab as MaterialTab,
     Tabs as MaterialTabs,
-} from "@material-ui/core";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React from "react";
 

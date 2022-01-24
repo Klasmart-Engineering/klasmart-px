@@ -1,7 +1,7 @@
 import {
     createStyles,
     makeStyles,
-} from "@material-ui/core";
+} from '@mui/styles';
 import React,
 { useState } from "react";
 import Cropper from "react-easy-crop";

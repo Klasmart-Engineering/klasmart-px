@@ -1,4 +1,4 @@
-import { getContrastRatio } from '@material-ui/core/styles';
+import { getContrastRatio } from '@mui/material/styles';
 
 interface ContrastColorOptions {
     darkColor?: string;

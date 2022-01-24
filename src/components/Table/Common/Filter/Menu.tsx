@@ -1,3 +1,4 @@
+
 import Button from '../../../Button/Button';
 import Select from '../../../Input/Select';
 import TextField from '../../../Input/TextField';
@@ -7,12 +8,14 @@ import {
 } from './Filters';
 import {
     Box,
-    createStyles,
     Grid,
-    makeStyles,
     Popover,
     Theme,
-} from '@material-ui/core';
+} from '@mui/material';
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React,
 {
     useEffect,
@@ -95,12 +98,10 @@ export default function TableFilterMenu<T> (props: Props<T>) {
         setFilter({
             ...filter,
             columnId,
-            ...columnId !== filter.columnId
-                ? {
-                    operatorValue,
-                    values: [],
-                }
-                : {},
+            ...(columnId !== filter.columnId ? {
+                operatorValue,
+                values: [],
+            } : {}),
         });
         if (columnId !== filter.columnId) {
             setSelectValue(``);
@@ -113,9 +114,9 @@ export default function TableFilterMenu<T> (props: Props<T>) {
         setFilter({
             ...filter,
             operatorValue,
-            ...operatorValue !== filter.operatorValue ? {
+            ...(operatorValue !== filter.operatorValue ? {
                 values: [],
-            } : {},
+            } : {}),
         });
         if (operatorValue !== filter.operatorValue) {
             setSelectValue(``);

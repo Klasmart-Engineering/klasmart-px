@@ -1,5 +1,5 @@
 import { DialogVariant } from "./DialogTitle";
-import { DialogProps } from "@material-ui/core";
+import { DialogProps } from "@mui/material";
 import { ReactNode } from "react";
 export interface Openable<T> {
     open: boolean;

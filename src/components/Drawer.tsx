@@ -1,16 +1,18 @@
 /* eslint-disable react/no-multi-comp */
 import IconButton from "./Button/IconButton";
+import { Close as CloseIcon } from "@mui/icons-material";
 import {
     Box,
-    createStyles,
     Divider,
     Drawer as Drwr,
-    makeStyles,
     Toolbar,
     Typography,
     useTheme,
-} from "@material-ui/core";
-import { Close as CloseIcon } from "@material-ui/icons";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 { ReactNode } from "react";
@@ -89,27 +91,28 @@ export default function Drawer (props: Props) {
             open={open}
             onClose={onClose}
         >
-            {title && (
-                <>
-                    <Toolbar className={classes.toolbar}>
-                        <Box
-                            display="flex"
-                            flexDirection={theme.direction === `rtl` ? `row-reverse` : `row`}
-                            alignItems="center"
-                            flex={1}
-                        >
-                            <Typography variant="h6">{title}</Typography>
-                            <Box flex="1" />
-                            <IconButton
-                                className={classes.closeButton}
-                                icon={CloseIcon}
-                                onClick={() => onClose({}, `escapeKeyDown`)}
-                            />
-                        </Box>
-                    </Toolbar>
-                    <Divider />
-                </>
-            )}
+            {title &&
+            <>
+                <Toolbar className={classes.toolbar}>
+                    <Box
+                        display="flex"
+                        flexDirection={theme.direction === `rtl` ? `row-reverse` : `row`}
+                        alignItems="center"
+                        flex={1}
+                    >
+                        <Typography variant="h6">{title}</Typography>
+                        <Box flex="1" />
+                        <IconButton
+                            className={classes.closeButton}
+                            icon={CloseIcon}
+                            size="medium"
+                            onClick={() => onClose({}, `escapeKeyDown`)}
+                        />
+                    </Box>
+                </Toolbar>
+                <Divider />
+            </>
+            }
             {sections.map((section, i) => (
                 <React.Fragment key={`section-${i}`}>
                     <DrawerSection

@@ -1,22 +1,25 @@
+
 import {
     PageChange,
     PaginationLocalization,
 } from "../Common/Pagination/shared";
 import {
-    createStyles,
-    IconButton,
-    makeStyles,
-    TablePagination,
-    Theme,
-    Tooltip,
-    useTheme,
-} from "@material-ui/core";
-import {
     FirstPage as FirstPageIcon,
     KeyboardArrowLeft as KeyboardArrowLeftIcon,
     KeyboardArrowRight as KeyboardArrowRightIcon,
     LastPage as LastPageIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
+import {
+    IconButton,
+    TablePagination,
+    Theme,
+    Tooltip,
+    useTheme,
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React from "react";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -77,6 +80,7 @@ export default function CursorTablePagination (props: Props) {
                         <IconButton
                             disabled={!hasPreviousPage}
                             aria-label="first page"
+                            size="large"
                             onClick={handleFirstPageButtonClick}
                         >
                             {theme.direction === `rtl` ? <LastPageIcon /> : <FirstPageIcon />}
@@ -88,6 +92,7 @@ export default function CursorTablePagination (props: Props) {
                         <IconButton
                             disabled={!hasPreviousPage}
                             aria-label="previous page"
+                            size="large"
                             onClick={handleBackButtonClick}
                         >
                             {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
@@ -99,6 +104,7 @@ export default function CursorTablePagination (props: Props) {
                         <IconButton
                             disabled={!hasNextPage}
                             aria-label="next page"
+                            size="large"
                             onClick={handleNextButtonClick}
                         >
                             {theme.direction === `rtl` ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
@@ -110,6 +116,7 @@ export default function CursorTablePagination (props: Props) {
                         <IconButton
                             disabled={!hasNextPage}
                             aria-label="last page"
+                            size="large"
                             onClick={handleLastPageButtonClick}
                         >
                             {theme.direction === `rtl` ? <FirstPageIcon /> : <LastPageIcon />}

@@ -2,7 +2,7 @@ import { SelectMode } from "./BaseTable";
 import { CheckboxDropdownLocalization, CheckboxDropdownValue } from "./CheckboxDropdown";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
 import { SubgroupTab } from "./GroupTabs";
-import { TableCellProps } from "@material-ui/core";
+import { TableCellProps } from "@mui/material";
 import React, { ReactNode } from "react";
 export declare type Order = "asc" | "desc";
 export declare type Align = TableCellProps["align"];

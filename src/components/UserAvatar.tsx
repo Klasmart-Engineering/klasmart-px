@@ -2,13 +2,15 @@ import {
     nameToInitials,
     stringToColor,
 } from "../utils";
+import { Person } from "@mui/icons-material";
 import {
     Avatar,
+    Tooltip,
+} from "@mui/material";
+import {
     createStyles,
     makeStyles,
-    Tooltip,
-} from "@material-ui/core";
-import { Person } from "@material-ui/icons";
+} from '@mui/styles';
 import clsx from "clsx";
 import React from "react";
 

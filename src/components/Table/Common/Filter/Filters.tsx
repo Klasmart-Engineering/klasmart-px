@@ -1,18 +1,21 @@
+
 import IconButton from '../../../Button/IconButton';
 import AddFilterButton from './AddButton';
 import TableFilterChips from './Chips';
 import TableFilterMenu,
 { FilterMenuLocalization } from './Menu';
 import {
-    Box,
-    createStyles,
-    makeStyles,
-    Theme,
-} from '@material-ui/core';
-import {
     Clear as ClearIcon,
     FilterList as FilterListIcon,
-} from '@material-ui/icons';
+} from '@mui/icons-material';
+import {
+    Box,
+    Theme,
+} from '@mui/material';
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React, {
     Dispatch,
     ReactNode,
@@ -123,7 +126,7 @@ export default function BaseTableFilter<T> (props: Props<T>) {
         setFilters((filters) => {
             if (!updatedFilter) return filters;
             const updatedFilters = filters.map((filter) => filter.columnId === editingFilter?.columnId ? updatedFilter : filter);
-            return [ ...updatedFilters, ...isCreateFilter ? [ updatedFilter ] : [] ];
+            return [ ...updatedFilters, ...(isCreateFilter ? [ updatedFilter ] : []) ];
         });
         setIsFilterMenuOpen(false);
     };
@@ -160,6 +163,7 @@ export default function BaseTableFilter<T> (props: Props<T>) {
                             icon={ClearIcon}
                             tooltip={localization?.clearAll ?? `Clear filters`}
                             data-testid="clearFilters"
+                            size="medium"
                             onClick={handleClearFilters}
                         />
                     )}
@@ -174,6 +178,5 @@ export default function BaseTableFilter<T> (props: Props<T>) {
                 localization={localization?.filterMenu}
                 onClose={handleClose}
             />
-        </>
-    );
+        </>);
 }

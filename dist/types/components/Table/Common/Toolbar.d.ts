@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { SvgIconComponent } from "@material-ui/icons";
+import { SvgIconComponent } from "@mui/icons-material";
 export interface ToolbarLocalization {
     title?: string;
     numSelected?: (num: number) => string;

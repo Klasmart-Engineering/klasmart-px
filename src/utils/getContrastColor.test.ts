@@ -8,7 +8,7 @@ describe(`getContrastColor`, () => {
     test(`receive a non hex value`, () => {
         expect(() => {
             getContrastColor(`fff`);
-        }).toThrow(`Material-UI: Unsupported \`fff\` color.\nWe support the following formats: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla().`);
+        }).toThrow(`MUI: Unsupported \`fff\` color.\nThe following formats are supported: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla(), color().`);
     });
 
     describe(`default options`, () => {

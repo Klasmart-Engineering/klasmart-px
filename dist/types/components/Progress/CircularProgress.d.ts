@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { CircularProgressProps } from "@material-ui/core";
+import { CircularProgressProps } from "@mui/material";
 declare type CircularProgressColor = CircularProgressProps["color"] | `action` | `white`;
 interface Props {
     className?: string;

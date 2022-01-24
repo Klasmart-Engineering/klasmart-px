@@ -1,3 +1,4 @@
+
 import MoreMenu, {
     MenuAction,
     MoreMenuLocalization,
@@ -6,13 +7,15 @@ import { SelectMode } from "./BaseTable";
 import { TableColumn } from "./Head";
 import {
     Checkbox,
-    createStyles,
-    makeStyles,
     Radio,
     TableBody,
     TableCell,
     TableRow,
-} from "@material-ui/core";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({

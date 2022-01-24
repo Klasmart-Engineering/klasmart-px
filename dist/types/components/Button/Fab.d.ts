@@ -1,7 +1,6 @@
-import { FabProps } from "@material-ui/core";
-import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
-import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
-import { SvgIconComponent } from "@material-ui/icons";
+import { SvgIconComponent } from "@mui/icons-material";
+import { FabProps } from "@mui/material";
+import { Breakpoint, Palette, PaletteColor } from '@mui/material/styles';
 import React from "react";
 interface Props {
     className?: string;

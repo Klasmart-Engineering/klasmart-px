@@ -1,3 +1,4 @@
+
 import {
     Filter,
     FilterLocalization,
@@ -5,11 +6,13 @@ import {
 } from './Filters';
 import {
     Chip,
-    createStyles,
-    makeStyles,
     Theme,
     Typography,
-} from '@material-ui/core';
+} from '@mui/material';
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React,
 { ReactNode } from 'react';
 

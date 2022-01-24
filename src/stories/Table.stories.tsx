@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+
 import { TableFilter } from '../components/Table/Common/Filter/Filters';
 import { SubgroupTab } from '../components/Table/Common/GroupTabs';
 import {
@@ -13,14 +14,15 @@ import {
     required,
 } from '../validations';
 import {
-    Chip,
-    createStyles,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import {
     Check,
     Close,
-} from '@material-ui/icons';
+} from '@mui/icons-material';
+import { Chip } from '@mui/material';
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
+import { Story } from '@storybook/react';
 import React,
 {
     useEffect,
@@ -1123,7 +1125,7 @@ const loadProgramsData = async (request: LoadProgramsDataPageRequest) => {
     };
 };
 
-export const PageTableFilter = () => {
+const PageTableFilter = () => {
     const classes = useStyles();
     const [ page, setPage ] = useState(0);
     const [ loadingData, setLoadingData ] = useState(false);
@@ -1311,4 +1313,9 @@ export const PageTableFilter = () => {
         />
     );
 };
+
+const Template: Story = (args) => <PageTableFilter {...args} />;
+
+export const PageTableFilters = Template.bind({});
+
 /* eslint-disable react/no-multi-comp */

@@ -1,19 +1,22 @@
+
 import { PaginationLocalization } from "../Common/Pagination/shared";
-import {
-    createStyles,
-    IconButton,
-    makeStyles,
-    TablePagination,
-    Theme,
-    Tooltip,
-    useTheme,
-} from "@material-ui/core";
 import {
     FirstPage as FirstPageIcon,
     KeyboardArrowLeft as KeyboardArrowLeftIcon,
     KeyboardArrowRight as KeyboardArrowRightIcon,
     LastPage as LastPageIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
+import {
+    IconButton,
+    TablePagination,
+    Theme,
+    Tooltip,
+    useTheme,
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import { clamp } from "lodash";
 import React from "react";
 
@@ -72,6 +75,7 @@ export default function PageTablePagination (props: Props) {
                         <IconButton
                             disabled={page === 0}
                             aria-label="first page"
+                            size="large"
                             onClick={handleFirstPageButtonClick}
                         >
                             {theme.direction === `rtl` ? <LastPageIcon /> : <FirstPageIcon />}
@@ -83,6 +87,7 @@ export default function PageTablePagination (props: Props) {
                         <IconButton
                             disabled={page === 0}
                             aria-label="previous page"
+                            size="large"
                             onClick={handleBackButtonClick}
                         >
                             {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
@@ -94,6 +99,7 @@ export default function PageTablePagination (props: Props) {
                         <IconButton
                             disabled={page >= lastPage}
                             aria-label="next page"
+                            size="large"
                             onClick={handleNextButtonClick}
                         >
                             {theme.direction === `rtl` ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
@@ -105,6 +111,7 @@ export default function PageTablePagination (props: Props) {
                         <IconButton
                             disabled={page >= lastPage}
                             aria-label="last page"
+                            size="large"
                             onClick={handleLastPageButtonClick}
                         >
                             {theme.direction === `rtl` ? <FirstPageIcon /> : <LastPageIcon />}

@@ -1,19 +1,21 @@
 import IconButton from "../Button/IconButton";
 import { FileItem } from "./CounterIconButton";
 import FileTypeIcon from "./TypeIcon";
+import { CloudDownload } from "@mui/icons-material";
 import {
-    createStyles,
     List,
     ListItem,
     ListItemIcon,
     ListItemSecondaryAction,
     ListSubheader,
-    makeStyles,
     Popover,
     Tooltip,
     Typography,
-} from "@material-ui/core";
-import { CloudDownload } from "@material-ui/icons";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
@@ -84,6 +86,7 @@ export default function FileListMenu (props: Props) {
                                         icon={CloudDownload}
                                         disabled={!file.onDownloadClick}
                                         className={classes.downloadIconButton}
+                                        size="medium"
                                         onClick={file.onDownloadClick}
                                     />
                                 </ListItemSecondaryAction>

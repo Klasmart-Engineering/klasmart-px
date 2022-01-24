@@ -1,3 +1,4 @@
+
 import IconButton from "../../Button/IconButton";
 import { SelectMode } from "./BaseTable";
 import BaseTableCheckboxDropdown,
@@ -10,10 +11,13 @@ import BaseTableColumnSelector,
 import { SubgroupTab } from "./GroupTabs";
 import { DEFAULT_SORT_ORDER } from "./Pagination/shared";
 import {
+    Close as CloseIcon,
+    Info as InfoIcon,
+    Lock as LockIcon,
+} from "@mui/icons-material";
+import {
     alpha,
     Box,
-    createStyles,
-    makeStyles,
     TableCell,
     TableCellProps,
     TableHead,
@@ -21,25 +25,24 @@ import {
     TableSortLabel,
     Theme,
     Tooltip,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
-    Close as CloseIcon,
-    Info as InfoIcon,
-    Lock as LockIcon,
-} from "@material-ui/icons";
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 { ReactNode } from "react";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     container: {
-        backgroundColor: theme.palette.type === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
+        backgroundColor: theme.palette.mode === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
     },
     hoverHeader: {
         height: 53,
         padding: theme.spacing(0, 2),
         "&:hover": {
-            backgroundColor: theme.palette.type === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
+            backgroundColor: theme.palette.mode === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
         },
     },
     removeButton: {
@@ -161,7 +164,7 @@ export default function BaseTableHead<T> (props: Props<T>) {
                             };
                         const flexDirection = column.align === `right` ? `row-reverse` : `row`;
                         const isAlignCenter = column.align === `center`;
-                        return ((
+                        return (
                             <TableCell
                                 key={column.id}
                                 align={column.align}
@@ -199,7 +202,7 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                             flexDirection={flexDirection}
                                         >
                                             {column.label}
-                                            {column.tooltip && (
+                                            {column.tooltip &&
                                                 <Tooltip title={column.tooltip}>
                                                     <InfoIcon
                                                         color="action"
@@ -209,7 +212,7 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                                         })}
                                                     />
                                                 </Tooltip>
-                                            )}
+                                            }
                                         </Box>
                                     </TableSortLabel>
                                     {isAlignCenter && <Box flex="1" />}
@@ -219,11 +222,12 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                         iconSize="small"
                                         tooltip={!column.persistent ? localization?.hideColumnButton ?? `Hide column` : undefined}
                                         icon={column.persistent ? LockIcon : CloseIcon}
+                                        size="medium"
                                         onClick={() => onColumnChange(column.id)}
                                     />
                                 </Box>
                             </TableCell>
-                        ));
+                        );
                     })}
                 <TableCell padding="checkbox">
                     <BaseTableColumnSelector

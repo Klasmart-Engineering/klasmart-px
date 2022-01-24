@@ -1,4 +1,4 @@
-import { SvgIconComponent } from "@material-ui/icons";
+import { SvgIconComponent } from "@mui/icons-material";
 import React from "react";
 declare const COLORS: readonly ["primary", "secondary", "error", "warning", "info", "success"];
 export declare type Color = typeof COLORS[number];

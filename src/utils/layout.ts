@@ -2,8 +2,8 @@ import {
     Theme,
     useMediaQuery,
     useTheme,
-} from "@material-ui/core";
-import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
+} from "@mui/material";
+import { Breakpoint } from '@mui/material/styles';
 
 /**
 * Be careful using this hook. It only works because the number of

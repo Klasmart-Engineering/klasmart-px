@@ -6,10 +6,10 @@ import {
     UserRow,
     userRows,
 } from '../../../../test/mockTableData';
+import { render } from '../../../../test/themeProviderRender';
 import CursorTable from './Table';
 import {
     fireEvent,
-    render,
     screen,
     waitFor,
 } from "@testing-library/react";

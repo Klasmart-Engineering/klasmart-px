@@ -1,17 +1,22 @@
+
 import Tabs,
 { Tab } from "../../Tabs";
 import {
     Box,
-    createStyles,
     Divider,
-    makeStyles,
     MenuItem,
     Select,
+    SelectChangeEvent,
     Theme,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React,
 {
+    ReactNode,
     useEffect,
     useMemo,
     useState,
@@ -34,6 +39,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         },
         "& .MuiSelect-icon": {
             marginRight: theme.spacing(2),
+        },
+        "& .MuiSelect-select": {
+            paddingLeft: theme.spacing(2),
         },
     },
     selectPlaceholderText: {
@@ -94,8 +102,8 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
         onSelectSubgroup(value);
     };
 
-    const handleGroupChange = (e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>, child: React.ReactNode) => {
-        const value = e.target.value as "" | Extract<keyof T, string>;
+    const handleGroupChange = (event: SelectChangeEvent<"" | keyof T>, child: ReactNode) => {
+        const value = event.target.value as "" | Extract<keyof T, string>;
         setGroupBy(value);
         const newGroup = value === `` ? undefined : value;
         onSelectGroup(newGroup);
@@ -110,12 +118,12 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
     const hasSubGroupCountValues = subgroups.every((subgroup) => typeof subgroup.count === `number`);
 
     const tabs: Tab[] = [
-        ...!hideAllGroupTab ? [
+        ...(!hideAllGroupTab ? [
             {
                 text: `${localization?.tabAll ?? `All`}${hasSubGroupCountValues ? ` (${allCount})` : ``}`,
                 value: undefined,
             },
-        ] : [],
+        ] : []),
         ...subgroups.map((subgroup) => ({
             text: `${subgroup.text}${typeof subgroup.count === `number` ? ` (${subgroup.count})` : ``}`,
             value: `${subgroup.value}`,
@@ -155,6 +163,7 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
                         <Divider orientation="vertical" />
                         <Select
                             displayEmpty
+                            variant="standard"
                             value={groupBy_}
                             className={classes.select}
                             renderValue={

@@ -1,11 +1,13 @@
+import CropRotateIcon from '@mui/icons-material/CropRotate';
+import PhotoSizeSelectLargeIcon from '@mui/icons-material/PhotoSizeSelectLarge';
+import {
+    lighten,
+    Slider,
+} from "@mui/material";
 import {
     createStyles,
-    lighten,
     makeStyles,
-    Slider,
-} from "@material-ui/core";
-import CropRotateIcon from '@material-ui/icons/CropRotate';
-import PhotoSizeSelectLargeIcon from '@material-ui/icons/PhotoSizeSelectLarge';
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 {
@@ -122,55 +124,53 @@ export default function Controls (props: Props) {
     ];
 
     const actions: EditImageAction[] = [
-        ...!isZoomDisabled
-            ? [
-                {
-                    label: zoomLabel,
-                    icon: <PhotoSizeSelectLargeIcon />,
-                    control: (
-                        <Slider
-                            value={zoom}
-                            min={0.1}
-                            max={3}
-                            step={0.1}
-                            marks={zoomMarks}
-                            valueLabelDisplay="auto"
-                            valueLabelFormat={(value) => `${value}x`}
-                            aria-labelledby={editImageAction}
-                            classes={{
-                                root: classes.slider,
-                            }}
-                            onChange={(e, zoom) => onZoomChange(Number(zoom))}
-                        />
-                    ),
-                    onClick: () => selectEditImageAction(EditImageActionType.ZOOM),
-                },
-            ] : [],
-        ...!isRotationDisabled
-            ? [
-                {
-                    label: rotateLabel,
-                    icon: <CropRotateIcon />,
-                    control: (
-                        <Slider
-                            value={rotation}
-                            min={-180}
-                            max={180}
-                            step={1}
-                            marks={rotationMarks}
-                            track={false}
-                            valueLabelDisplay="auto"
-                            valueLabelFormat={(value) => `${value}°`}
-                            aria-labelledby={editImageAction}
-                            classes={{
-                                root: classes.slider,
-                            }}
-                            onChange={(e, rotation) => onRotationChange(Number(rotation))}
-                        />
-                    ),
-                    onClick: () => selectEditImageAction(EditImageActionType.ROTATE),
-                },
-            ] : [],
+        ...(!isZoomDisabled ? [
+            {
+                label: zoomLabel,
+                icon: <PhotoSizeSelectLargeIcon />,
+                control: (
+                    <Slider
+                        value={zoom}
+                        min={0.1}
+                        max={3}
+                        step={0.1}
+                        marks={zoomMarks}
+                        valueLabelDisplay="auto"
+                        valueLabelFormat={(value) => `${value}x`}
+                        aria-labelledby={editImageAction}
+                        classes={{
+                            root: classes.slider,
+                        }}
+                        onChange={(e, zoom) => onZoomChange(Number(zoom))}
+                    />
+                ),
+                onClick: () => selectEditImageAction(EditImageActionType.ZOOM),
+            },
+        ] : []),
+        ...(!isRotationDisabled ? [
+            {
+                label: rotateLabel,
+                icon: <CropRotateIcon />,
+                control: (
+                    <Slider
+                        value={rotation}
+                        min={-180}
+                        max={180}
+                        step={1}
+                        marks={rotationMarks}
+                        track={false}
+                        valueLabelDisplay="auto"
+                        valueLabelFormat={(value) => `${value}°`}
+                        aria-labelledby={editImageAction}
+                        classes={{
+                            root: classes.slider,
+                        }}
+                        onChange={(e, rotation) => onRotationChange(Number(rotation))}
+                    />
+                ),
+                onClick: () => selectEditImageAction(EditImageActionType.ROTATE),
+            },
+        ] : []),
     ];
 
     return (

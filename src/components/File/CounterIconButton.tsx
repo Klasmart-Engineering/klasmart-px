@@ -1,12 +1,12 @@
 import IconButton from "../Button/IconButton";
 import FileListMenu,
 { Props as ListMenuProps } from "./ListMenu";
+import { InsertDriveFile } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 import {
     createStyles,
     makeStyles,
-    Typography,
-} from "@material-ui/core";
-import { InsertDriveFile } from "@material-ui/icons";
+} from '@mui/styles';
 import React,
 { useState } from "react";
 

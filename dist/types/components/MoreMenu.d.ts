@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { SvgIconComponent } from "@material-ui/icons";
+import { SvgIconComponent } from "@mui/icons-material";
 export interface MenuAction<T> {
     label: string;
     icon?: SvgIconComponent;

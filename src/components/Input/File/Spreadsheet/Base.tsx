@@ -15,13 +15,15 @@ import ValidationDetails from "./ValidationDetails";
 import {
     alpha,
     Box,
-    createStyles,
     Divider,
     Fade,
-    makeStyles,
     Paper,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import Papa from "papaparse";
 import React,
 {

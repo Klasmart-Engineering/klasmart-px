@@ -1,18 +1,20 @@
 /* eslint-disable react/no-multi-comp */
 import {
-    createStyles,
-    makeStyles,
+    Edit as EditIcon,
+    SvgIconComponent,
+} from "@mui/icons-material";
+import {
     Step,
     StepButton,
     StepLabel,
     Stepper as Stppr,
     Typography,
     useTheme,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
-    Edit as EditIcon,
-    SvgIconComponent,
-} from "@material-ui/icons";
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import { clamp } from "lodash";
 import React,
@@ -30,6 +32,7 @@ const useStyles = makeStyles((theme) => createStyles({
         "& .MuiStepLabel-labelContainer": {
             textAlign: `left`,
         },
+        padding: `24px`,
     },
     iconContainer: {
         position: `relative`,
@@ -189,15 +192,12 @@ export default function Stepper (props: Props) {
                 return (
                     <Step key={`step-${index}`}>
                         <StepButton
-                            active={stepIndex === index}
-                            completed={editable || completed}
                             optional={
                                 <OptionalLabel
                                     step={step}
                                     optionalLabel={optionalLabel}
                                 />
                             }
-                            onClick={() => {handleClick(index);}}
                             {...customIconProps}
                         >
                             <StepLabel

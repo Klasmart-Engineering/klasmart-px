@@ -1,16 +1,18 @@
 import IconButton from "../../Button/IconButton";
 import FileTypeIcon from "../../File/TypeIcon";
 import {
-    Box,
-    createStyles,
-    makeStyles,
-    Typography,
-} from "@material-ui/core";
-import {
     Check as CheckIcon,
     CloudUpload as CloudUploadIcon,
     Delete as DeleteIcon,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
+import {
+    Box,
+    Typography,
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 { useState } from "react";
@@ -133,10 +135,10 @@ export default function SelectedFileRow (props: Props) {
                         icon={DeleteIcon}
                         disabled={areActionsDisabled || uploadLoading}
                         tooltip={removeButtonTooltip}
+                        size="medium"
                         onClick={onClickRemove}
                     />
-                )
-                }
+                )}
                 {uploadSuccess
                     ? (
                         <CheckIcon
@@ -150,6 +152,7 @@ export default function SelectedFileRow (props: Props) {
                             color="primary"
                             disabled={areActionsDisabled || !!error || uploadLoading}
                             tooltip={uploadButtonTooltip}
+                            size="medium"
                             onClick={onClickUpload_}
                         />
                     )

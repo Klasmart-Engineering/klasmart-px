@@ -1,6 +1,6 @@
 /// <reference types="react" />
-import { DialogProps } from "@material-ui/core";
-import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
+import { DialogProps } from "@mui/material";
+import { Palette, PaletteColor } from '@mui/material/styles';
 export interface DialogAction {
     align?: "left" | "right";
     color: {

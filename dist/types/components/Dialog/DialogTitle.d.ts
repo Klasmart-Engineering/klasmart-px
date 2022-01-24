@@ -1,5 +1,5 @@
-import { DialogTitleProps } from "@material-ui/core";
-import { Palette, PaletteColor } from "@material-ui/core/styles/createPalette";
+import { DialogTitleProps } from "@mui/material";
+import { Palette, PaletteColor } from '@mui/material/styles';
 import { ReactNode } from "react";
 export declare type DialogVariant = Exclude<{
     [P in keyof Palette]: Palette[P] extends PaletteColor ? P : never;

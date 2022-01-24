@@ -1,4 +1,4 @@
-import { CardProps, SvgIconProps } from "@material-ui/core";
+import { CardProps, SvgIconProps } from "@mui/material";
 import React, { ChangeEvent } from "react";
 declare type LibraryAssetType = "lessonPlan" | "lessonMaterial";
 interface CheckboxItem {

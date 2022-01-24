@@ -1,5 +1,7 @@
 /* eslint-disable testing-library/no-node-access */
+/* eslint-disable testing-library/no-container */
 import { gif } from "../../../../../test/image";
+import { render as actualRender } from '../../../../../test/themeProviderRender';
 import Base,
 { Props } from "./Base";
 import {
@@ -10,7 +12,6 @@ import {
 } from "./Preview.test";
 import { SpreadsheetValidationError } from "./types";
 import {
-    render as actualRender,
     screen,
     waitFor,
     waitForElementToBeRemoved,
@@ -344,13 +345,13 @@ function expectValidationFailed () {
 const resetOnFileUploadMock = () => (props.onFileUpload as jest.MockedFunction<Props["onFileUpload"]>).mockClear();
 
 const removeButton = () => {
-    const tooltip = screen.queryByTitle(props.removeButtonTooltip);
+    const tooltip = screen.queryByLabelText(props.removeButtonTooltip);
     if (tooltip === null) return null;
     return tooltip.querySelector(`button`);
 };
 
 const uploadButton = () => {
-    const tooltip = screen.queryByTitle(props.uploadButtonTooltip);
+    const tooltip = screen.queryByLabelText(props.uploadButtonTooltip);
     if (tooltip === null) return null;
     return tooltip.querySelector(`button`);
 };
@@ -404,7 +405,7 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
             size: fileSize,
         });
 
-        await screen.findByTitle(props.removeButtonTooltip);
+        await screen.findByLabelText(props.removeButtonTooltip);
 
         expectPreviewUnavailable();
 
@@ -426,7 +427,7 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
             type: `image/gif`,
         });
 
-        await screen.findByTitle(props.removeButtonTooltip);
+        await screen.findByLabelText(props.removeButtonTooltip);
 
         expectPreviewUnavailable();
 
@@ -449,7 +450,7 @@ each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (
             },
         ]);
 
-        await screen.findByTitle(props.removeButtonTooltip);
+        await screen.findByLabelText(props.removeButtonTooltip);
 
         expectPreviewUnavailable();
 
@@ -640,7 +641,7 @@ test(`on failed upload calls the 'onFileUploadError' callback and displays error
 
     expect(screen.getByText(`Invalid data`)).toBeInTheDocument();
 
-    expect(uploadButton()).not.toBeInTheDocument();
+    expect(uploadButton()).toBeDisabled();
 });
 
 test(`if isDryRunEnabled, uploads immediately after loading a valid spreadsheet`, async () => {
@@ -762,8 +763,7 @@ test(`after a successful dryrun, a manual upload can fail`, async () => {
         uploadHandler: succeedThenFailFileUpload,
     });
 
-    expect(uploadButton()).not.toBeInTheDocument();
-
+    expect(uploadButton()).toBeDisabled();
 });
 
 test(`on failed dryrun and no SpreadsheetValidationErrors are returned from the error handler, the error's message is shown`, async () => {

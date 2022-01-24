@@ -1,7 +1,7 @@
 /// <reference types="react" />
 export interface Props {
     open: boolean;
-    anchorEl: HTMLButtonElement | null;
+    anchorEl: HTMLDivElement | null;
     hideCanvas?: boolean;
     color?: string;
     colors?: string[];

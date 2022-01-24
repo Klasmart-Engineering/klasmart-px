@@ -2,26 +2,26 @@
 import CircularProgress from '../../../Progress/CircularProgress';
 import { SpreadsheetValidationError } from './types';
 import {
-    Box,
-    Chip,
-    createStyles,
-    makeStyles,
-} from "@material-ui/core";
-import MuiAccordion from '@material-ui/core/Accordion';
-import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
-import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
-import {
-    lighten,
-    withStyles,
-} from '@material-ui/core/styles';
-import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import Typography,
-{ TypographyProps } from '@material-ui/core/Typography';
-import {
     Check as CheckIcon,
     Error as ErrorIcon,
     ExpandMore as ExpandMoreIcon,
-} from '@material-ui/icons';
+} from '@mui/icons-material';
+import {
+    Box,
+    Chip,
+} from "@mui/material";
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import { lighten } from '@mui/material/styles';
+import Typography,
+{ TypographyProps } from '@mui/material/Typography';
+import {
+    ClassNameMap,
+    createStyles,
+    makeStyles,
+    withStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import React,
 { useState } from 'react';

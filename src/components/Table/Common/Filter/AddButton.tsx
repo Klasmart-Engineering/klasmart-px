@@ -1,15 +1,18 @@
+
 import {
     Filter,
     FilterLocalization,
 } from './Filters';
+import { Add as AddIcon } from '@mui/icons-material';
 import {
     Chip,
-    createStyles,
-    makeStyles,
     Theme,
     Tooltip,
-} from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
+} from '@mui/material';
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React from 'react';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({

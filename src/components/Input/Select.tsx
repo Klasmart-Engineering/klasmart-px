@@ -5,19 +5,23 @@ import {
 } from "./shared";
 import {
     Checkbox,
-    createStyles,
     Divider,
     ListItemIcon,
     ListItemText,
-    makeStyles,
     MenuItem,
+    SelectChangeEvent,
     TextField,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import clsx from "clsx";
 import { isEqual } from "lodash";
 import React,
 {
+    ReactNode,
     useEffect,
     useState,
 } from "react";
@@ -87,8 +91,8 @@ export default function Select<T> (props: Props<T>) {
     const [ value_, setValue ] = useState(multiple && !Array.isArray(value) ? [ value ] : value);
     const [ error_, setError ] = useState(getErrorText(value, validations));
 
-    const selectAllItems = [ ...items, ...sections?.filter((section) => !section.ignoreSelectAll).flatMap((section) => section.items) ?? [] ];
-    const allItems = [ ...items, ...sections?.flatMap((section) => section.items) ?? [] ];
+    const selectAllItems = [ ...items, ...(sections?.filter((section) => !section.ignoreSelectAll).flatMap((section) => section.items) ?? []) ];
+    const allItems = [ ...items, ...(sections?.flatMap((section) => section.items) ?? []) ];
 
     const getToggleSelectAll = (values: string[]) => values.length !== selectAllItems.length ? selectAllItems.map(itemValue) : [];
 
@@ -104,7 +108,7 @@ export default function Select<T> (props: Props<T>) {
         onError?.(error);
     };
 
-    const handleChange = (event: React.ChangeEvent<{name?: string | undefined; value: unknown}>, child: React.ReactNode) => {
+    const handleChange = (event: SelectChangeEvent<unknown>, child: ReactNode) => {
         const value = event.target.value as string | string[];
         updateValue(value);
     };
@@ -159,7 +163,7 @@ export default function Select<T> (props: Props<T>) {
                         </ListItemText>
                     </MenuItem>
                 )),
-                ...(i !== sections.length - 1 || !items.length) ? [] : [ <Divider key={`section-divider-${i}`} /> ],
+                ...(i !== sections.length - 1 || !items.length ? [] : [ <Divider key={`section-divider-${i}`} /> ]),
             ];
             if (section.header) {
                 sectionElements.unshift((

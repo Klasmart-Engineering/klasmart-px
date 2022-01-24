@@ -1,22 +1,24 @@
 import Button from "./Button/Button";
+import { Close as CloseIcon } from "@mui/icons-material";
 import {
     Box,
-    createStyles,
     Dialog,
     DialogActions,
     DialogContent,
     DialogProps,
     DialogTitle,
     IconButton,
-    makeStyles,
     Theme,
     Tooltip,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
     Palette,
     PaletteColor,
-} from "@material-ui/core/styles/createPalette";
-import { Close as CloseIcon } from "@material-ui/icons";
+} from '@mui/material/styles';
+import {
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React from "react";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -75,6 +77,7 @@ export default function BaseDialog (props: Props) {
             <Tooltip title="Close dialog">
                 <IconButton
                     className={classes.closeButton}
+                    size="large"
                     onClick={onClose}
                 >
                     <CloseIcon />

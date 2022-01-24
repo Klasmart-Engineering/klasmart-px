@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { DialogProps } from "@material-ui/core";
+import { DialogProps } from "@mui/material";
 interface ToolbarAction {
     label: string;
     disabled?: boolean;

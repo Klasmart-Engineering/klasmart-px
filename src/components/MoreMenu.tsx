@@ -1,19 +1,21 @@
 import {
-    createStyles,
+    MoreVert as MoreVertIcon,
+    SvgIconComponent,
+} from "@mui/icons-material";
+import {
     IconButton,
     ListItemIcon,
-    makeStyles,
     MenuItem,
     MenuList,
     Popover,
     Theme,
     Tooltip,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
-    MoreVert as MoreVertIcon,
-    SvgIconComponent,
-} from "@material-ui/icons";
+    createStyles,
+    makeStyles,
+} from '@mui/styles';
 import React,
 { useState } from "react";
 
@@ -60,6 +62,7 @@ export default function MoreMenu<T> (props: Props<T>) {
                 <IconButton
                     aria-label={localization?.moreMenuButton ?? `More actions`}
                     aria-haspopup="true"
+                    size="large"
                     onClick={handleClick}
                 >
                     <MoreVertIcon />
@@ -79,25 +82,24 @@ export default function MoreMenu<T> (props: Props<T>) {
                 onClose={handleClose}
             >
                 <MenuList>
-                    {actions?.length && actions.map((action, i) => (
-                        <MenuItem
-                            key={`menu-item-${i}`}
-                            disabled={action.disabled}
-                            onClick={() => {
-                                action.onClick(item);
-                                handleClose();
-                            }}
-                        >
-                            {action.icon &&
+                    {actions?.length && actions.map((action, i) =>
+                        (
+                            <MenuItem
+                                key={`menu-item-${i}`}
+                                disabled={action.disabled}
+                                onClick={() => {
+                                    action.onClick(item);
+                                    handleClose();
+                                }}
+                            >
+                                {action.icon &&
                             <ListItemIcon>
                                 <action.icon />
                             </ListItemIcon>
-                            }
-                            <Typography variant="body2">{action.label}</Typography>
-                        </MenuItem>
-                    ))}
+                                }
+                                <Typography variant="body2">{action.label}</Typography>
+                            </MenuItem>))}
                 </MenuList>
             </Popover>
-        </>
-    );
+        </>);
 }

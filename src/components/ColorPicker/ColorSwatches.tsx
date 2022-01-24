@@ -1,9 +1,9 @@
 import ColorClick from "./ColorClick";
+import { Grid } from "@mui/material";
 import {
     createStyles,
-    Grid,
     makeStyles,
-} from "@material-ui/core";
+} from '@mui/styles';
 import clsx from "clsx";
 import React from "react";
 

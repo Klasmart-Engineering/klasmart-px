@@ -1,10 +1,12 @@
 import {
-    createStyles,
     DialogContent as Content,
     DialogContentProps,
     DialogContentText,
+} from "@mui/material";
+import {
+    createStyles,
     makeStyles,
-} from "@material-ui/core";
+} from '@mui/styles';
 import React,
 { ReactNode } from "react";
 

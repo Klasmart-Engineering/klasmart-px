@@ -7,11 +7,13 @@ import {
     Openable,
 } from "../shared";
 import {
-    createStyles,
     Dialog,
     DialogActions,
+} from "@mui/material";
+import {
+    createStyles,
     makeStyles,
-} from "@material-ui/core";
+} from '@mui/styles';
 import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
