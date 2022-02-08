@@ -4,6 +4,7 @@ export interface MenuAction<T> {
     label: string;
     icon?: SvgIconComponent;
     disabled?: boolean;
+    hidden?: boolean;
     onClick: ((item: T) => void);
 }
 export interface MoreMenuLocalization {

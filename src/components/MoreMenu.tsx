@@ -23,6 +23,7 @@ export interface MenuAction<T> {
     label: string;
     icon?: SvgIconComponent;
     disabled?: boolean;
+    hidden?: boolean;
     onClick: ((item: T) => void);
 }
 
@@ -79,23 +80,26 @@ export default function MoreMenu<T> (props: Props<T>) {
                 onClose={handleClose}
             >
                 <MenuList>
-                    {actions?.length && actions.map((action, i) => (
-                        <MenuItem
-                            key={`menu-item-${i}`}
-                            disabled={action.disabled}
-                            onClick={() => {
-                                action.onClick(item);
-                                handleClose();
-                            }}
-                        >
-                            {action.icon &&
+                    {actions?.length && actions.map((action, i) => {
+                        if (action.hidden) return;
+                        return (
+                            <MenuItem
+                                key={`menu-item-${action.label}`}
+                                disabled={action.disabled}
+                                onClick={() => {
+                                    action.onClick(item);
+                                    handleClose();
+                                }}
+                            >
+                                {action.icon &&
                             <ListItemIcon>
                                 <action.icon />
                             </ListItemIcon>
-                            }
-                            <Typography variant="body2">{action.label}</Typography>
-                        </MenuItem>
-                    ))}
+                                }
+                                <Typography variant="body2">{action.label}</Typography>
+                            </MenuItem>
+                        );
+                    })}
                 </MenuList>
             </Popover>
         </>
