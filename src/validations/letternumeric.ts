@@ -1,4 +1,4 @@
-export const letternumericRegex = /^[\p{L}\d .'&/,-]*$/gu;
+export const letternumericRegex = /^[\p{L}\p{M}\d .'&/,-]*$/gu;
 
 export default (errorMessage?: string) => (input: any) => {
     return letternumericRegex.test(input ?? ``)
