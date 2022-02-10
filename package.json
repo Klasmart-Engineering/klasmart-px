@@ -12,8 +12,8 @@
         "start:sb": "start-storybook -p 6006",
         "test": "jest",
         "lint": "eslint .",
-        "version": "npm run build && git add -A dist",
-        "postversion": "git push && git push --tags"
+        "release": "standard-version -t ''",
+        "prepare": "husky install"
     },
     "repository": {
         "type": "git",
@@ -50,6 +50,8 @@
         "@babel/preset-env": "7.16.4",
         "@babel/preset-react": "7.16.0",
         "@babel/preset-typescript": "7.16.0",
+        "@commitlint/cli": "16.1.0",
+        "@commitlint/config-conventional": "16.0.0",
         "@kidsloop/eslint-config": "bitbucket:calmisland/kidsloop-eslint-config#1.4.1",
         "@storybook/addon-actions": "^6.2.0-rc.7",
         "@storybook/addon-essentials": "^6.2.0-rc.7",
@@ -79,9 +81,11 @@
         "file-loader": "^6.2.0",
         "fork-ts-checker-webpack-plugin": "^6.1.0",
         "html-webpack-plugin": "^5.3.1",
+        "husky": "^7.0.0",
         "jest": "^26.6.3",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
+        "standard-version": "9.3.2",
         "style-loader": "^2.0.0",
         "ts-jest": "^26.5.6",
         "ts-node": "^9.1.1",
