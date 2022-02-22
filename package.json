@@ -1,6 +1,6 @@
 {
-    "name": "kidsloop-px",
-    "version": "1.0.0",
+    "name": "@KL-Engineering/kidsloop-px",
+    "version": "1.0.9",
     "description": "KidsLoop Product Experience UI Library",
     "main": "./dist/main.js",
     "types": "dist/types/index.d.ts",
@@ -11,10 +11,6 @@
         "build:sb": "build-storybook",
         "start:sb": "start-storybook -p 6006",
         "test": "jest"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+ssh://git@bitbucket.org/calmisland/kidsloop-px.git"
     },
     "keywords": [],
     "author": "KidsLoop",
@@ -92,5 +88,12 @@
         "notistack": "^1.0.4",
         "react-cookie": "^4.0.3",
         "typeface-nanum-square-round": "^1.0.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/KL-Engineering/kidsloop-px"
+    },
+    "publishConfig": {
+      "registry": "https://npm.pkg.github.com"
     }
 }
