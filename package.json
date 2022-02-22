@@ -6,6 +6,7 @@
     "types": "dist/types/index.d.ts",
     "scripts": {
         "build": "npm test && npm run build:js && npm run build:types",
+        "build:only": "npm run build:js && npm run build:types",
         "build:js": "webpack",
         "build:types": "tsc --emitDeclarationOnly",
         "build:sb": "build-storybook",
