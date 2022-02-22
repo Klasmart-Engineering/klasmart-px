@@ -39,7 +39,7 @@
         "@babel/preset-env": "7.16.4",
         "@babel/preset-react": "7.16.0",
         "@babel/preset-typescript": "7.16.0",
-        "@kidsloop/eslint-config": "bitbucket:calmisland/kidsloop-eslint-config#1.4.1",
+        "@kl-engineering/eslint-config": "1.4.1",
         "@storybook/addon-actions": "^6.2.0-rc.7",
         "@storybook/addon-essentials": "^6.2.0-rc.7",
         "@storybook/addon-links": "^6.2.0-rc.7",

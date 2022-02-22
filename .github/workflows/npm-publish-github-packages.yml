@@ -18,11 +18,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-          registry-url: https://npm.pkg.github.com/
+          token: ${{ secrets.PAT_NPM_GITHUB_REPO }}
       - run: npm ci
+        env:
+          NPM_GITHUB_TOKEN: ${{secrets.PAT_NPM_GITHUB_REPO}}
       - run: npm run build
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          NPM_GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          NPM_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NPM_GITHUB_TOKEN: ${{secrets.PAT_NPM_GITHUB_REPO}}
