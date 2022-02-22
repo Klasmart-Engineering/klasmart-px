@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import {
     createStyles,
     makeStyles,
@@ -56,25 +57,27 @@ const showCustomStepIcon = (step: Step, editable?: boolean) => {
 
 const StepEditIcon = () => {
     const classes = useStyles();
-    return <div className={classes.iconContainer}>
-        <svg
-            className={clsx(`MuiSvgIcon-root MuiStepIcon-root`, classes.iconLayer, classes.stepEditIconBackground)}
-            focusable="false"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-        >
-            <circle
-                cx="12"
-                cy="12"
-                r="12"
+    return (
+        <div className={classes.iconContainer}>
+            <svg
+                className={clsx(`MuiSvgIcon-root MuiStepIcon-root`, classes.iconLayer, classes.stepEditIconBackground)}
+                focusable="false"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="12"
+                />
+            </svg>
+            <EditIcon
+                className={classes.iconLayer}
+                fontSize="small"
+                htmlColor="white"
             />
-        </svg>
-        <EditIcon
-            className={classes.iconLayer}
-            fontSize="small"
-            htmlColor="white"
-        />
-    </div>;
+        </div>
+    );
 };
 
 interface IconProps {
@@ -92,9 +95,11 @@ const CustomStepIcon = (props: IconProps) => {
     } = props;
     if (showEditableIcon) return <StepEditIcon />;
     if (!Icon) return null;
-    return <Icon
-        htmlColor={active ? theme.palette.secondary.main : theme.palette.grey[500]}
-    />;
+    return (
+        <Icon
+            htmlColor={active ? theme.palette.secondary.main : theme.palette.grey[500]}
+        />
+    );
 };
 
 interface OptionalLabelProps {
@@ -172,33 +177,37 @@ export default function Stepper (props: Props) {
                 const showEditableIcon = editable || completed;
                 const customIconProps = showCustomStepIcon(step, showEditableIcon)
                     ? {
-                        icon: <CustomStepIcon
-                            icon={step.icon}
-                            editable={showEditableIcon}
-                            active={index <= stepIndex}
-                        />,
+                        icon: (
+                            <CustomStepIcon
+                                icon={step.icon}
+                                editable={showEditableIcon}
+                                active={index <= stepIndex}
+                            />
+                        ),
                     }
                     : {};
-                return <Step key={`step-${index}`}>
-                    <StepButton
-                        active={stepIndex === index}
-                        completed={editable || completed}
-                        optional={
-                            <OptionalLabel
-                                step={step}
-                                optionalLabel={optionalLabel}
-                            />
-                        }
-                        onClick={() => {handleClick(index);}}
-                        {...customIconProps}
-                    >
-                        <StepLabel
-                            error={!!step.error}
+                return (
+                    <Step key={`step-${index}`}>
+                        <StepButton
+                            active={stepIndex === index}
+                            completed={editable || completed}
+                            optional={
+                                <OptionalLabel
+                                    step={step}
+                                    optionalLabel={optionalLabel}
+                                />
+                            }
+                            onClick={() => {handleClick(index);}}
+                            {...customIconProps}
                         >
-                            {step.label}
-                        </StepLabel>
-                    </StepButton>
-                </Step>;
+                            <StepLabel
+                                error={!!step.error}
+                            >
+                                {step.label}
+                            </StepLabel>
+                        </StepButton>
+                    </Step>
+                );
             })}
         </Stppr>
     );

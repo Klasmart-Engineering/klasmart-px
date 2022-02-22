@@ -1,4 +1,5 @@
-import { Button } from "@material-ui/core";
+/* eslint-disable react/no-multi-comp */
+import Button from './Button/Button';
 import {
     SnackbarProvider,
     SnackbarProviderProps,
@@ -20,15 +21,16 @@ function CloseButton (props: CloseButtonProps) {
 
     const { closeSnackbar } = useSnackbar();
 
-    return <Button
-        color="inherit"
-        onClick={() => closeSnackbar(actionKey)}
-    >
-        {label ?? `Close`}
-    </Button>;
+    return (
+        <Button
+            label={label ?? `Close`}
+            color="inherit"
+            onClick={() => closeSnackbar(actionKey)}
+        />
+    );
 }
 
-interface Props extends SnackbarProviderProps {
+export interface Props extends SnackbarProviderProps {
     closeButtonLabel?: string;
 }
 
@@ -52,12 +54,12 @@ export default function BaseSnackbarProvider (props: Props) {
                 vertical: `bottom`,
                 horizontal: `center`,
             }}
-            action={
-                (key) => <CloseButton
+            action={(key) => (
+                <CloseButton
                     actionKey={key}
                     label={closeButtonLabel}
                 />
-            }
+            )}
             {...others}
         >
             {children}

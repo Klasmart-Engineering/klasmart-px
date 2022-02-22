@@ -1,3 +1,5 @@
+export type PageChange = `first` | `previous` | `next` | `last`
+
 export interface PaginationLocalization {
   rowsPerPage?: string;
   fromToTotal?: (from: number, to: number, total: number) => string;
@@ -8,4 +10,5 @@ export interface PaginationLocalization {
   lastPage?: string;
 }
 
-export const ROWS_PER_PAGE = 10;
+export const DEFAULT_ROWS_PER_PAGE = 10;
+export const DEFAULT_SORT_ORDER = `asc`;

@@ -11,7 +11,7 @@ interface Props extends DialogProps {
     action?: ToolbarAction;
     header?: JSX.Element;
     footer?: JSX.Element;
-    onClose: () => void;
+    onClose: ((event: unknown, reason?: "backdropClick" | "escapeKeyDown") => void) | undefined;
 }
 export default function FullScreenDialog(props: Props): JSX.Element;
 export {};

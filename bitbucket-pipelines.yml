@@ -1,0 +1,43 @@
+image: node:16
+# clone:
+#   lfs: true
+pipelines:
+  pull-requests:
+    '**':
+      - parallel:
+        - step:
+            name: Test & Build
+            caches:
+              - node
+              - dependecies
+            script:
+              - npm ci --prefer-offline --no-audit --cache .npm
+              - npm test
+              - npm run build
+        - step:
+            name: Code Linting
+            caches:
+              - node
+            script:
+              - npm install eslint
+              - npx eslint .
+  # branches:
+  #   master:
+  #     - step:
+  #         name: Increment Version & Build
+  #         script:
+  #           - npm ci
+  #           - VERSION=$(node -p -e "require('./package.json').version")
+  #           - TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+  #           - if [ $VERSION == $TAG ]; then
+  #           -   VERSION=$(npm version patch)
+  #           - else
+  #           -   npm version $VERSION
+  #           - fi
+  #           - npm run build
+  #           - git add .
+  #           - git commit -m "Upgrade to $VERSION [skip ci]"
+  #           - git push && git push --tags
+definitions:
+  caches:
+    dependecies: .npm

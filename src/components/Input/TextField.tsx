@@ -1,3 +1,5 @@
+import { Validator } from "../../validations";
+import LoadingIndicator from "./LoadingIndicator";
 import {
     getErrorText,
     Input,
@@ -5,23 +7,42 @@ import {
 import {
     createStyles,
     makeStyles,
-    TextField as TxtField,
+    TextField as MUITextField,
 } from "@material-ui/core";
+import clsx from "clsx";
 import React,
 {
     useEffect,
     useState,
 } from "react";
 
-const useStyles = makeStyles((theme) => createStyles({}));
+const useStyles = makeStyles((theme) => createStyles({
+    disabledText: {
+        color: theme.palette.action.active,
+    },
+}));
 
-const parseValue = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, type: InputType) => type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value;
+export const inputTypes = [
+    `text`,
+    `number`,
+    `password`,
+    `date`,
+    `datetime-local`,
+    `email`,
+    `time`,
+    `month`,
+    `tel`,
+    `url`,
+    `week`,
+] as const;
 
-export type InputType = `text` | `number` | `password` | `date` | `datetime-local` | `email` | `time` | `month` | `tel` | `url` | `week`
+export type InputType = typeof inputTypes[number];
 
-interface Props extends Input {
+export interface Props extends Input {
     type?: InputType;
     className?: string;
+    error?: string;
+    loading?: boolean;
 }
 
 export default function TextField (props: Props) {
@@ -29,51 +50,88 @@ export default function TextField (props: Props) {
         hideHelperText,
         value,
         validations,
+        error: controlledError,
         onChange,
         onError,
         onValidate,
         className,
         type,
+        readOnly,
+        prependInner,
+        appendInner,
         variant = `outlined`,
+        loading,
         ...rest
     } = props;
     const classes = useStyles();
+
+    const isControlledError = () => controlledError !== undefined;
+
+    const getErrorState = (value: unknown, validations: Validator[] | undefined) => controlledError ?? getErrorText(value, validations);
+
     const [ value_, setValue ] = useState(value ?? ``);
     const [ error_, setError ] = useState(getErrorText(value, validations));
 
     const updateValue = (value: unknown) => {
-        const error = getErrorText(value, validations);
+        const validationError = getErrorText(value, validations);
         setValue(value);
-        setError(error);
+        if (!isControlledError()) {
+            setError(validationError);
+        }
+        const masterError = getErrorState(value, validations);
         onChange?.(value);
-        onValidate?.(!error);
-        onError?.(error);
+        onValidate?.(!masterError);
+        onError?.(masterError);
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        const value = type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value;
-        updateValue(value);
+        const newValue = type === `number` ? parseInt(event.currentTarget.value) : event.currentTarget.value;
+        updateValue(newValue);
     };
 
     useEffect(() => {
-        if (value === value_) return;
-        updateValue(value);
-    }, [ value ]);
-
-    useEffect(() => {
         onChange?.(value_);
-        onValidate?.(!error_);
-        onError?.(error_);
     }, []);
 
-    return <TxtField
-        className={className}
-        variant={variant}
-        value={value_}
-        error={!!error_}
-        helperText={hideHelperText ? undefined : (error_ ?? ` `)}
-        type={type}
-        onChange={handleChange}
-        {...rest}
-    />;
+    useEffect(() => {
+        const masterError = getErrorState(value, validations);
+        onValidate?.(!masterError);
+        onError?.(masterError);
+    }, [ controlledError ]);
+
+    useEffect(() => {
+        if (value !== value_) {
+            updateValue(value);
+        }
+    }, [ value ]);
+
+    return (
+        <MUITextField
+            className={className}
+            variant={variant}
+            value={value_}
+            error={isControlledError() ? true : !!error_}
+            helperText={hideHelperText ? undefined : (isControlledError() ? controlledError : error_) || ` `}
+            type={type}
+            InputProps={{
+                className: clsx({
+                    [classes.disabledText]: readOnly,
+                }),
+                readOnly,
+                startAdornment: prependInner,
+                endAdornment: (
+                    <>
+                        {appendInner}
+                        <LoadingIndicator
+                            loading={loading}
+                            variant={variant}
+                        />
+                    </>
+                ),
+            }}
+            onChange={handleChange}
+            {...rest}
+        />
+    );
 }
+TextField.displayName = `pxTextField`;

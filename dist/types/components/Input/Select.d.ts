@@ -5,7 +5,7 @@ export interface Section<T> {
     header?: string;
     ignoreSelectAll?: boolean;
 }
-interface Props<T> extends Input {
+export interface Props<T> extends Input {
     value: string | string[];
     className?: string;
     items: T[];
@@ -15,6 +15,6 @@ interface Props<T> extends Input {
     multiple?: boolean;
     itemText?: (item: T) => string;
     itemValue?: (item: T) => string;
+    loading?: boolean;
 }
 export default function Select<T>(props: Props<T>): JSX.Element;
-export {};

@@ -16,6 +16,7 @@ interface Props extends DialogProps {
     title: string;
     actions: DialogAction[];
     width?: DialogWidth;
+    contentClassName?: string;
     onClose: ((event: unknown, reason?: "backdropClick" | "escapeKeyDown") => void) | undefined;
 }
 export default function BaseDialog(props: Props): JSX.Element;

@@ -8,8 +8,8 @@ import { PaletteOptions } from "@material-ui/core/styles/createPalette";
 // import "typeface-nanum-square-round";
 // import "../assets/styles/index.min.css";
 
-export default function builder(languageCode: string, themeMode: string) {
-    function setTypography(languageCode: string) {
+export default function builder (languageCode: string, themeMode: string) {
+    function setTypography (languageCode: string) {
         let localeFontFamily = `Source Sans Pro`;
         const localeWeightLight = 400;
         const localeWeightMedium = 600;

@@ -4,7 +4,7 @@ export interface SearchLocalization {
     clear?: string;
 }
 interface Props {
-    value: string;
+    value?: string;
     localization?: SearchLocalization;
     onChange: (value: string) => void;
 }

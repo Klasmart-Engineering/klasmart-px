@@ -1,4 +1,5 @@
 node_modules
 .vscode
 .eslintcache
+coverage
 .DS_Store

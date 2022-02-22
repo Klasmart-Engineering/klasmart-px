@@ -8,6 +8,7 @@ describe(`alphanumeric validation`, () => {
         expect(alphanumeric()(`#cool`)).not.toBe(true);
         expect(alphanumeric()(`S!@# !!!!`)).not.toBe(true);
         expect(alphanumeric()(`@calmid.com`)).not.toBe(true);
+        expect(alphanumeric()(`text_with_symbol`)).not.toBe(true);
     });
 
     test(`not alphanumeric with custom error message`, () => {

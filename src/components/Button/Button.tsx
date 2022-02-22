@@ -1,18 +1,15 @@
-import Loading,
-{ useLoadingStyles } from "./Loading";
+import CircularProgress from "../Progress/CircularProgress";
+import { useButtonLoadingStyles } from "../Progress/utils";
 import {
     Box,
     Button as Btn,
     createStyles,
     makeStyles,
+    Theme,
     Tooltip,
     Typography,
     useTheme,
 } from "@material-ui/core";
-import {
-    Palette,
-    PaletteColor,
-} from "@material-ui/core/styles/createPalette";
 import { SvgIconComponent } from "@material-ui/icons";
 import clsx from "clsx";
 import React,
@@ -27,16 +24,62 @@ const useStyles = makeStyles((theme) => createStyles({
     },
 }));
 
+const getTextColor = (color: string | undefined, variant: Variant | undefined, theme: Theme) => {
+    if (variant === `contained`) {
+        if (!color || !COLORS.includes(color as Color)) return `white`;
+
+        return theme.palette[color as Color].main !== theme.palette[color as Color].contrastText
+            ? theme.palette[color as Color].contrastText
+            : `white`;
+    }
+
+    if (variant === `outlined`) {
+        if (!color) return `black`;
+        if (!COLORS.includes(color as Color)) return color;
+
+        return theme.palette[color as Color].contrastText;
+    }
+
+    if (!color) return `black`;
+    if (COLORS.includes(color as Color)) return theme.palette[color as Color].contrastText;
+    return color;
+};
+
+const getBackgroundColor = (color: string | undefined, variant: Variant | undefined, theme: Theme) => {
+    if (!color || variant !== `contained`) return;
+    if (COLORS.includes(color as Color)) return theme.palette[color as Color].main;
+    return color;
+};
+
+const getBorderColor = (color: string | undefined, variant: Variant | undefined, theme: Theme) => {
+    if (!color || variant !== `outlined`) return;
+    if (COLORS.includes(color as Color)) return theme.palette[color as Color].main;
+    return color;
+};
+
+const COLORS = [
+    `primary`,
+    `secondary`,
+    `error`,
+    `warning`,
+    `info`,
+    `success`,
+] as const;
+
+// export type Color = { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette]
+export type Color = typeof COLORS[number]
+export type Variant = "text" | "outlined" | "contained"
+
 export interface Props {
     className?: string;
     label: React.ReactNode;
     icon?: SvgIconComponent;
     type?: "submit" | "reset" | "button";
-    variant?: "text" | "outlined" | "contained";
+    variant?: Variant;
     size?: "small" | "medium" | "large";
     rounded?: boolean;
     fullWidth?: boolean;
-    color?: { [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette];
+    color?: string;
     disabled?: boolean;
     tooltip?: string;
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
@@ -57,12 +100,15 @@ export default function Button (props: Props) {
         ...rest
     } = props;
     const classes = useStyles();
-    const loadingClasses = useLoadingStyles();
+    const loadingClasses = useButtonLoadingStyles();
     const theme = useTheme();
     const [ loading, setLoading ] = useState(false);
 
-    const textColor = color ? theme.palette[color][ variant === `contained` ? `contrastText` : `main` ] : undefined;
-    const backgroundColor = (color && variant === `contained`) ? theme.palette[color].main : undefined;
+    const textColor_ = getTextColor(color, variant, theme);
+    const backgroundColor_ = getBackgroundColor(color, variant, theme);
+    const borderColor_ = getBorderColor(color, variant, theme);
+
+    color && COLORS.includes(color as Color) ? theme.palette[color as Color].main : color;
 
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setLoading(true);
@@ -76,44 +122,47 @@ export default function Button (props: Props) {
         if (error) throw error;
     };
 
-    return <Tooltip title={tooltip ?? ``}>
-        <span>
-            <Btn
-                variant={variant}
-                type={type}
-                style={{
-                    color: !disabled ? textColor : undefined,
-                    backgroundColor: !disabled ? backgroundColor : undefined,
-                }}
-                disabled={disabled}
-                className={clsx(className, {
-                    [loadingClasses.buttonLoading]: loading,
-                    [classes.rounded]: rounded,
-                })}
-                onClick={handleClick}
-                {...rest}
-            >
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    className={clsx({
-                        [loadingClasses.buttonLoadingContent]: loading,
+    return (
+        <Tooltip title={tooltip ?? ``}>
+            <span>
+                <Btn
+                    variant={variant}
+                    type={type}
+                    style={{
+                        color: !disabled ? textColor_ : undefined,
+                        backgroundColor: !disabled ? backgroundColor_ : undefined,
+                        borderColor: !disabled ? borderColor_ : undefined,
+                    }}
+                    disabled={disabled}
+                    className={clsx(className, {
+                        [loadingClasses.buttonLoading]: loading,
+                        [classes.rounded]: rounded,
                     })}
+                    onClick={handleClick}
+                    {...rest}
                 >
-
-                    {Icon && <Icon />}
-                    <Typography
-                        noWrap
-                        variant="inherit"
+                    <Box
+                        display="flex"
+                        flexDirection="row"
                         className={clsx({
-                            [classes.extendedText]: Icon && label,
+                            [loadingClasses.buttonLoadingContent]: loading,
                         })}
                     >
-                        {label}
-                    </Typography>
-                </Box>
-                {loading && <Loading />}
-            </Btn>
-        </span>
-    </Tooltip>;
+
+                        {Icon && <Icon />}
+                        <Typography
+                            noWrap
+                            variant="inherit"
+                            className={clsx({
+                                [classes.extendedText]: Icon && label,
+                            })}
+                        >
+                            {label}
+                        </Typography>
+                    </Box>
+                    {loading && <CircularProgress />}
+                </Btn>
+            </span>
+        </Tooltip>
+    );
 }

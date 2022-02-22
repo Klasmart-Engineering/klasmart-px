@@ -47,6 +47,7 @@ interface Props extends DialogProps {
     title: string;
     actions: DialogAction[];
     width?: DialogWidth;
+    contentClassName?: string;
     onClose: ((event: unknown, reason?: "backdropClick" | "escapeKeyDown") => void) | undefined;
 }
 
@@ -57,6 +58,7 @@ export default function BaseDialog (props: Props) {
         title,
         actions,
         width = `sm`,
+        contentClassName,
         onClose,
     } = props;
     const classes = useStyles();
@@ -75,38 +77,43 @@ export default function BaseDialog (props: Props) {
                     className={classes.closeButton}
                     onClick={onClose}
                 >
-                    <CloseIcon/>
+                    <CloseIcon />
                 </IconButton>
             </Tooltip>
             <DialogTitle id="scroll-dialog-title">
                 {title}
             </DialogTitle>
-            <DialogContent dividers>
+            <DialogContent
+                dividers
+                className={contentClassName}
+            >
                 {children}
             </DialogContent>
             <DialogActions>
                 {actions
                     ?.filter((a) => a.align === `left`)
-                    ?.map((action, i) =>
+                    ?.map((action, i) => (
                         <Button
                             key={`action-${i}`}
                             label={action.label}
                             disabled={action.disabled}
                             color={action.color}
                             onClick={action.onClick}
-                        />)
+                        />
+                    ))
                 }
                 <Box flex="1" />
                 {actions
                     ?.filter((a) => a.align !== `left`)
-                    ?.map((action, i) =>
+                    ?.map((action, i) => (
                         <Button
                             key={`action-${i}`}
                             label={action.label}
                             disabled={action.disabled}
                             color={action.color}
                             onClick={action.onClick}
-                        />)
+                        />
+                    ))
                 }
             </DialogActions>
         </Dialog>

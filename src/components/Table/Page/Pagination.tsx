@@ -83,7 +83,8 @@ export default function PageTablePagination (props: Props) {
                         <IconButton
                             disabled={page === 0}
                             aria-label="previous page"
-                            onClick={handleBackButtonClick}>
+                            onClick={handleBackButtonClick}
+                        >
                             {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
                         </IconButton>
                     </span>
@@ -126,8 +127,8 @@ export default function PageTablePagination (props: Props) {
             rowsPerPage={rowsPerPage}
             page={clamp(page, 0, lastPage)}
             ActionsComponent={actions}
-            onChangePage={(event, page) => onChangePage(page)}
-            onChangeRowsPerPage={(event) => onChangeRowsPerPage?.(parseInt(event.target.value, 10))}
+            onPageChange={(event, page) => onChangePage(page)}
+            onRowsPerPageChange={(event) => onChangeRowsPerPage?.(parseInt(event.target.value, 10))}
         />
     );
 }

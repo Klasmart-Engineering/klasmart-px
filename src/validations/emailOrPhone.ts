@@ -1,10 +1,24 @@
 import { emailRegex } from "./email";
 import { phoneRegex } from "./phone";
 
-export default (errorMessage?: string) => (input: any) => {
+/**
+ * Validates if the input is either a valid email or phone number
+ *
+ * Input starting with `+` assumed to be a phone number, otherwise an email
+ * @param {string} [emailErrorMessage] - Error message returned if `input` is an invalid email,
+ * or if `phoneErrorMessage` wasn't specified and `input` an invalid phone number
+ * @param {string} [phoneErrorMessage] - Error message returned if `input` is an invalid phone
+ */
+export default (emailErrorMessage?: string, phoneErrorMessage?: string) => (input: any) => {
     if (input === `` || input === undefined || input === null) return true;
-    const validEmail = emailRegex.test(input);
-    const validPhone = phoneRegex.test(input);
-    if (!validEmail && !validPhone) return errorMessage ?? `Invalid email or phone number`;
+    if (input.startsWith(`+`)) {
+        if (!phoneRegex.test(input)) {
+            return phoneErrorMessage ?? emailErrorMessage ?? `Invalid phone`;
+        }
+    } else {
+        if (!emailRegex.test(input)) {
+            return emailErrorMessage ?? `Invalid email`;
+        }
+    }
     return true;
 };

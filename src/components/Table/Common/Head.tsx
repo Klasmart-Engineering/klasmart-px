@@ -1,3 +1,4 @@
+import IconButton from "../../Button/IconButton";
 import { SelectMode } from "./BaseTable";
 import BaseTableCheckboxDropdown,
 {
@@ -7,11 +8,11 @@ import BaseTableCheckboxDropdown,
 import BaseTableColumnSelector,
 { ColumnSelectorLocalization } from "./ColumnSelector";
 import { SubgroupTab } from "./GroupTabs";
+import { DEFAULT_SORT_ORDER } from "./Pagination/shared";
 import {
+    alpha,
     Box,
     createStyles,
-    fade,
-    IconButton,
     makeStyles,
     TableCell,
     TableCellProps,
@@ -32,13 +33,13 @@ import React,
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     container: {
-        backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
+        backgroundColor: theme.palette.type === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
     },
     hoverHeader: {
         height: 53,
         padding: theme.spacing(0, 2),
         "&:hover": {
-            backgroundColor: theme.palette.type === `light` ? fade(`#000000`, 0.04) : fade(`#FFFFFF`, 0.08),
+            backgroundColor: theme.palette.type === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
         },
     },
     removeButton: {
@@ -58,24 +59,20 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export type Order = "asc" | "desc";
 export type Align = TableCellProps["align"]
-export type CustomGroup<T> = (rowValue: T[keyof T]) => string
 export type CustomSearch<T> = (rowValue: T[Extract<keyof T, string>], searchValue: string) => boolean
 export type CustomSort<T> = (a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) => number
-export type CustomGroupSort = (a: string, b: string, locale?: string, collatorOptions?: Intl.CollatorOptions) => number
 
 export interface TableColumn<T> {
     id: Extract<keyof T, string>;
     label: string;
     align?: Align;
     persistent?: boolean;
-    groupable?: boolean;
     disableSearch?: boolean;
     disableSort?: boolean;
     hidden?: boolean;
-    groupText?: CustomGroup<T>;
+    secret?: boolean;
     search?: CustomSearch<T>;
     sort?: CustomSort<T>;
-    groupSort?: CustomGroupSort;
     groups?: SubgroupTab[];
     tooltip?: string;
     render?: (row: T) => ReactNode;
@@ -99,10 +96,11 @@ interface Props<T> {
     loading?: boolean;
     showSelectables: boolean;
     hasGroups: boolean;
+    hideSelectAll?: boolean;
     checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;
     localization?: HeadLocalization;
-    onColumnChange: (event: React.MouseEvent<unknown>, columnId: Extract<keyof T, string>) => void;
+    onColumnChange: (columnId: Extract<keyof T, string>) => void;
 }
 
 export default function BaseTableHead<T> (props: Props<T>) {
@@ -120,103 +118,113 @@ export default function BaseTableHead<T> (props: Props<T>) {
         hasGroups,
         checkboxDropdownLocalization,
         columnSelectorLocalization,
+        hideSelectAll,
         localization,
         onSelectAllClick,
         onSelectAllPageClick,
         onColumnChange,
     } = props;
     const classes = useStyles();
+
     const createSortHandler = (property: Extract<keyof T, string>) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
     };
-
-    const isSelected = (column: keyof T) => selected.indexOf(column) !== -1;
 
     return (
         <TableHead>
             <TableRow className={classes.container}>
                 {showSelectables &&
                     <TableCell padding="checkbox">
-                        {selectMode === `multiple` && <BaseTableCheckboxDropdown
-                            hasGroups={hasGroups}
-                            disabled={loading}
-                            indeterminate={numSelected > 0 && numSelected < rowCount}
-                            checked={rowCount > 0 && numSelected === rowCount}
-                            localization={checkboxDropdownLocalization}
-                            onSelectAllPageClick={onSelectAllPageClick}
-                            onSelectAllClick={onSelectAllClick}
-                        />}
+                        {selectMode === `multiple` && (
+                            <BaseTableCheckboxDropdown
+                                hasGroups={hasGroups}
+                                hideSelectAll={hideSelectAll}
+                                disabled={loading}
+                                indeterminate={numSelected > 0 && numSelected < rowCount}
+                                checked={rowCount > 0 && numSelected === rowCount}
+                                localization={checkboxDropdownLocalization}
+                                onSelectAllPageClick={onSelectAllPageClick}
+                                onSelectAllClick={onSelectAllClick}
+                            />
+                        )}
                     </TableCell>
                 }
                 {columns
-                    .filter((column) => isSelected(column.id))
+                    .filter((column) => selected.indexOf(column.id) !== -1)
+                    .filter((column) => !column.secret)
                     .map((column) => {
-                        const hideButton = <IconButton
-                            disabled={column.persistent}
-                            className={classes.removeButton}
-                            onClick={(e) => onColumnChange(e, column.id)}
-                        >
-                            {column.persistent
-                                ? <LockIcon fontSize="small" />
-                                : <CloseIcon fontSize="small" />
-                            }
-                        </IconButton>;
-                        const paddingStyle = column.align === `right` ? {
-                            paddingLeft: 0,
-                        } : {
-                            paddingRight: 0,
-                        };
+                        const paddingStyle = column.align === `right`
+                            ? {
+                                paddingLeft: 0,
+                            } : {
+                                paddingRight: 0,
+                            };
                         const flexDirection = column.align === `right` ? `row-reverse` : `row`;
                         const isAlignCenter = column.align === `center`;
-                        return <TableCell
-                            key={column.id}
-                            align={column.align}
-                            sortDirection={orderBy === column.id ? order : false}
-                            className={classes.hoverHeader}
-                            style={paddingStyle}
-                        >
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                flexDirection={flexDirection}
+                        return ((
+                            <TableCell
+                                key={column.id}
+                                align={column.align}
+                                sortDirection={orderBy === column.id ? order : false}
+                                className={classes.hoverHeader}
+                                style={paddingStyle}
                             >
-                                {isAlignCenter && <Box flex="1" />}
-                                <TableSortLabel
-                                    disabled={column.disableSort}
-                                    active={orderBy === column.id}
-                                    direction={order}
-                                    style={{
-                                        flexDirection,
-                                    }}
-                                    onClick={createSortHandler(column.id)}
+                                <Box
+                                    display="flex"
+                                    justifyContent="space-between"
+                                    flexDirection={flexDirection}
                                 >
-                                    <Box
-                                        display="flex"
-                                        flexDirection={flexDirection}
-                                    >
-                                        {column.label}
-                                        {column.tooltip && <Tooltip title={column.tooltip}>
-                                            <InfoIcon
-                                                color="action"
-                                                className={clsx({
-                                                    [classes.infoIcon]: column.align !== `right`,
-                                                    [classes.infoIconReverse]: column.align === `right`,
-                                                })}
+                                    {isAlignCenter && (
+                                        <>
+                                            <span
+                                                style={{
+                                                    width: 44, // width of column remove button
+                                                }}
                                             />
-                                        </Tooltip>}
-                                    </Box>
-                                </TableSortLabel>
-                                {isAlignCenter && <Box flex="1" />}
-                                {column.persistent
-                                    ? hideButton
-                                    : <Tooltip title={localization?.hideColumnButton ?? `Hide column`}>
-                                        {hideButton}
-                                    </Tooltip>
-                                }
-                            </Box>
-                        </TableCell>;
-                    })
-                }
+                                            <Box flex="1" />
+                                        </>
+                                    )}
+                                    <TableSortLabel
+                                        disabled={column.disableSort}
+                                        active={orderBy === column.id}
+                                        direction={orderBy === column.id ? order : DEFAULT_SORT_ORDER}
+                                        style={{
+                                            flexDirection,
+                                        }}
+                                        data-testid={`${column.id}SortHandler`}
+                                        onClick={createSortHandler(column.id)}
+                                    >
+                                        <Box
+                                            display="flex"
+                                            flexDirection={flexDirection}
+                                        >
+                                            {column.label}
+                                            {column.tooltip && (
+                                                <Tooltip title={column.tooltip}>
+                                                    <InfoIcon
+                                                        color="action"
+                                                        className={clsx({
+                                                            [classes.infoIcon]: column.align !== `right`,
+                                                            [classes.infoIconReverse]: column.align === `right`,
+                                                        })}
+                                                    />
+                                                </Tooltip>
+                                            )}
+                                        </Box>
+                                    </TableSortLabel>
+                                    {isAlignCenter && <Box flex="1" />}
+                                    <IconButton
+                                        disabled={column.persistent}
+                                        className={classes.removeButton}
+                                        iconSize="small"
+                                        tooltip={!column.persistent ? localization?.hideColumnButton ?? `Hide column` : undefined}
+                                        icon={column.persistent ? LockIcon : CloseIcon}
+                                        onClick={() => onColumnChange(column.id)}
+                                    />
+                                </Box>
+                            </TableCell>
+                        ));
+                    })}
                 <TableCell padding="checkbox">
                     <BaseTableColumnSelector
                         columns={columns}

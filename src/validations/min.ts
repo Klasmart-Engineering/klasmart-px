@@ -5,7 +5,7 @@ export default (min: number, errorMessage?: string) => (input: any) => {
     } else if (typeof input === `number`) {
         inputMin = input;
     } else {
-        inputMin = String(input).length;
+        inputMin = String(input.trim()).length;
     }
     return inputMin >= min || (errorMessage ?? `Minimum ${min}`);
 };

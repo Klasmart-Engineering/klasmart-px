@@ -38,7 +38,7 @@ export default function AlertDialogProvider (props: Props) {
     });
     const [ resolves, setResolve ] = useState<PromiseResolve[]>([]);
 
-    const alert = useCallback((options: DialogOptions): Promise<boolean | undefined> =>  {
+    const alert = useCallback((options: DialogOptions): Promise<boolean | undefined> => {
         const dialogOptions = {
             ...DEFAULT_OPTIONS,
             ...userDefaultOptions,

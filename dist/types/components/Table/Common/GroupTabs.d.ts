@@ -5,7 +5,8 @@ export interface GroupSelectMenuItem<T> {
 }
 export interface SubgroupTab {
     text: string;
-    count?: number;
+    value: string | number | boolean;
+    count?: number | boolean;
 }
 export interface GroupTabsLocalization {
     selectLabel?: string;
@@ -18,6 +19,8 @@ interface Props<T> {
     groups?: GroupSelectMenuItem<T>[];
     subgroupBy?: string;
     subgroups?: SubgroupTab[];
+    hideAllGroupTab?: boolean;
+    hideNoGroupOption?: boolean;
     localization?: GroupTabsLocalization;
     onSelectGroup: (value: Extract<keyof T, string> | undefined) => void;
     onSelectSubgroup: (value: string | undefined) => void;

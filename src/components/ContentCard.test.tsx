@@ -22,11 +22,14 @@ describe(`ContentCard`, () => {
     const description = `Here is a long description that probably won't fit on just two lines so it needs to be truncated in the end.`;
     const title = `This is a title that will get truncated because it's too long`;
     const imageUrl = `https://d17fnq9dkz9hgj.cloudfront.net/uploads/2020/04/shelter-dog-cropped-1.jpg`;
-    const contentCard = <ContentCard
-        author={author}
-        description={description}
-        title={title}
-        imageUrl={imageUrl} />;
+    const contentCard = (
+        <ContentCard
+            author={author}
+            description={description}
+            title={title}
+            imageUrl={imageUrl}
+        />
+    );
 
     test(`display props`, () => {
         render(contentCard);
@@ -67,7 +70,6 @@ describe(`ContentCard`, () => {
             userEvent.click(button);
             expect(console.log).toHaveBeenCalledWith(value);
         }
-        screen.debug();
     });
 
     test(`select card`, () => {
@@ -84,7 +86,7 @@ describe(`ContentCard`, () => {
         const checkbox = screen.getByRole(`checkbox`) as HTMLInputElement;
         const cardActionArea = screen.getByTestId(`card-action-area`);
         expect(cardActionArea).not.toHaveClass(`selected`);
-        expect(checkbox.checked).toEqual(false);
+        expect(checkbox.checked).toBe(false);
         userEvent.click(checkbox);
         rerender(cloneElement(contentCard, {
             checkbox: {
@@ -93,6 +95,6 @@ describe(`ContentCard`, () => {
             },
         }));
         expect(cardActionArea).toHaveClass(`selected`);
-        expect(checkbox.checked).toEqual(true);
+        expect(checkbox.checked).toBe(true);
     });
 });

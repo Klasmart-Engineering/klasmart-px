@@ -22,7 +22,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
 }));
 
-export type CheckboxDropdownValue = "all" | "allPages" | "none" | "page"
+export enum CheckboxDropdownValue {
+    ALL = `all`,
+    ALL_PAGES = `all-pages`,
+    NONE = `none`,
+    PAGE = `page`,
+}
 
 export interface CheckboxDropdownAction {
     label: string;
@@ -40,18 +45,20 @@ interface Props {
     indeterminate: boolean;
     checked: boolean;
     hasGroups: boolean;
+    hideSelectAll?: boolean;
     disabled?: boolean;
     localization?: CheckboxDropdownLocalization;
     onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
     onSelectAllPageClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function BaseTableCheckboxDropdown(props: Props) {
+export default function BaseTableCheckboxDropdown (props: Props) {
     const {
         indeterminate,
         checked,
         disabled,
         hasGroups,
+        hideSelectAll,
         localization,
         onSelectAllClick,
         onSelectAllPageClick,
@@ -60,24 +67,28 @@ export default function BaseTableCheckboxDropdown(props: Props) {
     const [ anchorEl, setAnchorEl ] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const standardActions: CheckboxDropdownAction[] = [
-        {
-            label: localization?.allPages ?? `All pages`,
-            value: `allPages`,
-        },
+        ...hideSelectAll ? [] : [
+            {
+                label: localization?.allPages ?? `All pages`,
+                value: CheckboxDropdownValue.ALL_PAGES,
+            },
+        ],
         {
             label: localization?.thisPage ?? `This page`,
-            value: `page`,
+            value: CheckboxDropdownValue.PAGE,
         },
         {
             label: localization?.none ?? `None`,
-            value: `none`,
+            value: CheckboxDropdownValue.NONE,
         },
     ];
     const actions: CheckboxDropdownAction[] = hasGroups ? [
-        {
-            label: localization?.allGroupsPages ?? `All groups & pages`,
-            value: `all`,
-        },
+        ...hideSelectAll ? [] : [
+            {
+                label: localization?.allGroupsPages ?? `All groups & pages`,
+                value: CheckboxDropdownValue.ALL,
+            },
+        ],
         ...standardActions,
     ] : standardActions;
 
@@ -107,7 +118,7 @@ export default function BaseTableCheckboxDropdown(props: Props) {
                 className={classes.menuButton}
                 onClick={handleClick}
             >
-                <ArrowDropDown color="action"/>
+                <ArrowDropDown color="action" />
             </Button>
             <Popover
                 keepMounted
@@ -124,7 +135,7 @@ export default function BaseTableCheckboxDropdown(props: Props) {
                 onClose={handleClose}
             >
                 <MenuList>
-                    {actions.map((action, i) =>
+                    {actions.map((action, i) => (
                         <MenuItem
                             key={`menu-item-${i}`}
                             onClick={(e) => {
@@ -133,7 +144,8 @@ export default function BaseTableCheckboxDropdown(props: Props) {
                             }}
                         >
                             <Typography variant="body2">{action.label}</Typography>
-                        </MenuItem>)}
+                        </MenuItem>
+                    ))}
                 </MenuList>
             </Popover>
         </Box>

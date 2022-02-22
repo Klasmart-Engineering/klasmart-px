@@ -6,14 +6,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "jsx": "react",
-        "lib": [
-            "DOM",
-            "DOM.Iterable",
-            "ESNext",
-            "ES6",
-            "ScriptHost"
-        ],
-        "module": "commonjs",
+        "module": "CommonJS",
         "noEmit": false,
         "noImplicitAny": true,
         "outDir": "./dist",
@@ -21,7 +14,7 @@
         "rootDir": "./src",
         "skipLibCheck": true,
         "strict": true,
-        "target": "ES6",
+        "target": "ESNext",
         "types": [
             "react",
             "jest",

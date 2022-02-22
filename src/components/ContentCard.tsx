@@ -93,8 +93,7 @@ const useStyles = makeStyles((theme: Theme) =>
         actionButton: {
             marginLeft: `${theme.spacing(0.5)}px !important`,
         },
-    }),
-);
+    }));
 
 type LibraryAssetType = "lessonPlan" | "lessonMaterial";
 
@@ -121,7 +120,7 @@ interface Props extends Omit<CardProps, "onClick"> {
     onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
 }
 
-export default function ContentCard(props: Props) {
+export default function ContentCard (props: Props) {
     const classes = useStyles();
     const {
         actions,
@@ -172,18 +171,20 @@ export default function ContentCard(props: Props) {
                     data-testid="card-media"
                 />
             </CardActionArea>
-            {checkbox && <>
-                <div className={classes.checkboxBackground} />
-                <Checkbox
-                    checked={checkbox.checked}
-                    inputProps={{
-                        'aria-label': `checkbox ${checkbox.checked ? `selected` : `deselected`} ${title}`,
-                        role: `checkbox`,
-                    }}
-                    className={classes.checkbox}
-                    onChange={checkbox.onChange}
-                />
-            </>}
+            {checkbox && (
+                <>
+                    <div className={classes.checkboxBackground} />
+                    <Checkbox
+                        checked={checkbox.checked}
+                        inputProps={{
+                            'aria-label': `checkbox ${checkbox.checked ? `selected` : `deselected`} ${title}`,
+                            role: `checkbox`,
+                        }}
+                        className={classes.checkbox}
+                        onChange={checkbox.onChange}
+                    />
+                </>
+            )}
             <CardContent className={classes.cardContent}>
                 <Box
                     justifyContent="space-between"
@@ -193,14 +194,11 @@ export default function ContentCard(props: Props) {
                 >
                     <Box>
                         <Tooltip title={getAssetTypeLabel(assetType)}>
-                            {cloneElement(
-                                getAssetTypeIcon(assetType),
-                                {
-                                    color: `primary`,
-                                    className: classes.assetTypeIcon,
-                                    fontSize: `small`,
-                                },
-                            )}
+                            {cloneElement(getAssetTypeIcon(assetType), {
+                                color: `primary`,
+                                className: classes.assetTypeIcon,
+                                fontSize: `small`,
+                            })}
                         </Tooltip>
                     </Box>
                     <Box
@@ -246,7 +244,7 @@ export default function ContentCard(props: Props) {
                     { author }
                 </Typography>
                 <Box flex="1" />
-                {actions?.length && actions.map((action, i) =>
+                {actions?.length && actions.map((action, i) => (
                     <Tooltip
                         key={`action-button-${i}`}
                         title={action.label}
@@ -258,16 +256,13 @@ export default function ContentCard(props: Props) {
                             data-testid={`${i}-action-button`}
                             onClick={action.onClick}
                         >
-                            {cloneElement(
-                                action.icon,
-                                {
-                                    color: action.color ?? `primary`,
-                                    fontSize: `small`,
-                                },
-                            )}
+                            {cloneElement(action.icon, {
+                                color: action.color ?? `primary`,
+                                fontSize: `small`,
+                            })}
                         </IconButton>
-                    </Tooltip>,
-                )}
+                    </Tooltip>
+                ))}
             </CardActions>
         </Card>
     );

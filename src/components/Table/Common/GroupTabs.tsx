@@ -11,7 +11,11 @@ import {
     Typography,
 } from "@material-ui/core";
 import React,
-{ useState } from "react";
+{
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -45,7 +49,8 @@ export interface GroupSelectMenuItem<T> {
 
 export interface SubgroupTab {
     text: string;
-    count?: number;
+    value: string | number | boolean;
+    count?: number | boolean;
 }
 
 export interface GroupTabsLocalization {
@@ -60,6 +65,8 @@ interface Props<T> {
     groups?: GroupSelectMenuItem<T>[];
     subgroupBy?: string;
     subgroups?: SubgroupTab[];
+    hideAllGroupTab?: boolean;
+    hideNoGroupOption?: boolean;
     localization?: GroupTabsLocalization;
     onSelectGroup: (value: Extract<keyof T, string> | undefined) => void;
     onSelectSubgroup: (value: string | undefined) => void;
@@ -72,6 +79,8 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
         groups = [],
         subgroupBy,
         subgroups = [],
+        hideAllGroupTab,
+        hideNoGroupOption,
         localization,
         onSelectGroup,
         onSelectSubgroup,
@@ -80,32 +89,46 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
     const [ groupBy_, setGroupBy ] = useState<"" | keyof T>(groupBy && groups.find((group) => group.id === groupBy) ? groupBy : ``);
     const [ subgroupBy_, setSubgroupBy ] = useState(subgroupBy);
 
-    const handleSubgroupChange = (value: string) => {
+    const handleSubgroupChange = (value?: string) => {
         setSubgroupBy(value);
         onSelectSubgroup(value);
     };
 
     const handleGroupChange = (e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>, child: React.ReactNode) => {
-        const newGroup = e.target.value as "" | Extract<keyof T, string>;
-        const newSubgroup = undefined;
-        if (newSubgroup !== subgroupBy_) {
-            setSubgroupBy(newSubgroup);
-            onSelectSubgroup(newSubgroup);
-        }
-        setGroupBy(newGroup);
-        onSelectGroup(newGroup === `` ? undefined : newGroup);
+        const value = e.target.value as "" | Extract<keyof T, string>;
+        setGroupBy(value);
+        const newGroup = value === `` ? undefined : value;
+        onSelectGroup(newGroup);
+        if (subgroupBy_) handleSubgroupChange(undefined);
     };
 
+    useEffect(() => {
+        if (subgroupBy === subgroupBy_) return;
+        setSubgroupBy(subgroupBy);
+    }, [ subgroupBy ]);
+
+    const hasSubGroupCountValues = subgroups.every((subgroup) => typeof subgroup.count === `number`);
+
     const tabs: Tab[] = [
-        {
-            text: `${localization?.tabAll ?? `All`} (${allCount})`,
-            value: undefined,
-        },
+        ...!hideAllGroupTab ? [
+            {
+                text: `${localization?.tabAll ?? `All`}${hasSubGroupCountValues ? ` (${allCount})` : ``}`,
+                value: undefined,
+            },
+        ] : [],
         ...subgroups.map((subgroup) => ({
-            text: `${subgroup.text} (${subgroup.count ?? 0})`,
-            value: subgroup.text,
+            text: `${subgroup.text}${typeof subgroup.count === `number` ? ` (${subgroup.count})` : ``}`,
+            value: `${subgroup.value}`,
         })),
     ];
+
+    const hasValidSubgroupValue = useMemo(() => {
+        return tabs.find((tab) => tab.value === subgroupBy_);
+    }, [
+        tabs,
+        subgroupBy_,
+        hideAllGroupTab,
+    ]);
 
     return (
         <>
@@ -114,36 +137,50 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
                 flexDirection="row"
                 className={classes.root}
             >
-                <Tabs
-                    value={subgroupBy_}
-                    tabs={tabs}
-                    onChange={handleSubgroupChange}
-                />
-                <Divider orientation="vertical"/>
-                <Select
-                    displayEmpty
-                    value={groupBy_}
-                    className={classes.select}
-                    renderValue={
-                        groupBy_ !== `` ? undefined : () =>
-                            <Typography
-                                variant="body1"
-                                className={classes.selectPlaceholderText}
-                            >
-                                {localization?.selectLabel ?? `Group by`}
-                            </Typography>
-                    }
-                    onChange={handleGroupChange}
-                >
-                    <MenuItem value="">{localization?.selectNone ?? `None`}</MenuItem>
-                    {groups?.map((group, i) =>
-                        <MenuItem
-                            key={`group-${i}`}
-                            value={group.id as Extract<keyof T, "string">}
+                {hasValidSubgroupValue
+                    ? (
+                        <Tabs
+                            value={subgroupBy_}
+                            tabs={tabs}
+                            onChange={handleSubgroupChange}
+                        />
+                    ) : (
+                        <Box
+                            display="flex"
+                            flex="1"
+                        />
+                    )}
+                {groups.length > 1 && (
+                    <>
+                        <Divider orientation="vertical" />
+                        <Select
+                            displayEmpty
+                            value={groupBy_}
+                            className={classes.select}
+                            renderValue={
+                                groupBy_ !== `` ? undefined : () => (
+                                    <Typography
+                                        variant="body1"
+                                        className={classes.selectPlaceholderText}
+                                    >
+                                        {localization?.selectLabel ?? `Group by`}
+                                    </Typography>
+                                )
+                            }
+                            onChange={handleGroupChange}
                         >
-                            {group.label}
-                        </MenuItem>)}
-                </Select>
+                            {!hideNoGroupOption && <MenuItem value="">{localization?.selectNone ?? `None`}</MenuItem>}
+                            {groups?.map((group, i) => (
+                                <MenuItem
+                                    key={`group-${i}`}
+                                    value={group.id as Extract<keyof T, "string">}
+                                >
+                                    {group.label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </>
+                )}
             </Box>
         </>
     );

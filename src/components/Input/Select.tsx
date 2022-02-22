@@ -1,3 +1,4 @@
+import LoadingIndicator from "./LoadingIndicator";
 import {
     getErrorText,
     Input,
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => createStyles({
         },
         "& .MuiListItemText-root": {
             margin: 0,
+            overflow: `hidden`,
         },
     },
     sectionHeader: {
@@ -42,7 +44,7 @@ export interface Section<T> {
     ignoreSelectAll?: boolean;
 }
 
-interface Props<T> extends Input {
+export interface Props<T> extends Input {
     value: string | string[];
     className?: string;
     items: T[];
@@ -52,6 +54,7 @@ interface Props<T> extends Input {
     multiple?: boolean;
     itemText?: (item: T) => string;
     itemValue?: (item: T) => string;
+    loading?: boolean;
 }
 
 export default function Select<T> (props: Props<T>) {
@@ -69,11 +72,15 @@ export default function Select<T> (props: Props<T>) {
         itemText = (item) => String(item),
         itemValue = (item) => String(item),
         variant = `outlined`,
+        readOnly,
+        prependInner,
+        appendInner,
         onBlur,
         onFocus,
         onChange,
         onError,
         onValidate,
+        loading,
         ...rest
     } = props;
     const classes = useStyles();
@@ -152,18 +159,20 @@ export default function Select<T> (props: Props<T>) {
                         </ListItemText>
                     </MenuItem>
                 )),
-                ...(i !== sections.length - 1 || !items.length) ? [] : [ <Divider key={`section-divider-${i}`}/> ],
+                ...(i !== sections.length - 1 || !items.length) ? [] : [ <Divider key={`section-divider-${i}`} /> ],
             ];
             if (section.header) {
-                sectionElements.unshift(<Typography
-                    key={`section-header-${i}`}
-                    variant="caption"
-                    color="textSecondary"
-                    component="div"
-                    className={classes.sectionHeader}
-                >
-                    {section.header}
-                </Typography>);
+                sectionElements.unshift((
+                    <Typography
+                        key={`section-header-${i}`}
+                        variant="caption"
+                        color="textSecondary"
+                        component="div"
+                        className={classes.sectionHeader}
+                    >
+                        {section.header}
+                    </Typography>
+                ));
             }
             return sectionElements;
         });
@@ -172,30 +181,57 @@ export default function Select<T> (props: Props<T>) {
     if (multiple && Array.isArray(value_)) {
         const selectAllSectionItems = (sections?.filter((section) => !section.ignoreSelectAll).flatMap((section) => section.items) ?? []);
         const currentSelectAllValues = [ ...items, ...selectAllSectionItems ].filter((item) => !!value_.find((v) => v === itemValue(item)));
-        menuItems.unshift(<MenuItem
-            key="selectAll"
-            value=""
-        >
-            <ListItemIcon>
-                <Checkbox
-                    checked={selectAllItems.every((item) => !!value_.find((v) => v === itemValue(item)))}
-                    indeterminate={currentSelectAllValues.length > 0 && currentSelectAllValues.length < selectAllItems.length}
-                />
-            </ListItemIcon>
-            <ListItemText>
-                {selectAllLabel ?? `Select All`}
-            </ListItemText>
-        </MenuItem>, <Divider key="divider"/>);
+        menuItems.unshift(...[
+            (
+                <MenuItem
+                    key="selectAll"
+                    value=""
+                >
+                    <ListItemIcon>
+                        <Checkbox
+                            checked={selectAllItems.every((item) => !!value_.find((v) => v === itemValue(item)))}
+                            indeterminate={currentSelectAllValues.length > 0 && currentSelectAllValues.length < selectAllItems.length}
+                        />
+                    </ListItemIcon>
+                    <ListItemText>
+                        {selectAllLabel ?? `Select All`}
+                    </ListItemText>
+                </MenuItem>
+            ),
+            (
+                <Divider key="divider" />
+            ),
+        ]);
     }
 
-    return <>
+    return (
         <TextField
             select
+            data-testid={`${label}SelectTextField`}
             className={clsx(className, classes.root)}
             label={label}
             variant={variant}
             helperText={hideHelperText ? undefined : (error_ ?? ` `)}
             error={!!error_}
+            inputProps={{
+                // https://github.com/microsoft/TypeScript/issues/28960
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                "data-testid": `${label}SelectTextInput`,
+            }}
+            InputProps={{
+                readOnly,
+                startAdornment: prependInner,
+                endAdornment: (
+                    <>
+                        {appendInner}
+                        <LoadingIndicator
+                            loading={loading}
+                            variant={variant}
+                        />
+                    </>
+                ),
+            }}
             SelectProps={{
                 multiple,
                 renderValue: Array.isArray(value_) && !value_.includes(``)
@@ -205,7 +241,7 @@ export default function Select<T> (props: Props<T>) {
                         return itemText(item);
                     }).join(`, `)
                     : undefined,
-                value: value_,
+                value: multiple && !Array.isArray(value_) ? [ value_ ] : value_,
                 onBlur,
                 onChange: handleChange,
                 onFocus,
@@ -213,12 +249,14 @@ export default function Select<T> (props: Props<T>) {
             {...rest}
         >
             {!allItems.length || !menuItems.length
-                ? <MenuItem disabled>
-                    <ListItemText>
-                        {noDataLabel ?? `No items`}
-                    </ListItemText>
-                </MenuItem>
+                ? (
+                    <MenuItem disabled>
+                        <ListItemText>
+                            {noDataLabel ?? `No items`}
+                        </ListItemText>
+                    </MenuItem>
+                )
                 : menuItems}
         </TextField>
-    </>;
+    );
 }

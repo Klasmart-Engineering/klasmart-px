@@ -5,10 +5,7 @@ import {
     Tabs as MaterialTabs,
 } from "@material-ui/core";
 import clsx from "clsx";
-import React, {
-    useEffect,
-    useState,
-} from "react";
+import React from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
     tabRoot: {
@@ -29,6 +26,9 @@ const useStyles = makeStyles((theme) => createStyles({
         },
         "& .MuiTab-root": {
             backgroundColor: `transparent !important`,
+        },
+        "& .Mui-selected": {
+            color: theme.palette.primary.contrastText,
         },
     },
 }));
@@ -55,34 +55,18 @@ export default function Tabs (props: Props) {
         onChange,
     } = props;
     const classes = useStyles();
-    const [ value_, setValue ] = useState(value);
 
     const handleChange = (event: React.ChangeEvent<{}>, value: any) => {
-        if (value === 0) value = undefined;
-        onChange?.(value);
+        onChange?.(value !== 0 ? value : undefined);
     };
-
-    const updateIfValid = (value: string | undefined) => {
-        const isValid = tabs.find((tab) => tab.value === value);
-        setValue(isValid ? value : undefined);
-    };
-
-    useEffect(() => {
-        updateIfValid(value_ ?? value);
-    }, [ tabs ]);
-
-    useEffect(() => {
-        updateIfValid(value);
-    }, [ value ]);
 
     return (
         <MaterialTabs
-            value={value_ ?? 0}
+            value={tabs.find((tab) => tab.value === value)?.value ?? 0}
             TabIndicatorProps={{
                 className: classes.tabIndicator,
             }}
             indicatorColor="primary"
-            textColor="primary"
             variant="scrollable"
             scrollButtons="auto"
             className={clsx(classes.tabsContainer, className)}
