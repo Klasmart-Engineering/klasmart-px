@@ -23,7 +23,13 @@ import React,
     useState,
 } from "react";
 
-const useStyles = makeStyles((theme) => createStyles({}));
+const useStyles = makeStyles((theme) => createStyles({
+    root: {
+        "& .MuiDialogContent-root:first-of-type":  {
+            paddingTop: theme.spacing(2.5),
+        },
+    },
+}));
 
 export interface Props extends CommonDialog, CancelableDialog {
     label?: string;
@@ -68,6 +74,7 @@ export default function ConfirmDialog (props: Props & Openable<any>) {
                 open={open}
                 onClose={() => onClose()}
                 {...rest}
+                className={classes.root}
             >
                 <DialogTitle
                     title={title}
