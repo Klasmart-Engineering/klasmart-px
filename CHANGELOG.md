@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.1](https://bitbucket.org/calmisland/kidsloop-px/branches/compare/1.10.1%0D1.10.0) (2022-03-07)
+
 ## [1.10.0](https://bitbucket.org/calmisland/kidsloop-px/branches/compare/1.10.0%0D1.8.1) (2022-02-25)
 
 
