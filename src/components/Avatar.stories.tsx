@@ -1,8 +1,8 @@
 /* eslint-disable react/no-multi-comp */
 import OrganizationAvatar,
-{ Props as OrganizationAvatarProps } from "../components/OrganizationAvatar";
+{ Props as OrganizationAvatarProps } from "./OrganizationAvatar";
 import UserAvatar,
-{ Props as UserAvatarProps } from "../components/UserAvatar";
+{ Props as UserAvatarProps } from "./UserAvatar";
 import { Story } from "@storybook/react";
 import React from "react";
 

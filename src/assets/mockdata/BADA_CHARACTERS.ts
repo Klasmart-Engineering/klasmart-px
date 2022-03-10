@@ -1,4 +1,4 @@
-import { AutoCompleteOption } from "../../../components/Input/ComboBox";
+import { AutoCompleteOption } from "../../components/Input/ComboBox";
 
 const BADA_CHARACTERS: AutoCompleteOption[] = [
     {

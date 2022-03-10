@@ -1,5 +1,5 @@
 import CounterIcon,
-{ Props } from '../components/File/TypeIcon';
+{ Props } from './TypeIcon';
 import { Story } from '@storybook/react';
 import React from 'react';
 

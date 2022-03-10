@@ -1,5 +1,5 @@
 import ColorPicker,
-{ Props } from '../components/Input/ColorPicker';
+{ Props } from './ColorPicker';
 import {
     amber,
     blue,

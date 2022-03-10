@@ -3,9 +3,9 @@ import {
     mockFile,
     mockOnParseFile,
     validationErrors,
-} from '../components/Input/File/Spreadsheet/__mocks__/Preview';
+} from './__mocks__/Preview';
 import Preview,
-{ Props } from '../components/Input/File/Spreadsheet/Preview';
+{ Props } from './Preview';
 import {
     Meta,
     Story,

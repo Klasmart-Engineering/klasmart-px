@@ -1,18 +1,18 @@
 /* eslint-disable react/no-multi-comp */
 
-import { TableFilter } from '../components/Table/Common/Filter/Filters';
-import { SubgroupTab } from '../components/Table/Common/GroupTabs';
-import {
-    Order,
-    TableColumn,
-} from '../components/Table/Common/Head';
-import CursorTable from '../components/Table/Cursor/Table';
-import PageTable from '../components/Table/Page/Table';
-import { sleep } from '../utils';
+import { sleep } from '../../../utils';
 import {
     max,
     required,
-} from '../validations';
+} from '../../../validations';
+import CursorTable from '../Cursor/Table';
+import PageTable from '../Page/Table';
+import { TableFilter } from './Filter/Filters';
+import { SubgroupTab } from './GroupTabs';
+import {
+    Order,
+    TableColumn,
+} from './Head';
 import {
     Check,
     Close,

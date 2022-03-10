@@ -1,12 +1,12 @@
-import IconButton,
-{ Props } from '../components/Button/IconButton';
 import {
     ACTION_COLORS,
     BASE_COLORS,
     COMMON_COLORS,
     STATUS_COLORS,
     THEME_COLORS,
-} from '../types/colors';
+} from '../../types/colors';
+import IconButton,
+{ Props } from './IconButton';
 import { Home } from '@mui/icons-material';
 import { Story } from '@storybook/react';
 import React from 'react';

@@ -1,12 +1,12 @@
 /* eslint-disable react/no-multi-comp */
+import { sleep } from '../../utils';
+import validations from '../../validations';
+import { Primary as Button } from "../Button/Button.stories";
 import TextField,
 {
     inputTypes,
     Props,
-} from '../components/Input/TextField';
-import { sleep } from '../utils';
-import validations from '../validations';
-import { Primary as Button } from "./Button.stories";
+} from './TextField';
 import { Story } from '@storybook/react';
 import React,
 { useState } from 'react';

@@ -1,10 +1,10 @@
 /* eslint-disable react/no-multi-comp */
-import { Props } from "../components/SnackbarProvider";
 import {
     Button,
     SnackbarProvider,
     useSnackbar,
 } from "../index";
+import { Props } from "./SnackbarProvider";
 import { Story } from "@storybook/react";
 import { VariantType } from "notistack";
 import React from 'react';

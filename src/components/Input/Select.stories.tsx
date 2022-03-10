@@ -1,8 +1,8 @@
 /* eslint-disable react/no-multi-comp */
+import { sleep } from '../../utils';
+import { Primary as Button } from "../Button/Button.stories";
 import Select,
-{ Props } from '../components/Input/Select';
-import { sleep } from '../utils';
-import { Primary as Button } from "./Button.stories";
+{ Props } from './Select';
 import { Story } from '@storybook/react';
 import React,
 { useState } from 'react';

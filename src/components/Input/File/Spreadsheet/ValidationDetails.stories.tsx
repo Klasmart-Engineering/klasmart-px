@@ -2,7 +2,7 @@ import ValidationDetails,
 {
     Props,
     validationStatuses,
-} from "../components/Input/File/Spreadsheet/ValidationDetails";
+} from "./ValidationDetails";
 import { Paper } from "@mui/material";
 import { Story } from "@storybook/react";
 import React from "react";

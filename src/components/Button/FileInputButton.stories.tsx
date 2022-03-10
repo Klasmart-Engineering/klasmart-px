@@ -1,5 +1,5 @@
 import FileInputButton,
-{ Props } from '../components/Button/FileInputButton';
+{ Props } from './FileInputButton';
 import { Story } from '@storybook/react';
 import React from 'react';
 

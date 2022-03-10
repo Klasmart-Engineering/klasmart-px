@@ -1,5 +1,5 @@
 import { render } from '../../../test/themeProviderRender';
-import BADA_CHARACTERS from "../../stories/assets/testdata/BADA_CHARACTERS";
+import BADA_CHARACTERS from "../../assets/mockdata/BADA_CHARACTERS";
 import ComboBox from "./ComboBox";
 import {
     fireEvent,

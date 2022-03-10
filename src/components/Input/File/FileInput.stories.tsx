@@ -1,6 +1,6 @@
+import { sleep } from '../../../utils';
 import FileInput,
-{ Props } from '../components/Input/File/Base';
-import { sleep } from '../utils';
+{ Props } from './Base';
 import { Story } from '@storybook/react';
 import React from 'react';
 

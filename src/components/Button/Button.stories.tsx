@@ -1,6 +1,6 @@
+import getContrastColor from '../../utils/getContrastColor';
 import Button,
-{ Props } from '../components/Button/Button';
-import getContrastColor from '../utils/getContrastColor';
+{ Props } from './Button';
 import {
     adaptV4Theme,
     createTheme,

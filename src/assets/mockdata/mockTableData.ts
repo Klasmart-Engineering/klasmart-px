@@ -1,5 +1,5 @@
-import { TableFilter } from "../src/components/Table/Common/Filter/Filters";
-import { TableColumn } from "../src/components/Table/Common/Head";
+import { TableFilter } from "../../components/Table/Common/Filter/Filters";
+import { TableColumn } from "../../components/Table/Common/Head";
 
 export const mockOrgId = `c19de3cc-aa01-47f5-9f87-850eb70ae073`;
 export const user1Id = `p19de3cc-aa01-47f5-9f87-850eb70ae071`;

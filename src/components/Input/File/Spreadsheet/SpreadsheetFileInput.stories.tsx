@@ -1,7 +1,7 @@
+import { sleep } from "../../../../utils";
 import SpreadsheetFileInput,
-{ Props } from "../components/Input/File/Spreadsheet/Base";
-import { SpreadsheetValidationError } from "../components/Input/File/Spreadsheet/types";
-import { sleep } from "../utils";
+{ Props } from "./Base";
+import { SpreadsheetValidationError } from "./types";
 import { Story } from "@storybook/react";
 import React from "react";
 

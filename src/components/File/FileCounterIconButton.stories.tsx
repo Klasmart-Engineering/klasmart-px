@@ -1,6 +1,6 @@
+import { sleep } from '../../utils';
 import CounterIconButton,
-{ Props } from '../components/File/CounterIconButton';
-import { sleep } from '../utils';
+{ Props } from './CounterIconButton';
 import { Story } from '@storybook/react';
 import React from 'react';
 

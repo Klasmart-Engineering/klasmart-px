@@ -1,5 +1,5 @@
 import ImagePicker,
-{ Props } from '../components/ImagePicker/ImagePicker';
+{ Props } from './ImagePicker';
 import { Story } from '@storybook/react';
 import React from 'react';
 

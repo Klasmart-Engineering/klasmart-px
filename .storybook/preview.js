@@ -9,6 +9,11 @@ export const parameters = {
             date: /Date$/,
         },
     },
+    options: {
+        storySort: {
+            method: `alphabetical`,
+        }
+    }
 }
 
 // Add our project theme, add a global stylesheet

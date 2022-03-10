@@ -1,13 +1,13 @@
 /* eslint-disable react/no-multi-comp */
+import BADA_CHARACTERS from "../../assets/mockdata/BADA_CHARACTERS";
+import { sleep } from '../../utils';
+import validations from '../../validations';
+import { Primary as Button } from "../Button/Button.stories";
 import ComboBox,
 {
     AutoCompleteOption,
     Props,
-} from "../components/Input/ComboBox";
-import { sleep } from '../utils';
-import validations from '../validations';
-import BADA_CHARACTERS from "./assets/testdata/BADA_CHARACTERS";
-import { Primary as Button } from "./Button.stories";
+} from "./ComboBox";
 import { Story } from '@storybook/react';
 import React,
 { useState }from "react";
