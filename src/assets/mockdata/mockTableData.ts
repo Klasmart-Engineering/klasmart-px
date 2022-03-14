@@ -265,6 +265,7 @@ export const filters: TableFilter<UserRow>[] = [
                 value: `eq`,
                 multipleValues: true,
                 options: mockRolesFilterList,
+                valueComponent: `select`,
             },
         ],
     },
@@ -275,6 +276,50 @@ export const filters: TableFilter<UserRow>[] = [
             {
                 label: `equals`,
                 value: `eq`,
+                options: [
+                    {
+                        value: `active`,
+                        label: `Active`,
+                    },
+                    {
+                        value: `inactive`,
+                        label:`Inactive`,
+                    },
+                ],
+                valueComponent: `select`,
+            },
+        ],
+    },
+];
+
+export const comboBoxFilters: TableFilter<UserRow>[] = [
+    {
+        id: `roleNames`,
+        label: `Organization Roles`,
+        operators: [
+            {
+                label: `equals`,
+                value: `eq`,
+                multipleValues: true,
+                options: mockRolesFilterList,
+                valueComponent: `combo-box`,
+            },
+            {
+                label: `Contains`,
+                value: `contains`,
+                options: mockRolesFilterList,
+                valueComponent: `select`,
+            },
+        ],
+    },
+    {
+        id: `status`,
+        label: `Status`,
+        operators: [
+            {
+                label: `equals`,
+                value: `eq`,
+                valueComponent: `select`,
                 options: [
                     {
                         value: `active`,

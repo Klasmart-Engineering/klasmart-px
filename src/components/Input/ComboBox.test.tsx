@@ -4,7 +4,6 @@ import ComboBox from "./ComboBox";
 import {
     fireEvent,
     screen,
-    waitFor,
 } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import React from "react";
@@ -23,6 +22,7 @@ const defaultProps = {
     label: `testLabel`,
     loading: false,
     options: BADA_CHARACTERS,
+    optionsLimit: 10,
 };
 
 const clickInput = () => {
@@ -92,7 +92,23 @@ describe(`ComboBox`, () => {
 
             clickInput();
 
-            expect(screen.getAllByRole(`option`)).toHaveLength(defaultProps.options.length);
+            expect(screen.getAllByRole(`option`)).toHaveLength(defaultProps.optionsLimit);
+        });
+
+        test(`optionsLimit prop limits options`, () => {
+            const OPTIONS_LENGTH = 15;
+            const limitOptionsComboBox = (
+                <ComboBox
+                    {...defaultProps}
+                    optionsLimit={OPTIONS_LENGTH}
+                />);
+            render(limitOptionsComboBox);
+
+            expect(screen.queryAllByRole(`option`)).toHaveLength(0);
+
+            clickInput();
+
+            expect(screen.getAllByRole(`option`)).toHaveLength(OPTIONS_LENGTH);
         });
 
         test(`checkbox when multiple set true`, () => {
@@ -105,7 +121,7 @@ describe(`ComboBox`, () => {
 
             clickInput();
 
-            expect(screen.getAllByTestId(`checkbox-root`)).toHaveLength(defaultProps.options.length);
+            expect(screen.getAllByTestId(`checkbox-root`)).toHaveLength(defaultProps.optionsLimit);
         });
 
         test.each([
@@ -128,18 +144,16 @@ describe(`ComboBox`, () => {
             expect(optionsMenu.length).toBeLessThanOrEqual(props.optionsLimit);
         });
 
-        test(`typing should filter options`, async () => {
+        test(`typing should filter options`, () => {
             const inputText = `text`;
             render(<ComboBox {...defaultProps} />);
 
-            const textOptions = defaultProps.options.map((option) => option.text);
+            const textOptions = defaultProps.options.map((option) => option.label);
 
             for (let i = 0; i < inputText.length; i++) {
                 typeInputValue(inputText[i]);
                 const filteredOptions = textOptions.filter((option) => option.includes(inputText.substring(0, i + 1)));
-                await waitFor(() => {
-                    expect(screen.queryAllByRole(`option`)).toHaveLength(filteredOptions.length);
-                });
+                expect(screen.queryAllByRole(`option`)).toHaveLength(filteredOptions.length);
             }
         });
 
@@ -149,30 +163,27 @@ describe(`ComboBox`, () => {
             clickInput();
 
             const selectOptions = screen.queryAllByRole(`option`);
+            const firstOptionText = selectOptions[0].textContent;
 
-            fireEvent.click(selectOptions[0]);
+            userEvent.click(selectOptions[0]);
 
             expect(screen.getByRole(`textbox`, {
                 name: `testLabel`,
-            })).toHaveValue(selectOptions[0].textContent);
-            expect(selectOptions[0]).not.toBeInTheDocument(); //menu should close on select, so no more selectOptions in the document
+            })).toHaveValue(firstOptionText);
+            expect(selectOptions[0]).not.toBeInTheDocument();
         });
 
-        test(`options menu closes when input field is clicked`, async () => {
+        test(`options menu closes when input field is clicked`, () => {
             render(<ComboBox {...defaultProps} />);
 
             clickInput();
 
             const optionsMenu = screen.queryAllByRole(`listbox`);
 
-            await waitFor(() => {
-                expect(optionsMenu[0]).toBeInTheDocument();
-            });
+            expect(optionsMenu[0]).toBeInTheDocument();
 
             clickInput();
-            await waitFor(() => {
-                expect(optionsMenu[0]).not.toBeInTheDocument();
-            });
+            expect(optionsMenu[0]).not.toBeInTheDocument();
         });
 
         test(`when multiple, options menu stays open on select`, () => {
@@ -196,19 +207,15 @@ describe(`ComboBox`, () => {
             expect(screen.getByRole(`listbox`)).toBeInTheDocument();
         });
 
-        test(`menu closes when click outside of component occurs`, async () => {
+        test(`menu closes when click outside of component occurs`, () => {
             render(<ComboBox {...defaultProps} />);
 
             clickInput();
 
-            await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).toBeInTheDocument();
-            });
+            expect(screen.getByRole(`listbox`)).toBeInTheDocument();
 
             userEvent.click(document.body);
-            await waitFor(() => {
-                expect(screen.queryByRole(`listbox`)).not.toBeInTheDocument();
-            });
+            expect(screen.queryByRole(`listbox`)).not.toBeInTheDocument();
         });
 
         //TODO: write test if using custom chips

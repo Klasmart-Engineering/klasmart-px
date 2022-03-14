@@ -14,6 +14,7 @@ pipelines:
               - npm ci --prefer-offline --no-audit --cache .npm
               - npm test
               - npm run build
+            size: "2x"
         - step:
             name: Code Linting
             caches:

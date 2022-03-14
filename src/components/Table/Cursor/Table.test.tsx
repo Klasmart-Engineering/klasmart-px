@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import { render } from '../../../../test/themeProviderRender';
 import {
     columns,
+    comboBoxFilters,
     filters,
     UserRow,
     userRows,
@@ -13,6 +14,7 @@ import {
     screen,
     waitFor,
 } from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 const defaultProps = {
@@ -28,6 +30,25 @@ const defaultProps = {
     idField: `id` as keyof UserRow,
 };
 
+const { ResizeObserver } = window;
+
+beforeEach(() => {
+    //https://github.com/maslianok/react-resize-detector/issues/145
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    delete window.ResizeObserver;
+    window.ResizeObserver = jest.fn().mockImplementation(() => ({
+        observe: jest.fn(),
+        unobserve: jest.fn(),
+        disconnect: jest.fn(),
+    }));
+});
+
+afterEach(() => {
+    window.ResizeObserver = ResizeObserver;
+    jest.restoreAllMocks();
+});
+
 describe(`Cursor Table`, () => {
     describe(`Render`, () => {
         test(`default props`, async () => {
@@ -39,24 +60,40 @@ describe(`Cursor Table`, () => {
                 expect(screen.getByText(`John`)).toBeInTheDocument();
             });
         });
+        test(`combobox render`, () => {
+            const component = (
+                <CursorTable
+                    {
+                        ...defaultProps
+                    }
+                    filters={comboBoxFilters}
+                />
+            );
+
+            render(component);
+
+            userEvent.click(screen.getByText(`Add Filter`));
+
+            expect(screen.getByRole(`combobox`)).toBeInTheDocument();
+        });
     });
 
     describe(`Interact`, () => {
-        test(`add filter`, async () => {
+        test(`add filter with Select Menu`, async () => {
             const component = <CursorTable {...defaultProps} />;
 
             render(component);
 
-            fireEvent.click(screen.getByText(`Add Filter`));
+            userEvent.click(screen.getByText(`Add Filter`));
 
             const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`) as HTMLInputElement;
 
-            fireEvent.mouseDown(screen.getAllByRole(`button`)[0]);
+            userEvent.click(screen.getAllByRole(`button`)[0]);
 
             expect(screen.getByRole(`listbox`)).not.toBeNull();
 
             const columnOptions = screen.getAllByRole(`option`);
-            fireEvent.click(columnOptions[1]);
+            userEvent.click(columnOptions[1]); //should select status
 
             await waitFor(() => {
                 expect(columnSelectInput.value).toEqual(`status`);
@@ -70,7 +107,7 @@ describe(`Cursor Table`, () => {
             const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
             expect(valueSelectInput.value).toEqual(``);
 
-            fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
+            userEvent.click(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
                 expect(screen.getByRole(`listbox`)).not.toBeNull();
@@ -82,7 +119,7 @@ describe(`Cursor Table`, () => {
             });
 
             const valueOptions = screen.getAllByRole(`option`);
-            fireEvent.click(valueOptions[0]);
+            userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`active`);
@@ -93,11 +130,54 @@ describe(`Cursor Table`, () => {
                 })).toHaveLength(1);
             });
 
-            fireEvent.click(screen.getAllByText(`Add Filter`)[1]);
+            userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             await waitFor(() => {
                 expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Active"`);
             });
+        });
+
+        test(`Add Filter with Combobox Menu`, async () => {
+            const component = (
+                <CursorTable
+                    {
+                        ...defaultProps
+                    }
+                    filters={comboBoxFilters}
+                />
+            );
+            render(component);
+
+            userEvent.click(screen.getByText(`Add Filter`));
+
+            expect(await screen.findByRole(`combobox`)).toBeInTheDocument();
+
+            const comboBoxInput = screen.getByRole(`textbox`, {
+                name: `Value`,
+            });
+            userEvent.click(comboBoxInput);
+
+            const options = screen.getAllByRole(`option`);
+
+            await waitFor(() => {
+                expect(options).toHaveLength(3);
+            });
+
+            userEvent.click(options[2]);
+
+            const comboBoxChip = screen.getByRole(`button`, {
+                name: `${options[2].textContent}`,
+            });
+
+            await waitFor(() => {
+                expect(comboBoxChip).toHaveTextContent(`${options[2].textContent}`);
+            });
+
+            userEvent.click(screen.getAllByText(`Add Filter`)[1]);
+
+            expect(await screen.findByRole(`button`, {
+                name: `Organization Roles equals "Test Parent"`,
+            })).toBeInTheDocument();
         });
 
         test(`edit filter`, async () => {
@@ -105,16 +185,16 @@ describe(`Cursor Table`, () => {
 
             render(component);
 
-            fireEvent.click(screen.getByText(`Add Filter`));
+            userEvent.click(screen.getByText(`Add Filter`));
 
             const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`) as HTMLInputElement;
 
-            fireEvent.mouseDown(screen.getAllByRole(`button`)[0]);
+            userEvent.click(screen.getAllByRole(`button`)[0]);
 
             expect(screen.getByRole(`listbox`)).not.toBeNull();
 
             const columnOptions = screen.getAllByRole(`option`);
-            fireEvent.click(columnOptions[1]);
+            userEvent.click(columnOptions[1]);
 
             await waitFor(() => {
                 expect(columnSelectInput.value).toEqual(`status`);
@@ -128,7 +208,7 @@ describe(`Cursor Table`, () => {
             let valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
             expect(valueSelectInput.value).toEqual(``);
 
-            fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
+            userEvent.click(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
                 expect(screen.getByRole(`listbox`)).not.toBeNull();
@@ -140,7 +220,7 @@ describe(`Cursor Table`, () => {
             });
 
             let valueOptions = screen.getAllByRole(`option`);
-            fireEvent.click(valueOptions[0]);
+            userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`active`);
@@ -151,18 +231,17 @@ describe(`Cursor Table`, () => {
                 })).toHaveLength(1);
             });
 
-            fireEvent.click(screen.getAllByText(`Add Filter`)[1]);
+            userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             await waitFor(() => {
                 expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Active"`);
             });
 
-            fireEvent.click(screen.getByTestId(`statusChipLabel`));
+            userEvent.click(screen.getByTestId(`statusChipLabel`));
 
-            valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
             expect(valueSelectInput.value).toEqual(`active`);
 
-            fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
+            userEvent.click(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
                 expect(screen.getByRole(`listbox`)).not.toBeNull();
@@ -174,7 +253,9 @@ describe(`Cursor Table`, () => {
             });
 
             valueOptions = screen.getAllByRole(`option`);
-            fireEvent.click(valueOptions[1]);
+            userEvent.click(valueOptions[1]);
+
+            valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`inactive`);
@@ -185,7 +266,7 @@ describe(`Cursor Table`, () => {
                 })).toHaveLength(1);
             });
 
-            fireEvent.click(screen.getAllByText(`Save Filter`)[0]);
+            userEvent.click(screen.getAllByText(`Save Filter`)[0]);
 
             await waitFor(() => {
                 expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Inactive"`);
@@ -197,16 +278,16 @@ describe(`Cursor Table`, () => {
 
             render(component);
 
-            fireEvent.click(screen.getByText(`Add Filter`));
+            userEvent.click(screen.getByText(`Add Filter`));
 
             const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`) as HTMLInputElement;
 
-            fireEvent.mouseDown(screen.getAllByRole(`button`)[0]);
+            userEvent.click(screen.getAllByRole(`button`)[0]);
 
             expect(screen.getByRole(`listbox`)).not.toBeNull();
 
             const columnOptions = screen.getAllByRole(`option`);
-            fireEvent.click(columnOptions[1]);
+            userEvent.click(columnOptions[1]);
 
             await waitFor(() => {
                 expect(columnSelectInput.value).toEqual(`status`);
@@ -220,7 +301,7 @@ describe(`Cursor Table`, () => {
             const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
             expect(valueSelectInput.value).toEqual(``);
 
-            fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
+            userEvent.click(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
                 expect(screen.getByRole(`listbox`)).not.toBeNull();
@@ -232,7 +313,7 @@ describe(`Cursor Table`, () => {
             });
 
             const valueOptions = screen.getAllByRole(`option`);
-            fireEvent.click(valueOptions[0]);
+            userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`active`);
@@ -243,7 +324,7 @@ describe(`Cursor Table`, () => {
                 })).toHaveLength(1);
             });
 
-            fireEvent.click(screen.getAllByText(`Add Filter`)[1]);
+            userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             await waitFor(() => {
                 expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Active"`);
@@ -251,7 +332,7 @@ describe(`Cursor Table`, () => {
 
             const deleteIcon = document.querySelector(`.MuiChip-deleteIcon`) as HTMLElement;
 
-            fireEvent.click(deleteIcon);
+            userEvent.click(deleteIcon);
 
             await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
@@ -275,16 +356,16 @@ describe(`Cursor Table`, () => {
 
             render(component);
 
-            fireEvent.click(screen.getByText(`Add Filter`));
+            userEvent.click(screen.getByText(`Add Filter`));
 
             const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`) as HTMLInputElement;
 
-            fireEvent.mouseDown(screen.getAllByRole(`button`)[0]);
+            userEvent.click(screen.getAllByRole(`button`)[0]);
 
             expect(screen.getByRole(`listbox`)).not.toBeNull();
 
             const columnOptions = screen.getAllByRole(`option`);
-            fireEvent.click(columnOptions[1]);
+            userEvent.click(columnOptions[1]);
 
             await waitFor(() => {
                 expect(columnSelectInput.value).toEqual(`status`);
@@ -298,7 +379,7 @@ describe(`Cursor Table`, () => {
             const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
             expect(valueSelectInput.value).toEqual(``);
 
-            fireEvent.mouseDown(screen.getAllByRole(`button`)[2]);
+            userEvent.click(screen.getAllByRole(`button`)[2]);
 
             await waitFor(() => {
                 expect(screen.getByRole(`listbox`)).not.toBeNull();
@@ -310,7 +391,7 @@ describe(`Cursor Table`, () => {
             });
 
             const valueOptions = screen.getAllByRole(`option`);
-            fireEvent.click(valueOptions[0]);
+            userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
                 expect(valueSelectInput.value).toEqual(`active`);
@@ -321,13 +402,13 @@ describe(`Cursor Table`, () => {
                 })).toHaveLength(1);
             });
 
-            fireEvent.click(screen.getAllByText(`Add Filter`)[1]);
+            userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             await waitFor(() => {
                 expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Active"`);
             });
 
-            fireEvent.click(screen.getByTestId(`clearFilters`));
+            userEvent.click(screen.getByTestId(`clearFilters`));
 
             await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
@@ -395,7 +476,7 @@ describe(`Cursor Table`, () => {
             expect(userRowsInTable[0]).toHaveTextContent(`Andres`);
             expect(userRowsInTable[1]).toHaveTextContent(`John`);
 
-            fireEvent.click(screen.getByTestId(`givenNameSortHandler`));
+            userEvent.click(screen.getByTestId(`givenNameSortHandler`));
 
             await waitFor(() => {
                 userRowsInTable = screen.getAllByTestId(`tableRow`, {
@@ -429,7 +510,7 @@ describe(`Cursor Table`, () => {
             expect(userRowsInTable[0]).toHaveTextContent(`Stephen`);
             expect(userRowsInTable[1]).toHaveTextContent(`Mike`);
 
-            fireEvent.click(screen.getByTestId(`givenNameSortHandler`));
+            userEvent.click(screen.getByTestId(`givenNameSortHandler`));
 
             await waitFor(() => {
                 userRowsInTable = screen.getAllByTestId(`tableRow`, {

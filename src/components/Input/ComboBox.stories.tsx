@@ -3,11 +3,9 @@ import BADA_CHARACTERS from "../../assets/mockdata/BADA_CHARACTERS";
 import { sleep } from '../../utils';
 import validations from '../../validations';
 import { Primary as Button } from "../Button/Button.stories";
+import { FilterValueOption } from "../Table/Common/Filter/Filters";
 import ComboBox,
-{
-    AutoCompleteOption,
-    Props,
-} from "./ComboBox";
+{ Props } from "./ComboBox";
 import { Story } from '@storybook/react';
 import React,
 { useState }from "react";
@@ -80,17 +78,17 @@ const OPTIONS_LIMIT = 10;
 const customFilterOnServer = async (inputValue: string) => {
     await sleep(1000);
     return BADA_CHARACTERS
-        .filter(option => new RegExp(`${inputValue}`, `i`).test(option.text))
+        .filter(option => new RegExp(`${inputValue}`, `i`).test(option.label))
         .slice(0, OPTIONS_LIMIT);
 };
 
 export const FilterFromServer = () => {
-    const [ selectValue, setSelectValue ] = useState<AutoCompleteOption | AutoCompleteOption[]>([]);
+    const [ selectValue, setSelectValue ] = useState<FilterValueOption[]>([]);
     const [ inputValue, setInputValue ] = useState(``);
     const [ isValid, setIsValid ] = useState(true);
     const [ isLoading, setIsLoading ] = useState(false);
     const [ error, setError ] = useState<string | undefined>(undefined);
-    const [ filteredList, setFilteredList ] = useState<AutoCompleteOption[]>([]);
+    const [ filteredList, setFilteredList ] = useState<FilterValueOption[]>([]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -107,7 +105,7 @@ export const FilterFromServer = () => {
         setFilteredList(filteredList);
     };
 
-    const handleSelectChange = (newValue: AutoCompleteOption[] | AutoCompleteOption) => {
+    const handleSelectChange = (newValue: FilterValueOption[]) => {
         setSelectValue(newValue);
     };
 
@@ -124,6 +122,7 @@ export const FilterFromServer = () => {
                 loading={isLoading}
                 options={filteredList}
                 label={`Bada and Friends`}
+                id={`Combo Box`}
                 value={selectValue}
                 inputValue={inputValue}
                 error={error}

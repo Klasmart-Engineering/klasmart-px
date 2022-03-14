@@ -45,12 +45,7 @@ import {
     Divider,
     Table,
     TableContainer,
-    Theme,
 } from "@mui/material";
-import {
-    createStyles,
-    makeStyles,
-} from '@mui/styles';
 import {
     escapeRegExp,
     isEqual,
@@ -64,8 +59,6 @@ import React,
     useMemo,
     useState,
 } from "react";
-
-const useStyles = makeStyles((theme: Theme) => createStyles({}));
 
 function descendingComparator<T> (a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) {
     if ((typeof a === `string` && typeof b === `string`) || (a instanceof String && b instanceof String)) {
@@ -159,6 +152,7 @@ export interface BaseProps<T> {
     secondaryActions?: ToolbarAction[];
     selectActions?: ToolbarSelectAction<T>[];
     loading?: boolean;
+    filterValueLoading?: boolean;
     hideSelectAll?: boolean;
     hideAllGroupTab?: boolean;
     hideNoGroupOption?: boolean;
@@ -169,8 +163,10 @@ export interface BaseProps<T> {
     noGroupTotal?: number;
     hideSelectStatus?: boolean;
     selectMode?: SelectMode;
-    onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
     filters?: TableFilter<T>[];
+    onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
+    onFilterInputValueChange?: (columnId: string, operator: string, value: string) => void;
+
 }
 
 export interface Props<T> extends BaseProps<T> {
@@ -211,12 +207,12 @@ export default function BaseTable<T> (props: Props<T>) {
         noGroupTotal,
         hideSelectStatus,
         PaginationComponent,
+        filters,
+        filterValueLoading,
         onChange,
         onSelected,
-        filters,
+        onFilterInputValueChange,
     } = props;
-
-    const classes = useStyles();
 
     const fallbackGroupBy = hideNoGroupOption ? columns.find((column) => column.groups)?.id : undefined;
     const persistentColumnIds = columns.filter((c) => c.persistent).map(({ id }) => id);
@@ -449,7 +445,9 @@ export default function BaseTable<T> (props: Props<T>) {
                 <>
                     <BaseTableFilter
                         filters={filters}
+                        filterValueLoading={filterValueLoading}
                         onChange={setFilters}
+                        onFilterInputValueChange={onFilterInputValueChange}
                     />
                     <Divider />
                 </>

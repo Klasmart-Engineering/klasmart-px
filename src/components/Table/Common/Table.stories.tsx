@@ -1,18 +1,20 @@
 /* eslint-disable react/no-multi-comp */
-
 import { sleep } from '../../../utils';
 import {
     max,
     required,
 } from '../../../validations';
-import CursorTable from '../Cursor/Table';
-import PageTable from '../Page/Table';
-import { TableFilter } from './Filter/Filters';
-import { SubgroupTab } from './GroupTabs';
+import { SubgroupTab } from '../Common/GroupTabs';
 import {
     Order,
     TableColumn,
-} from './Head';
+} from '../Common/Head';
+import CursorTable from '../Cursor/Table';
+import PageTable from '../Page/Table';
+import {
+    FilterValueOption,
+    TableFilter,
+} from './Filter/Filters';
 import {
     Check,
     Close,
@@ -22,7 +24,6 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import { Story } from '@storybook/react';
 import React,
 {
     useEffect,
@@ -500,6 +501,7 @@ export const CursorTableServer = () => {
                             value: data.id,
                         };
                     }),
+                    valueComponent: `combo-box`,
                 },
             ],
         },
@@ -641,7 +643,7 @@ const useStyles = makeStyles((theme) =>
             width: `100%`,
         },
         chip: {
-            margin: theme.spacing(0.25),
+            margin: theme.spacing(3/8),
         },
     }));
 
@@ -1125,8 +1127,192 @@ const loadProgramsData = async (request: LoadProgramsDataPageRequest) => {
     };
 };
 
-const PageTableFilter = () => {
+const filters: TableFilter<ProgramRow>[] = [
+    {
+        id: `grades`,
+        label: `Grades`,
+        operators: [
+            {
+                label: `Contains`,
+                value: `contains`,
+                multipleValues: true,
+                validations: [ max(10), required() ],
+                options: grades,
+                valueComponent: `combo-box`,
+                chipLabel: (column, value) => (
+                    <>
+                        {column}
+                        {` contains `}
+                        {value}
+                    </>
+                ),
+            },
+            {
+                label: `Equals`,
+                value: `equals`,
+                multipleValues: true,
+                validations: [ required() ],
+                options: grades,
+                valueComponent: `select`,
+                chipLabel: (column, value) => (
+                    <>
+                        {column}
+                        {` equals `}
+                        {value}
+                    </>
+                ),
+            },
+        ],
+    },
+    {
+        id: `ageRanges`,
+        label: `Age Ranges`,
+        operators: [
+            {
+                label: `Equals`,
+                value: `equals`,
+                validations: [ required() ],
+                options: ageRanges,
+                valueComponent: `select`,
+            },
+            {
+                label: `Contains`,
+                value: `contains`,
+                validations: [ max(10), required() ],
+                options: ageRanges,
+                valueComponent: `combo-box`,
+            },
+        ],
+    },
+    {
+        id: `subjects`,
+        label: `Subjects`,
+        operators: [
+            {
+                label: `Contains`,
+                value: `contains`,
+                validations: [ max(10), required() ],
+                options: subjects,
+                valueComponent: `combo-box`,
+                multipleValues: true,
+            },
+        ],
+    },
+];
+
+const starterFilters: TableFilter<ProgramRow>[] = [
+    {
+        id: `grades`,
+        label: `Grades`,
+        operators: [
+            {
+                label: `Contains`,
+                value: `contains`,
+                multipleValues: true,
+                validations: [ max(10) ],
+                options: [],
+                valueComponent: `combo-box`,
+                chipLabel: (column, value) => (
+                    <>
+                        {column}
+                        {` contains `}
+                        {value}
+                    </>
+                ),
+            },
+            {
+                label: `Equals`,
+                value: `equals`,
+                multipleValues: true,
+                validations: [ required() ],
+                options: grades,
+                valueComponent: `select`,
+                chipLabel: (column, value) => (
+                    <>
+                        {column}
+                        {` equals `}
+                        {value}
+                    </>
+                ),
+            },
+        ],
+    },
+    {
+        id: `ageRanges`,
+        label: `Age Ranges`,
+        operators: [
+            {
+                label: `Equals`,
+                value: `equals`,
+                validations: [ required() ],
+                options: ageRanges,
+                valueComponent: `select`,
+            },
+            {
+                label: `Contains`,
+                value: `contains`,
+                validations: [ max(10) ],
+                options: [],
+                valueComponent: `combo-box`,
+            },
+        ],
+    },
+    {
+        id: `subjects`,
+        label: `Subjects`,
+        operators: [
+            {
+                label: `Contains`,
+                value: `contains`,
+                multipleValues: true,
+                validations: [ max(10) ],
+                options: [],
+                valueComponent: `combo-box`,
+            },
+        ],
+    },
+];
+
+const OPTIONS_LIMIT = 5;
+
+const customFilterOnServer = async (columnId: string, operatorValue: string, inputValue: string) => {
+    await sleep(1000);
+    const matchingColumnFilter = filters.find(filter => filter.id === columnId);
+    const matchingOperator = matchingColumnFilter?.operators.find(matchingColumnOperator => matchingColumnOperator.value === operatorValue);
+    if (!matchingColumnFilter || !matchingOperator) return starterFilters;
+    let updatedOptions: FilterValueOption[];
+
+    if (matchingOperator.valueComponent === `select` || matchingOperator.valueComponent === `text-field`) {
+        return starterFilters;
+    }
+
+    switch (matchingOperator.value) {
+    case `equals`:
+        updatedOptions = matchingOperator.options?.filter(option => option.label === inputValue).slice(0, OPTIONS_LIMIT) ?? [];
+        break;
+    case `contains`:
+        updatedOptions = matchingOperator.options?.filter(option => new RegExp(`${inputValue}`, `i`).test(option.label)).slice(0, OPTIONS_LIMIT) ?? [];
+        break;
+    default:
+        updatedOptions = [];
+    }
+
+    const updatedFilter: TableFilter<ProgramRow> = {
+        ...matchingColumnFilter,
+        operators: matchingColumnFilter.operators.map((op) => op.value === operatorValue ? {
+            ...op,
+            options: [ ...updatedOptions ],
+        } : {
+            ...op,
+        }),
+    };
+
+    return starterFilters.map(filter => filter.id === columnId ? updatedFilter : filter);
+};
+
+export const PageTableServerFilter = () => {
     const classes = useStyles();
+    const [ filterValueLoading, setFilterValueLoading ] = useState(false);
     const [ page, setPage ] = useState(0);
     const [ loadingData, setLoadingData ] = useState(false);
     const [ total, setTotal ] = useState(0);
@@ -1135,6 +1321,7 @@ const PageTableFilter = () => {
     const [ search, setSearch ] = useState(``);
     const [ order, setOrder ] = useState<Order>(`desc`);
     const [ orderBy, setOrderBy ] = useState<keyof ProgramRow>(`id`);
+    const [ serverFilters, setServerFilters ] = useState<TableFilter<ProgramRow>[]>(starterFilters);
 
     const columns: TableColumn<ProgramRow>[] = [
         {
@@ -1204,61 +1391,15 @@ const PageTableFilter = () => {
         },
     ];
 
-    const filters: TableFilter<ProgramRow>[] = [
-        {
-            id: `grades`,
-            label: `Grades`,
-            operators: [
-                {
-                    label: `Equals`,
-                    value: `equals`,
-                    multipleValues: true,
-                    validations: [ required() ],
-                    options: grades,
-                    chipLabel: (column, value) => (
-                        <>
-                            {column}
-                            {` equals `}
-                            {value}
-                        </>
-                    ),
-                },
-            ],
-        },
-        {
-            id: `ageRanges`,
-            label: `Age Ranges`,
-            operators: [
-                {
-                    label: `Equals`,
-                    value: `equals`,
-                    validations: [ required() ],
-                    options: ageRanges,
-                },
-                {
-                    label: `Contains`,
-                    value: `contains`,
-                    validations: [ required(), max(3) ],
-                },
-            ],
-        },
-        {
-            id: `subjects`,
-            label: `Subjects`,
-            operators: [
-                {
-                    label: `Equals`,
-                    value: `equals`,
-                    multipleValues: true,
-                    validations: [ required() ],
-                    options: subjects,
-                },
-            ],
-        },
-    ];
-
     const updatePage = () => {
         setPage((page) => page + 1);
+    };
+
+    const handleFilterInputValueChange = async (columnId: string, operator: string, value: string) => {
+        setFilterValueLoading(true);
+        const filterFromServer = await customFilterOnServer(columnId, operator, value);
+        setServerFilters(filterFromServer);
+        setFilterValueLoading(false);
     };
 
     useEffect(() => {
@@ -1289,12 +1430,13 @@ const PageTableFilter = () => {
         <PageTable
             idField="id"
             loading={loadingData}
+            filterValueLoading={filterValueLoading}
             columns={columns}
             rows={rows}
             page={page}
             total={total}
             search={search}
-            filters={filters}
+            filters={serverFilters}
             order={order}
             orderBy={orderBy}
             rowsPerPage={ROWS_PER_PAGE}
@@ -1310,12 +1452,7 @@ const PageTableFilter = () => {
                 setOrder(tableData.order);
                 setOrderBy(tableData.orderBy);
             }}
+            onFilterInputValueChange={handleFilterInputValueChange}
         />
     );
 };
-
-const Template: Story = (args) => <PageTableFilter {...args} />;
-
-export const PageTableFilters = Template.bind({});
-
-/* eslint-disable react/no-multi-comp */

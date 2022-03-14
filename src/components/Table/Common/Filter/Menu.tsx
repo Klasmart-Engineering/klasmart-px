@@ -1,13 +1,15 @@
 
 import Button from '../../../Button/Button';
+import ComboBox from '../../../Input/ComboBox';
 import Select from '../../../Input/Select';
 import TextField from '../../../Input/TextField';
 import {
     Filter,
+    FilterOperator,
+    FilterValueOption,
     TableFilter,
 } from './Filters';
 import {
-    Box,
     Grid,
     Popover,
     Theme,
@@ -21,15 +23,23 @@ import React,
     useEffect,
     useState,
 } from 'react';
+import { useResizeDetector } from 'react-resize-detector';
+
+const CONTAINER_MAX_WIDTH = 368;
+const CONTAINER_PADDING = 32;
+const CONTENT_MAX_WIDTH = CONTAINER_MAX_WIDTH - CONTAINER_PADDING;
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
-        marginTop: `8px`,
+        marginTop: theme.spacing(1),
+        width: `100%`,
     },
-    select: {
-        margin: theme.spacing(0.5),
-        minWidth: 160,
-        maxWidth: 160,
+    menuContainer: {
+        padding: theme.spacing(2),
+        paddingTop: theme.spacing(3),
+    },
+    valueComponent: {
+        width: `100%`,
     },
     actionButton: {
         marginLeft: theme.spacing(2),
@@ -37,10 +47,18 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     actionsContainer: {
         display: `flex`,
         justifyContent: `flex-end`,
-        paddingRight: 4,
+        paddingRight: theme.spacing(1/2),
+    },
+    containerBox: {
+        display: `flex`,
+        flexDirection: `column`,
+        padding: theme.spacing(2),
     },
 }));
 
+export type ValueComponent = `select` | `combo-box` | `text-field`;
+
+export type FilterValueInputEventHandler = (columnId: string, operator: string, value: string) => void;
 export interface FilterMenuLocalization {
     addFilter?: string;
     cancel?: string;
@@ -58,6 +76,8 @@ interface Props<T> {
     editingFilter: Filter | undefined;
     tableFilters: TableFilter<T>[];
     localization?: FilterMenuLocalization;
+    filterValueLoading?: boolean;
+    onFilterInputValueChange?: FilterValueInputEventHandler;
     onClose: (filter?: Filter) => void;
 }
 
@@ -68,6 +88,8 @@ export default function TableFilterMenu<T> (props: Props<T>) {
         editingFilter,
         tableFilters,
         localization,
+        filterValueLoading,
+        onFilterInputValueChange,
         onClose,
     } = props;
     const classes = useStyles();
@@ -76,11 +98,13 @@ export default function TableFilterMenu<T> (props: Props<T>) {
         operatorValue: ``,
         values: [],
     };
+    const { width = 0, ref } = useResizeDetector();
+
     const [ filter, setFilter ] = useState<Filter>(editingFilter ?? startFilter);
-    const [ selectValue, setSelectValue ] = useState(``);
     const [ selectValues, setSelectValues ] = useState<string[]>([]);
-    const [ textFieldValue, setTextFieldValue ] = useState(``);
     const [ validValues, setValidValues ] = useState(true);
+    const [ comboBoxValue, setComboBoxValue ] = useState<FilterValueOption[]>([]);
+    const [ textValue, setTextValue ] = useState(``);
 
     const tableFilter = tableFilters.find((tableFilter) => tableFilter.id === filter.columnId);
     const columns = tableFilters.map(({ id, label }) => ({
@@ -90,6 +114,12 @@ export default function TableFilterMenu<T> (props: Props<T>) {
     const operators = tableFilter?.operators ?? [];
 
     const operator = tableFilter?.operators.find((operator) => operator.value === filter.operatorValue);
+
+    const resetValues = () => {
+        setSelectValues([]);
+        setComboBoxValue([]);
+        setTextValue(``);
+    };
 
     const handleColumnChange = (columnId: string) => {
         const tableFilter = tableFilters.find((tableFilter) => tableFilter.id === columnId);
@@ -104,9 +134,7 @@ export default function TableFilterMenu<T> (props: Props<T>) {
             } : {}),
         });
         if (columnId !== filter.columnId) {
-            setSelectValue(``);
-            setSelectValues([]);
-            setTextFieldValue(``);
+            resetValues();
         }
     };
 
@@ -119,21 +147,19 @@ export default function TableFilterMenu<T> (props: Props<T>) {
             } : {}),
         });
         if (operatorValue !== filter.operatorValue) {
-            setSelectValue(``);
-            setSelectValues([]);
-            setTextFieldValue(``);
+            resetValues();
         }
     };
-
-    const handleSelectValueChange = (value: string) => {
-        setSelectValue(value);
+    const handleSelectChange = (value: string) => {
+        setTextValue(value);
         setFilter({
             ...filter,
             values: [ value ],
         });
     };
 
-    const handleSelectValuesChange = (values: string[]) => {
+    const handleSelectsChange = (values: string[]) => {
+        if (!values?.length) return;
         setSelectValues(values);
         setFilter({
             ...filter,
@@ -142,33 +168,153 @@ export default function TableFilterMenu<T> (props: Props<T>) {
     };
 
     const handleFreeTextValueChange = (value: string) => {
-        setTextFieldValue(value);
+        setTextValue(value);
         setFilter({
             ...filter,
             values: [ value ],
         });
     };
 
+    const handleComboBoxChange = (values: FilterValueOption[]) => {
+        setComboBoxValue(values);
+        setFilter({
+            ...filter,
+            values,
+        });
+    };
+
+    const handleValueInputChange = (value: string) => {
+        if (!value && !textValue) return;
+        setTextValue(value);
+        setFilter({
+            ...filter,
+            values: comboBoxValue,
+        });
+    };
+
+    const handleValueInputFocus = () => {
+        onFilterInputValueChange?.(filter.columnId, filter.operatorValue, textValue);
+    };
+
+    const getValueComponent = (operator: FilterOperator) => {
+        switch (operator.valueComponent) {
+        case `combo-box`: return (
+            <ComboBox
+                multiple={operator.multipleValues}
+                loading={filterValueLoading}
+                value={comboBoxValue}
+                inputValue={textValue}
+                label={localization?.value ?? `Value`}
+                className={classes.valueComponent}
+                options={operator.options}
+                selectValidations={operator.validations}
+                onChange={handleComboBoxChange}
+                onValidate={setValidValues}
+                onInputChange={handleValueInputChange}
+                onFocus={handleValueInputFocus}
+            />
+        );
+        case `select`: {
+            if (operator.multipleValues) {
+                return (
+                    <Select
+                        multiple
+                        value={selectValues}
+                        label={localization?.value ?? `Values`}
+                        className={classes.valueComponent}
+                        items={operator.options}
+                        selectAllLabel={localization?.selectAllLabel}
+                        itemText={(item) => item.label}
+                        itemValue={(item) => item.value}
+                        validations={operator.validations}
+                        onChange={handleSelectsChange}
+                        onValidate={setValidValues}
+                    />
+                );
+            } else {
+                return (
+                    <Select
+                        value={textValue}
+                        label={localization?.values ?? `Value`}
+                        className={classes.valueComponent}
+                        items={operator.options}
+                        itemText={(item) => item.label}
+                        itemValue={(item) => item.value}
+                        validations={operator.validations}
+                        onChange={handleSelectChange}
+                        onValidate={setValidValues}
+                    />
+                );
+            }
+        }
+        case `text-field`:
+        default:
+            return (
+                <TextField
+                    value={textValue}
+                    label={localization?.value ?? `Value`}
+                    className={classes.valueComponent}
+                    type="text"
+                    autoFocus={!editingFilter}
+                    validations={operator.validations}
+                    onChange={handleFreeTextValueChange}
+                    onValidate={setValidValues}
+                />
+            );
+        }
+    };
+
+    useEffect(() => {
+        if (operator?.valueComponent === `combo-box`) {
+            onFilterInputValueChange?.(filter.columnId, filter.operatorValue, textValue);
+        }
+    }, [ textValue ]);
+
+    useEffect(() => {
+        if (comboBoxValue.length && operator?.valueComponent === `combo-box` && !operator?.multipleValues) {
+            setTextValue(comboBoxValue[0].label ?? ``);
+        }
+    }, [ comboBoxValue ]);
+
     useEffect(() => {
         if (!isOpen) return;
         const tableFilter = tableFilters.find((tableFilter) => tableFilter.id === editingFilter?.columnId) ?? tableFilters[0];
         const operator = tableFilter.operators.find((operator) => operator.value === editingFilter?.operatorValue) ?? tableFilter.operators[0];
-        const firstValue = editingFilter?.values?.[0] ?? ``;
+        const firstValue = typeof editingFilter?.values?.[0] === `string` ? editingFilter?.values?.[0] : (editingFilter?.values?.[0].label ?? ``);
         const allValues = editingFilter?.values ?? [];
-        setSelectValue(firstValue);
-        setSelectValues(allValues);
-        setTextFieldValue(firstValue);
+
+        switch (operator?.valueComponent) {
+        case `combo-box`:
+            setTextValue(!operator.multipleValues ? firstValue : ``);
+            setComboBoxValue(allValues as FilterValueOption[]);
+            break;
+        case `select`:
+            setTextValue(!operator.multipleValues ? firstValue : ``);
+            setSelectValues(allValues as string[]); // TODO: remove casting when select items are changed to object values
+            break;
+        default:
+            setTextValue(``);
+        }
         setFilter(editingFilter ?? {
             columnId: tableFilter.id,
             operatorValue: operator.value,
-            values: operator.options?.length ? allValues : [ firstValue ],
+            values: operator.valueComponent !== `text-field` && operator.options.length ? allValues : [ firstValue ],
         });
     }, [ editingFilter, isOpen ]);
 
     return (
         <Popover
-            className={classes.root}
+            tabIndex={0}
+            classes={{
+                paper: classes.root,
+            }}
             anchorEl={anchorEl}
+            PaperProps={{
+                ref: ref,
+                style: {
+                    maxWidth: CONTAINER_MAX_WIDTH,
+                },
+            }}
             open={isOpen}
             anchorOrigin={{
                 vertical: `bottom`,
@@ -180,71 +326,42 @@ export default function TableFilterMenu<T> (props: Props<T>) {
             }}
             onClose={() => onClose()}
         >
-            <Box
-                display="flex"
-                flexDirection="column"
-                p={2}
-            >
-                <div>
-                    <Select
-                        value={filter.columnId}
-                        items={columns ?? []}
-                        className={classes.select}
-                        label={localization?.column ?? `Column`}
-                        itemText={(column) => column.label}
-                        itemValue={(column) => column.id}
-                        onChange={handleColumnChange}
-                    />
-                    <Select
-                        value={filter.operatorValue}
-                        items={operators}
-                        className={classes.select}
-                        label={localization?.operator ?? `Operator`}
-                        itemText={(operator) => operator.label}
-                        itemValue={(operator) => operator.value}
-                        onChange={handleOperatorChange}
-                    />
-                    {operator?.options?.length ? (
-                        !operator?.multipleValues ? (
-                            <Select
-                                value={selectValue}
-                                label={localization?.values ?? `Value`}
-                                className={classes.select}
-                                items={operator.options}
-                                itemText={(item) => item.label}
-                                itemValue={(item) => item.value}
-                                validations={operator?.validations}
-                                onChange={handleSelectValueChange}
-                                onValidate={setValidValues}
-                            />
-                        ) : (
-                            <Select
-                                multiple
-                                value={selectValues}
-                                label={localization?.value ?? `Values`}
-                                className={classes.select}
-                                items={operator.options}
-                                selectAllLabel={localization?.selectAllLabel}
-                                itemText={(item) => item.label}
-                                itemValue={(item) => item.value}
-                                validations={operator?.validations}
-                                onChange={handleSelectValuesChange}
-                                onValidate={setValidValues}
-                            />
-                        )
-                    ) : (
-                        <TextField
-                            value={textFieldValue}
-                            label={localization?.value ?? `Value`}
-                            className={classes.select}
-                            type="text"
-                            autoFocus={!editingFilter}
-                            validations={operator?.validations}
-                            onChange={handleFreeTextValueChange}
-                            onValidate={setValidValues}
+            <div className={classes.menuContainer}>
+                <Grid
+                    container
+                    direction={width < CONTENT_MAX_WIDTH ? `column` : `row`}
+                    spacing={2}
+                >
+                    <Grid
+                        item
+                        xs={width < CONTENT_MAX_WIDTH ? 12 : 6}
+                    >
+                        <Select
+                            value={filter.columnId}
+                            items={columns ?? []}
+                            className={classes.valueComponent}
+                            label={localization?.column ?? `Column`}
+                            itemText={(column) => column.label}
+                            itemValue={(column) => column.id}
+                            onChange={handleColumnChange}
                         />
-                    )}
-                </div>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={width < CONTENT_MAX_WIDTH ? 12 : 6}
+                    >
+                        <Select
+                            value={filter.operatorValue}
+                            items={operators}
+                            className={classes.valueComponent}
+                            label={localization?.operator ?? `Operator`}
+                            itemText={(operator) => operator.label}
+                            itemValue={(operator) => operator.value}
+                            onChange={handleOperatorChange}
+                        />
+                    </Grid>
+                </Grid>
+                {operator && getValueComponent(operator)}
                 <Grid
                     container
                     spacing={1}
@@ -265,11 +382,13 @@ export default function TableFilterMenu<T> (props: Props<T>) {
                             variant="contained"
                             color="primary"
                             label={!editingFilter ? (localization?.addFilter ?? `Add Filter`) : (localization?.saveFilter ?? `Save Filter`)}
-                            onClick={() => onClose(filter)}
+                            onClick={() => {
+                                onClose(filter);
+                            }}
                         />
                     </Grid>
                 </Grid>
-            </Box>
+            </div>
         </Popover>
     );
 }

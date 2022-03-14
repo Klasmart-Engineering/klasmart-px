@@ -2,6 +2,8 @@
 import {
     Filter,
     FilterLocalization,
+    FilterOperator,
+    FilterValueOption,
     TableFilter,
 } from './Filters';
 import {
@@ -34,6 +36,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         chipText: {
             whiteSpace: `break-spaces`,
+            display: `flex`,
+        },
+        chipValueText: {
+            display: `flex`,
         },
     }));
 
@@ -63,6 +69,14 @@ export default function TableFilterChips<T> (props: Props<T>) {
         </>
     );
 
+    const getValues = (filter: Filter, operator: FilterOperator) => {
+        if(operator.valueComponent === `text-field`) return [];
+        if (typeof filter.values[0] === `string`) {
+            return filter.values.map((value) => (`"${operator.options?.find((option) => option.value === value)?.label}"`));
+        }
+        return (filter.values as FilterValueOption[]).map((value) => `"${value.label}"`); // TODO: remove casting when select items are changed to object values
+    };
+
     return (
         <>
             {filters.map((filter) => {
@@ -76,16 +90,15 @@ export default function TableFilterChips<T> (props: Props<T>) {
                         {currentFilter?.label}
                     </Typography>
                 );
-                const values = (
-                    operator?.options
-                        ? filter.values.map((value) => operator.options?.find((option) => option.value === value)?.label)
-                        : filter.values
-                ).map((value) => `"${value}"`);
+                const values = operator
+                    ? getValues(filter, operator)
+                    : [];
 
                 const valueText = (
                     <Typography
                         color="textPrimary"
                         variant="inherit"
+                        className={classes.chipValueText}
                     >
                         {values.map((value, index, values) => (
                             <React.Fragment key={`${value}-${index}`}>
@@ -95,6 +108,7 @@ export default function TableFilterChips<T> (props: Props<T>) {
                                     <Typography
                                         color="textSecondary"
                                         variant="inherit"
+                                        component={`span`}
                                     >
                                         {`, `}
                                     </Typography>
@@ -104,6 +118,7 @@ export default function TableFilterChips<T> (props: Props<T>) {
                                     <Typography
                                         color="textSecondary"
                                         variant="inherit"
+                                        component={`span`}
                                     >
                                         {localization?.chipLabelValueOr ?? ` or `}
                                     </Typography>
@@ -121,6 +136,7 @@ export default function TableFilterChips<T> (props: Props<T>) {
                                 className={classes.chipText}
                                 color="textSecondary"
                                 variant="inherit"
+                                component={`span`}
                             >
                                 {operator?.chipLabel?.(columnText, valueText) ?? onChipLabelFallback(columnText, operator!.label, valueText)}
                             </Typography>

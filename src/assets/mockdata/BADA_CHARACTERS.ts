@@ -1,77 +1,77 @@
-import { AutoCompleteOption } from "../../components/Input/ComboBox";
+import { FilterValueOption } from "../../components/Table/Common/Filter/Filters";
 
-const BADA_CHARACTERS: AutoCompleteOption[] = [
+const BADA_CHARACTERS: FilterValueOption[] = [
     {
-        id: 1,
-        text: `Abby`,
+        value: `1`,
+        label: `Abby`,
     },
     {
-        id: 2,
-        text: `Bada`,
+        value: `2`,
+        label: `Bada`,
     },
     {
-        id: 3,
-        text: `Curly`,
+        value: `3`,
+        label: `Curly`,
     },
     {
-        id: 4,
-        text: `Daddy Penguin`,
+        value: `4`,
+        label: `Daddy Penguin`,
     },
     {
-        id: 5,
-        text: `Dinobus`,
+        value: `5`,
+        label: `Dinobus`,
     },
     {
-        id: 6,
-        text: `Henrik the Hippo`,
+        value: `6`,
+        label: `Henrik the Hippo`,
     },
     {
-        id: 7,
-        text: `David the Dino`,
+        value: `7`,
+        label: `David the Dino`,
     },
     {
-        id: 8,
-        text: `Malcolm the Moose`,
+        value: `8`,
+        label: `Malcolm the Moose`,
     },
     {
-        id: 9,
-        text: `Gael the Gator`,
+        value: `9`,
+        label: `Gael the Gator`,
     },
     {
-        id: 10,
-        text: `Eccos`,
+        value: `10`,
+        label: `Eccos`,
     },
     {
-        id: 11,
-        text: `Jessie`,
+        value: `11`,
+        label: `Jessie`,
     },
     {
-        id: 12,
-        text: `Mat`,
+        value: `12`,
+        label: `Mat`,
     },
     {
-        id: 13,
-        text: `Mimi`,
+        value: `13`,
+        label: `Mimi`,
     },
     {
-        id: 14,
-        text: `Mommy Penguin`,
+        value: `14`,
+        label: `Mommy Penguin`,
     },
     {
-        id: 15,
-        text: `Pogo`,
+        value: `15`,
+        label: `Pogo`,
     },
     {
-        id: 16,
-        text: `Professor Pip`,
+        value: `16`,
+        label: `Professor Pip`,
     },
     {
-        id: 17,
-        text: `Punk`,
+        value: `17`,
+        label: `Punk`,
     },
     {
-        id: 18,
-        text: `Ziggy`,
+        value: `18`,
+        label: `Ziggy`,
     },
 ];
 
