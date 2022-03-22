@@ -18,8 +18,9 @@ export const Primary = Template.bind({});
 
 Primary.args = {
     fullWidth: true,
+    multiple: true,
     label:`Label`,
-    value:`Value`,
+    value:``,
     disabled: false,
     loading: false,
     placeholder:`Placeholder`,

@@ -3,8 +3,10 @@ import {
     getErrorText,
     Input,
 } from "./shared";
+import { Cancel as CancelIcon } from '@mui/icons-material';
 import {
     Checkbox,
+    Chip,
     Divider,
     ListItemIcon,
     ListItemText,
@@ -40,6 +42,14 @@ const useStyles = makeStyles((theme) => createStyles({
         padding: theme.spacing(1, 2, 0),
         fontWeight: 600,
         textTransform: `uppercase`,
+    },
+    chip: {
+        marginRight: theme.spacing(3/8),
+    },
+    multiplePadding: {
+        "& .MuiSelect-multiple": {
+            padding: theme.spacing(1.5, 1.75),
+        },
     },
 }));
 export interface Section<T> {
@@ -101,16 +111,27 @@ export default function Select<T> (props: Props<T>) {
             value = getToggleSelectAll(value.filter((v) => v));
         }
         const error = getErrorText(value, validations);
-        setValue(value);
         setError(error);
         onChange?.(value);
         onValidate?.(!error);
         onError?.(error);
+        if (multiple && !value) {
+            setValue([]);
+            return;
+        }
+        setValue(value);
     };
 
     const handleChange = (event: SelectChangeEvent<unknown>, child: ReactNode) => {
         const value = event.target.value as string | string[];
         updateValue(value);
+    };
+
+    const handleChipDelete = (itemValue: string) => {
+        setValue((previousValues) => {
+            if (!Array.isArray(previousValues)) return previousValues;
+            return previousValues.filter((previousValue) => previousValue !== itemValue);
+        });
     };
 
     useEffect(() => {
@@ -212,7 +233,9 @@ export default function Select<T> (props: Props<T>) {
         <TextField
             select
             data-testid={`${label}SelectTextField`}
-            className={clsx(className, classes.root)}
+            className={clsx(className, classes.root, {
+                [classes.multiplePadding]: multiple && value_.length,
+            })}
             label={label}
             variant={variant}
             helperText={hideHelperText ? undefined : (error_ ?? ` `)}
@@ -242,8 +265,23 @@ export default function Select<T> (props: Props<T>) {
                     ? (value) => value_.map((v) => {
                         const item = allItems.find((item) => itemValue(item) === v);
                         if (!item) return ``;
-                        return itemText(item);
-                    }).join(`, `)
+                        return (
+                            <Chip
+                                key={itemValue(item)}
+                                data-testid={`chip`}
+                                className={classes.chip}
+                                label={itemText(item)}
+                                deleteIcon={
+                                    <CancelIcon
+                                        onMouseDown={(event) => {
+                                            event.stopPropagation();
+                                        }}
+                                    />
+                                }
+                                onDelete={() => handleChipDelete(itemValue(item))}
+                            />
+                        );
+                    })
                     : undefined,
                 value: multiple && !Array.isArray(value_) ? [ value_ ] : value_,
                 onBlur,
