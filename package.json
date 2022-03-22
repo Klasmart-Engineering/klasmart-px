@@ -22,7 +22,7 @@
     "keywords": [],
     "author": "KidsLoop",
     "license": "ISC",
-    "homepage": "+https://github.com/KL-Engineering/kidsloop-px#readme",
+    "homepage": "https://github.com/KL-Engineering/kidsloop-px#readme",
     "peerDependencies": {
         "@material-ui/core": "^4.12.3",
         "@material-ui/icons": "^4.0.0",
