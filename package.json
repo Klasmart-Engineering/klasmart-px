@@ -12,7 +12,7 @@
         "start:sb": "start-storybook -p 6006",
         "test": "jest",
         "lint": "eslint .",
-        "release": "standard-version -a",
+        "release": "standard-version",
         "prepare": "husky install"
     },
     "repository": {
