@@ -15,7 +15,7 @@ module.exports = {
         filename: `[name].js`,
         path: path.resolve(__dirname, `dist`),
         libraryTarget: `umd`,
-        library: `kidsloop-px`,
+        library: `@kl-engineering/kidsloop-px`,
     },
     module: {
         rules: [

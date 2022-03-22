@@ -64,5 +64,8 @@
     "DT-",
     "WEBPX-",
     "CR-"
-  ]
+  ],
+  "scripts": {
+    "prerelease": "npm run build && git add ."
+  }
 }
