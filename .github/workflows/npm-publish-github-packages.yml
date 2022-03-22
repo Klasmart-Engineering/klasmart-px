@@ -22,6 +22,8 @@ jobs:
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{secrets.PACKAGES_TOKEN}}
+      - run: npm run lint
+      - run: npm test -- --coverage --coverageReporters="text-summary"
       - run: npm run build
       - run: npm publish
         env:
