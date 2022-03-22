@@ -1,4 +1,4 @@
-import { Props } from "../components/SnackbarProvider";
+import { Props } from "./SnackbarProvider";
 import { Story } from "@storybook/react";
 declare const _default: {
     title: string;

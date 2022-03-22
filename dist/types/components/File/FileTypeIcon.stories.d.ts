@@ -1,4 +1,4 @@
-import CounterIcon, { Props } from '../components/File/TypeIcon';
+import CounterIcon, { Props } from './TypeIcon';
 import { Story } from '@storybook/react';
 declare const _default: {
     title: string;

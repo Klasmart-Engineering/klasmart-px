@@ -1,4 +1,4 @@
-import Button, { Props } from '../components/Button/Button';
+import Button, { Props } from './Button';
 import { Story } from '@storybook/react';
 declare const _default: {
     title: string;

@@ -1,8 +1,8 @@
-import FileInputButton, { Props } from '../components/Button/FileInputButton';
+import IconButton, { Props } from './IconButton';
 import { Story } from '@storybook/react';
 declare const _default: {
     title: string;
-    component: typeof FileInputButton;
+    component: typeof IconButton;
 };
 export default _default;
 export declare const Primary: Story<Props>;

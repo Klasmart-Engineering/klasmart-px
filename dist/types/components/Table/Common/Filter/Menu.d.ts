@@ -1,5 +1,7 @@
 /// <reference types="react" />
 import { Filter, TableFilter } from './Filters';
+export declare type ValueComponent = `select` | `combo-box` | `text-field`;
+export declare type FilterValueInputEventHandler = (columnId: string, operator: string, value: string) => void;
 export interface FilterMenuLocalization {
     addFilter?: string;
     cancel?: string;
@@ -16,6 +18,8 @@ interface Props<T> {
     editingFilter: Filter | undefined;
     tableFilters: TableFilter<T>[];
     localization?: FilterMenuLocalization;
+    filterValueLoading?: boolean;
+    onFilterInputValueChange?: FilterValueInputEventHandler;
     onClose: (filter?: Filter) => void;
 }
 export default function TableFilterMenu<T>(props: Props<T>): JSX.Element;

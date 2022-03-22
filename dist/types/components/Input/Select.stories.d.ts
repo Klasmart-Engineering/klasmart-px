@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import Select, { Props } from '../components/Input/Select';
+import Select, { Props } from './Select';
 import { Story } from '@storybook/react';
 declare const _default: {
     title: string;

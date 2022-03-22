@@ -1,8 +1,8 @@
-import IconButton, { Props } from '../components/Button/IconButton';
+import ColorPicker, { Props } from './ColorPicker';
 import { Story } from '@storybook/react';
 declare const _default: {
     title: string;
-    component: typeof IconButton;
+    component: typeof ColorPicker;
 };
 export default _default;
 export declare const Primary: Story<Props>;

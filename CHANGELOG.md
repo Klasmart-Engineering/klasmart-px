@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.0.0%0Dv1.10.2) (2022-03-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* add combobox to table filter value
+
+### ✨ Features
+
+* add combobox to table filter value ([44d6131](https://github.com/KL-Engineering/kidsloop-px/commits/44d61317931ae6ba4b00d435e66c5ccb0c03a67e)), closes [WEBPX-38](https://calmisland.atlassian.net/browse/WEBPX-38) [WEBPX-38](https://calmisland.atlassian.net/browse/WEBPX-38) [WEBPX-38](https://calmisland.atlassian.net/browse/WEBPX-38) [WEBPX-38](https://calmisland.atlassian.net/browse/WEBPX-38)
+* make selected values into chips ([c0e1e3f](https://github.com/KL-Engineering/kidsloop-px/commits/c0e1e3f7471ad1aa1b1d36565bd38215bcd4b578)), closes [WEBPX-27](https://calmisland.atlassian.net/browse/WEBPX-27) [WEBPX-27](https://calmisland.atlassian.net/browse/WEBPX-27) [WEBPX-27](https://calmisland.atlassian.net/browse/WEBPX-27) [WEBPX-27](https://calmisland.atlassian.net/browse/WEBPX-27) [WEBPX-27](https://calmisland.atlassian.net/browse/WEBPX-27)
+
 ### [1.10.2](https://bitbucket.org/calmisland/kidsloop-px/branches/compare/1.10.2%0D1.10.1) (2022-03-07)
 
 ### [1.10.1](https://bitbucket.org/calmisland/kidsloop-px/branches/compare/1.10.1%0D1.10.0) (2022-03-07)

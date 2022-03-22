@@ -1,4 +1,4 @@
-import ImagePicker, { Props } from '../components/ImagePicker/ImagePicker';
+import ImagePicker, { Props } from './ImagePicker';
 import { Story } from '@storybook/react';
 declare const _default: {
     title: string;

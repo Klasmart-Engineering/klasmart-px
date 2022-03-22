@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import ComboBox, { Props } from "../components/Input/ComboBox";
+import ComboBox, { Props } from "./ComboBox";
 import { Story } from '@storybook/react';
 declare const _default: {
     title: string;

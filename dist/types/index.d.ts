@@ -17,6 +17,7 @@ export { default as FileTypeIcon } from "./components/File/TypeIcon";
 export { default as FullScreenDialog } from "./components/FullScreenDialog";
 export { default as ImagePicker } from "./components/ImagePicker/ImagePicker";
 export { default as ColorPicker } from "./components/Input/ColorPicker";
+export { default as ComboBox } from "./components/Input/ComboBox";
 export { default as FileInput } from "./components/Input/File/Base";
 export { default as SpreadsheetFileInput } from "./components/Input/File/Spreadsheet/Base";
 export { default as Select } from "./components/Input/Select";

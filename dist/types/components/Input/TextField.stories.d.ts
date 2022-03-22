@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import TextField, { Props } from '../components/Input/TextField';
+import TextField, { Props } from './TextField';
 import { Story } from '@storybook/react';
 declare const _default: {
     title: string;

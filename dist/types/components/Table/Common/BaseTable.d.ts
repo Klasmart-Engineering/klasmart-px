@@ -55,6 +55,7 @@ export interface BaseProps<T> {
     secondaryActions?: ToolbarAction[];
     selectActions?: ToolbarSelectAction<T>[];
     loading?: boolean;
+    filterValueLoading?: boolean;
     hideSelectAll?: boolean;
     hideAllGroupTab?: boolean;
     hideNoGroupOption?: boolean;
@@ -65,8 +66,9 @@ export interface BaseProps<T> {
     noGroupTotal?: number;
     hideSelectStatus?: boolean;
     selectMode?: SelectMode;
-    onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
     filters?: TableFilter<T>[];
+    onSelected?: (rows: T[Extract<keyof T, string>][]) => void;
+    onFilterInputValueChange?: (columnId: string, operator: string, value: string) => void;
 }
 export interface Props<T> extends BaseProps<T> {
     PaginationComponent?: ReactNode;

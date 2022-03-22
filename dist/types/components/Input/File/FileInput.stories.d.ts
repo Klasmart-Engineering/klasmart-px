@@ -1,4 +1,4 @@
-import FileInput, { Props } from '../components/Input/File/Base';
+import FileInput, { Props } from './Base';
 import { Story } from '@storybook/react';
 declare const _default: {
     title: string;

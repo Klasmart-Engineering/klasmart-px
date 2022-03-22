@@ -1,4 +1,4 @@
-import ValidationDetails, { Props } from "../components/Input/File/Spreadsheet/ValidationDetails";
+import ValidationDetails, { Props } from "./ValidationDetails";
 import { Story } from "@storybook/react";
 declare const _default: {
     title: string;

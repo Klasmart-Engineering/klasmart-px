@@ -1,4 +1,4 @@
-import SpreadsheetFileInput, { Props } from "../components/Input/File/Spreadsheet/Base";
+import SpreadsheetFileInput, { Props } from "./Base";
 import { Story } from "@storybook/react";
 declare const _default: {
     title: string;

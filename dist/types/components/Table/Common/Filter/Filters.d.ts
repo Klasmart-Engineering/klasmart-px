@@ -9,18 +9,30 @@ export interface FilterValueOption {
     label: string;
     value: string;
 }
-export interface FilterOperator {
+interface BaseFilterOperator {
     label: string;
     value: string;
-    multipleValues?: boolean;
     validations?: ((input: unknown) => true | string)[];
-    options?: FilterValueOption[];
     chipLabel?: (column: ReactNode, value: ReactNode) => ReactNode;
 }
+export interface ComboBoxFilterOperator extends BaseFilterOperator {
+    multipleValues?: boolean;
+    options: FilterValueOption[];
+    valueComponent: `combo-box`;
+}
+export interface TextFieldFilterOperator extends BaseFilterOperator {
+    valueComponent: `text-field`;
+}
+export interface SelectFilterOperator extends BaseFilterOperator {
+    multipleValues?: boolean;
+    options: FilterValueOption[];
+    valueComponent: `select`;
+}
+export declare type FilterOperator = ComboBoxFilterOperator | TextFieldFilterOperator | SelectFilterOperator;
 export interface Filter {
     columnId: string;
     operatorValue: string;
-    values: string[];
+    values: FilterValueOption[] | string[];
 }
 export interface FilterLocalization {
     clearAll?: string;
@@ -31,6 +43,8 @@ export interface FilterLocalization {
 interface Props<T> {
     filters: TableFilter<T>[];
     localization?: FilterLocalization;
+    filterValueLoading?: boolean;
+    onFilterInputValueChange?: (columnId: string, operator: string, value: string) => void;
     onChange: Dispatch<SetStateAction<Filter[]>>;
 }
 export default function BaseTableFilter<T>(props: Props<T>): JSX.Element;

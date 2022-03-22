@@ -1,5 +1,5 @@
-import { Props as OrganizationAvatarProps } from "../components/OrganizationAvatar";
-import { Props as UserAvatarProps } from "../components/UserAvatar";
+import { Props as OrganizationAvatarProps } from "./OrganizationAvatar";
+import { Props as UserAvatarProps } from "./UserAvatar";
 import { Story } from "@storybook/react";
 declare const _default: {
     title: string;

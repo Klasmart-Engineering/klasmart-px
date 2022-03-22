@@ -1,4 +1,4 @@
-import { Props } from '../components/Input/File/Spreadsheet/Preview';
+import { Props } from './Preview';
 import { Meta, Story } from '@storybook/react';
 declare const _default: Meta<import("@storybook/react").Args>;
 export default _default;
