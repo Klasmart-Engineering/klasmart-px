@@ -1,5 +1,5 @@
 module.exports = {
-    extends: [ `@kidsloop/eslint-config/react`, `@kidsloop/eslint-config/jest/react` ],
+    extends: [ `@kl-engineering/eslint-config/react`, `@kl-engineering/eslint-config/jest/react` ],
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
