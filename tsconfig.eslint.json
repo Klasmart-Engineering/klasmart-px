@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+      "rootDir": "./",
+  },
+  "extends": "./tsconfig.json",
+  "include": [
+        ".eslintrc.js",
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.ts",
+        "**/*.tsx",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx"
+  ],
+  "exclude": [
+      "node_modules",
+      "dist"
+  ]
+}

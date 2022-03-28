@@ -11,7 +11,7 @@
         "noImplicitAny": true,
         "outDir": "./dist",
         "removeComments": true,
-        "baseUrl": "./src",
+        "rootDir": "./src",
         "skipLibCheck": true,
         "strict": true,
         "target": "ESNext",
@@ -23,15 +23,16 @@
         ]
     },
     "include": [
-        ".eslintrc.js",
-        "**/*.js",
-        "**/*.jsx",
-        "**/*.ts",
-        "**/*.tsx"
+        "src/**/*.js",
+        "src/**/*.jsx",
+        "src/**/*.ts",
+        "src/**/*.tsx"
     ],
     "exclude": [
         "node_modules",
         "dist",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
         "test"
     ]
 }
