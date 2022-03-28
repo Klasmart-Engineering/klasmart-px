@@ -1,5 +1,5 @@
 {
-    "name": "kidsloop-px",
+    "name": "@kl-engineering/kidsloop-px",
     "version": "1.10.2",
     "description": "KidsLoop Product Experience UI Library",
     "main": "./dist/main.js",
@@ -107,5 +107,8 @@
         "react-easy-crop": "^3.5.1",
         "typeface-nanum-square-round": "^1.0.2",
         "use-debounce": "^6.0.1"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
     }
 }
