@@ -1,5 +1,5 @@
 {
-    "name": "@KL-Engineering/kidsloop-px",
+    "name": "@kl-engineering/kidsloop-px",
     "version": "1.0.9",
     "description": "KidsLoop Product Experience UI Library",
     "main": "./dist/main.js",
