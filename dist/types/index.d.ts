@@ -10,7 +10,7 @@ export { default as ConfirmDialogProvider } from "./components/Dialog/Confirm/Pr
 export { usePrompt } from "./components/Dialog/Prompt/hooks";
 export { default as PromptDialogProvider } from "./components/Dialog/Prompt/Provider";
 export { default as Drawer } from "./components/Drawer";
-export { default as FullScreenDialog } from "./components/FullscreeenDialog";
+export { default as FullScreenDialog } from "./components/FullScreenDialog";
 export { default as Select } from "./components/Input/Select";
 export { default as TextField } from "./components/Input/TextField";
 export { default as LanguageSelect } from "./components/LanguageSelect";
