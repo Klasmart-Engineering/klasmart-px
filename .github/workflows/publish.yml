@@ -15,9 +15,9 @@ jobs:
         secrets:
             NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
 
-    # test-unit:
-    #     needs: [install]
-    #     uses: KL-Engineering/github-action-workflows/.github/workflows/npm-test-jest.yml@v2.0.0
+    test-unit:
+        needs: [install]
+        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-test-jest.yml@v2.0.0
 
     lint:
         needs: [install]
@@ -30,7 +30,7 @@ jobs:
             upload: true
 
     confirm-publish:
-        needs: [lint, build]
+        needs: [test-unit, lint, build]
         runs-on: ubuntu-latest
         environment: latest
         steps:
