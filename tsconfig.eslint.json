@@ -4,11 +4,12 @@
     },
     "extends": "./tsconfig.json",
     "include": [
-        "**.js",
-        "**.ts",
-        "**/*",
-        "src/**/*.test.ts",
-        "src/**/*.test.tsx"
+        ".*.js",
+        ".*.ts",
+        "*.js",
+        "*.ts",
+        "**/*.ts",
+        "**/*.tsx"
     ],
     "exclude": [
         "node_modules",

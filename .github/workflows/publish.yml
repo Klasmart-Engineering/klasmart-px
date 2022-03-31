@@ -1,0 +1,44 @@
+name: Publish
+
+concurrency: 
+    group: Publish
+    cancel-in-progress: true
+
+on:
+    release:
+        types: [published]
+    workflow_dispatch:
+
+jobs:
+    install:
+        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-ci.yml@v2.0.0
+        secrets:
+            NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+
+    # test-unit:
+    #     needs: [install]
+    #     uses: KL-Engineering/github-action-workflows/.github/workflows/npm-test-jest.yml@v2.0.0
+
+    lint:
+        needs: [install]
+        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-lint.yml@v2.0.0
+
+    build:
+        needs: [install]
+        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-build-upload-package.yml@v2.0.0
+        with:
+            upload: true
+
+    confirm-publish:
+        needs: [lint, build]
+        runs-on: ubuntu-latest
+        environment: latest
+        steps:
+            - name: Debug message
+              run: echo Publish confirmed
+
+    publish:
+        needs: [confirm-publish]
+        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-publish.yml@v2.0.0
+        secrets:
+            NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
