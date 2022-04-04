@@ -11,7 +11,7 @@ on:
 
 jobs:
     install:
-        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-ci.yml@v2.0.0
+        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-ci.yml@v2.0.3
         secrets:
             NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
 
@@ -21,11 +21,11 @@ jobs:
 
     lint:
         needs: [install]
-        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-lint.yml@v2.0.0
+        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-lint.yml@v2.0.3
 
     build:
         needs: [install]
-        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-build-upload-package.yml@v2.0.0
+        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-build-upload-package.yml@v2.0.3
         with:
             upload: true
 
@@ -39,6 +39,6 @@ jobs:
 
     publish:
         needs: [confirm-publish]
-        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-publish.yml@v2.0.0
+        uses: KL-Engineering/github-action-workflows/.github/workflows/npm-publish.yml@v2.0.3
         secrets:
             NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
