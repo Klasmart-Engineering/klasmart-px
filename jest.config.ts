@@ -6,6 +6,7 @@ const config: Config.InitialOptions = {
     testEnvironment: `jsdom`,
     testPathIgnorePatterns: [ `/node_modules/` ],
     setupFilesAfterEnv: [ `<rootDir>/setupTests.ts` ],
+    maxWorkers: `50%`,
 };
 
 export default config;

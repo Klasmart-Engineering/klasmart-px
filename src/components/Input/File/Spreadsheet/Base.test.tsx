@@ -321,6 +321,9 @@ function expectFailedUpload ({
 
 function expectValidationPassed (data?: string[][]) {
     const validationDetails = screen.getByTestId(`validation-details`);
+    const lastModified = Intl.DateTimeFormat(`en`, {
+        dateStyle: `long`,
+    }).format(new Date(defaultFile.lastModified));
     expect(validationDetails).toBeInTheDocument();
 
     expect(uploadButton()).toBeEnabled();
@@ -328,7 +331,7 @@ function expectValidationPassed (data?: string[][]) {
 
     expect(screen.getByText(`All validations passed`)).toBeInTheDocument();
     expect(screen.getByText(`test.csv`)).toBeInTheDocument();
-    expect(screen.getByText(`1.0 Kb • January 1, 2020`)).toBeInTheDocument();
+    expect(screen.getByText(`1.0 Kb • ${lastModified}`)).toBeInTheDocument();
 
     expectPreviewData(data || defaultData);
 }

@@ -1,4 +1,4 @@
-export default (min: Date, errorMessage: string) => ((date: Date | string | undefined) => {
+export default (min: Date, errorMessage: string) => ((date: any) => {
     if (!date) return true;
 
     const value = date instanceof Date ? date : new Date(date);

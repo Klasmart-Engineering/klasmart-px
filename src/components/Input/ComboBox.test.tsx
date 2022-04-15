@@ -26,7 +26,7 @@ const defaultProps = {
 };
 
 const clickInput = () => {
-    const searchInput = screen.getByRole(`textbox`, {
+    const searchInput = screen.getByRole(`combobox`, {
         name: `testLabel`,
     });
 
@@ -34,7 +34,7 @@ const clickInput = () => {
 };
 
 const typeInputValue = (value: string) => {
-    const searchInput = screen.getByRole(`textbox`, {
+    const searchInput = screen.getByRole(`combobox`, {
         name: `testLabel`,
     });
 
@@ -46,7 +46,7 @@ describe(`ComboBox`, () => {
         test(`default props`, () => {
             render(<ComboBox {...defaultProps} />);
 
-            const inputElement = screen.getByRole(`textbox`, {
+            const inputElement = screen.getByRole(`combobox`, {
                 name: `testLabel`,
             });
 
@@ -167,7 +167,7 @@ describe(`ComboBox`, () => {
 
             userEvent.click(selectOptions[0]);
 
-            expect(screen.getByRole(`textbox`, {
+            expect(screen.getByRole(`combobox`, {
                 name: `testLabel`,
             })).toHaveValue(firstOptionText);
             expect(selectOptions[0]).not.toBeInTheDocument();
