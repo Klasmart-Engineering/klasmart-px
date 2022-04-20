@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.1.0%0Dv2.0.4) (2022-04-20)
+
+
+### ♻️ Chores
+
+* enable tests ([f84e3c8](https://github.com/KL-Engineering/kidsloop-px/commits/f84e3c80d76e63c9e1918ee1389d61a9592225ac))
+* fix homepage url ([c0eb841](https://github.com/KL-Engineering/kidsloop-px/commits/c0eb841ee79f0e95299b403803cc0697e9e38b39))
+
+
+### ⚙️ Continuous Integrations
+
+* add conventional pr title workflow ([b071111](https://github.com/KL-Engineering/kidsloop-px/commits/b071111f6fa829fc4e723bce0e3ca765bab7d95f))
+* add more workflows ([46d445b](https://github.com/KL-Engineering/kidsloop-px/commits/46d445b54772646616959da5d5bbd981d58c2ed0))
+* remove edited event type trigger from pr workflow ([326f588](https://github.com/KL-Engineering/kidsloop-px/commits/326f588d1f4df8cc72acda2f1a463eb4f572c727))
+* separate pr workflows for meta info and commits ([2f2e5f9](https://github.com/KL-Engineering/kidsloop-px/commits/2f2e5f9d1ebb7a59fc66934f9f9052e210930e6e))
+* update to latest reusable workflows ([1244df9](https://github.com/KL-Engineering/kidsloop-px/commits/1244df9de286459933f80e8b0bf9579ed1931dc9))
+
+
+### 💎 Style
+
+* format workflow file ([8cdc8fa](https://github.com/KL-Engineering/kidsloop-px/commits/8cdc8fa7ceef5dedc055c0ffd2f679c94af6f11a))
+
+
+### ✨ Features
+
+* **component:** add datepicker (#10) ([cd4afea](https://github.com/KL-Engineering/kidsloop-px/commits/cd4afea7169043b0841df41cf210e55858318626)), closes [AD-2253](https://calmisland.atlassian.net/browse/AD-2253)
+* **component:** add truncation chip group and truncation chip tooltip (#12) ([a1c8b98](https://github.com/KL-Engineering/kidsloop-px/commits/a1c8b98849f7c4013ce960a5eba35c040ed2dd87))
+
 ### [2.0.4](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.0.4%0Dv2.0.3) (2022-03-22)
 
 ### [2.0.3](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.0.3%0Dv2.0.2) (2022-03-22)
