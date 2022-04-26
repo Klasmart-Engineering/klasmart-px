@@ -2,14 +2,15 @@ import { Validator } from "../../validations";
 import { getErrorText } from "./shared";
 import TextField from "./TextField";
 import Dayjs from "@date-io/dayjs";
-import DatePicker,
-{ DatePickerProps } from "@mui/lab/DatePicker";
 import { InputProps } from "@mui/material";
 import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import clsx from "clsx";
+import {
+    DatePicker,
+    DatePickerProps,
+} from "@mui/x-date-pickers/DatePicker";
 import React,
 {
     useCallback,
@@ -127,15 +128,19 @@ export default function DatePickerField (props: Props) {
             value={value ? value : null}
             minDate={dayjs(minDate)}
             maxDate={dayjs(maxDate)}
-            renderInput={(params) => (
+            renderInput={({
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                inputProps, InputProps, type, onBlur, onFocus, onError, ...paramsRest
+            }) => (
                 <TextField
+                    {...paramsRest}
                     placeholder={placeholder}
                     hideHelperText={hideHelperText}
                     loading={loading}
                     variant={variant}
                     error={error_}
-                    value={params.inputProps?.value}
-                    InputProps={params.InputProps}
+                    value={inputProps?.value}
+                    InputProps={InputProps}
                     label={label}
                     fullWidth={fullWidth}
                     {...rest}
@@ -143,6 +148,9 @@ export default function DatePickerField (props: Props) {
             )}
             views={views}
             label={label}
+            PopperProps={{
+                placement: `auto-start`,
+            }}
             readOnly={readOnly}
             onChange={(value) => onChange?.(value?.toDate() ?? null)}
             onError={handleError}

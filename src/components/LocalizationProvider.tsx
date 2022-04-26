@@ -1,5 +1,5 @@
-import AdapterDayJs from "@mui/lab/AdapterDayjs";
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import React, {
     useEffect,
     useState,
@@ -38,7 +38,7 @@ export default function BaseLocalizationProvider (props: Props) {
 
     return (
         <LocalizationProvider
-            dateAdapter={AdapterDayJs}
+            dateAdapter={AdapterDayjs}
             locale={dictionary}
         >
             {children}
