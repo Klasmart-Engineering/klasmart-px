@@ -1,0 +1,1 @@
+exports.id=5054,exports.ids=[5054],exports.modules={5054:function(e){e.exports=function(){"use strict";return{name:"en",weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_")}}()}};
