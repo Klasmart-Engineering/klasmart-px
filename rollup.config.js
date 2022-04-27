@@ -2,12 +2,15 @@ import pkg from './package.json';
 // import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
+import esbuild from 'rollup-plugin-esbuild';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 // import replace from '@rollup/plugin-replace';
 // import babel from "rollup-plugin-babel";
 // import nodePolyfills from 'rollup-plugin-node-polyfills';
 import postCSS from 'rollup-plugin-postcss';
-// import { terser } from 'rollup-plugin-terser';
-import typescript from 'rollup-plugin-typescript2';
+import { terser } from 'rollup-plugin-terser';
+import typescript2 from 'rollup-plugin-typescript2';
 
 export default {
     input: `src/index.ts`,
@@ -27,12 +30,30 @@ export default {
     // this marks all peerDependencies as external meaning they won't be bundled in the distribution
     external: [ ...Object.keys(pkg.peerDependencies || {}) ],
     plugins: [
-        nodeResolve(),
-        commonjs(),
-        typescript({
-            useTsconfigDeclarationDir: true,
+        typescript(),
+        nodePolyfills({
+            include: [`src/**/*.ts`, `src/**/*.tsx`],
         }),
+        nodeResolve({
+            preferBuiltins: false
+        }),
+        commonjs(),
         postCSS(),
+        terser(),
+        // typescript(),
+        // nodeResolve({
+        //     preferBuiltins: false
+        // }),
+        // commonjs({
+        //     include: /node_modules/,
+        //     namedExports: {
+        //         'prop-types': `PropTypes`,
+        //     }
+        // }),
+        // nodePolyfills({
+        //     include: null,
+        // }),
+        // postCSS(),
     ],
     // plugins: [
     //     nodePolyfills(),
