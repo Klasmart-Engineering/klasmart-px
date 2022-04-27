@@ -9,7 +9,6 @@ import IconButton,
 { Props } from './IconButton';
 import { Home } from '@mui/icons-material';
 import { Story } from '@storybook/react';
-import React from 'react';
 
 export default {
     title: `IconButton`,

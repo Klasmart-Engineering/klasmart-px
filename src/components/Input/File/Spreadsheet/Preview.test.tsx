@@ -16,7 +16,6 @@ import {
     screen,
     waitFor,
 } from "@testing-library/react";
-import React from "react";
 
 const render = ({ errors }: {errors: Props["errors"]} = {
     errors: [],

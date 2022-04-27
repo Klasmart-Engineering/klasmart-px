@@ -11,7 +11,6 @@ import TextField,
 { Props } from "./TextField";
 import { screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
-import React from "react";
 
 const mockHandlers = {
     onChange: jest.fn(),

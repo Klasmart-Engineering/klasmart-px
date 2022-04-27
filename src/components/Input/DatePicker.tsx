@@ -11,8 +11,7 @@ import {
     DatePicker,
     DatePickerProps,
 } from "@mui/x-date-pickers/DatePicker";
-import React,
-{
+import {
     useCallback,
     useEffect,
     useState,
@@ -129,8 +128,14 @@ export default function DatePickerField (props: Props) {
             minDate={dayjs(minDate)}
             maxDate={dayjs(maxDate)}
             renderInput={({
+                inputProps,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                inputProps, InputProps, type, onBlur, onFocus, onError, ...paramsRest
+                InputProps,
+                type,
+                onBlur,
+                onFocus,
+                onError,
+                ...paramsRest
             }) => (
                 <TextField
                     {...paramsRest}

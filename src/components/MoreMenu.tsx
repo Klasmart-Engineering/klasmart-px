@@ -16,8 +16,7 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import React,
-{ useState } from "react";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme: Theme) => createStyles ({}));
 

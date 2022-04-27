@@ -7,15 +7,15 @@ import {
     ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material';
 import {
+    Accordion as MuiAccordion,
+    AccordionDetails as MuiAccordionDetails,
+    AccordionSummary as MuiAccordionSummary,
     Box,
     Chip,
+    Typography,
+    TypographyProps,
 } from "@mui/material";
-import MuiAccordion from '@mui/material/Accordion';
-import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import { lighten } from '@mui/material/styles';
-import Typography,
-{ TypographyProps } from '@mui/material/Typography';
 import {
     ClassNameMap,
     createStyles,

@@ -4,8 +4,7 @@ import ContentCard from './ContentCard';
 import { Add as AddIcon } from '@mui/icons-material';
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React,
-{ cloneElement } from 'react';
+import { cloneElement } from 'react';
 
 const consoleLog = console.log;
 beforeEach(() => {

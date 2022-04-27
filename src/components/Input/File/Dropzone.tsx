@@ -9,8 +9,7 @@ import {
     makeStyles,
 } from '@mui/styles';
 import clsx from "clsx";
-import React,
-{ useCallback } from "react";
+import { useCallback } from "react";
 import {
     FileRejection,
     useDropzone,

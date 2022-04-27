@@ -1,12 +1,9 @@
 import {
-    createMuiTheme,
+    createTheme,
+    PaletteOptions,
     responsiveFontSizes,
     Theme,
-} from "@material-ui/core";
-import { PaletteOptions } from "@material-ui/core/styles/createPalette";
-// import "node-source-han-sans-sc/SourceHanSansSC-Regular-all.css";
-// import "typeface-nanum-square-round";
-// import "../assets/styles/index.min.css";
+} from "@mui/material";
 
 export default function builder (languageCode: string, themeMode: string) {
     function setTypography (languageCode: string) {
@@ -59,56 +56,6 @@ export default function builder (languageCode: string, themeMode: string) {
         fontWeightRegular: localeTypography.localeWeightRegular,
     } as any;
 
-    const overrides = {
-        MuiAppBar: {
-            root: {
-                backgroundColor: themeMode === `light` ? `#fafafa` : `#041125`,
-            },
-        },
-        MuiTable: {
-            root: {
-                backgroundColor: themeMode === `light` ? `#fff` : `#05152e`,
-            },
-        },
-        MuiTableCell: {
-            stickyHeader: {
-                backgroundColor: themeMode === `light` ? `#fafafa` : `#041125`,
-            },
-        },
-        MuiTabs: {
-            root: {
-                backgroundColor: themeMode === `light` ? `#FFF` : `#030D1C`,
-            },
-        },
-        MuiTab: {
-            root: {
-                backgroundColor:
-                    themeMode === `light` ? `#fafafa` : `#030D1C !important`,
-            },
-        },
-        MuiIconButton: {
-            colorPrimary: {
-                color: themeMode === `light` ? `#0E78D5` : `#fafafa !important`, // TODO: Confirm color
-                backgroundColor:
-                    themeMode === `light` ? `#f6fafe` : `#0E78D5 !important`, // TODO: Confirm color
-            },
-        },
-        MuiToggleButton: {
-            root: {
-                color: themeMode === `light` ? `#1B365D` : `#FFF`,
-                backgroundColor: themeMode === `light` ? `#FFF` : `#1B365D`,
-                "&:hover": {
-                    "-webkit-transition": `all .4s ease`,
-                    color: themeMode === `light` ? `#FFF` : `#030D1C`,
-                    backgroundColor: themeMode === `light` ? `#1B365D` : `#FFF`,
-                    "box-shadow":
-                        `0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)`,
-                    transition: `all .4s ease`,
-                },
-            },
-        },
-    };
-
     const palette: PaletteOptions = {
         background: {
             default: themeMode === `light` ? `#fafafa` : `#030D1C`,
@@ -124,19 +71,17 @@ export default function builder (languageCode: string, themeMode: string) {
 
     let theme: Theme;
     if (themeMode === `light`) {
-        palette.type = `light`;
+        palette.mode = `light`;
         palette.background = {
             default: `#FFF`,
         };
-        theme = createMuiTheme({
-            overrides,
+        theme = createTheme({
             palette,
             typography,
         });
     } else {
-        palette.type = `dark`;
-        theme = createMuiTheme({
-            overrides,
+        palette.mode = `dark`;
+        theme = createTheme({
             palette,
             typography,
         });

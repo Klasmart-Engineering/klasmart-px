@@ -17,7 +17,7 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import { clamp } from "lodash";
+import { clamp } from "lodash-es";
 import React from "react";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({

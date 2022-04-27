@@ -16,9 +16,8 @@ import {
     makeStyles,
 } from '@mui/styles';
 import clsx from "clsx";
-import { clamp } from "lodash";
-import React,
-{
+import { clamp } from "lodash-es";
+import {
     ReactNode,
     useEffect,
     useState,

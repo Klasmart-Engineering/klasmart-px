@@ -5,7 +5,6 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import React from "react";
 
 const POPOVER_WIDTH = 216;
 

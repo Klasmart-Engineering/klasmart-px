@@ -7,8 +7,7 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import React,
-{ ReactNode } from "react";
+import { ReactNode } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 

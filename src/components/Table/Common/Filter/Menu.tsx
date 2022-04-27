@@ -18,8 +18,7 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import React,
-{
+import {
     useEffect,
     useState,
 } from 'react';

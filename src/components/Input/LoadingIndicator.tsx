@@ -7,7 +7,6 @@ import {
     makeStyles,
 } from '@mui/styles';
 import clsx from "clsx";
-import React from "react";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     loading: {

@@ -1,8 +1,7 @@
 import { render } from '../../../../test/themeProviderRender';
 import TruncateChipTooltip from './TruncateChipTooltip';
 import { screen } from "@testing-library/react";
-import React,
-{ cloneElement } from 'react';
+import { cloneElement } from 'react';
 
 describe(`TruncateChipTooltip`, () => {
 

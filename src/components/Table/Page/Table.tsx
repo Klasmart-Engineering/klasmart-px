@@ -14,9 +14,8 @@ import {
 import {
     clamp,
     isEqual,
-} from "lodash";
-import React,
-{ useState } from "react";
+} from "lodash-es";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 

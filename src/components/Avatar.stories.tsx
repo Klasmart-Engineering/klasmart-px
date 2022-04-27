@@ -4,7 +4,6 @@ import OrganizationAvatar,
 import UserAvatar,
 { Props as UserAvatarProps } from "./UserAvatar";
 import { Story } from "@storybook/react";
-import React from "react";
 
 export default {
     title: `Avatar`,

@@ -2,7 +2,6 @@ import { sleep } from '../../../utils';
 import FileInput,
 { Props } from './Base';
 import { Story } from '@storybook/react';
-import React from 'react';
 
 export default {
     title: `FileInput`,

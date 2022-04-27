@@ -5,8 +5,7 @@ import {
     SnackbarProviderProps,
     useSnackbar,
 } from 'notistack';
-import React,
-{ ReactText } from "react";
+import { ReactText } from "react";
 
 interface CloseButtonProps {
     actionKey: ReactText;

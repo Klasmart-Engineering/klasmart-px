@@ -5,8 +5,16 @@
         "declarationDir": "dist/types",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "jsx": "react",
+        "resolveJsonModule": true,
+        "strictNullChecks": true,
+        "jsx": "react-jsx",
         "module": "CommonJS",
+        "moduleResolution": "Node",
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext"
+        ],
         "noEmit": false,
         "noImplicitAny": true,
         "outDir": "./dist",
@@ -14,7 +22,7 @@
         "rootDir": "./src",
         "skipLibCheck": true,
         "strict": true,
-        "target": "ESNext",
+        "target": "ES6",
         "types": [
             "react",
             "jest",
@@ -31,6 +39,9 @@
     "exclude": [
         "node_modules",
         "dist",
+        "src/**/*.stories.mdx",
+        "src/**/*.stories.ts",
+        "src/**/*.stories.tsx",
         "src/**/*.test.ts",
         "src/**/*.test.tsx"
     ]

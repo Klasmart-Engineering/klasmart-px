@@ -1,7 +1,6 @@
 import TruncateChipGroup,
 { Props } from './TruncateChipGroup';
 import { Story } from '@storybook/react';
-import React from 'react';
 
 export default {
     title: `Truncate/TruncateChipGroup`,

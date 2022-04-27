@@ -3,8 +3,7 @@ import {
     StyledEngineProvider,
     ThemeProvider,
 } from '@mui/material/styles';
-import React,
-{ ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 const theme = createTheme();
 

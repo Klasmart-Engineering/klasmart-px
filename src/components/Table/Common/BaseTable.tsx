@@ -51,9 +51,8 @@ import {
     isEqual,
     pick,
     union,
-} from "lodash";
-import React,
-{
+} from "lodash-es";
+import {
     ReactNode,
     useEffect,
     useMemo,

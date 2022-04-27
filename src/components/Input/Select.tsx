@@ -20,9 +20,8 @@ import {
     makeStyles,
 } from '@mui/styles';
 import clsx from "clsx";
-import { isEqual } from "lodash";
-import React,
-{
+import { isEqual } from "lodash-es";
+import {
     ReactNode,
     useEffect,
     useState,

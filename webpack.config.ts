@@ -1,12 +1,21 @@
-const path = require(`path`);
-const { CleanWebpackPlugin } = require(`clean-webpack-plugin`);
-const CopyPlugin = require(`copy-webpack-plugin`);
-const ForkTsCheckerWebpackPlugin = require(`fork-ts-checker-webpack-plugin`);
-const nodeExternals = require(`webpack-node-externals`);
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
+// import CopyPlugin from "copy-webpack-plugin";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+import path from "path";
+import { Configuration } from "webpack";
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
+import nodeExternals from "webpack-node-externals";
 
-module.exports = {
+const webpackConfig: Configuration = {
     mode: `production`,
-    target: `node`,
+    devtool: `source-map`,
+    experiments: {
+        outputModule: true,
+    },
+    externalsType: `module`,
+    externalsPresets: {
+        node: true,
+    },
     entry: {
         main: `./src/index.ts`,
         utils: `./src/utils/index.ts`,
@@ -14,8 +23,21 @@ module.exports = {
     output: {
         filename: `[name].js`,
         path: path.resolve(__dirname, `dist`),
-        libraryTarget: `umd`,
-        library: `@kl-engineering/kidsloop-px`,
+        module: true,
+        chunkFormat: `module`,
+        // libraryTarget: `umd`,
+        library: {
+            type: `module`,
+        },
+        environment: {
+            module: true,
+        },
+        // library: {
+        //     type: `umd`,
+        // },
+    },
+    optimization: {
+        usedExports: true,
     },
     module: {
         rules: [
@@ -55,14 +77,15 @@ module.exports = {
     },
     resolve: {
         extensions: [
-            `.js`,
+            `.tsx`,
             `.ts`,
             `.jsx`,
-            `.tsx`,
+            `.js`,
         ],
     },
     plugins: [
         new CleanWebpackPlugin(), new ForkTsCheckerWebpackPlugin(),
+        // new BundleAnalyzerPlugin(),
         // new CopyPlugin({
         //     patterns: [
         //         {
@@ -72,5 +95,11 @@ module.exports = {
         //     ],
         // }),
     ],
-    externals: [ nodeExternals() ],
+    // externals: [
+    //     nodeExternals({
+    //         importType: `umd`,
+    //     }),
+    // ],
 };
+
+export default webpackConfig;

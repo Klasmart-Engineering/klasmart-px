@@ -3,7 +3,11 @@
 require(`@rushstack/eslint-patch/modern-module-resolution`);
 
 module.exports = {
-    extends: [ `@kl-engineering/eslint-config/react`, `@kl-engineering/eslint-config/jest/react` ],
+    extends: [
+        `@kl-engineering/eslint-config/react`,
+        `@kl-engineering/eslint-config/jest/react`,
+        `plugin:react/jsx-runtime`,
+    ],
     parserOptions: {
         ecmaFeatures: {
             jsx: true,

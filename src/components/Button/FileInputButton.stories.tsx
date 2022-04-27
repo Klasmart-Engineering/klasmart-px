@@ -1,7 +1,6 @@
 import FileInputButton,
 { Props } from './FileInputButton';
 import { Story } from '@storybook/react';
-import React from 'react';
 
 export default {
     title: `FileInputButton`,

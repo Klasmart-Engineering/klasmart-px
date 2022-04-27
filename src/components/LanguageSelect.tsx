@@ -1,19 +1,22 @@
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import LanguageIcon from "@mui/icons-material/Translate";
-import Button from "@mui/material/Button";
-import Menu,
-{ MenuProps } from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { Theme } from "@mui/material/styles";
-import Tooltip from "@mui/material/Tooltip";
+import {
+    ExpandMore as ExpandMoreIcon,
+    Translate as LanguageIcon,
+} from "@mui/icons-material";
+import {
+    Button,
+    Menu,
+    MenuItem,
+    MenuProps,
+    Tooltip,
+} from "@mui/material";
 import {
     createStyles,
     makeStyles,
     withStyles,
 } from '@mui/styles';
 import clsx from "clsx";
-import { useState } from "react";
-import * as React from "react";
+import React,
+{ useState } from "react";
 import { useCookies } from "react-cookie";
 
 export interface LanguageSelectLocalization {
@@ -33,7 +36,7 @@ interface Props {
     noIcon?: boolean;
 }
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
     expand: {
         transform: `rotate(0deg)`,
         transition: theme.transitions.create(`transform`, {

@@ -1,7 +1,6 @@
 import ImagePicker,
 { Props } from './ImagePicker';
 import { Story } from '@storybook/react';
-import React from 'react';
 
 export default {
     title: `ImagePicker`,

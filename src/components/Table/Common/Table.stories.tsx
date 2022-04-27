@@ -21,11 +21,6 @@ import {
 } from '@mui/icons-material';
 import { Chip } from '@mui/material';
 import {
-    createStyles,
-    makeStyles,
-} from '@mui/styles';
-import React,
-{
     useEffect,
     useState,
 } from 'react';
@@ -636,16 +631,6 @@ export const CursorTableServer = () => {
         />
     );
 };
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: `100%`,
-        },
-        chip: {
-            margin: theme.spacing(3/8),
-        },
-    }));
 
 const programsRows = [
     {
@@ -1311,7 +1296,6 @@ const customFilterOnServer = async (columnId: string, operatorValue: string, inp
 };
 
 export const PageTableServerFilter = () => {
-    const classes = useStyles();
     const [ filterValueLoading, setFilterValueLoading ] = useState(false);
     const [ page, setPage ] = useState(0);
     const [ loadingData, setLoadingData ] = useState(false);
@@ -1349,7 +1333,9 @@ export const PageTableServerFilter = () => {
                         <Chip
                             key={`grade-${i}`}
                             label={grade}
-                            className={classes.chip}
+                            sx={{
+                                m: 3/8,
+                            }}
                         />
                     ))}
                 </>
@@ -1366,7 +1352,9 @@ export const PageTableServerFilter = () => {
                         <Chip
                             key={`ageRange-${i}`}
                             label={ageRange}
-                            className={classes.chip}
+                            sx={{
+                                m: 3/8,
+                            }}
                         />
                     ))}
                 </>
@@ -1383,7 +1371,9 @@ export const PageTableServerFilter = () => {
                         <Chip
                             key={`subject-${i}`}
                             label={subject}
-                            className={classes.chip}
+                            sx={{
+                                m: 3/8,
+                            }}
                         />
                     ))}
                 </>

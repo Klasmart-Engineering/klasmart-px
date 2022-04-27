@@ -19,7 +19,6 @@ import {
 import userEvent from '@testing-library/user-event';
 import { AssertionError } from "assert";
 import each from "jest-each";
-import React from "react";
 import { FileWithPath } from "react-dropzone";
 
 beforeEach(() => jest.clearAllMocks());

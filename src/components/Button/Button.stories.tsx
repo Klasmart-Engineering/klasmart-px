@@ -10,7 +10,6 @@ import {
     ThemeProvider,
 } from '@mui/material/styles';
 import { Story } from '@storybook/react';
-import React from 'react';
 
 export default {
     title: `Button`,

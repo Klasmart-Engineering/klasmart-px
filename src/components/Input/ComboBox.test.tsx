@@ -1,12 +1,11 @@
+import BADA_CHARACTERS from "../../../test/mockdata/BADA_CHARACTERS";
 import { render } from '../../../test/themeProviderRender';
-import BADA_CHARACTERS from "../../assets/mockdata/BADA_CHARACTERS";
 import ComboBox from "./ComboBox";
 import {
     fireEvent,
     screen,
 } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
-import React from "react";
 
 beforeEach(() => {
     jest.clearAllMocks();

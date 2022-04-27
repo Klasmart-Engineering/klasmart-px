@@ -1,7 +1,6 @@
 import CounterIcon,
 { Props } from './TypeIcon';
 import { Story } from '@storybook/react';
-import React from 'react';
 
 export default {
     title: `FileIcon`,

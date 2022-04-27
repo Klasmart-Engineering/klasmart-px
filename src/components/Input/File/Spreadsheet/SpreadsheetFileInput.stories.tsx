@@ -3,7 +3,6 @@ import SpreadsheetFileInput,
 { Props } from "./Base";
 import { SpreadsheetValidationError } from "./types";
 import { Story } from "@storybook/react";
-import React from "react";
 
 export default {
     title: `Spreadsheet/Base`,

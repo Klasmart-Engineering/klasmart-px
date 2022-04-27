@@ -10,11 +10,11 @@ import {
     CheckBoxOutlineBlank,
 } from '@mui/icons-material';
 import {
+    Autocomplete,
     Checkbox,
     Chip,
+    createFilterOptions,
 } from '@mui/material';
-import Autocomplete,
-{ createFilterOptions } from '@mui/material/Autocomplete';
 import {
     createStyles,
     makeStyles,

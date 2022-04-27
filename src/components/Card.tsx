@@ -1,14 +1,12 @@
 import { Paper } from "@mui/material";
-import { Theme } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
 import clsx from "clsx";
-import React,
-{ ReactNode } from 'react';
+import { ReactNode } from 'react';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
     paperContainer: {
         borderRadius: 12,
         border: `1px solid ${theme.palette.grey[300]}`,

@@ -2,8 +2,7 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import React,
-{ useState } from "react";
+import { useState } from "react";
 import Cropper from "react-easy-crop";
 import {
     Area,

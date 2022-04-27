@@ -14,8 +14,7 @@ import {
     makeStyles,
 } from '@mui/styles';
 import clsx from "clsx";
-import React,
-{ useState } from "react";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({
     root: {

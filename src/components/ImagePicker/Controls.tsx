@@ -1,16 +1,15 @@
-import CropRotateIcon from '@mui/icons-material/CropRotate';
-import PhotoSizeSelectLargeIcon from '@mui/icons-material/PhotoSizeSelectLarge';
 import {
-    lighten,
-    Slider,
-} from "@mui/material";
+    CropRotate as CropRotateIcon,
+    PhotoSizeSelectLarge as PhotoSizeSelectLargeIcon,
+} from '@mui/icons-material';
+import { Slider } from "@mui/material";
+import { lighten } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
 import clsx from "clsx";
-import React,
-{
+import {
     ReactNode,
     useState,
 } from "react";

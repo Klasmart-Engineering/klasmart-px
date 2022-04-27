@@ -25,8 +25,7 @@ import {
     makeStyles,
 } from '@mui/styles';
 import Papa from "papaparse";
-import React,
-{
+import {
     useEffect,
     useState,
 } from "react";

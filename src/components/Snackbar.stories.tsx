@@ -7,7 +7,6 @@ import {
 import { Props } from "./SnackbarProvider";
 import { Story } from "@storybook/react";
 import { VariantType } from "notistack";
-import React from 'react';
 
 export default {
     title: `Snackbar`,

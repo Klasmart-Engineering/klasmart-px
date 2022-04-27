@@ -8,7 +8,6 @@ import {
     makeStyles,
 } from '@mui/styles';
 import clsx from "clsx";
-import React from "react";
 
 const SIZE = 24;
 

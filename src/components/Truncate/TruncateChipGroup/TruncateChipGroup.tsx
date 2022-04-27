@@ -1,5 +1,7 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import {
+    KeyboardArrowDown as KeyboardArrowDownIcon,
+    KeyboardArrowUp as KeyboardArrowUpIcon,
+} from '@mui/icons-material';
 import {
     Button,
     Chip,
@@ -10,9 +12,8 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import _ from 'lodash';
-import React,
-{
+import { uniqueId } from 'lodash-es';
+import {
     useEffect,
     useState,
 } from "react";
@@ -38,7 +39,7 @@ export default function TruncateChipGroup (props: Props) {
         moreLabel = (count) => `+${count} more`,
     } = props;
     const classes = useStyles();
-    const [ uniqueId, setUniqueId ] = useState(``);
+    const [ id, setId ] = useState(``);
     const [ isOpen, setIsOpen ] = useState(false);
     const truncateItems = items.length > maxPreview;
     const showMoreCount = truncateItems ? items.length - maxPreview : 0;
@@ -47,7 +48,7 @@ export default function TruncateChipGroup (props: Props) {
     const collapsedItems = items.slice(maxPreview, items.length);
 
     useEffect(() => {
-        setUniqueId(_.uniqueId());
+        setId(uniqueId());
     }, []);
 
     return (
@@ -55,7 +56,7 @@ export default function TruncateChipGroup (props: Props) {
             <div>
                 { previewItems.map((item) => (
                     <Chip
-                        key={`${uniqueId}-item-${item}`}
+                        key={`${id}-item-${item}`}
                         role="listitem"
                         label={item}
                         className={classes.chip}
@@ -66,13 +67,13 @@ export default function TruncateChipGroup (props: Props) {
             <Collapse
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                id={`${ uniqueId }-collapsable`}
+                id={`${ id }-collapsable`}
                 in={isOpen}
                 aria-hidden={!isOpen}
             >
                 { collapsedItems.map((item) => (
                     <Chip
-                        key={`${uniqueId}-item-${item}`}
+                        key={`${id}-item-${item}`}
                         role="listitem"
                         label={item}
                         className={classes.chip}
@@ -83,7 +84,7 @@ export default function TruncateChipGroup (props: Props) {
             {
                 truncateItems &&
                     <Button
-                        aria-controls={`${ uniqueId }-collapsable`}
+                        aria-controls={`${ id }-collapsable`}
                         aria-expanded={isOpen}
                         variant="text"
                         size="small"

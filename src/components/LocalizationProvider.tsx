@@ -1,14 +1,12 @@
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import React, {
+import {
     useEffect,
     useState,
 } from "react";
 
-export type LocaleCode = "en"|"es"|"id"|"ko"|"th"|"vi"|"zh-cn";
-
 export interface Props {
-    locale?: LocaleCode;
+    locale?: string;
     children?: React.ReactNode;
 }
 

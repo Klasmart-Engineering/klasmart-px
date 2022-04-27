@@ -2,7 +2,6 @@ import { render } from '../../../../test/themeProviderRender';
 import TruncateChipGroup from './TruncateChipGroup';
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from 'react';
 
 describe(`TruncateChipGroup`, () => {
 

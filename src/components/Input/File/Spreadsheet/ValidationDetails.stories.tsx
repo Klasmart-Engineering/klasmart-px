@@ -5,7 +5,6 @@ import ValidationDetails,
 } from "./ValidationDetails";
 import { Paper } from "@mui/material";
 import { Story } from "@storybook/react";
-import React from "react";
 
 export default {
     title: `Spreadsheet/ValidationDetails`,

@@ -24,7 +24,7 @@ export { default as SpreadsheetFileInput } from "./components/Input/File/Spreads
 export { default as Select } from "./components/Input/Select";
 export { default as TextField } from "./components/Input/TextField";
 export { default as LanguageSelect } from "./components/LanguageSelect";
-export { default as LocalizationProvider } from "./components/LocalizationProvider";
+// export { default as LocalizationProvider } from "./components/LocalizationProvider";
 export { default as MoreMenu } from "./components/MoreMenu";
 export { default as OrganizationAvatar } from "./components/OrganizationAvatar";
 export { default as SnackbarProvider } from "./components/SnackbarProvider";

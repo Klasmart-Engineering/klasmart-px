@@ -15,9 +15,8 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import { isEqual } from "lodash";
-import React,
-{ useState } from "react";
+import { isEqual } from "lodash-es";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => createStyles({}));
 

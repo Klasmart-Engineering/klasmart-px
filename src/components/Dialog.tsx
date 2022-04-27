@@ -8,7 +8,6 @@ import {
     DialogProps,
     DialogTitle,
     IconButton,
-    Theme,
     Tooltip,
 } from "@mui/material";
 import {
@@ -19,9 +18,8 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import React from "react";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
     closeButton: {
         position: `absolute`,
         top: 0,
