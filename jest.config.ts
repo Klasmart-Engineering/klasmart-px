@@ -7,6 +7,9 @@ const config: Config.InitialOptions = {
     testPathIgnorePatterns: [ `/node_modules/` ],
     setupFilesAfterEnv: [ `<rootDir>/setupTests.ts` ],
     maxWorkers: `50%`,
+    moduleNameMapper: {
+        "^lodash-es$": `lodash`,
+    },
 };
 
 export default config;
