@@ -1,12 +1,12 @@
 import pkg from './package.json';
-import alias from '@rollup/plugin-alias';
+// import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
-import babel from "rollup-plugin-babel";
-import nodePolyfills from 'rollup-plugin-node-polyfills';
+// import replace from '@rollup/plugin-replace';
+// import babel from "rollup-plugin-babel";
+// import nodePolyfills from 'rollup-plugin-node-polyfills';
 import postCSS from 'rollup-plugin-postcss';
-import { terser } from 'rollup-plugin-terser';
+// import { terser } from 'rollup-plugin-terser';
 import typescript from 'rollup-plugin-typescript2';
 
 export default {

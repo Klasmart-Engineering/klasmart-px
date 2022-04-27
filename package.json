@@ -2,13 +2,13 @@
     "name": "@kl-engineering/kidsloop-px",
     "version": "2.1.0",
     "description": "KidsLoop Product Experience UI Library",
-    "main": "dist/main.js",
+    "main": "dist/main.cjs",
     "module": "dist/main.js",
     "types": "dist/types/index.d.ts",
-    "files": [
-        "dist"
+    "sideEffects": [
+        "src/components/LanguageSelect.tsx"
     ],
-    "sideEffects": false,
+    "type": "module",
     "scripts": {
         "build": "npm run build:js && npm run build:types",
         "build:js": "webpack",
@@ -81,6 +81,7 @@
         "husky": "^7.0.0",
         "jest": "^26.6.3",
         "react-dom": "^17.0.2",
+        "rollup": "2.70.2",
         "rollup-plugin-babel": "4.4.0",
         "rollup-plugin-node-polyfills": "0.2.1",
         "rollup-plugin-peer-deps-external": "2.2.4",

@@ -4,11 +4,12 @@
         "declaration": true,
         "declarationDir": "dist/types",
         "esModuleInterop": true,
+        "downlevelIteration": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "strictNullChecks": true,
         "jsx": "react-jsx",
-        "module": "CommonJS",
+        "module": "ESNext",
         "moduleResolution": "Node",
         "lib": [
             "DOM",
@@ -22,7 +23,7 @@
         "rootDir": "./src",
         "skipLibCheck": true,
         "strict": true,
-        "target": "ES6",
+        "target": "ESNext",
         "types": [
             "react",
             "jest",
@@ -34,7 +35,7 @@
         "src/**/*.js",
         "src/**/*.jsx",
         "src/**/*.ts",
-        "src/**/*.tsx",
+        "src/**/*.tsx"
     ],
     "exclude": [
         "node_modules",
