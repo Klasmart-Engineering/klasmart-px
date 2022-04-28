@@ -2,9 +2,8 @@
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
         "declaration": true,
-        "declarationDir": "dist/types",
+        "declarationDir": "dist",
         "esModuleInterop": true,
-        "downlevelIteration": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "strictNullChecks": true,
@@ -16,14 +15,13 @@
             "DOM.Iterable",
             "ESNext"
         ],
-        "noEmit": false,
         "noImplicitAny": true,
-        "outDir": "./dist",
+        "outDir": "dist",
         "removeComments": true,
-        "rootDir": "./src",
+        "sourceMap": true,
         "skipLibCheck": true,
         "strict": true,
-        "target": "ESNext",
+        "target": "ES6",
         "types": [
             "react",
             "jest",
@@ -40,8 +38,8 @@
     "exclude": [
         "node_modules",
         "dist",
+        "src/**/*__mocks__*",
         "src/**/*.stories.mdx",
-        "src/**/*.stories.ts",
         "src/**/*.stories.tsx",
         "src/**/*.test.ts",
         "src/**/*.test.tsx"

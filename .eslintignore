@@ -2,5 +2,6 @@ node_modules
 dist
 .vscode
 coverage
+!.*.cjs
 !.*.js
 !.*.ts
