@@ -1,8 +1,6 @@
 import { Check as CheckIcon } from "@mui/icons-material";
-import {
-    ButtonBase,
-    useTheme,
-} from "@mui/material";
+import { ButtonBase } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,

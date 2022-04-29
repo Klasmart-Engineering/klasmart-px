@@ -13,13 +13,13 @@ import {
 } from "./validate";
 import ValidationDetails from "./ValidationDetails";
 import {
-    alpha,
     Box,
     Divider,
     Fade,
     Paper,
     Typography,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,

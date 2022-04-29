@@ -1,9 +1,9 @@
 import { CloudUpload as CloudUploadIcon } from "@mui/icons-material";
 import {
     Box,
-    lighten,
     Typography,
 } from "@mui/material";
+import { lighten } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,

@@ -2,7 +2,7 @@
     "name": "@kl-engineering/kidsloop-px",
     "version": "2.1.0",
     "description": "KidsLoop Product Experience UI Library",
-    "main": "dist/main.js",
+    "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "sideEffects": false,
     "files": [

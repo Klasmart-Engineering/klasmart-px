@@ -16,7 +16,6 @@ import {
     Lock as LockIcon,
 } from "@mui/icons-material";
 import {
-    alpha,
     Box,
     TableCell,
     TableCellProps,
@@ -26,6 +25,7 @@ import {
     Theme,
     Tooltip,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,

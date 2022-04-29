@@ -5,7 +5,6 @@ import {
     Lock as LockIcon,
 } from "@mui/icons-material";
 import {
-    alpha,
     Checkbox,
     Divider,
     IconButton,
@@ -18,6 +17,7 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,

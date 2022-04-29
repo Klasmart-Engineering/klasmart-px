@@ -4,11 +4,11 @@ import Fab from "../../Button/Fab";
 import IconButton from "../../Button/IconButton";
 import { SvgIconComponent } from "@mui/icons-material";
 import {
-    lighten,
     Theme,
     Toolbar,
     Typography,
 } from "@mui/material";
+import { lighten } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,

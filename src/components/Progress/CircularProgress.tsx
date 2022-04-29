@@ -4,8 +4,8 @@ import {
     CircularProgress as MUICircularProgress,
     CircularProgressProps,
     Theme,
-    useTheme,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import makeStyles from '@mui/styles/makeStyles';
 import React from "react";
 

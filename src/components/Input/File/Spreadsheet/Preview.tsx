@@ -1,9 +1,7 @@
 import ErrorField from "./ErrorField";
 import { SpreadsheetValidationError } from "./types";
-import {
-    lighten,
-    Typography,
-} from "@mui/material";
+import { Typography } from "@mui/material";
+import { lighten } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,

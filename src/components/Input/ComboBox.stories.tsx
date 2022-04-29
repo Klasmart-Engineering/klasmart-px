@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import BADA_CHARACTERS from "../../assets/mockdata/BADA_CHARACTERS";
+import BADA_CHARACTERS from "../../../test/mockdata/BADA_CHARACTERS";
 import { sleep } from '../../utils';
 import validations from '../../validations';
 import { Primary as Button } from "../Button/Button.stories";

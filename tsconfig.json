@@ -18,6 +18,7 @@
         "noImplicitAny": true,
         "outDir": "dist",
         "removeComments": true,
+        "sourceRoot": "src",
         "sourceMap": true,
         "skipLibCheck": true,
         "strict": true,

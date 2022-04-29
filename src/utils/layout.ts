@@ -1,9 +1,11 @@
 import {
     Theme,
     useMediaQuery,
-    useTheme,
 } from "@mui/material";
-import { Breakpoint } from '@mui/material/styles';
+import {
+    Breakpoint,
+    useTheme,
+} from "@mui/material/styles";
 
 /**
 * Be careful using this hook. It only works because the number of

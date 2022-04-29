@@ -1,9 +1,11 @@
 import {
-    createTheme,
     PaletteOptions,
-    responsiveFontSizes,
     Theme,
 } from "@mui/material";
+import {
+    createTheme,
+    responsiveFontSizes,
+} from "@mui/material/styles";
 
 export default function builder (languageCode: string, themeMode: string) {
     function setTypography (languageCode: string) {

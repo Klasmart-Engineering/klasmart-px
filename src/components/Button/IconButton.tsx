@@ -13,8 +13,8 @@ import {
     IconButton as IconBtn,
     Theme,
     Tooltip,
-    useTheme,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,

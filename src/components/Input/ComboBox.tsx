@@ -5,6 +5,7 @@ import {
     Input,
 } from "./shared";
 import TextField from "./TextField";
+import { createFilterOptions } from '@mui/base';
 import {
     CheckBox,
     CheckBoxOutlineBlank,
@@ -13,7 +14,6 @@ import {
     Autocomplete,
     Checkbox,
     Chip,
-    createFilterOptions,
 } from '@mui/material';
 import {
     createStyles,

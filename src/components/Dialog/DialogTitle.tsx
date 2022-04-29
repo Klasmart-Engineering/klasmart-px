@@ -9,12 +9,12 @@ import {
     Box,
     DialogTitle as Title,
     DialogTitleProps,
-    useTheme,
 } from "@mui/material";
 import {
     Palette,
     PaletteColor,
-} from '@mui/material/styles';
+    useTheme,
+} from "@mui/material/styles";
 import {
     createStyles,
     makeStyles,
