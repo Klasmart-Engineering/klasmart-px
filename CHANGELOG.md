@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.1.1%0Dv2.1.0) (2022-05-03)
+
+
+### 🐛 Bug Fixes
+
+* date picker ([cf57559](https://github.com/KL-Engineering/kidsloop-px/commits/cf57559f6c7c744f5a761f3cade238dca595ae6a))
+* removed datepicker to allow px to run safely in hub (#14) ([0d5619d](https://github.com/KL-Engineering/kidsloop-px/commits/0d5619d6fede2eb0d7b3934beeffad2fcc06a6e8))
+
 ## [2.1.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.1.0%0Dv2.0.4) (2022-04-20)
 
 
