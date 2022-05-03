@@ -17,7 +17,7 @@ const webpackConfig: Configuration = {
         node: true,
     },
     entry: {
-        main: `./src/index.ts`,
+        index: `./src/index.ts`,
         utils: `./src/utils/index.ts`,
     },
     output: {

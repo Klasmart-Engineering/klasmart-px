@@ -1,0 +1,48 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "declarationDir": "dist",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "strictNullChecks": true,
+        "jsx": "react-jsx",
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext"
+        ],
+        "noImplicitAny": true,
+        "outDir": "dist",
+        "removeComments": true,
+        "sourceRoot": "src",
+        "sourceMap": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ES6",
+        "types": [
+            "react",
+            "jest",
+            "@testing-library/jest-dom",
+            "node"
+        ]
+    },
+    "include": [
+        "src/**/*.js",
+        "src/**/*.jsx",
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "src/**/*__mocks__*",
+        "src/**/*.stories.mdx",
+        "src/**/*.stories.tsx",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx"
+    ]
+}

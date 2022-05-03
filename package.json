@@ -3,11 +3,12 @@
     "version": "2.1.0",
     "description": "KidsLoop Product Experience UI Library",
     "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "types": "dist/types/index.d.ts",
     "sideEffects": false,
     "files": [
         "dist"
     ],
+    "type": "module",
     "scripts": {
         "build": "npm run build:js && npm run build:types",
         "build:js": "webpack",
