@@ -2,19 +2,25 @@
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
         "declaration": true,
-        "declarationDir": "dist/types",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "jsx": "react",
+        "jsx": "react-jsx",
         "module": "CommonJS",
+        "target": "ES6",
+        "moduleResolution": "Node",
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext"
+        ],
         "noEmit": false,
         "noImplicitAny": true,
         "outDir": "./dist",
+        "sourceRoot": "./src",
+        "sourceMap": true,
         "removeComments": true,
-        "rootDir": "./src",
         "skipLibCheck": true,
         "strict": true,
-        "target": "ESNext",
         "types": [
             "react",
             "jest",
@@ -29,9 +35,17 @@
         "src/**/*.tsx",
     ],
     "exclude": [
-        "node_modules",
         "dist",
+        "node_modules",
+        "scripts",
         "src/**/*.test.ts",
         "src/**/*.test.tsx"
-    ]
+    ],
+    "files": [
+        "scripts/generate-icons.ts",
+        "src/types/global.d.ts"
+    ],
+    "ts-node": {
+        "files": true
+    }
 }

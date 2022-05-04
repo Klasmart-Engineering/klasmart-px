@@ -1,9 +1,11 @@
 /* eslint-disable react/no-multi-comp */
+import { AssessmentIcon } from "../icons";
 import {
     Button,
     SnackbarProvider,
     useSnackbar,
 } from "../index";
+import IconButton from "./Button/IconButton";
 import { Props } from "./SnackbarProvider";
 import { Story } from "@storybook/react";
 import { VariantType } from "notistack";
@@ -30,6 +32,7 @@ const SnackbarButton = () => {
 const SnackbarContainer = (props: Props) => {
     return (
         <SnackbarProvider {...props}>
+            <IconButton icon={AssessmentIcon} />
             <SnackbarButton />
         </SnackbarProvider>
     );

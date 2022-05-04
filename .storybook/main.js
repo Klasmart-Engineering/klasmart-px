@@ -14,16 +14,31 @@ module.exports = {
         "builder": "webpack5"
     },
     webpackFinal: async (config) => {
-        return {
-          ...config,
-          resolve: {
-            ...config.resolve,
-            alias: {
-              ...config.resolve.alias,
-              '@emotion/core': toPath('node_modules/@emotion/react'),
-              'emotion-theming': toPath('node_modules/@emotion/react'),
+        const assetRules = config.module.rules.filter(({ test }) => !test.test(".svg"));
+
+        config.module.rules = [
+            ...assetRules,
+            {
+                test: /\.(ico|jpg|jpeg|png|apng|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
+                loader: 'asset/resource',
+                generator: { filename: 'static/media/[path][name].[ext]' }
             },
-          },
+            {
+                test: /\.svg$/,
+                use: [ `@svgr/webpack`, `url-loader` ],
+            },
+        ];
+
+        return {
+            ...config,
+            resolve: {
+                ...config.resolve,
+                alias: {
+                    ...config.resolve.alias,
+                    '@emotion/core': toPath('node_modules/@emotion/react'),
+                    'emotion-theming': toPath('node_modules/@emotion/react'),
+                },
+            },
         };
-      },
+    },
 }
