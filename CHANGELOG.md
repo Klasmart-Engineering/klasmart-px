@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/1.11.0%0D1.10.2-internal) (2022-05-04)
+
+
+### ✨ Features
+
+* ad-2326 academic term fix (#17) ([8d3d2ea](https://github.com/KL-Engineering/kidsloop-px/commits/8d3d2ea8c6fb7f661051a47ca8a17b9a354bddc1)), closes [ad-2326](https://calmisland.atlassian.net/browse/ad-2326) [ad-2326](https://calmisland.atlassian.net/browse/ad-2326) [ad-2326](https://calmisland.atlassian.net/browse/ad-2326) [ad-2326](https://calmisland.atlassian.net/browse/ad-2326)
+
 ### [1.10.2](https://bitbucket.org/calmisland/kidsloop-px/branches/compare/1.10.2%0D1.10.1) (2022-03-07)
 
 ### [1.10.1](https://bitbucket.org/calmisland/kidsloop-px/branches/compare/1.10.1%0D1.10.0) (2022-03-07)
