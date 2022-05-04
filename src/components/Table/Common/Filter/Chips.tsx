@@ -65,7 +65,7 @@ export default function TableFilterChips<T> (props: Props<T>) {
 
     return (
         <>
-            {filters.map((filter) => {
+            {filters.filter((filter) => tableFilters ? tableFilters.find((filterElement) => filterElement.id === filter.columnId) : []).map((filter) => {
                 const currentFilter = tableFilters?.find((filterElement) => filterElement.id === filter.columnId);
                 const operator = currentFilter?.operators?.find((operator) => operator.value === filter.operatorValue);
                 const columnText = (
