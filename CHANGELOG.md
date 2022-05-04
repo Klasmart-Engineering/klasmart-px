@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.0%0Dv2.1.1) (2022-05-04)
+
+
+### ✨ Features
+
+* fetch and generate icons from figma (#16) ([af22978](https://github.com/KL-Engineering/kidsloop-px/commits/af2297888f830d38888d831684fe01fc2706673a))
+
 ### [2.1.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.1.1%0Dv2.1.0) (2022-05-03)
 
 
