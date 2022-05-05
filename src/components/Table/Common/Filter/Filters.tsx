@@ -132,6 +132,10 @@ export default function BaseTableFilter<T> (props: Props<T>) {
     };
 
     useEffect(() => {
+        setFilters(filters.filter((filter) => tableFilters ? tableFilters.find((filterElement) => filterElement.id === filter.columnId) : []));
+    }, [ tableFilters ]);
+
+    useEffect(() => {
         onChange(filters);
     }, [ filters ]);
 
