@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/1.11.1%0D1.11.0) (2022-05-05)
+
+
+### 🐛 Bug Fixes
+
+* fixed bug related to table filters (#19) ([90df8dd](https://github.com/KL-Engineering/kidsloop-px/commits/90df8ddb1ee830c4da1cfaf55bd03f460a6c31e9)), closes [ad-2326](https://calmisland.atlassian.net/browse/ad-2326) [ad-2326](https://calmisland.atlassian.net/browse/ad-2326) [ad-2326](https://calmisland.atlassian.net/browse/ad-2326) [ad-2326](https://calmisland.atlassian.net/browse/ad-2326)
+
 ## [1.11.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/1.11.0%0D1.10.2-internal) (2022-05-04)
 
 
