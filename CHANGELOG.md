@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.2](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.2%0Dv2.2.1) (2022-05-06)
+
+
+### 🐛 Bug Fixes
+
+* script to generate icons include last item ([547220b](https://github.com/KL-Engineering/kidsloop-px/commits/547220b1b7e15767e01418828ff1f6739ecc3df7))
+
 ### [2.2.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.1%0Dv2.2.0) (2022-05-06)
 
 
