@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.1%0Dv2.2.0) (2022-05-06)
+
+
+### 🐛 Bug Fixes
+
+* change to correct publish pipeline ([4c987be](https://github.com/KL-Engineering/kidsloop-px/commits/4c987be88b7f574de941e1f4cf13c21834696ba8))
+
 ## [2.2.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.0%0Dv2.1.1) (2022-05-04)
 
 
