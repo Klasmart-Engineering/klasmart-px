@@ -4,6 +4,7 @@ export { default as AssessmentIcon } from "./AssessmentIcon";
 export { default as ClassIcon } from "./ClassIcon";
 export { default as ContentsLibraryIcon } from "./ContentsLibraryIcon";
 export { default as GradeIcon } from "./GradeIcon";
+export { default as HomeIcon } from "./HomeIcon";
 export { default as OrganizationIcon } from "./OrganizationIcon";
 export { default as ProgramIcon } from "./ProgramIcon";
 export { default as RoleIcon } from "./RoleIcon";

@@ -62,21 +62,18 @@ const fetchSvgLinks = async (options: FetchFigmaDesignOptions): Promise<SvgMetaD
     return (await Promise.all(figmaMetaData
         .reduce((groupedBatchedFigmaMetaData, metaData, i, arr) => {
             const currentBatch = groupedBatchedFigmaMetaData[groupedBatchedFigmaMetaData.length - 1];
-            if (i === arr.length - 1) {
-                return groupedBatchedFigmaMetaData;
-            } else if ((metaData.id.length + currentBatch.join(`,`).length) >= idsMaxLength) {
-                return [ ...groupedBatchedFigmaMetaData, [] ];
+            const metaData_ = {
+                id: metaData.id,
+                name: metaData.name,
+            };
+            const updatedBatch = [ ...currentBatch, metaData_ ];
+            if ((metaData.id.length + currentBatch.join(`,`).length) >= idsMaxLength) {
+                return [ ...groupedBatchedFigmaMetaData, [ metaData_ ] ];
             }
-            const updatedBatch = [
-                ...currentBatch,
-                {
-                    id: metaData.id,
-                    name: metaData.name,
-                },
-            ];
             return [ ...groupedBatchedFigmaMetaData.slice(0, -1), updatedBatch ];
         }, [ [] ] as FigmaMetaData[][])
-        .map(async (groupedBatchedFigmaMetaData) => {
+        .map(async (groupedBatchedFigmaMetaData, i, arr) => {
+            console.log(arr.length);
             const batchedIds = groupedBatchedFigmaMetaData.map((metaData) => metaData.id);
             const batchedSvgLinks = (await figmaApiClient.get(`images/${options.fileKey}?${staticQueryParams}${batchedIds.join(`,`)}`)).data.images as Record<string, string>;
             return groupedBatchedFigmaMetaData.map((metaData) => ({
@@ -90,6 +87,10 @@ const fetchSvgLinks = async (options: FetchFigmaDesignOptions): Promise<SvgMetaD
 const createSvgIconFiles = async (options: BuildConfig) => {
     const svgDirName = options.svgOutPath;
     const svgsMetaData = await fetchSvgLinks(options);
+    console.log({
+        svgsMetaData: svgsMetaData.length,
+    });
+
     if (!existsSync(svgDirName)) mkdirSync(svgDirName, {
         recursive: true,
     });
