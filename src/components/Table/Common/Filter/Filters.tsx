@@ -132,7 +132,8 @@ export default function BaseTableFilter<T> (props: Props<T>) {
     };
 
     useEffect(() => {
-        setFilters(filters.filter((filter) => tableFilters ? tableFilters.find((filterElement) => filterElement.id === filter.columnId) : []));
+        const updatedFilters = filters.filter((filter) => tableFilters ? tableFilters.find((filterElement) => filterElement.id === filter.columnId) : []);
+        if(filters.length !== updatedFilters.length) setFilters(updatedFilters);
     }, [ tableFilters ]);
 
     useEffect(() => {
