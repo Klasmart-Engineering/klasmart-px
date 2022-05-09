@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.2](https://github.com/KL-Engineering/kidsloop-px/branches/compare/1.11.2%0D1.11.1) (2022-05-09)
+
+
+### 🐛 Bug Fixes
+
+* filter change caused tables to rerender on page change (#20) ([b481978](https://github.com/KL-Engineering/kidsloop-px/commits/b481978b7ef288a2643318782a32d354ec5679fb)), closes [ad-2326](https://calmisland.atlassian.net/browse/ad-2326) [ad-2326](https://calmisland.atlassian.net/browse/ad-2326) [ad-2326](https://calmisland.atlassian.net/browse/ad-2326) [ad-2326](https://calmisland.atlassian.net/browse/ad-2326)
+
 ### [1.11.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/1.11.1%0D1.11.0) (2022-05-05)
 
 
