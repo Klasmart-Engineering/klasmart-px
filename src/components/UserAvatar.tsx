@@ -6,6 +6,7 @@ import { Person } from "@mui/icons-material";
 import {
     Avatar,
     Tooltip,
+    useTheme,
 } from "@mui/material";
 import {
     createStyles,
@@ -19,23 +20,23 @@ const useStyles = makeStyles((theme) => createStyles({
         color: `white`,
     },
     avatarSmall: {
-        width: 24,
-        height: 24,
-        fontSize: 10,
+        width: 30,
+        height: 30,
+        fontSize: 14,
     },
     avatarMedium: {
         width: 40,
         height: 40,
-        fontSize: 16,
+        fontSize: 18,
     },
     avatarLarge: {
         width: 80,
         height: 80,
-        fontSize: 24,
+        fontSize: 38,
     },
 }));
 
-const MAX_INITIALS_LENGTH = 3;
+const MAX_INITIALS_LENGTH = 2;
 
 export interface Props {
     name: string;
@@ -56,8 +57,17 @@ export default function UserAvatar (props: Props) {
         color,
     } = props;
     const classes = useStyles();
+    const theme = useTheme();
+
+    const backgroundColor = color ?? (name ? stringToColor(name || ``) : theme.palette.primary.main);
+
     return (
-        <Tooltip title={name}>
+        <Tooltip
+            title={name}
+            style={{
+                display: `inline-block`,
+            }}
+        >
             <span>
                 <Avatar
                     variant="circular"
@@ -68,7 +78,7 @@ export default function UserAvatar (props: Props) {
                         [classes.avatarLarge]: size === `large`,
                     })}
                     style={{
-                        backgroundColor: color ?? stringToColor(name || ``),
+                        backgroundColor,
                     }}
                 >
                     {name
