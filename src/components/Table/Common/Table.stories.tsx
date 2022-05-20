@@ -505,6 +505,44 @@ export const CursorTableServer = () => {
                 },
             ],
         },
+        {
+            id: `movieTitle`,
+            label: `Title`,
+            operators: [
+                {
+                    label: `Equals`,
+                    value: `equals`,
+                    validations: [ required() ],
+                    valueComponent: `text-field`,
+                },
+            ],
+        },
+        {
+            id: `trilogy`,
+            label: `Trilogy`,
+            operators: [
+                {
+                    label: `Equals`,
+                    value: `equals`,
+                    validations: [ required() ],
+                    options: [
+                        {
+                            label: `Original`,
+                            value: StarWarsTrilogy.ORIGINAL,
+                        },
+                        {
+                            label: `Prequals`,
+                            value: StarWarsTrilogy.PREQUALS,
+                        },
+                        {
+                            label: `Sequals`,
+                            value: StarWarsTrilogy.SEQUALS,
+                        },
+                    ],
+                    valueComponent: `select`,
+                },
+            ],
+        },
     ];
 
     const columns: TableColumn<StarWarsRow>[] = [

@@ -70,7 +70,7 @@ export default function TableFilterChips<T> (props: Props<T>) {
     );
 
     const getValues = (filter: Filter, operator: FilterOperator) => {
-        if(operator.valueComponent === `text-field`) return [];
+        if (operator.valueComponent === `text-field`) return [ `"${filter.values[0]}"` ];
         if (typeof filter.values[0] === `string`) {
             return filter.values.map((value) => (`"${operator.options?.find((option) => option.value === value)?.label}"`));
         }
