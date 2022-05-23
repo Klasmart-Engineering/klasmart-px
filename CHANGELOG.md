@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.3](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.3%0Dv2.2.2) (2022-05-23)
+
+
+### 🐛 Bug Fixes
+
+* clean up stories ([a7f9be6](https://github.com/KL-Engineering/kidsloop-px/commits/a7f9be605d81b68ec369f4a6ece2fee3043e60c8))
+* display table filter text chip value ([f8dc0b1](https://github.com/KL-Engineering/kidsloop-px/commits/f8dc0b19691d120d015034ee8698821e2f7dae95))
+* tooltip location and size of small user and organization avatars ([1229b7a](https://github.com/KL-Engineering/kidsloop-px/commits/1229b7a941af9623a54c546ccde92e492cf5875e))
+
+
+### 📚 Docs
+
+* add base README file ([69f55a2](https://github.com/KL-Engineering/kidsloop-px/commits/69f55a203bca648dda3841e8c48b5bcf21a22eea))
+
 ### [2.2.2](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.2%0Dv2.2.1) (2022-05-06)
 
 
