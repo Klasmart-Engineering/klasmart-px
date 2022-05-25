@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.4](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.4%0Dv2.2.3) (2022-05-25)
+
+
+### 🐛 Bug Fixes
+
+* loading and saving of state in table menu filter ([71087c4](https://github.com/KL-Engineering/kidsloop-px/commits/71087c4169327ffcd382f330a3edab43f32dcf20))
+
 ### [2.2.3](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.3%0Dv2.2.2) (2022-05-23)
 
 
