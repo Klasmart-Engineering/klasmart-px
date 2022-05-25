@@ -73,7 +73,6 @@ const fetchSvgLinks = async (options: FetchFigmaDesignOptions): Promise<SvgMetaD
             return [ ...groupedBatchedFigmaMetaData.slice(0, -1), updatedBatch ];
         }, [ [] ] as FigmaMetaData[][])
         .map(async (groupedBatchedFigmaMetaData, i, arr) => {
-            console.log(arr.length);
             const batchedIds = groupedBatchedFigmaMetaData.map((metaData) => metaData.id);
             const batchedSvgLinks = (await figmaApiClient.get(`images/${options.fileKey}?${staticQueryParams}${batchedIds.join(`,`)}`)).data.images as Record<string, string>;
             return groupedBatchedFigmaMetaData.map((metaData) => ({
@@ -87,10 +86,6 @@ const fetchSvgLinks = async (options: FetchFigmaDesignOptions): Promise<SvgMetaD
 const createSvgIconFiles = async (options: BuildConfig) => {
     const svgDirName = options.svgOutPath;
     const svgsMetaData = await fetchSvgLinks(options);
-    console.log({
-        svgsMetaData: svgsMetaData.length,
-    });
-
     if (!existsSync(svgDirName)) mkdirSync(svgDirName, {
         recursive: true,
     });

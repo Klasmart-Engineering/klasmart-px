@@ -18,8 +18,7 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import React,
-{
+import {
     useEffect,
     useState,
 } from 'react';
@@ -70,10 +69,10 @@ export interface FilterMenuLocalization {
     selectAllLabel?: string;
 }
 
-interface Props<T> {
+export interface TableFilterMenuProps<T> {
     anchorEl: HTMLElement | null;
     isOpen: boolean;
-    editingFilter: Filter | undefined;
+    editingFilter?: Filter;
     tableFilters: TableFilter<T>[];
     localization?: FilterMenuLocalization;
     filterValueLoading?: boolean;
@@ -81,7 +80,7 @@ interface Props<T> {
     onClose: (filter?: Filter) => void;
 }
 
-export default function TableFilterMenu<T> (props: Props<T>) {
+export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
     const {
         anchorEl,
         isOpen,
@@ -101,10 +100,6 @@ export default function TableFilterMenu<T> (props: Props<T>) {
     const { width = 0, ref } = useResizeDetector();
 
     const [ filter, setFilter ] = useState<Filter>(editingFilter ?? startFilter);
-    const [ selectValues, setSelectValues ] = useState<string[]>([]);
-    const [ validValues, setValidValues ] = useState(true);
-    const [ comboBoxValue, setComboBoxValue ] = useState<FilterValueOption[]>([]);
-    const [ textValue, setTextValue ] = useState(``);
 
     const tableFilter = tableFilters.find((tableFilter) => tableFilter.id === filter.columnId);
     const columns = tableFilters.map(({ id, label }) => ({
@@ -112,8 +107,12 @@ export default function TableFilterMenu<T> (props: Props<T>) {
         label,
     }));
     const operators = tableFilter?.operators ?? [];
-
     const operator = tableFilter?.operators.find((operator) => operator.value === filter.operatorValue);
+
+    const [ selectValues, setSelectValues ] = useState<string[]>([]);
+    const [ validValues, setValidValues ] = useState(true);
+    const [ comboBoxValue, setComboBoxValue ] = useState<FilterValueOption[]>((editingFilter?.values ?? []) as FilterValueOption[]);
+    const [ textValue, setTextValue ] = useState(operator?.valueComponent === `text-field` ? filter.values[0] as string : ``);
 
     const resetValues = () => {
         setSelectValues([]);
@@ -204,7 +203,7 @@ export default function TableFilterMenu<T> (props: Props<T>) {
                 loading={filterValueLoading}
                 value={comboBoxValue}
                 inputValue={textValue}
-                label={localization?.value ?? `Value`}
+                label={operator.multipleValues ? (localization?.values ?? `Values`) : (localization?.value ?? `Value`)}
                 className={classes.valueComponent}
                 options={operator.options}
                 selectValidations={operator.validations}
@@ -276,6 +275,10 @@ export default function TableFilterMenu<T> (props: Props<T>) {
         }
     }, [ comboBoxValue ]);
 
+    const isFilterValueOption = (value: FilterValueOption | string): value is FilterValueOption => {
+        return (value as FilterValueOption).value !== undefined;
+    };
+
     useEffect(() => {
         if (!isOpen) return;
         const tableFilter = tableFilters.find((tableFilter) => tableFilter.id === editingFilter?.columnId) ?? tableFilters[0];
@@ -288,12 +291,14 @@ export default function TableFilterMenu<T> (props: Props<T>) {
             setTextValue(!operator.multipleValues ? firstValue : ``);
             setComboBoxValue(allValues as FilterValueOption[]);
             break;
-        case `select`:
+        case `select`: {
+            const allSelectValues = editingFilter?.values.map((value) => isFilterValueOption(value) ? value.value : value) ?? []; // TODO: remove type guard when select items are changed to object values
             setTextValue(!operator.multipleValues ? firstValue : ``);
-            setSelectValues(allValues as string[]); // TODO: remove casting when select items are changed to object values
+            setSelectValues(allSelectValues);
             break;
+        }
         default:
-            setTextValue(``);
+            setTextValue(operator?.valueComponent === `text-field` ? firstValue : ``);
         }
         setFilter(editingFilter ?? {
             columnId: tableFilter.id,

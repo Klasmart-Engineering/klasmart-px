@@ -491,8 +491,21 @@ export const CursorTableServer = () => {
             label: `Release Year`,
             operators: [
                 {
-                    label: `Equals`,
-                    value: `equals`,
+                    label: `Equals (combo box - single)`,
+                    value: `equalsComboSingle`,
+                    valueComponent: `combo-box`,
+                    validations: [ required() ],
+                    options: data.map(data => {
+                        return {
+                            label: data.realeaseYear.toString(),
+                            value: data.id,
+                        };
+                    }),
+                },
+                {
+                    label: `Equals (combo box - multiple)`,
+                    value: `equalsComboMulti`,
+                    valueComponent: `combo-box`,
                     multipleValues: true,
                     validations: [ required() ],
                     options: data.map(data => {
@@ -501,7 +514,37 @@ export const CursorTableServer = () => {
                             value: data.id,
                         };
                     }),
-                    valueComponent: `combo-box`,
+                },
+                {
+                    label: `Equals (select - single)`,
+                    value: `equalsSelectSingle`,
+                    valueComponent: `select`,
+                    validations: [ required() ],
+                    options: data.map(data => {
+                        return {
+                            label: data.realeaseYear.toString(),
+                            value: data.id,
+                        };
+                    }),
+                },
+                {
+                    label: `Equals (select - multiple)`,
+                    value: `equalsSelectMulti`,
+                    valueComponent: `select`,
+                    multipleValues: true,
+                    validations: [ required() ],
+                    options: data.map(data => {
+                        return {
+                            label: data.realeaseYear.toString(),
+                            value: data.id,
+                        };
+                    }),
+                },
+                {
+                    label: `Equals (text field)`,
+                    value: `equalsText`,
+                    valueComponent: `text-field`,
+                    validations: [ required() ],
                 },
             ],
         },

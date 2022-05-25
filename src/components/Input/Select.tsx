@@ -1,3 +1,4 @@
+import ConditionalWrapper from "../Utils/ConditionalWrapper";
 import LoadingIndicator from "./LoadingIndicator";
 import {
     getErrorText,
@@ -5,6 +6,7 @@ import {
 } from "./shared";
 import { Cancel as CancelIcon } from '@mui/icons-material';
 import {
+    Box,
     Checkbox,
     Chip,
     Divider,
@@ -69,6 +71,7 @@ export interface Props<T> extends Input {
     itemText?: (item: T) => string;
     itemValue?: (item: T) => string;
     loading?: boolean;
+    wrapSelectedItems?: boolean;
 }
 
 export default function Select<T> (props: Props<T>) {
@@ -89,6 +92,7 @@ export default function Select<T> (props: Props<T>) {
         readOnly,
         prependInner,
         appendInner,
+        wrapSelectedItems = true,
         onBlur,
         onFocus,
         onChange,
@@ -130,7 +134,9 @@ export default function Select<T> (props: Props<T>) {
     const handleChipDelete = (itemValue: string) => {
         setValue((previousValues) => {
             if (!Array.isArray(previousValues)) return previousValues;
-            return previousValues.filter((previousValue) => previousValue !== itemValue);
+            const updatedValues = previousValues.filter((previousValue) => previousValue !== itemValue);
+            updateValue(updatedValues);
+            return updatedValues;
         });
     };
 
@@ -262,28 +268,55 @@ export default function Select<T> (props: Props<T>) {
             SelectProps={{
                 multiple,
                 renderValue: Array.isArray(value_) && !value_.includes(``)
-                    ? (value) => value_.map((v) => {
-                        const item = allItems.find((item) => itemValue(item) === v);
-                        if (!item) return ``;
-                        return (
-                            <Chip
-                                key={itemValue(item)}
-                                data-testid={`chip`}
-                                className={classes.chip}
-                                label={itemText(item)}
-                                deleteIcon={
-                                    <CancelIcon
-                                        onMouseDown={(event) => {
-                                            event.stopPropagation();
-                                        }}
+                    ? (value) => (
+                        <ConditionalWrapper
+                            condition={wrapSelectedItems}
+                            wrapper={(children) => (
+                                <Box
+                                    sx={{
+                                        display: `flex`,
+                                        flexWrap: `wrap`,
+                                        gap: 0.5,
+                                    }}
+                                >
+                                    {children}
+                                </Box>
+                            )}
+                        >
+                            {value_.map((v) => {
+                                const item = allItems.find((item) => itemValue(item) === v);
+                                if (!item) return ``;
+                                return (
+                                    <Chip
+                                        key={itemValue(item)}
+                                        data-testid={`chip`}
+                                        className={classes.chip}
+                                        label={itemText(item)}
+                                        deleteIcon={
+                                            <CancelIcon
+                                                onMouseDown={(event) => {
+                                                    event.stopPropagation();
+                                                }}
+                                            />
+                                        }
+                                        onDelete={() => handleChipDelete(itemValue(item))}
                                     />
-                                }
-                                onDelete={() => handleChipDelete(itemValue(item))}
-                            />
-                        );
-                    })
+                                );
+                            })}
+                        </ConditionalWrapper>
+                    )
                     : undefined,
-                value: multiple && !Array.isArray(value_) ? [ value_ ] : value_,
+                value: (multiple && !Array.isArray(value_)) ? [ value_ ] : value_,
+                MenuProps: {
+                    anchorOrigin: {
+                        vertical: `bottom`,
+                        horizontal: `left`,
+                    },
+                    transformOrigin: {
+                        vertical: `top`,
+                        horizontal: `left`,
+                    },
+                },
                 onBlur,
                 onChange: handleChange,
                 onFocus,

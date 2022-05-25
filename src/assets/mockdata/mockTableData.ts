@@ -290,6 +290,61 @@ export const filters: TableFilter<UserRow>[] = [
             },
         ],
     },
+    {
+        id: `email`,
+        label: `Email`,
+        operators: [
+            {
+                label: `contains`,
+                value: `contains`,
+                valueComponent: `text-field`,
+            },
+        ],
+    },
+    {
+        id: `phone`,
+        label: `Phone`,
+        operators: [
+            {
+                label: `equals`,
+                value: `eq`,
+                multipleValues: true,
+                options: [
+                    {
+                        value: `role1`,
+                        label: `Role 1`,
+                    },
+                    {
+                        value: `role2`,
+                        label:`Role 2`,
+                    },
+                ],
+                valueComponent: `combo-box`,
+            },
+        ],
+    },
+    {
+        id: `schoolNames`,
+        label: `Schools`,
+        operators: [
+            {
+                label: `equals`,
+                value: `eq`,
+                multipleValues: true,
+                options: [
+                    {
+                        value: `school1`,
+                        label: `School 1`,
+                    },
+                    {
+                        value: `school2`,
+                        label:`School 2`,
+                    },
+                ],
+                valueComponent: `combo-box`,
+            },
+        ],
+    },
 ];
 
 export const comboBoxFilters: TableFilter<UserRow>[] = [

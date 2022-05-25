@@ -153,7 +153,7 @@ describe(`Cursor Table`, () => {
             expect(await screen.findByRole(`combobox`)).toBeInTheDocument();
 
             const comboBoxInput = screen.getByRole(`combobox`, {
-                name: `Value`,
+                name: `Values`,
             });
             userEvent.click(comboBoxInput);
 

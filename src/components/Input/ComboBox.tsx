@@ -10,11 +10,11 @@ import {
     CheckBoxOutlineBlank,
 } from '@mui/icons-material';
 import {
+    Autocomplete,
     Checkbox,
     Chip,
+    createFilterOptions,
 } from '@mui/material';
-import Autocomplete,
-{ createFilterOptions } from '@mui/material/Autocomplete';
 import {
     createStyles,
     makeStyles,
@@ -126,12 +126,11 @@ export default function ComboBox (props: Props) {
             disableCloseOnSelect={multiple}
             clearOnEscape={false}
             clearOnBlur={false}
-            value={selectValue}
+            value={multiple ? selectValue : (selectValue?.[0] ?? null)}
             inputValue={inputValue}
             size={size}
             id={id}
             options={options}
-            isOptionEqualToValue={(option, value) => option.value === value.value}
             getOptionLabel={(option) => option.label ?? ``}
             renderTags={(values, getTagProps) => (
                 values.map((option, index) => (
