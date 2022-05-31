@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.5](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.5%0Dv2.2.4) (2022-05-31)
+
+
+### ♻️ Chores
+
+* update grade icon ([3c0fd7d](https://github.com/KL-Engineering/kidsloop-px/commits/3c0fd7d96537e7ec22a53bc2ef88137cd74ff5b9))
+
 ### [2.2.4](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.4%0Dv2.2.3) (2022-05-25)
 
 
