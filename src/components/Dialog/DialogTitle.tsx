@@ -40,7 +40,7 @@ const typeToIcon = (type?: DialogVariant) => {
 
 export type DialogVariant = Exclude<{ [P in keyof Palette]: Palette[P] extends PaletteColor? P : never }[keyof Palette], "primary" | "secondary">
 
-interface Props extends Omit<DialogTitleProps, "title"> {
+interface Props extends Omit<DialogTitleProps, "title" | "variant"> {
     title: ReactNode;
     variant?: DialogVariant;
     hideIcon?: boolean;
