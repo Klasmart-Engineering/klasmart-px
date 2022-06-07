@@ -13,9 +13,8 @@ module.exports = {
     "core": {
         "builder": "webpack5"
     },
-    staticDirs: [ `../src/assets`, `../public`, `../static`, `../assets/fonts/SourceSansPro` ],
     webpackFinal: async (config) => {
-        const nonSvgAssetRules = config.module.rules.filter(({ test }) => !test.test("svg"));
+        const nonSvgAssetRules = config.module.rules.filter(({ test }) => !test.test(".svg"));
 
         config.module.rules = [
             ...nonSvgAssetRules,
