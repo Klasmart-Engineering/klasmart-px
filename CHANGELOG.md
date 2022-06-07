@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.0%0Dv2.2.5) (2022-06-07)
+
+
+### ⚙️ Continuous Integrations
+
+* fix commit message git hook ([e5f3cf7](https://github.com/KL-Engineering/kidsloop-px/commits/e5f3cf72d4b997228121d28e3d23a42267ceb7bb))
+
+
+### ✨ Features
+
+* add reusable theme config with css styling ([c999f37](https://github.com/KL-Engineering/kidsloop-px/commits/c999f371e8d2b74b6134bcf488f394a8e9769785))
+
+
+### 🐛 Bug Fixes
+
+* build config ([b89b2bb](https://github.com/KL-Engineering/kidsloop-px/commits/b89b2bbdf546046d31c59320add44a0ee31ebec7))
+
 ### [2.2.5](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.2.5%0Dv2.2.4) (2022-05-31)
 
 
