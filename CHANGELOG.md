@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.3.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.1%0Dv2.3.0) (2022-06-07)
+
+
+### 🐛 Bug Fixes
+
+* downgrade to previously used react-dropzone version ([f4d3542](https://github.com/KL-Engineering/kidsloop-px/commits/f4d354247023ce73ce7689edb721a25258b6429b))
+
 ## [2.3.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.0%0Dv2.2.5) (2022-06-07)
 
 
