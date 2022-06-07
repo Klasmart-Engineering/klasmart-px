@@ -1,4 +1,5 @@
-import ThemeDecorator from '../src/theme/themeDecorator';
+import "../src/theme/index.css";
+import ThemeDecorator from '../src/theme/StoryProvider';
 const { addDecorator } = require('@storybook/react');
 
 export const parameters = {

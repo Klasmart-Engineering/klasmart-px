@@ -13,13 +13,14 @@ module.exports = {
     "core": {
         "builder": "webpack5"
     },
+    staticDirs: [ `../src/assets`, `../public`, `../static`, `../assets/fonts/SourceSansPro` ],
     webpackFinal: async (config) => {
-        const assetRules = config.module.rules.filter(({ test }) => !test.test(".svg"));
+        const nonSvgAssetRules = config.module.rules.filter(({ test }) => !test.test("svg"));
 
         config.module.rules = [
-            ...assetRules,
+            ...nonSvgAssetRules,
             {
-                test: /\.(ico|jpg|jpeg|png|apng|gif|eot|otf|webp|ttf|woff|woff2|cur|ani|pdf)(\?.*)?$/,
+                test: /\.(ico|jpg|jpeg|png|apng|gif|eot|cur|ani|pdf)(\?.*)?$/,
                 loader: 'asset/resource',
                 generator: { filename: 'static/media/[path][name].[ext]' }
             },
@@ -27,6 +28,10 @@ module.exports = {
                 test: /\.svg$/,
                 use: [ `@svgr/webpack`, `url-loader` ],
             },
+            {
+                test: /\.(eot|otf|webp|ttf|woff|woff2)$/i,
+                type: 'asset/resource',
+              },
         ];
 
         return {

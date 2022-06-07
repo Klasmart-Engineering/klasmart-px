@@ -43,6 +43,8 @@ export { default as TruncateChipGroup } from "./components/Truncate/TruncateChip
 export { default as TruncateChipTooltip } from "./components/Truncate/TruncateChipTooltip/TruncateChipTooltip";
 export { default as UserAvatar } from "./components/UserAvatar";
 export * from "./icons";
+export { default as ThemeProvider } from "./theme/Provider";
+export * from "./theme/utils";
 export { default as utils } from "./utils";
 export { useWidth } from "./utils/layout";
 export { default as validations } from "./validations";

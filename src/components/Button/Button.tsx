@@ -4,6 +4,7 @@ import { SvgIconComponent } from "@mui/icons-material";
 import {
     Box,
     Button as Btn,
+    colors,
     Theme,
     Tooltip,
     Typography,
@@ -28,22 +29,18 @@ const useStyles = makeStyles((theme) => createStyles({
 
 const getTextColor = (color: string | undefined, variant: Variant | undefined, theme: Theme) => {
     if (variant === `contained`) {
-        if (!color || !COLORS.includes(color as Color)) return `white`;
-
-        return theme.palette[color as Color].main !== theme.palette[color as Color].contrastText
-            ? theme.palette[color as Color].contrastText
-            : `white`;
-    }
-
-    if (variant === `outlined`) {
-        if (!color) return `black`;
-        if (!COLORS.includes(color as Color)) return color;
-
+        if (!color || !COLORS.includes(color as Color)) return colors.common.white;
         return theme.palette[color as Color].contrastText;
     }
 
+    if (variant === `outlined`) {
+        if (!color) return colors.common.black;
+        if (!COLORS.includes(color as Color)) return color;
+        return theme.palette[color as Color].main;
+    }
+
     if (!color) return `black`;
-    if (COLORS.includes(color as Color)) return theme.palette[color as Color].contrastText;
+    if (COLORS.includes(color as Color)) return theme.palette[color as Color].main;
     return color;
 };
 
