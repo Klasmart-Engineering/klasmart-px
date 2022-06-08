@@ -1,13 +1,13 @@
 /* eslint-disable testing-library/no-node-access */
 import '@testing-library/jest-dom';
-import { render } from '../../../../test/themeProviderRender';
 import {
     columns,
     comboBoxFilters,
     filters,
     UserRow,
     userRows,
-} from '../../../assets/mockdata/mockTableData';
+} from '../../../../test/mockdata/mockTableData';
+import { render } from '../../../../test/themeProviderRender';
 import CursorTable from './Table';
 import {
     fireEvent,
