@@ -29,9 +29,6 @@ const useStyles = makeStyles((theme) => createStyles({
         "& .MuiTab-root": {
             backgroundColor: `transparent !important`,
         },
-        "& .Mui-selected": {
-            color: theme.palette.primary.contrastText,
-        },
     },
 }));
 
