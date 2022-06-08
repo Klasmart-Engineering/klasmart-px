@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.3.2](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.2%0Dv2.3.1) (2022-06-08)
+
+
+### 🐛 Bug Fixes
+
+* build config by rolling back dependency versions (#22) ([3c77ed1](https://github.com/KL-Engineering/kidsloop-px/commits/3c77ed187a4afbb913977744b4d99f571acda9bf))
+
 ### [2.3.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.1%0Dv2.3.0) (2022-06-07)
 
 
