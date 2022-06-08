@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.3.3](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.3%0Dv2.3.2) (2022-06-08)
+
+
+### ♻️ Chores
+
+* organize and clean up asset and test files ([a06c540](https://github.com/KL-Engineering/kidsloop-px/commits/a06c540752c0e0b692e86093f4a432de07f252db))
+* remove gitlfs husky hooks ([78d1a8d](https://github.com/KL-Engineering/kidsloop-px/commits/78d1a8d48d03a0218ffcf72486e97146b5a0b8eb))
+* unlfs ([ccad0ff](https://github.com/KL-Engineering/kidsloop-px/commits/ccad0ffc5354aa13aa1f6508c793de8f7975ee1a))
+
 ### [2.3.2](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.2%0Dv2.3.1) (2022-06-08)
 
 
