@@ -1,4 +1,4 @@
-import { FilterValueOption } from "../../components/Table/Common/Filter/Filters";
+import { FilterValueOption } from "../../src/components/Table/Common/Filter/Filters";
 
 const BADA_CHARACTERS: FilterValueOption[] = [
     {
