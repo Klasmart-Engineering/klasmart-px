@@ -118,7 +118,7 @@ export default function BaseTableSearch (props: Props) {
                         className={classes.actionIcon}
                         icon={ClearIcon}
                         tooltip={localization?.clear ?? `Clear search`}
-                        size="medium"
+                        size="large"
                         onClick={() => handleOnChange(``)}
                     />
                 )}

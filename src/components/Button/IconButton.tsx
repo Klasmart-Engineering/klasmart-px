@@ -83,7 +83,7 @@ export interface Props {
     className?: string;
     icon: SvgIconComponent;
     iconSize?: `inherit` | `medium` | `small` | `large`;
-    size?: "small" | "medium";
+    size?: `small` | `medium` | `large`;
     tooltip?: string;
     disabled?: boolean;
     color?: IconButtonColor;

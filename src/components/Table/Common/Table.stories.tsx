@@ -723,9 +723,6 @@ const useStyles = makeStyles((theme) =>
         root: {
             width: `100%`,
         },
-        chip: {
-            margin: theme.spacing(3/8),
-        },
     }));
 
 const programsRows = [
@@ -1430,7 +1427,9 @@ export const PageTableServerFilter = () => {
                         <Chip
                             key={`grade-${i}`}
                             label={grade}
-                            className={classes.chip}
+                            sx={{
+                                margin: 3/8,
+                            }}
                         />
                     ))}
                 </>
@@ -1447,7 +1446,9 @@ export const PageTableServerFilter = () => {
                         <Chip
                             key={`ageRange-${i}`}
                             label={ageRange}
-                            className={classes.chip}
+                            sx={{
+                                margin: 3/8,
+                            }}
                         />
                     ))}
                 </>
@@ -1464,7 +1465,9 @@ export const PageTableServerFilter = () => {
                         <Chip
                             key={`subject-${i}`}
                             label={subject}
-                            className={classes.chip}
+                            sx={{
+                                margin: 3/8,
+                            }}
                         />
                     ))}
                 </>
