@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
             marginRight: theme.spacing(2),
         },
         "& .MuiSelect-select": {
-            paddingLeft: theme.spacing(2),
+            padding: theme.spacing(2),
         },
     },
     selectPlaceholderText: {
