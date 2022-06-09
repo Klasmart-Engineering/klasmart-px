@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.3.4](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.4%0Dv2.3.3) (2022-06-09)
+
+
+### 🗑 Reverts
+
+* **fab:** hardcoded white text color ([9cc1cfe](https://github.com/KL-Engineering/kidsloop-px/commits/9cc1cfe13bf929f19a56474809263e6158d1e1a8))
+
+
+### 🐛 Bug Fixes
+
+* adjust full screen dialog content top margin ([c0c383a](https://github.com/KL-Engineering/kidsloop-px/commits/c0c383a3030081ccec694ec2c6dbd80cf339d08a))
+* **table:** group select padding ([1425604](https://github.com/KL-Engineering/kidsloop-px/commits/14256041d62523050e988860817179b42ad8dc93))
+
 ### [2.3.3](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.3%0Dv2.3.2) (2022-06-08)
 
 
