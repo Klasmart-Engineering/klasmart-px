@@ -25,10 +25,7 @@ const useStyles = makeStyles((theme) => createStyles({
         flex: 1,
     },
     content: {
-        marginTop: 48,
-        [theme.breakpoints.up(`sm`)]: {
-            marginTop: 64,
-        },
+        marginTop: 50,
     },
 }));
 
