@@ -105,11 +105,12 @@ beforeEach(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     delete window.ResizeObserver;
-    window.ResizeObserver = jest.fn().mockImplementation(() => ({
-        observe: jest.fn(),
-        unobserve: jest.fn(),
-        disconnect: jest.fn(),
-    }));
+    window.ResizeObserver = jest.fn()
+        .mockImplementation(() => ({
+            observe: jest.fn(),
+            unobserve: jest.fn(),
+            disconnect: jest.fn(),
+        }));
 });
 
 afterEach(() => {
@@ -151,11 +152,12 @@ describe(`Menu`, () => {
         selectValue(filterItem.label);
         addFilter();
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: [ filterItem ],
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: [ filterItem ],
+            });
     });
 
     test(`Load edit single combo filter`, () => {
@@ -188,9 +190,12 @@ describe(`Menu`, () => {
 
         render(<TableFilterMenu {...props} />);
 
-        expect(screen.getByTestId(`ColumnSelectTextInput`)).toHaveValue(columnId);
-        expect(screen.getByTestId(`OperatorSelectTextInput`)).toHaveValue(operatorValue);
-        expect(screen.getByLabelText(`Value`)).toHaveValue(filterValue.value);
+        expect(screen.getByTestId(`ColumnSelectTextInput`))
+            .toHaveValue(columnId);
+        expect(screen.getByTestId(`OperatorSelectTextInput`))
+            .toHaveValue(operatorValue);
+        expect(screen.getByLabelText(`Value`))
+            .toHaveValue(filterValue.value);
     });
 
     test(`Edit single combo box filter`, () => {
@@ -232,11 +237,12 @@ describe(`Menu`, () => {
         selectValue(newFilterItem.label);
         saveFilter();
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: [ newFilterItem ],
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: [ newFilterItem ],
+            });
     });
 
     test(`Add multi combo box filter`, () => {
@@ -273,11 +279,12 @@ describe(`Menu`, () => {
         selectValues(filterValues.map((value) => value.label));
         addFilter();
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: filterValues,
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: filterValues,
+            });
     });
 
     test(`Load edit multi combo filter`, () => {
@@ -311,12 +318,15 @@ describe(`Menu`, () => {
 
         render(<TableFilterMenu {...props} />);
 
-        expect(screen.getByTestId(`ColumnSelectTextInput`)).toHaveValue(columnId);
-        expect(screen.getByTestId(`OperatorSelectTextInput`)).toHaveValue(operatorValue);
+        expect(screen.getByTestId(`ColumnSelectTextInput`))
+            .toHaveValue(columnId);
+        expect(screen.getByTestId(`OperatorSelectTextInput`))
+            .toHaveValue(operatorValue);
         for (const filterValue of filterValues) {
             expect(screen.getByRole(`button`, {
                 name: filterValue.label,
-            })).toBeInTheDocument();
+            }))
+                .toBeInTheDocument();
         }
     });
 
@@ -362,11 +372,12 @@ describe(`Menu`, () => {
         });
         saveFilter();
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: newFilterValues,
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: newFilterValues,
+            });
     });
 
     test(`Add single select filter`, () => {
@@ -402,11 +413,12 @@ describe(`Menu`, () => {
         selectValue(filterItem.label);
         addFilter();
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: [ filterItem ],
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: [ filterItem ],
+            });
     });
 
     test(`Load edit single select filter`, () => {
@@ -439,11 +451,14 @@ describe(`Menu`, () => {
 
         render(<TableFilterMenu {...props} />);
 
-        expect(screen.getByTestId(`ColumnSelectTextInput`)).toHaveValue(columnId);
-        expect(screen.getByTestId(`OperatorSelectTextInput`)).toHaveValue(operatorValue);
+        expect(screen.getByTestId(`ColumnSelectTextInput`))
+            .toHaveValue(columnId);
+        expect(screen.getByTestId(`OperatorSelectTextInput`))
+            .toHaveValue(operatorValue);
         expect(screen.getByRole(`button`, {
             name: `Value ${filterValue.label}`,
-        })).toBeInTheDocument();
+        }))
+            .toBeInTheDocument();
     });
 
     test(`Edit single select filter`, () => {
@@ -485,11 +500,12 @@ describe(`Menu`, () => {
         selectValue(newFilterItem.label);
         saveFilter();
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: [ newFilterItem ],
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: [ newFilterItem ],
+            });
     });
 
     test(`Add multi select filter`, () => {
@@ -528,11 +544,12 @@ describe(`Menu`, () => {
             hidden: true,
         });
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: filterValues,
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: filterValues,
+            });
     });
 
     test(`Load edit multi select filter`, () => {
@@ -566,12 +583,15 @@ describe(`Menu`, () => {
 
         render(<TableFilterMenu {...props} />);
 
-        expect(screen.getByTestId(`ColumnSelectTextInput`)).toHaveValue(columnId);
-        expect(screen.getByTestId(`OperatorSelectTextInput`)).toHaveValue(operatorValue);
+        expect(screen.getByTestId(`ColumnSelectTextInput`))
+            .toHaveValue(columnId);
+        expect(screen.getByTestId(`OperatorSelectTextInput`))
+            .toHaveValue(operatorValue);
         for (const filterValue of filterValues) {
             expect(screen.getByRole(`button`, {
                 name: filterValue.label,
-            })).toBeInTheDocument();
+            }))
+                .toBeInTheDocument();
         }
     });
 
@@ -619,11 +639,12 @@ describe(`Menu`, () => {
             hidden: true,
         });
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: newFilterValues.map((value) => value.value),
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: newFilterValues.map((value) => value.value),
+            });
     });
 
     test(`Add text field filter`, () => {
@@ -658,11 +679,12 @@ describe(`Menu`, () => {
         inputValue(filterValue);
         addFilter();
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: [ filterValue ],
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: [ filterValue ],
+            });
     });
 
     test(`Load edit text field filter`, () => {
@@ -694,9 +716,12 @@ describe(`Menu`, () => {
 
         render(<TableFilterMenu {...props} />);
 
-        expect(screen.getByTestId(`ColumnSelectTextInput`)).toHaveValue(columnId);
-        expect(screen.getByTestId(`OperatorSelectTextInput`)).toHaveValue(operatorValue);
-        expect(screen.getByLabelText(`Value`)).toHaveValue(filterValue);
+        expect(screen.getByTestId(`ColumnSelectTextInput`))
+            .toHaveValue(columnId);
+        expect(screen.getByTestId(`OperatorSelectTextInput`))
+            .toHaveValue(operatorValue);
+        expect(screen.getByLabelText(`Value`))
+            .toHaveValue(filterValue);
     });
 
     test(`Edit text field filter`, () => {
@@ -738,10 +763,11 @@ describe(`Menu`, () => {
         inputValue(newUserEmail);
         saveFilter();
 
-        expect(props.onClose).toHaveBeenCalledWith({
-            columnId: tableFilter.id,
-            operatorValue: operator.value,
-            values: [ newUserEmail ],
-        });
+        expect(props.onClose)
+            .toHaveBeenCalledWith({
+                columnId: tableFilter.id,
+                operatorValue: operator.value,
+                values: [ newUserEmail ],
+            });
     });
 });

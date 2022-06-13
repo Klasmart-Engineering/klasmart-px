@@ -283,7 +283,7 @@ export const filters: TableFilter<UserRow>[] = [
                     },
                     {
                         value: `inactive`,
-                        label:`Inactive`,
+                        label: `Inactive`,
                     },
                 ],
                 valueComponent: `select`,
@@ -316,7 +316,7 @@ export const filters: TableFilter<UserRow>[] = [
                     },
                     {
                         value: `role2`,
-                        label:`Role 2`,
+                        label: `Role 2`,
                     },
                 ],
                 valueComponent: `combo-box`,
@@ -338,7 +338,7 @@ export const filters: TableFilter<UserRow>[] = [
                     },
                     {
                         value: `school2`,
-                        label:`School 2`,
+                        label: `School 2`,
                     },
                 ],
                 valueComponent: `combo-box`,
@@ -382,7 +382,7 @@ export const comboBoxFilters: TableFilter<UserRow>[] = [
                     },
                     {
                         value: `inactive`,
-                        label:`Inactive`,
+                        label: `Inactive`,
                     },
                 ],
             },

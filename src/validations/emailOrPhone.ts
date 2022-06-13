@@ -15,10 +15,8 @@ export default (emailErrorMessage?: string, phoneErrorMessage?: string) => (inpu
         if (!phoneRegex.test(input)) {
             return phoneErrorMessage ?? emailErrorMessage ?? `Invalid phone`;
         }
-    } else {
-        if (!emailRegex.test(input)) {
-            return emailErrorMessage ?? `Invalid email`;
-        }
+    } else if (!emailRegex.test(input)) {
+        return emailErrorMessage ?? `Invalid email`;
     }
     return true;
 };

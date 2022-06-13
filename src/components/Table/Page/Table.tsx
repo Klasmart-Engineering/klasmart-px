@@ -49,7 +49,8 @@ export default function PageTable<T> (props: Props<T>) {
     const [ page_, setPage ] = useState(page);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage);
     const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>({
-        columns: other.columns.filter(({ hidden }) => !hidden).map(({ id }) => id),
+        columns: other.columns.filter(({ hidden }) => !hidden)
+            .map(({ id }) => id),
         order: [ `asc`, `desc` ].includes(other.order ?? ``) ? other.order as Order : `desc`,
         rows: other.rows,
         rowsPerPage: rowsPerPage,

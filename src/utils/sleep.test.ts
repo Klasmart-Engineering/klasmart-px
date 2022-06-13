@@ -12,7 +12,8 @@ describe(`sleep`, () => {
             const start = Date.now();
             await sleep(ms);
             const diff = Date.now() - start;
-            expect(diff / 1000).toBeCloseTo(ms / 1000, 1);
+            expect(diff / 1000)
+                .toBeCloseTo(ms / 1000, 1);
         });
     }
 });

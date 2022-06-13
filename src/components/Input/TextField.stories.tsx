@@ -24,10 +24,10 @@ export const Primary = Template.bind({});
 Primary.args = {
     fullWidth: true,
     type: `text`,
-    label:`Label`,
-    value:`Value`,
+    label: `Label`,
+    value: `Value`,
     disabled: false,
-    placeholder:`Placeholder`,
+    placeholder: `Placeholder`,
     loading: false,
     variant: `outlined`,
 };

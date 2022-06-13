@@ -122,37 +122,38 @@ export default function BaseTableColumnSelector<T> (props: Props<T>) {
                 </Toolbar>
                 <List className={classes.list}>
                     <Divider />
-                    {columns.filter((column) => !column.secret).map((column, i) => (
-                        <Fragment key={`list-item-${i}`}>
-                            {i !== 0 && <Divider />}
-                            <ListItem
-                                className={classes.columnItemContainer}
-                                onClick={!column.persistent ? () => onColumnChange(column.id) : undefined}
-                            >
-                                <Checkbox
-                                    role="checkbox"
-                                    checked={isSelected(column.id)}
-                                    disabled={column.persistent}
-                                />
-                                <Typography
-                                    variant="body2"
-                                    className={clsx({
-                                        [classes.persistentText]: column.persistent,
-                                    })}
+                    {columns.filter((column) => !column.secret)
+                        .map((column, i) => (
+                            <Fragment key={`list-item-${i}`}>
+                                {i !== 0 && <Divider />}
+                                <ListItem
+                                    className={classes.columnItemContainer}
+                                    onClick={!column.persistent ? () => onColumnChange(column.id) : undefined}
                                 >
-                                    {column.label}
-                                </Typography>
-                                {column.persistent &&
+                                    <Checkbox
+                                        role="checkbox"
+                                        checked={isSelected(column.id)}
+                                        disabled={column.persistent}
+                                    />
+                                    <Typography
+                                        variant="body2"
+                                        className={clsx({
+                                            [classes.persistentText]: column.persistent,
+                                        })}
+                                    >
+                                        {column.label}
+                                    </Typography>
+                                    {column.persistent &&
                                 <ListItemSecondaryAction>
                                     <LockIcon
                                         className={classes.persistentIcon}
                                         fontSize="small"
                                     />
                                 </ListItemSecondaryAction>
-                                }
-                            </ListItem>
-                        </Fragment>
-                    ))}
+                                    }
+                                </ListItem>
+                            </Fragment>
+                        ))}
                 </List>
             </Popover>
         </>);

@@ -12,26 +12,38 @@ describe(`alphanumeric validation`, () => {
     });
 
     test(`not alphanumeric with custom error message`, () => {
-        expect(alphanumeric(errorMessage)(`Nooice!!11`)).toBe(errorMessage);
-        expect(alphanumeric(errorMessage)(`^_^`)).toBe(errorMessage);
-        expect(alphanumeric(errorMessage)(`h@t`)).toBe(errorMessage);
+        expect(alphanumeric(errorMessage)(`Nooice!!11`))
+            .toBe(errorMessage);
+        expect(alphanumeric(errorMessage)(`^_^`))
+            .toBe(errorMessage);
+        expect(alphanumeric(errorMessage)(`h@t`))
+            .toBe(errorMessage);
     });
 
     test(`alphanumeric`, () => {
-        expect(alphanumeric()(`k3wl`)).toBe(true);
-        expect(alphanumeric()(`ABCDEFG123`)).toBe(true);
-        expect(alphanumeric()(`hellothere`)).toBe(true);
+        expect(alphanumeric()(`k3wl`))
+            .toBe(true);
+        expect(alphanumeric()(`ABCDEFG123`))
+            .toBe(true);
+        expect(alphanumeric()(`hellothere`))
+            .toBe(true);
     });
 
     test(`alphanumeric with custom error message`, () => {
-        expect(alphanumeric(errorMessage)(`n1c3`)).toBe(true);
-        expect(alphanumeric(errorMessage)(`toodles`)).toBe(true);
-        expect(alphanumeric(errorMessage)(`OKIDOKI`)).toBe(true);
+        expect(alphanumeric(errorMessage)(`n1c3`))
+            .toBe(true);
+        expect(alphanumeric(errorMessage)(`toodles`))
+            .toBe(true);
+        expect(alphanumeric(errorMessage)(`OKIDOKI`))
+            .toBe(true);
     });
 
     test(`empty`, () => {
-        expect(alphanumeric()(``)).toBe(true);
-        expect(alphanumeric()(undefined)).toBe(true);
-        expect(alphanumeric()(null)).toBe(true);
+        expect(alphanumeric()(``))
+            .toBe(true);
+        expect(alphanumeric()(undefined))
+            .toBe(true);
+        expect(alphanumeric()(null))
+            .toBe(true);
     });
 });

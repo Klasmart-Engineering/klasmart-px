@@ -11,14 +11,17 @@ describe(`email or phone validation`, () => {
     phoneTests(emailOrPhone);
 
     test(`returns the phoneErrorMessage for an invalid phone if provided`, () => {
-        expect(emailOrPhone(emailErrorMessage, phoneErrorMessage)(`+1234`)).toBe(phoneErrorMessage);
+        expect(emailOrPhone(emailErrorMessage, phoneErrorMessage)(`+1234`))
+            .toBe(phoneErrorMessage);
     });
 
     test(`returns the emailErrorMessage for an invalid phone if phoneErrorMessage wasn't provided`, () => {
-        expect(emailOrPhone(emailErrorMessage)(`+1234`)).toBe(emailErrorMessage);
+        expect(emailOrPhone(emailErrorMessage)(`+1234`))
+            .toBe(emailErrorMessage);
     });
 
     test(`returns the emailErrorMessage for an invalid email`, () => {
-        expect(emailOrPhone(emailErrorMessage, phoneErrorMessage)(`not-an-email`)).toBe(emailErrorMessage);
+        expect(emailOrPhone(emailErrorMessage, phoneErrorMessage)(`not-an-email`))
+            .toBe(emailErrorMessage);
     });
 });

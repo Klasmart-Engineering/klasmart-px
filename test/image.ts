@@ -7,7 +7,8 @@ export function b64toBlob (b64Data: string, contentType: string, sliceSize?: num
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
         const slice = byteCharacters.slice(offset, offset + sliceSize);
 
-        const byteNumbers = Array.from(slice).map(c => c.charCodeAt(0));
+        const byteNumbers = Array.from(slice)
+            .map(c => c.charCodeAt(0));
 
         byteArrays.push(new Uint8Array(byteNumbers));
     }

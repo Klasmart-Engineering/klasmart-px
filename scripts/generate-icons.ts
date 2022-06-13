@@ -151,7 +151,8 @@ const createExporterComponent = (fileNames: string[]) => {
     return `${fileNames.map((fileName) => {
         const iconName = fileNameToIconName(fileName);
         return `export { default as ${iconName} } from "./${iconName}";`;
-    }).join(`\n`)}\n`;
+    })
+        .join(`\n`)}\n`;
 };
 
 const removeOldFiles = (config: BuildConfig) => {

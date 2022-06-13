@@ -20,9 +20,9 @@ const Template: Story<Props> = (args) => <ComboBox {...args} />;
 export const SingleItem = Template.bind({});
 SingleItem.args = {
     fullWidth: true,
-    label:`Label`,
+    label: `Label`,
     disabled: false,
-    placeholder:`Placeholder`,
+    placeholder: `Placeholder`,
     loading: false,
     variant: `outlined`,
     options: BADA_CHARACTERS,
@@ -44,9 +44,9 @@ SingleItem.argTypes = {
 export const MultiItem = Template.bind({});
 MultiItem.args = {
     fullWidth: true,
-    label:`Label`,
+    label: `Label`,
     disabled: false,
-    placeholder:`Placeholder`,
+    placeholder: `Placeholder`,
     loading: false,
     variant: `outlined`,
     multiple: true,
@@ -78,7 +78,8 @@ const OPTIONS_LIMIT = 10;
 const customFilterOnServer = async (inputValue: string) => {
     await sleep(1000);
     return BADA_CHARACTERS
-        .filter(option => new RegExp(`${inputValue}`, `i`).test(option.label))
+        .filter(option => new RegExp(`${inputValue}`, `i`)
+            .test(option.label))
         .slice(0, OPTIONS_LIMIT);
 };
 

@@ -40,7 +40,9 @@ const useStyles = makeStyles((theme) => createStyles({
     },
 }));
 
-const getRandomString = (length = 8, maxLength = 36) => Math.random().toString(maxLength).substring(length > maxLength ? maxLength : length);
+const getRandomString = (length = 8, maxLength = 36) => Math.random()
+    .toString(maxLength)
+    .substring(length > maxLength ? maxLength : length);
 
 export interface SelectedFile {
     key: string;

@@ -14,13 +14,16 @@ function mount () {
 
 test(`returns true when mounted`, () => {
     const { isMounted } = mount();
-    expect(isMounted()).toBe(true);
+    expect(isMounted())
+        .toBe(true);
 });
 
 test(`returns false when unmounted`, () => {
     const { isMounted, unmount } = mount();
-    expect(isMounted()).toBe(true);
+    expect(isMounted())
+        .toBe(true);
 
     act(() => unmount());
-    expect(isMounted()).toBe(false);
+    expect(isMounted())
+        .toBe(false);
 });

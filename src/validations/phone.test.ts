@@ -13,28 +13,41 @@ const tests = (regex: (errorMessage?: string | undefined) => (input: any) => str
     });
 
     test(`invalid phone with custom error message`, () => {
-        expect(regex(errorMessage)(`123`)).toBe(errorMessage);
-        expect(regex(errorMessage)(`1234567890`)).toBe(errorMessage);
-        expect(regex(errorMessage)(`+0821234567890`)).toBe(errorMessage);
-        expect(regex(errorMessage)(`+8212345678901234567890`)).toBe(errorMessage);
+        expect(regex(errorMessage)(`123`))
+            .toBe(errorMessage);
+        expect(regex(errorMessage)(`1234567890`))
+            .toBe(errorMessage);
+        expect(regex(errorMessage)(`+0821234567890`))
+            .toBe(errorMessage);
+        expect(regex(errorMessage)(`+8212345678901234567890`))
+            .toBe(errorMessage);
     });
 
     test(`valid phone`, () => {
-        expect(regex()(`+8212345`)).toBe(true);
-        expect(regex()(`+8212345678`)).toBe(true);
-        expect(regex()(`+821234567890123`)).toBe(true);
+        expect(regex()(`+8212345`))
+            .toBe(true);
+        expect(regex()(`+8212345678`))
+            .toBe(true);
+        expect(regex()(`+821234567890123`))
+            .toBe(true);
     });
 
     test(`valid phone with custom error message`, () => {
-        expect(regex(errorMessage)(`+8212345`)).toBe(true);
-        expect(regex(errorMessage)(`+8212345678`)).toBe(true);
-        expect(regex(errorMessage)(`+821234567890123`)).toBe(true);
+        expect(regex(errorMessage)(`+8212345`))
+            .toBe(true);
+        expect(regex(errorMessage)(`+8212345678`))
+            .toBe(true);
+        expect(regex(errorMessage)(`+821234567890123`))
+            .toBe(true);
     });
 
     test(`empty`, () => {
-        expect(regex()(``)).toBe(true);
-        expect(regex()(undefined)).toBe(true);
-        expect(regex()(null)).toBe(true);
+        expect(regex()(``))
+            .toBe(true);
+        expect(regex()(undefined))
+            .toBe(true);
+        expect(regex()(null))
+            .toBe(true);
     });
 });
 

@@ -66,7 +66,8 @@ export default function FileListMenu (props: Props) {
                 subheader={title ? <ListSubheader>{title}</ListSubheader> : undefined}
             >
                 {files.map((file, i) => {
-                    const fileType = file.name.split(`.`).slice(-1)[0];
+                    const fileType = file.name.split(`.`)
+                        .slice(-1)[0];
                     return (
                         <ListItem key={`file-item-${i}`}>
                             <ListItemIcon>

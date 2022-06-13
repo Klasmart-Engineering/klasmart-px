@@ -23,7 +23,8 @@ describe(`TruncateChipTooltip`, () => {
     test(`shows right correct chip label with number of items and pluralLabel`, () => {
         const expectedLabel = `5 kittens`;
         render(truncateChipTooltip);
-        expect(screen.getByText(expectedLabel)).toBeInTheDocument();
+        expect(screen.getByText(expectedLabel))
+            .toBeInTheDocument();
     });
 
     test(`when only 1 item is present, simply shows that one`, () => {
@@ -31,6 +32,7 @@ describe(`TruncateChipTooltip`, () => {
         render(cloneElement(truncateChipTooltip, {
             items: [ `item 1` ],
         }));
-        expect(screen.getByText(expectedLabel)).toBeInTheDocument();
+        expect(screen.getByText(expectedLabel))
+            .toBeInTheDocument();
     });
 });

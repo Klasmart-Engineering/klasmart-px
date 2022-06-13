@@ -20,7 +20,8 @@ const mockHandlers = {
 };
 
 function clearMockHandlers () {
-    Object.values(mockHandlers).forEach(mock => mock.mockClear());
+    Object.values(mockHandlers)
+        .forEach(mock => mock.mockClear());
 }
 
 beforeEach(clearMockHandlers);
@@ -35,21 +36,32 @@ function expectOnValueChange ({ error, value }: {
         onError,
     } = mockHandlers;
     if (value) {
-        expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange).toHaveBeenCalledWith(value);
+        expect(onChange)
+            .toHaveBeenCalledTimes(1);
+        expect(onChange)
+            .toHaveBeenCalledWith(value);
     } else {
-        expect(onChange).toHaveBeenCalledTimes(0);
+        expect(onChange)
+            .toHaveBeenCalledTimes(0);
     }
     if (error) {
-        expect(onValidate).toHaveBeenCalledTimes(1);
-        expect(onValidate).toHaveBeenCalledWith(false);
-        expect(onError).toHaveBeenCalledTimes(1);
-        expect(onError).toHaveBeenCalledWith(error);
+        expect(onValidate)
+            .toHaveBeenCalledTimes(1);
+        expect(onValidate)
+            .toHaveBeenCalledWith(false);
+        expect(onError)
+            .toHaveBeenCalledTimes(1);
+        expect(onError)
+            .toHaveBeenCalledWith(error);
     } else {
-        expect(onValidate).toHaveBeenCalledTimes(1);
-        expect(onValidate).toHaveBeenCalledWith(true);
-        expect(onError).toHaveBeenCalledTimes(1);
-        expect(onError).toHaveBeenCalledWith(undefined);
+        expect(onValidate)
+            .toHaveBeenCalledTimes(1);
+        expect(onValidate)
+            .toHaveBeenCalledWith(true);
+        expect(onError)
+            .toHaveBeenCalledTimes(1);
+        expect(onError)
+            .toHaveBeenCalledWith(undefined);
     }
 }
 
@@ -60,32 +72,43 @@ function expectOnErrorChange (error: string | undefined) {
         onError,
     } = mockHandlers;
     expect(onChange).not.toHaveBeenCalled();
-    expect(onValidate).toHaveBeenCalledTimes(1);
-    expect(onValidate).toHaveBeenCalledWith(!error);
-    expect(onError).toHaveBeenCalledTimes(1);
-    expect(onError).toHaveBeenCalledWith(error);
+    expect(onValidate)
+        .toHaveBeenCalledTimes(1);
+    expect(onValidate)
+        .toHaveBeenCalledWith(!error);
+    expect(onError)
+        .toHaveBeenCalledTimes(1);
+    expect(onError)
+        .toHaveBeenCalledWith(error);
 }
 
 function expectError ({ container, error }: { container: HTMLElement; error: string}) {
-    expect(container.querySelector(`.MuiInputBase-root`)).toHaveClass(`Mui-error`);
+    expect(container.querySelector(`.MuiInputBase-root`))
+        .toHaveClass(`Mui-error`);
 
     const helperText = container.querySelector(`.MuiFormHelperText-root`);
-    expect(helperText).toBeInTheDocument();
-    expect(helperText).toHaveTextContent(error);
-    expect(helperText).toHaveClass(`Mui-error`);
+    expect(helperText)
+        .toBeInTheDocument();
+    expect(helperText)
+        .toHaveTextContent(error);
+    expect(helperText)
+        .toHaveClass(`Mui-error`);
 }
 
 function expectNoError (container: HTMLElement) {
     expect(container.querySelector(`.MuiInputBase-root`)).not.toHaveClass(`Mui-error`);
-    expect(container.querySelector(`.MuiFormHelperText-root`)).toHaveTextContent(`\u200b`);
+    expect(container.querySelector(`.MuiFormHelperText-root`))
+        .toHaveTextContent(`\u200b`);
 }
 
 function expectValue ({ container, value }: {container: HTMLElement; value: string}) {
-    expect(container.querySelector(`input`)).toHaveValue(value);
+    expect(container.querySelector(`input`))
+        .toHaveValue(value);
 }
 
 function expectErrorWithoutHelperText (container: HTMLElement) {
-    expect(container.querySelector(`.MuiInputBase-root`)).toHaveClass(`Mui-error`);
+    expect(container.querySelector(`.MuiInputBase-root`))
+        .toHaveClass(`Mui-error`);
 
     expect(container.querySelector(`.MuiFormHelperText-root`)).not.toBeInTheDocument();
 }
@@ -186,7 +209,8 @@ test(`calls onChange with a number if type='number'`, () => {
 
     userEvent.type(document.querySelector(`input`) as HTMLElement, `2`);
 
-    expect(mockHandlers.onChange).toHaveBeenLastCalledWith(12);
+    expect(mockHandlers.onChange)
+        .toHaveBeenLastCalledWith(12);
 });
 
 test(`updates value and helperText, and calls onChange, onValidate and onError on rerender`, () => {
@@ -377,6 +401,8 @@ test.each([ [ `me@company.com`, true ], [ `not-an-email`, false ] ])(`input %s c
         selector: `input`,
     }), value);
 
-    expect(mockHandlers.onValidate).toHaveBeenCalledTimes(value.length);
-    expect(mockHandlers.onValidate).toHaveBeenCalledWith(result);
+    expect(mockHandlers.onValidate)
+        .toHaveBeenCalledTimes(value.length);
+    expect(mockHandlers.onValidate)
+        .toHaveBeenCalledWith(result);
 });

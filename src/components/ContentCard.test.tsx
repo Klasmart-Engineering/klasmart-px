@@ -35,7 +35,8 @@ describe(`ContentCard`, () => {
         screen.getByText(nameToInitials(author, 3));
         screen.getByText(description);
         screen.getByText(title);
-        expect((screen.getByTestId(`card-media`) as HTMLImageElement).src).toBe(imageUrl);
+        expect((screen.getByTestId(`card-media`) as HTMLImageElement).src)
+            .toBe(imageUrl);
     });
 
     test(`click card`, () => {
@@ -46,7 +47,8 @@ describe(`ContentCard`, () => {
             },
         }));
         userEvent.click(screen.getByTestId(`card-action-area`));
-        expect(console.log).toHaveBeenCalledWith(logValue);
+        expect(console.log)
+            .toHaveBeenCalledWith(logValue);
     });
 
     test(`action buttons`, () => {
@@ -64,9 +66,11 @@ describe(`ContentCard`, () => {
         for (const i in logValues) {
             const value = logValues[i];
             const button = screen.getByTestId(`${i}-action-button`) as HTMLButtonElement;
-            expect(button.getAttribute(`aria-label`)).toBe(value);
+            expect(button.getAttribute(`aria-label`))
+                .toBe(value);
             userEvent.click(button);
-            expect(console.log).toHaveBeenCalledWith(value);
+            expect(console.log)
+                .toHaveBeenCalledWith(value);
         }
     });
 
@@ -84,7 +88,8 @@ describe(`ContentCard`, () => {
         const checkbox = screen.getByRole(`checkbox`) as HTMLInputElement;
         const cardActionArea = screen.getByTestId(`card-action-area`);
         expect(cardActionArea).not.toHaveClass(`selected`);
-        expect(checkbox.checked).toBe(false);
+        expect(checkbox.checked)
+            .toBe(false);
         userEvent.click(checkbox);
         rerender(cloneElement(contentCard, {
             checkbox: {
@@ -92,7 +97,9 @@ describe(`ContentCard`, () => {
                 onChange: () => setChecked(!checked),
             },
         }));
-        expect(cardActionArea).toHaveClass(`selected`);
-        expect(checkbox.checked).toBe(true);
+        expect(cardActionArea)
+            .toHaveClass(`selected`);
+        expect(checkbox.checked)
+            .toBe(true);
     });
 });

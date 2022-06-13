@@ -137,7 +137,9 @@ interface LoadDataRequest {
 
 const dataSearchSort = (data: StarWarsRow[], orderBy: keyof StarWarsRow, order: string, search?: string) => {
     return data
-        .filter((d) => search ? Object.values(d).some((value) => String(value).includes(String(search))) : true)
+        .filter((d) => search ? Object.values(d)
+            .some((value) => String(value)
+                .includes(String(search))) : true)
         .sort((a, b) => {
             const aValue = a[orderBy];
             const bValue = b[orderBy];
@@ -165,7 +167,8 @@ const loadData = async (request: LoadDataPageRequest) => {
     } = request;
     await sleep(500);
     let filteredData = data
-        .filter((d) => subgroupBy ? Object.values(d).some((value) => String(value) === String(subgroupBy)) : true);
+        .filter((d) => subgroupBy ? Object.values(d)
+            .some((value) => String(value) === String(subgroupBy)) : true);
     filteredData = dataSearchSort(filteredData, orderBy, order, search);
 
     return {
@@ -219,7 +222,9 @@ const loadCursorData = async (request: LoadDataCursorRequest) => {
 const loadGroups = async (request: LoadDataRequest) => {
     const { search } = request;
     await sleep(500);
-    const filteredData = data.filter((d) => search ? Object.values(d).some((value) => String(value).includes(String(search))) : true);
+    const filteredData = data.filter((d) => search ? Object.values(d)
+        .some((value) => String(value)
+            .includes(String(search))) : true);
     return {
         yearGroups: [
             {
@@ -289,7 +294,9 @@ export const PageTableServer = () => {
             id: `trilogy`,
             label: `Trilogy`,
             groups: trilogyGroups,
-            render: (row) => `${row.trilogy.slice(0, 1).toUpperCase()}${row.trilogy.slice(1).toLowerCase()}`,
+            render: (row) => `${row.trilogy.slice(0, 1)
+                .toUpperCase()}${row.trilogy.slice(1)
+                .toLowerCase()}`,
         },
         {
             id: `happyEnding`,
@@ -345,7 +352,8 @@ export const PageTableServer = () => {
             });
             setYearGroups(yearGroups.map((group) => ({
                 ...group,
-                text: group.value.toString().toUpperCase(),
+                text: group.value.toString()
+                    .toUpperCase(),
             })));
             setHappyEndingGroups(happyEndingGroups.map((group) => ({
                 ...group,
@@ -353,7 +361,8 @@ export const PageTableServer = () => {
             })));
             setTrilogyGroups(trilogyGroups.map((group) => ({
                 ...group,
-                text: group.value.toString().toUpperCase(),
+                text: group.value.toString()
+                    .toUpperCase(),
             })));
             setNoGroupTotal(noGroupTotal);
             setLoadingGroups(false);
@@ -418,7 +427,9 @@ export const PageTableLocal = () => {
                     value: StarWarsTrilogy.SEQUALS,
                 },
             ],
-            render: (row) => `${row.trilogy.slice(0, 1).toUpperCase()}${row.trilogy.slice(1).toLowerCase()}`,
+            render: (row) => `${row.trilogy.slice(0, 1)
+                .toUpperCase()}${row.trilogy.slice(1)
+                .toLowerCase()}`,
         },
         {
             id: `happyEnding`,
@@ -601,7 +612,9 @@ export const CursorTableServer = () => {
             id: `trilogy`,
             label: `Trilogy`,
             groups: trilogyGroups,
-            render: (row) => `${row.trilogy.slice(0, 1).toUpperCase()}${row.trilogy.slice(1).toLowerCase()}`,
+            render: (row) => `${row.trilogy.slice(0, 1)
+                .toUpperCase()}${row.trilogy.slice(1)
+                .toLowerCase()}`,
         },
         {
             id: `happyEnding`,
@@ -670,7 +683,8 @@ export const CursorTableServer = () => {
             });
             setYearGroups(yearGroups.map((group) => ({
                 ...group,
-                text: group.value.toString().toUpperCase(),
+                text: group.value.toString()
+                    .toUpperCase(),
             })));
             setHappyEndingGroups(happyEndingGroups.map((group) => ({
                 ...group,
@@ -678,7 +692,8 @@ export const CursorTableServer = () => {
             })));
             setTrilogyGroups(trilogyGroups.map((group) => ({
                 ...group,
-                text: group.value.toString().toUpperCase(),
+                text: group.value.toString()
+                    .toUpperCase(),
             })));
             setNoGroupTotal(noGroupTotal);
             setLoadingGroups(false);
@@ -1176,12 +1191,15 @@ const loadProgramsData = async (request: LoadProgramsDataPageRequest) => {
     const filteredData = programsRows
         .filter((d) =>
             subgroupBy
-                ? Object.values(d).some((value) => String(value) === String(subgroupBy))
+                ? Object.values(d)
+                    .some((value) => String(value) === String(subgroupBy))
                 : true)
         .filter((d) =>
             search
-                ? Object.values(d).some((value) =>
-                    String(value).includes(String(search)))
+                ? Object.values(d)
+                    .some((value) =>
+                        String(value)
+                            .includes(String(search)))
                 : true)
         .sort((a, b) => {
             const aValue = a[orderBy];
@@ -1366,10 +1384,13 @@ const customFilterOnServer = async (columnId: string, operatorValue: string, inp
 
     switch (matchingOperator.value) {
     case `equals`:
-        updatedOptions = matchingOperator.options?.filter(option => option.label === inputValue).slice(0, OPTIONS_LIMIT) ?? [];
+        updatedOptions = matchingOperator.options?.filter(option => option.label === inputValue)
+            .slice(0, OPTIONS_LIMIT) ?? [];
         break;
     case `contains`:
-        updatedOptions = matchingOperator.options?.filter(option => new RegExp(`${inputValue}`, `i`).test(option.label)).slice(0, OPTIONS_LIMIT) ?? [];
+        updatedOptions = matchingOperator.options?.filter(option => new RegExp(`${inputValue}`, `i`)
+            .test(option.label))
+            .slice(0, OPTIONS_LIMIT) ?? [];
         break;
     default:
         updatedOptions = [];

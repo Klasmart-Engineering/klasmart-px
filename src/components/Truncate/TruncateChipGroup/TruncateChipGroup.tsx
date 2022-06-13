@@ -66,7 +66,7 @@ export default function TruncateChipGroup (props: Props) {
             <Collapse
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                id={`${ uniqueId }-collapsable`}
+                id={`${uniqueId}-collapsable`}
                 in={isOpen}
                 aria-hidden={!isOpen}
             >
@@ -83,7 +83,7 @@ export default function TruncateChipGroup (props: Props) {
             {
                 truncateItems &&
                     <Button
-                        aria-controls={`${ uniqueId }-collapsable`}
+                        aria-controls={`${uniqueId}-collapsable`}
                         aria-expanded={isOpen}
                         variant="text"
                         size="small"

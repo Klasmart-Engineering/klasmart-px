@@ -22,4 +22,5 @@ export interface Input {
     onValidate?: (valid: boolean) => void;
 }
 
-export const getErrorText = (value: unknown, validations: ((input: unknown) => true | string)[] | undefined) => validations?.map((validation) => validation(value)).find((result) => result !== true) as string | undefined;
+export const getErrorText = (value: unknown, validations: ((input: unknown) => true | string)[] | undefined) => validations?.map((validation) => validation(value))
+    .find((result) => result !== true) as string | undefined;

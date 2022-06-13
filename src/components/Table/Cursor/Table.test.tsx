@@ -37,11 +37,12 @@ beforeEach(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     delete window.ResizeObserver;
-    window.ResizeObserver = jest.fn().mockImplementation(() => ({
-        observe: jest.fn(),
-        unobserve: jest.fn(),
-        disconnect: jest.fn(),
-    }));
+    window.ResizeObserver = jest.fn()
+        .mockImplementation(() => ({
+            observe: jest.fn(),
+            unobserve: jest.fn(),
+            disconnect: jest.fn(),
+        }));
 });
 
 afterEach(() => {
@@ -57,7 +58,8 @@ describe(`Cursor Table`, () => {
             render(component);
 
             await waitFor(() => {
-                expect(screen.getByText(`John`)).toBeInTheDocument();
+                expect(screen.getByText(`John`))
+                    .toBeInTheDocument();
             });
         });
         test(`combobox render`, () => {
@@ -74,7 +76,8 @@ describe(`Cursor Table`, () => {
 
             userEvent.click(screen.getByText(`Add Filter`));
 
-            expect(screen.getByRole(`combobox`)).toBeInTheDocument();
+            expect(screen.getByRole(`combobox`))
+                .toBeInTheDocument();
         });
     });
 
@@ -96,16 +99,19 @@ describe(`Cursor Table`, () => {
             userEvent.click(columnOptions[1]); //should select status
 
             await waitFor(() => {
-                expect(columnSelectInput.value).toEqual(`status`);
+                expect(columnSelectInput.value)
+                    .toBe(`status`);
             });
             await waitFor(() => {
                 expect(screen.getAllByText(`Status`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
-            expect(valueSelectInput.value).toEqual(``);
+            expect(valueSelectInput.value)
+                .toBe(``);
 
             userEvent.click(screen.getAllByRole(`button`)[2]);
 
@@ -115,25 +121,29 @@ describe(`Cursor Table`, () => {
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             const valueOptions = screen.getAllByRole(`option`);
             userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
-                expect(valueSelectInput.value).toEqual(`active`);
+                expect(valueSelectInput.value)
+                    .toBe(`active`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             await waitFor(() => {
-                expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Active"`);
+                expect(screen.getByTestId(`statusChipLabel`))
+                    .toHaveTextContent(`Status equals "Active"`);
             });
         });
 
@@ -150,7 +160,8 @@ describe(`Cursor Table`, () => {
 
             userEvent.click(screen.getByText(`Add Filter`));
 
-            expect(await screen.findByRole(`combobox`)).toBeInTheDocument();
+            expect(await screen.findByRole(`combobox`))
+                .toBeInTheDocument();
 
             const comboBoxInput = screen.getByRole(`combobox`, {
                 name: `Values`,
@@ -160,7 +171,8 @@ describe(`Cursor Table`, () => {
             const options = screen.getAllByRole(`option`);
 
             await waitFor(() => {
-                expect(options).toHaveLength(3);
+                expect(options)
+                    .toHaveLength(3);
             });
 
             userEvent.click(options[2]);
@@ -170,14 +182,16 @@ describe(`Cursor Table`, () => {
             });
 
             await waitFor(() => {
-                expect(comboBoxChip).toHaveTextContent(`${options[2].textContent}`);
+                expect(comboBoxChip)
+                    .toHaveTextContent(`${options[2].textContent}`);
             });
 
             userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             expect(await screen.findByRole(`button`, {
                 name: `Organization Roles equals "Test Parent"`,
-            })).toBeInTheDocument();
+            }))
+                .toBeInTheDocument();
         });
 
         test(`edit filter`, async () => {
@@ -197,16 +211,19 @@ describe(`Cursor Table`, () => {
             userEvent.click(columnOptions[1]);
 
             await waitFor(() => {
-                expect(columnSelectInput.value).toEqual(`status`);
+                expect(columnSelectInput.value)
+                    .toBe(`status`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             let valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
-            expect(valueSelectInput.value).toEqual(``);
+            expect(valueSelectInput.value)
+                .toBe(``);
 
             userEvent.click(screen.getAllByRole(`button`)[2]);
 
@@ -216,30 +233,35 @@ describe(`Cursor Table`, () => {
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             let valueOptions = screen.getAllByRole(`option`);
             userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
-                expect(valueSelectInput.value).toEqual(`active`);
+                expect(valueSelectInput.value)
+                    .toBe(`active`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             await waitFor(() => {
-                expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Active"`);
+                expect(screen.getByTestId(`statusChipLabel`))
+                    .toHaveTextContent(`Status equals "Active"`);
             });
 
             userEvent.click(screen.getByTestId(`statusChipLabel`));
 
-            expect(valueSelectInput.value).toEqual(`active`);
+            expect(valueSelectInput.value)
+                .toBe(`active`);
 
             userEvent.click(screen.getAllByRole(`button`)[2]);
 
@@ -249,7 +271,8 @@ describe(`Cursor Table`, () => {
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
-                })).toHaveLength(2);
+                }))
+                    .toHaveLength(2);
             });
 
             valueOptions = screen.getAllByRole(`option`);
@@ -258,18 +281,21 @@ describe(`Cursor Table`, () => {
             valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
 
             await waitFor(() => {
-                expect(valueSelectInput.value).toEqual(`inactive`);
+                expect(valueSelectInput.value)
+                    .toBe(`inactive`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Inactive`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             userEvent.click(screen.getAllByText(`Save Filter`)[0]);
 
             await waitFor(() => {
-                expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Inactive"`);
+                expect(screen.getByTestId(`statusChipLabel`))
+                    .toHaveTextContent(`Status equals "Inactive"`);
             });
         });
 
@@ -290,16 +316,19 @@ describe(`Cursor Table`, () => {
             userEvent.click(columnOptions[1]);
 
             await waitFor(() => {
-                expect(columnSelectInput.value).toEqual(`status`);
+                expect(columnSelectInput.value)
+                    .toBe(`status`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
-            expect(valueSelectInput.value).toEqual(``);
+            expect(valueSelectInput.value)
+                .toBe(``);
 
             userEvent.click(screen.getAllByRole(`button`)[2]);
 
@@ -309,25 +338,29 @@ describe(`Cursor Table`, () => {
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             const valueOptions = screen.getAllByRole(`option`);
             userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
-                expect(valueSelectInput.value).toEqual(`active`);
+                expect(valueSelectInput.value)
+                    .toBe(`active`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             await waitFor(() => {
-                expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Active"`);
+                expect(screen.getByTestId(`statusChipLabel`))
+                    .toHaveTextContent(`Status equals "Active"`);
             });
 
             const deleteIcon = document.querySelector(`.MuiChip-deleteIcon`) as HTMLElement;
@@ -337,17 +370,20 @@ describe(`Cursor Table`, () => {
             await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
-                })).toHaveLength(0);
+                }))
+                    .toHaveLength(0);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`equals`, {
                     selector: `span`,
-                })).toHaveLength(0);
+                }))
+                    .toHaveLength(0);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`"Active"`, {
                     selector: `span`,
-                })).toHaveLength(0);
+                }))
+                    .toHaveLength(0);
             });
         });
 
@@ -368,16 +404,19 @@ describe(`Cursor Table`, () => {
             userEvent.click(columnOptions[1]);
 
             await waitFor(() => {
-                expect(columnSelectInput.value).toEqual(`status`);
+                expect(columnSelectInput.value)
+                    .toBe(`status`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
-            expect(valueSelectInput.value).toEqual(``);
+            expect(valueSelectInput.value)
+                .toBe(``);
 
             userEvent.click(screen.getAllByRole(`button`)[2]);
 
@@ -387,25 +426,29 @@ describe(`Cursor Table`, () => {
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             const valueOptions = screen.getAllByRole(`option`);
             userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
-                expect(valueSelectInput.value).toEqual(`active`);
+                expect(valueSelectInput.value)
+                    .toBe(`active`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
                     selector: `span`,
-                })).toHaveLength(1);
+                }))
+                    .toHaveLength(1);
             });
 
             userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             await waitFor(() => {
-                expect(screen.getByTestId(`statusChipLabel`)).toHaveTextContent(`Status equals "Active"`);
+                expect(screen.getByTestId(`statusChipLabel`))
+                    .toHaveTextContent(`Status equals "Active"`);
             });
 
             userEvent.click(screen.getByTestId(`clearFilters`));
@@ -413,17 +456,20 @@ describe(`Cursor Table`, () => {
             await waitFor(() => {
                 expect(screen.queryAllByText(`Status`, {
                     selector: `span`,
-                })).toHaveLength(0);
+                }))
+                    .toHaveLength(0);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`equals`, {
                     selector: `span`,
-                })).toHaveLength(0);
+                }))
+                    .toHaveLength(0);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`"Active"`, {
                     selector: `span`,
-                })).toHaveLength(0);
+                }))
+                    .toHaveLength(0);
             });
         });
 
@@ -441,7 +487,8 @@ describe(`Cursor Table`, () => {
             });
 
             await waitFor(() => {
-                expect(searchInput.value).toEqual(`Mike Portnoy`);
+                expect(searchInput.value)
+                    .toBe(`Mike Portnoy`);
             });
         });
 
@@ -459,7 +506,8 @@ describe(`Cursor Table`, () => {
             });
 
             await waitFor(() => {
-                expect(searchInput.value).toEqual(``);
+                expect(searchInput.value)
+                    .toBe(``);
             });
         });
 
@@ -472,9 +520,12 @@ describe(`Cursor Table`, () => {
                 exact: false,
             });
 
-            expect(userRowsInTable).toHaveLength(4);
-            expect(userRowsInTable[0]).toHaveTextContent(`Andres`);
-            expect(userRowsInTable[1]).toHaveTextContent(`John`);
+            expect(userRowsInTable)
+                .toHaveLength(4);
+            expect(userRowsInTable[0])
+                .toHaveTextContent(`Andres`);
+            expect(userRowsInTable[1])
+                .toHaveTextContent(`John`);
 
             userEvent.click(screen.getByTestId(`givenNameSortHandler`));
 
@@ -482,13 +533,16 @@ describe(`Cursor Table`, () => {
                 userRowsInTable = screen.getAllByTestId(`tableRow`, {
                     exact: false,
                 });
-                expect(userRowsInTable).toHaveLength(4);
+                expect(userRowsInTable)
+                    .toHaveLength(4);
             });
             await waitFor(() => {
-                expect(userRowsInTable[0]).toHaveTextContent(`Stephen`);
+                expect(userRowsInTable[0])
+                    .toHaveTextContent(`Stephen`);
             });
             await waitFor(() => {
-                expect(userRowsInTable[1]).toHaveTextContent(`Mike`);
+                expect(userRowsInTable[1])
+                    .toHaveTextContent(`Mike`);
             });
         });
 
@@ -506,9 +560,12 @@ describe(`Cursor Table`, () => {
                 exact: false,
             });
 
-            expect(userRowsInTable).toHaveLength(4);
-            expect(userRowsInTable[0]).toHaveTextContent(`Stephen`);
-            expect(userRowsInTable[1]).toHaveTextContent(`Mike`);
+            expect(userRowsInTable)
+                .toHaveLength(4);
+            expect(userRowsInTable[0])
+                .toHaveTextContent(`Stephen`);
+            expect(userRowsInTable[1])
+                .toHaveTextContent(`Mike`);
 
             userEvent.click(screen.getByTestId(`givenNameSortHandler`));
 
@@ -516,10 +573,12 @@ describe(`Cursor Table`, () => {
                 userRowsInTable = screen.getAllByTestId(`tableRow`, {
                     exact: false,
                 });
-                expect(userRowsInTable).toHaveLength(4);
+                expect(userRowsInTable)
+                    .toHaveLength(4);
             });
             await waitFor(() => {
-                expect(userRowsInTable[1]).toHaveTextContent(`John`);
+                expect(userRowsInTable[1])
+                    .toHaveTextContent(`John`);
             });
         });
     });

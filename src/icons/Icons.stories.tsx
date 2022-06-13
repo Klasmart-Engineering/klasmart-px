@@ -56,31 +56,33 @@ export const Icons = () => {
                     justifyContent: `space-between`,
                 }}
             >
-                {/* eslint-disable-next-line @typescript-eslint/naming-convention */}
-                {icons.filter(([ iconName ]) => searchRegExp.test(iconName)).map(([ iconName, Icon ]) => (
-                    <Box
-                        key={iconName}
-                        sx={iconContainerStyle}
-                    >
+                {icons
+                    .filter(([ iconName ]) => searchRegExp.test(iconName))
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    .map(([ iconName, Icon ]) => (
                         <Box
-                            sx={{
-                                display: `flex`,
-                                alignItems: `center`,
-                                flexDirection: `column`,
-                                padding: 2,
-                                gap: 1,
-                            }}
+                            key={iconName}
+                            sx={iconContainerStyle}
                         >
-                            <Icon sx={iconsStyle} />
-                            <Typography
-                                variant="caption"
-                                color="gray"
+                            <Box
+                                sx={{
+                                    display: `flex`,
+                                    alignItems: `center`,
+                                    flexDirection: `column`,
+                                    padding: 2,
+                                    gap: 1,
+                                }}
                             >
-                                {iconName}
-                            </Typography>
+                                <Icon sx={iconsStyle} />
+                                <Typography
+                                    variant="caption"
+                                    color="gray"
+                                >
+                                    {iconName}
+                                </Typography>
+                            </Box>
                         </Box>
-                    </Box>
-                ))}
+                    ))}
             </Box>
         </>
     );

@@ -50,11 +50,13 @@ describe(`ComboBox`, () => {
                 name: `testLabel`,
             });
 
-            expect(inputElement).toBeInTheDocument();
+            expect(inputElement)
+                .toBeInTheDocument();
             expect(screen.queryByRole(`progressbar`, {
                 name: `testLabel`,
             })).not.toBeInTheDocument();
-            expect(screen.getByTestId(`helper-text-root`)).toBeInTheDocument();
+            expect(screen.getByTestId(`helper-text-root`))
+                .toBeInTheDocument();
         });
 
         test(`drop down icon renders`, () => {
@@ -64,7 +66,8 @@ describe(`ComboBox`, () => {
                 name: `Open`,
             });
 
-            expect(popupIndicator).toBeInTheDocument();
+            expect(popupIndicator)
+                .toBeInTheDocument();
         });
 
         test(`suggestion list closed on initial render`, () => {
@@ -81,7 +84,8 @@ describe(`ComboBox`, () => {
                 />);
             render(loadingComponent);
 
-            expect(screen.getByRole(`progressbar`)).toBeInTheDocument();
+            expect(screen.getByRole(`progressbar`))
+                .toBeInTheDocument();
         });
     });
 
@@ -92,7 +96,8 @@ describe(`ComboBox`, () => {
 
             clickInput();
 
-            expect(screen.getAllByRole(`option`)).toHaveLength(defaultProps.optionsLimit);
+            expect(screen.getAllByRole(`option`))
+                .toHaveLength(defaultProps.optionsLimit);
         });
 
         test(`optionsLimit prop limits options`, () => {
@@ -104,11 +109,13 @@ describe(`ComboBox`, () => {
                 />);
             render(limitOptionsComboBox);
 
-            expect(screen.queryAllByRole(`option`)).toHaveLength(0);
+            expect(screen.queryAllByRole(`option`))
+                .toHaveLength(0);
 
             clickInput();
 
-            expect(screen.getAllByRole(`option`)).toHaveLength(OPTIONS_LENGTH);
+            expect(screen.getAllByRole(`option`))
+                .toHaveLength(OPTIONS_LENGTH);
         });
 
         test(`checkbox when multiple set true`, () => {
@@ -121,7 +128,8 @@ describe(`ComboBox`, () => {
 
             clickInput();
 
-            expect(screen.getAllByTestId(`checkbox-root`)).toHaveLength(defaultProps.optionsLimit);
+            expect(screen.getAllByTestId(`checkbox-root`))
+                .toHaveLength(defaultProps.optionsLimit);
         });
 
         test.each([
@@ -141,7 +149,8 @@ describe(`ComboBox`, () => {
 
             const optionsMenu = screen.queryAllByRole(`option`);
 
-            expect(optionsMenu.length).toBeLessThanOrEqual(props.optionsLimit);
+            expect(optionsMenu.length)
+                .toBeLessThanOrEqual(props.optionsLimit);
         });
 
         test(`typing should filter options`, () => {
@@ -153,7 +162,8 @@ describe(`ComboBox`, () => {
             for (let i = 0; i < inputText.length; i++) {
                 typeInputValue(inputText[i]);
                 const filteredOptions = textOptions.filter((option) => option.includes(inputText.substring(0, i + 1)));
-                expect(screen.queryAllByRole(`option`)).toHaveLength(filteredOptions.length);
+                expect(screen.queryAllByRole(`option`))
+                    .toHaveLength(filteredOptions.length);
             }
         });
 
@@ -169,7 +179,8 @@ describe(`ComboBox`, () => {
 
             expect(screen.getByRole(`combobox`, {
                 name: `testLabel`,
-            })).toHaveValue(firstOptionText);
+            }))
+                .toHaveValue(firstOptionText);
             expect(selectOptions[0]).not.toBeInTheDocument();
         });
 
@@ -180,7 +191,8 @@ describe(`ComboBox`, () => {
 
             const optionsMenu = screen.queryAllByRole(`listbox`);
 
-            expect(optionsMenu[0]).toBeInTheDocument();
+            expect(optionsMenu[0])
+                .toBeInTheDocument();
 
             clickInput();
             expect(optionsMenu[0]).not.toBeInTheDocument();
@@ -203,8 +215,10 @@ describe(`ComboBox`, () => {
                 name: `${selectOptions[0].textContent}`,
             });
 
-            expect(chip).toBeInTheDocument();
-            expect(screen.getByRole(`listbox`)).toBeInTheDocument();
+            expect(chip)
+                .toBeInTheDocument();
+            expect(screen.getByRole(`listbox`))
+                .toBeInTheDocument();
         });
 
         test(`menu closes when click outside of component occurs`, () => {
@@ -212,7 +226,8 @@ describe(`ComboBox`, () => {
 
             clickInput();
 
-            expect(screen.getByRole(`listbox`)).toBeInTheDocument();
+            expect(screen.getByRole(`listbox`))
+                .toBeInTheDocument();
 
             userEvent.click(document.body);
             expect(screen.queryByRole(`listbox`)).not.toBeInTheDocument();
@@ -230,7 +245,8 @@ describe(`ComboBox`, () => {
             };
             render(<ComboBox {...props} />);
 
-            expect(screen.getByTestId(`helper-text-root`)).toHaveTextContent(VALIDATION_FAILED_MESSAGE);
+            expect(screen.getByTestId(`helper-text-root`))
+                .toHaveTextContent(VALIDATION_FAILED_MESSAGE);
         });
 
         test(`check no error on passing validation`, () => {
@@ -252,7 +268,8 @@ describe(`ComboBox`, () => {
             };
             render(<ComboBox {...props} />);
 
-            expect(screen.getByTestId(`helper-text-root`)).toHaveTextContent(ERROR_MESSAGE);
+            expect(screen.getByTestId(`helper-text-root`))
+                .toHaveTextContent(ERROR_MESSAGE);
         });
 
         test(`requires at least one option to be selected validation`, () => {
@@ -263,7 +280,8 @@ describe(`ComboBox`, () => {
             };
             render(<ComboBox {...props} />);
 
-            expect(screen.getByTestId(`helper-text-root`)).toHaveTextContent(VALIDATION_FAILED_MESSAGE);
+            expect(screen.getByTestId(`helper-text-root`))
+                .toHaveTextContent(VALIDATION_FAILED_MESSAGE);
         });
     });
 });

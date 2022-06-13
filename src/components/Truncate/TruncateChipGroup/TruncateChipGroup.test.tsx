@@ -22,7 +22,8 @@ describe(`TruncateChipGroup`, () => {
     test(`truncates items to maxPreview`, async () => {
         render(truncateChipGroup);
         const items = await screen.findAllByRole(`listitem`);
-        expect(items).toHaveLength(3);
+        expect(items)
+            .toHaveLength(3);
     });
 
     test(`When show more is clicked, shows all items`, async () => {
@@ -30,6 +31,7 @@ describe(`TruncateChipGroup`, () => {
         const button = screen.getByRole(`button`);
         userEvent.click(button);
         const items = await screen.findAllByRole(`listitem`);
-        expect(items).toHaveLength(5);
+        expect(items)
+            .toHaveLength(5);
     });
 });

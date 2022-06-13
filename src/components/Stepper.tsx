@@ -163,7 +163,8 @@ export default function Stepper (props: Props) {
     }, [ step, steps ]);
 
     useEffect(() => {
-        const error = steps.map((step) => step.error).find((error) => error);
+        const error = steps.map((step) => step.error)
+            .find((error) => error);
         onChange?.(stepIndex);
         onValidate?.(!error);
         onError?.(error);

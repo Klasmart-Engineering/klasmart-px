@@ -45,7 +45,8 @@ describe(`Select Component Test`, () => {
             render(<Select {...defaultProps} />);
 
             const select = screen.getByRole(`button`);
-            expect(select).toBeInTheDocument();
+            expect(select)
+                .toBeInTheDocument();
         });
 
         test(`Options Menu Renders`, () => {
@@ -53,10 +54,13 @@ describe(`Select Component Test`, () => {
             expect(screen.queryByRole(`listbox`)).not.toBeInTheDocument();
 
             openMenu();
-            expect(screen.getByRole(`listbox`)).toBeInTheDocument();
+            expect(screen.getByRole(`listbox`))
+                .toBeInTheDocument();
             const options = screen.queryAllByRole(`option`);
-            expect(options).toHaveLength(defaultProps.items.length);
-            expect(options[0]).toHaveTextContent(`${defaultProps.items[0]}`);
+            expect(options)
+                .toHaveLength(defaultProps.items.length);
+            expect(options[0])
+                .toHaveTextContent(`${defaultProps.items[0]}`);
         });
 
         test(`Loading Indicator`, () => {
@@ -67,7 +71,8 @@ describe(`Select Component Test`, () => {
                 />
             ));
 
-            expect(screen.getByRole(`progressbar`)).toBeInTheDocument();
+            expect(screen.getByRole(`progressbar`))
+                .toBeInTheDocument();
         });
 
         test(`Multiple Enabled`, () => {
@@ -82,10 +87,13 @@ describe(`Select Component Test`, () => {
             const options = screen.getAllByRole(`option`);
             const checkBoxes = screen.getAllByRole(`checkbox`);
 
-            expect(options).toHaveLength(defaultProps.items.length + 2); //options includes Select All + <hr /> divider
-            expect(options[0]).toHaveTextContent(`Select All`);
+            expect(options)
+                .toHaveLength(defaultProps.items.length + 2); //options includes Select All + <hr /> divider
+            expect(options[0])
+                .toHaveTextContent(`Select All`);
 
-            expect(checkBoxes).toHaveLength(defaultProps.items.length + 1); //+1 for the Select All Checkbox
+            expect(checkBoxes)
+                .toHaveLength(defaultProps.items.length + 1); //+1 for the Select All Checkbox
         });
 
         test(`check error on failing validation`, () => {
@@ -95,7 +103,8 @@ describe(`Select Component Test`, () => {
             };
             render(<Select {...props} />);
 
-            expect(screen.getByText(VALIDATION_FAILED_MESSAGE)).toBeInTheDocument();
+            expect(screen.getByText(VALIDATION_FAILED_MESSAGE))
+                .toBeInTheDocument();
         });
 
         test(`check no error on passing validation`, () => {
@@ -125,12 +134,14 @@ describe(`Select Component Test`, () => {
             const select = screen.getByRole(`button`);
 
             expect(screen.queryByRole(`listbox`)).not.toBeInTheDocument();
-            expect(select).toHaveTextContent(`This`);
+            expect(select)
+                .toHaveTextContent(`This`);
 
             openMenu();
             userEvent.click(options[3]);
 
-            expect(select).toHaveTextContent(`Value`);
+            expect(select)
+                .toHaveTextContent(`Value`);
         });
 
         test(`Multiple Select`, async () => {
@@ -144,15 +155,20 @@ describe(`Select Component Test`, () => {
             const select = screen.getByRole(`button`);
 
             expect(screen.queryByRole(`listbox`)).not.toBeInTheDocument();
-            expect(select).toBeInTheDocument();
+            expect(select)
+                .toBeInTheDocument();
 
             openMenu();
-            expect(screen.getByRole(`listbox`)).toBeInTheDocument();
+            expect(screen.getByRole(`listbox`))
+                .toBeInTheDocument();
             const options = screen.getAllByRole(`option`);
             const checkBoxes = screen.getAllByRole(`checkbox`);
-            expect(options).toHaveLength(defaultProps.items.length + 2);
-            expect(options[0]).toHaveTextContent(`Select All`);
-            expect(checkBoxes).toHaveLength(defaultProps.items.length + 1);
+            expect(options)
+                .toHaveLength(defaultProps.items.length + 2);
+            expect(options[0])
+                .toHaveTextContent(`Select All`);
+            expect(checkBoxes)
+                .toHaveLength(defaultProps.items.length + 1);
 
             userEvent.click(checkBoxes[1]);
             userEvent.click(checkBoxes[2]);
@@ -160,15 +176,19 @@ describe(`Select Component Test`, () => {
             closeMenu();
             const chips = screen.getAllByTestId(`chip`);
             expect(screen.queryByRole(`listbox`)).not.toBeInTheDocument();
-            expect(chips).toHaveLength(2);
-            expect(chips[0]).toHaveTextContent(defaultProps.items[0]);
-            expect(chips[1]).toHaveTextContent(defaultProps.items[1]);
+            expect(chips)
+                .toHaveLength(2);
+            expect(chips[0])
+                .toHaveTextContent(defaultProps.items[0]);
+            expect(chips[1])
+                .toHaveTextContent(defaultProps.items[1]);
 
             userEvent.click(screen.getAllByTestId(`CancelIcon`)[0]);
             await waitFor(() => {
                 expect(screen.queryByText(defaultProps.items[0])).not.toBeInTheDocument();
             });
-            expect(screen.getAllByRole(`button`)).toHaveLength(2);
+            expect(screen.getAllByRole(`button`))
+                .toHaveLength(2);
         });
         test(`Select All`, () => {
             render((
@@ -180,12 +200,14 @@ describe(`Select Component Test`, () => {
 
             openMenu();
             const options = screen.getAllByRole(`option`);
-            expect(options[0]).toHaveTextContent(`Select All`);
+            expect(options[0])
+                .toHaveTextContent(`Select All`);
             userEvent.click(options[0]);
             closeMenu();
 
             const buttons = screen.getAllByRole(`button`);
-            expect(buttons).toHaveLength(defaultProps.items.length + 1);
+            expect(buttons)
+                .toHaveLength(defaultProps.items.length + 1);
         });
     });
 });

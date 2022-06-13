@@ -7,11 +7,16 @@ describe(`clean object data`, () => {
     const str = `String input`;
 
     test(`trim strings`, () => {
-        expect(trimStrings(``)).toBe(``);
-        expect(trimStrings({})).toMatchObject({});
-        expect(trimStrings([])).toMatchObject([]);
-        expect(trimStrings(null)).toBeNull();
-        expect(trimStrings(undefined)).toBeUndefined();
+        expect(trimStrings(``))
+            .toBe(``);
+        expect(trimStrings({}))
+            .toMatchObject({});
+        expect(trimStrings([]))
+            .toMatchObject([]);
+        expect(trimStrings(null))
+            .toBeNull();
+        expect(trimStrings(undefined))
+            .toBeUndefined();
         expect(trimStrings({
             str: ` ${str} `,
             arr: [
@@ -26,20 +31,21 @@ describe(`clean object data`, () => {
             blob,
             file,
             date,
-        })).toMatchObject({
-            str: str,
-            arr: [
-                str,
-                str,
-                str,
-                `${str} ${str}`,
-                {
-                    nested: str,
-                },
-            ],
-            blob,
-            file,
-            date,
-        });
+        }))
+            .toMatchObject({
+                str: str,
+                arr: [
+                    str,
+                    str,
+                    str,
+                    `${str} ${str}`,
+                    {
+                        nested: str,
+                    },
+                ],
+                blob,
+                file,
+                date,
+            });
     });
 });

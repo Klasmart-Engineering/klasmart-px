@@ -38,30 +38,39 @@ const rowNumbers = (length: number) => Array.from({
 export function expectPreviewData (spreadsheetData: string[][]) {
     const preview = screen.getByTestId(`preview`);
 
-    expect(preview.querySelector(`table`)?.rows).toHaveLength(spreadsheetData.length);
+    expect(preview.querySelector(`table`)?.rows)
+        .toHaveLength(spreadsheetData.length);
 
     // Row indexes
-    expect(Array.from(preview.querySelectorAll(`td:first-child`)).map(node => node.textContent)).toEqual(rowNumbers(spreadsheetData.length));
+    expect(Array.from(preview.querySelectorAll(`td:first-child`))
+        .map(node => node.textContent))
+        .toEqual(rowNumbers(spreadsheetData.length));
 
-    const data = Array.from(preview.querySelectorAll(`tr`)).map(row =>
+    const data = Array.from(preview.querySelectorAll(`tr`))
+        .map(row =>
         // Ignore first column
-        [ ...row.cells ].filter((cell, i) => i !== 0).map(cell => cell.textContent));
+            [ ...row.cells ].filter((cell, i) => i !== 0)
+                .map(cell => cell.textContent));
 
-    expect(data).toEqual(spreadsheetData);
+    expect(data)
+        .toEqual(spreadsheetData);
 }
 
 export const hasErrorStyling = (el: Element) => {
-    return Array.from(el.classList).some(cls => cls.startsWith(`makeStyles-error`));
+    return Array.from(el.classList)
+        .some(cls => cls.startsWith(`makeStyles-error`));
 };
 
-const expectHasErrorStyling = (el: Element) => expect(hasErrorStyling(el)).toBe(true);
+const expectHasErrorStyling = (el: Element) => expect(hasErrorStyling(el))
+    .toBe(true);
 
 export function expectHasErrorIcon (el: Element, errorMessage: string) {
     expectHasErrorStyling(el);
     const errorIcon = el.querySelector(`svg`);
     if (errorIcon === null) throw Error(`Expected error icon`);
     // SVGElement doesn't define a `title` property, but it can be accessed from it's attributes instead
-    expect(errorIcon.attributes.getNamedItem(`aria-label`)?.value).toBe(errorMessage);
+    expect(errorIcon.attributes.getNamedItem(`aria-label`)?.value)
+        .toBe(errorMessage);
 }
 
 function expectHasNoErrorIcon (el: Element) {
@@ -70,7 +79,8 @@ function expectHasNoErrorIcon (el: Element) {
 
 export const waitForPreviewToParse = () => {
     return waitFor(() => {
-        expect(document.querySelectorAll(`tbody tr`).length).toBeGreaterThan(0);
+        expect(document.querySelectorAll(`tbody tr`).length)
+            .toBeGreaterThan(0);
     });
 };
 
@@ -113,7 +123,9 @@ test(`displays row errors in the row number and highlights the row red`, async (
 
     expectHasErrorIcon(errorRow.cells[0], validationErrors.row.message);
 
-    expect(Array.from(errorRow.cells).every(hasErrorStyling)).toBe(true);
+    expect(Array.from(errorRow.cells)
+        .every(hasErrorStyling))
+        .toBe(true);
 });
 
 test(`displays field errors in the row/column co-ordinate and highlights the row/column cells red`, async () => {

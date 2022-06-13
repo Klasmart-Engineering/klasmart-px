@@ -19,11 +19,11 @@ export const Primary = Template.bind({});
 Primary.args = {
     fullWidth: true,
     multiple: true,
-    label:`Label`,
-    value:``,
+    label: `Label`,
+    value: ``,
     disabled: false,
     loading: false,
-    placeholder:`Placeholder`,
+    placeholder: `Placeholder`,
     variant: `outlined`,
     items: [
         `This`,

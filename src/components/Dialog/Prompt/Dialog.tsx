@@ -25,7 +25,7 @@ import React,
 
 const useStyles = makeStyles((theme) => createStyles({
     root: {
-        "& .MuiDialogContent-root:first-of-type":  {
+        "& .MuiDialogContent-root:first-of-type": {
             paddingTop: theme.spacing(2.5),
         },
     },

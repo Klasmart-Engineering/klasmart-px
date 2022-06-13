@@ -139,7 +139,7 @@ const Template: Story<Props> = (args) => (
                     required: true,
                 },
                 {
-                    text:`user_given_name`,
+                    text: `user_given_name`,
                     required: true,
                 },
                 {

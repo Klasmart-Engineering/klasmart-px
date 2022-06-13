@@ -50,10 +50,10 @@ const props: Required<Props> = {
     accept: `text/csv`,
     maxFileSize: 2_000,
     locales: `en`,
-    dropzoneLabel:`Upload a file`,
+    dropzoneLabel: `Upload a file`,
     noItemsLabel: `No items`,
-    removeButtonTooltip:`remove-btn`,
-    uploadButtonTooltip:`upload-btn`,
+    removeButtonTooltip: `remove-btn`,
+    uploadButtonTooltip: `upload-btn`,
     uploadError: `Upload failed`,
     uploadSuccessMessage: `Upload succeeded`,
     typeRejectedError: `Unsupported filetype`,
@@ -87,7 +87,8 @@ const failingFileUpload = jest.fn(async (file: File, isDryRun: boolean) => {
 });
 
 function toCSV (rows: string[][]) {
-    return rows.map((row) => row.join()).join(`\n`);
+    return rows.map((row) => row.join())
+        .join(`\n`);
 }
 
 class CustomError extends Error {
@@ -171,7 +172,8 @@ async function waitForPreview () {
     upload(container);
 
     const preview = await screen.findByTestId(`preview`);
-    expect(preview).toBeInTheDocument();
+    expect(preview)
+        .toBeInTheDocument();
 
     await waitForPreviewToParse();
 }
@@ -185,7 +187,8 @@ function waitForUploadToFinish () {
     // in the DOM
     // Use similar for testing as MaterialUI Fade
     // https://github.com/mui-org/material-ui/blob/699b5e9ce0dfc8c06fd5f17a0846cd58d03b6414/packages/material-ui/src/Fade/Fade.test.js#L100
-    return waitFor(() => expect(loadingOverlay.style.visibility).toBe(`hidden`));
+    return waitFor(() => expect(loadingOverlay.style.visibility)
+        .toBe(`hidden`));
 }
 
 function expectEmptyFilepicker () {
@@ -194,59 +197,79 @@ function expectEmptyFilepicker () {
     expect(screen.queryByTitle(props.uploadButtonTooltip)).not.toBeInTheDocument();
     expect(screen.queryByTitle(props.uploadButtonTooltip)).not.toBeInTheDocument();
 
-    expect(screen.getByText(props.dropzoneLabel)).toBeInTheDocument();
+    expect(screen.getByText(props.dropzoneLabel))
+        .toBeInTheDocument();
 }
 
 function expectPreviewUnavailable () {
     expect(screen.queryByTestId(`validation-details`)).not.toBeInTheDocument();
     expect(screen.queryByTestId(`preview`)).not.toBeInTheDocument();
-    expect(screen.getByText(`Preview unavailable`)).toBeInTheDocument();
+    expect(screen.getByText(`Preview unavailable`))
+        .toBeInTheDocument();
 
-    expect(uploadButton()).toBeDisabled();
-    expect(removeButton()).toBeEnabled();
+    expect(uploadButton())
+        .toBeDisabled();
+    expect(removeButton())
+        .toBeEnabled();
 }
 
 function expectIsUploading () {
-    expect(screen.getByTestId(`preview`)).toBeInTheDocument();
-    expect(screen.getByTestId(`validation-details`)).toBeInTheDocument();
-    expect(screen.getByText(`Validation in progress`)).toBeInTheDocument();
+    expect(screen.getByTestId(`preview`))
+        .toBeInTheDocument();
+    expect(screen.getByTestId(`validation-details`))
+        .toBeInTheDocument();
+    expect(screen.getByText(`Validation in progress`))
+        .toBeInTheDocument();
     expect(screen.queryByText(`Invalid data`)).not.toBeInTheDocument();
     expect(screen.queryByText(`All validations passed`)).not.toBeInTheDocument();
 
-    expect(uploadButton()).toBeDisabled();
-    expect(removeButton()).toBeDisabled();
+    expect(uploadButton())
+        .toBeDisabled();
+    expect(removeButton())
+        .toBeDisabled();
 }
 
 function expectPreviewErrors () {
-    expect(screen.getByText(`Invalid data`)).toBeInTheDocument();
-    expect(screen.getByText(`3 validations failed`)).toBeInTheDocument();
-    expect(props.numValidationsFailedMessage).toHaveBeenCalled();
+    expect(screen.getByText(`Invalid data`))
+        .toBeInTheDocument();
+    expect(screen.getByText(`3 validations failed`))
+        .toBeInTheDocument();
+    expect(props.numValidationsFailedMessage)
+        .toHaveBeenCalled();
 
     const table = document.querySelector(`table`);
     if (table === null) throw Error(`Expected Preview table`);
 
     // Both data columns are highlighted red for errors
-    expect(Array.from(table.querySelectorAll(`thead th`)).map(hasErrorStyling)).toEqual([
-        false,
-        true,
-        true,
-    ]);
+    expect(Array.from(table.querySelectorAll(`thead th`))
+        .map(hasErrorStyling))
+        .toEqual([
+            false,
+            true,
+            true,
+        ]);
 
     // Row 1 and 2 have error highlighting
-    expect(Array.from(table.querySelectorAll(`td:first-child`)).map(hasErrorStyling)).toEqual([
-        true,
-        true,
-        false,
-    ]);
+    expect(Array.from(table.querySelectorAll(`td:first-child`))
+        .map(hasErrorStyling))
+        .toEqual([
+            true,
+            true,
+            false,
+        ]);
 
     expectHasErrorIcon(table.rows[1].cells[1], `Too short`);
 
     // Row level error
-    expect(Array.from(table.rows[2].cells).every(hasErrorStyling)).toBe(true);
+    expect(Array.from(table.rows[2].cells)
+        .every(hasErrorStyling))
+        .toBe(true);
     expectHasErrorIcon(table.rows[2].cells[0], `Row level error`);
 
     // 100% valid row
-    expect(Array.from(table.rows[3].cells).some(hasErrorStyling)).toBe(false);
+    expect(Array.from(table.rows[3].cells)
+        .some(hasErrorStyling))
+        .toBe(false);
 }
 
 function expectFileUploadCalled ({ dryRun, uploadHandler }: {dryRun: boolean; uploadHandler?: Props["onFileUpload"]}) {
@@ -257,13 +280,16 @@ function expectFileUploadCalled ({ dryRun, uploadHandler }: {dryRun: boolean; up
 
     const onUploadMock = (uploadHandler as jest.MockedFunction<Props["onFileUpload"]>).mock;
 
-    expect(uploadHandler).toHaveBeenCalledTimes(1);
+    expect(uploadHandler)
+        .toHaveBeenCalledTimes(1);
 
     const call = onUploadMock.calls[0];
     // Jest mock captures the File object, but can't seem to check the content (returns empty string)
-    expect((call[0] as FileWithPath).path).toBe(`test.csv`);
+    expect((call[0] as FileWithPath).path)
+        .toBe(`test.csv`);
 
-    expect(call[1]).toBe(dryRun);
+    expect(call[1])
+        .toBe(dryRun);
 }
 
 function expectUpload () {
@@ -280,8 +306,10 @@ function expectSuccessfulUpload (uploadHandler?: Props["onFileUpload"]) {
         uploadHandler,
     });
 
-    expect(screen.getByText(`Upload succeeded`)).toBeInTheDocument();
-    expect(screen.getByTestId(`upload-success-icon`)).toBeInTheDocument();
+    expect(screen.getByText(`Upload succeeded`))
+        .toBeInTheDocument();
+    expect(screen.getByTestId(`upload-success-icon`))
+        .toBeInTheDocument();
 }
 
 function expectSuccessfulDryRun (uploadHandler?: Props["onFileUpload"]) {
@@ -307,13 +335,16 @@ function expectFailedUpload ({
 }: FailedUploadOptions) {
     const call = uploadHandler.mock.calls[uploadHandler.mock.calls.length - 1];
     // Jest mock captures the File object, but can't seem to check the content (returns empty string)
-    expect((call[0] as FileWithPath).path).toBe(`test.csv`);
-    expect(call[1]).toBe(dryRun);
+    expect((call[0] as FileWithPath).path)
+        .toBe(`test.csv`);
+    expect(call[1])
+        .toBe(dryRun);
 
-    expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
-        name: `CustomError`,
-        message: `Plan to fail`,
-    }), dryRun);
+    expect(errorHandler)
+        .toHaveBeenCalledWith(expect.objectContaining({
+            name: `CustomError`,
+            message: `Plan to fail`,
+        }), dryRun);
 
     expect(screen.queryByText(`Upload succeeded`)).not.toBeInTheDocument();
     expect(screen.queryByTestId(`upload-success-icon`)).not.toBeInTheDocument();
@@ -323,24 +354,34 @@ function expectValidationPassed (data?: string[][]) {
     const validationDetails = screen.getByTestId(`validation-details`);
     const lastModified = Intl.DateTimeFormat(`en`, {
         dateStyle: `long`,
-    }).format(new Date(defaultFile.lastModified));
-    expect(validationDetails).toBeInTheDocument();
+    })
+        .format(new Date(defaultFile.lastModified));
+    expect(validationDetails)
+        .toBeInTheDocument();
 
-    expect(uploadButton()).toBeEnabled();
-    expect(removeButton()).toBeEnabled();
+    expect(uploadButton())
+        .toBeEnabled();
+    expect(removeButton())
+        .toBeEnabled();
 
-    expect(screen.getByText(`All validations passed`)).toBeInTheDocument();
-    expect(screen.getByText(`test.csv`)).toBeInTheDocument();
-    expect(screen.getByText(`1.0 Kb • ${lastModified}`)).toBeInTheDocument();
+    expect(screen.getByText(`All validations passed`))
+        .toBeInTheDocument();
+    expect(screen.getByText(`test.csv`))
+        .toBeInTheDocument();
+    expect(screen.getByText(`1.0 Kb • ${lastModified}`))
+        .toBeInTheDocument();
 
     expectPreviewData(data || defaultData);
 }
 
 function expectValidationFailed () {
-    expect(screen.getByTestId(`validation-details`)).toBeInTheDocument();
-    expect(screen.getByTestId(`preview`)).toBeInTheDocument();
+    expect(screen.getByTestId(`validation-details`))
+        .toBeInTheDocument();
+    expect(screen.getByTestId(`preview`))
+        .toBeInTheDocument();
 
-    expect(removeButton()).toBeEnabled();
+    expect(removeButton())
+        .toBeEnabled();
 
     expectPreviewErrors();
 }
@@ -387,161 +428,182 @@ test(`displays blank lines in the preview`, async () => {
     });
 
     const preview = await screen.findByTestId(`preview`);
-    expect(preview).toBeInTheDocument();
+    expect(preview)
+        .toBeInTheDocument();
 
     await waitForPreviewToParse();
 
-    expect(document.querySelectorAll(`tbody tr`)).toHaveLength(4);
+    expect(document.querySelectorAll(`tbody tr`))
+        .toHaveLength(4);
 
     expectPreviewData(data);
 });
 
-each([ false, true ]).describe(`file fails validation (isDryRunEnabled = %s)`, (isDryRunEnabled) => {
-    test(`when the file is bigger than 'maxFileSize'`, async () => {
-        const { container } = render({
-            isDryRunEnabled,
+each([ false, true ])
+    .describe(`file fails validation (isDryRunEnabled = %s)`, (isDryRunEnabled) => {
+        test(`when the file is bigger than 'maxFileSize'`, async () => {
+            const { container } = render({
+                isDryRunEnabled,
+            });
+
+            const fileSize = 3000;
+
+            upload(container, {
+                size: fileSize,
+            });
+
+            await screen.findByLabelText(props.removeButtonTooltip);
+
+            expectPreviewUnavailable();
+
+            expect(props.exceedsMaxSizeError)
+                .toHaveBeenCalledWith(fileSize, props.maxFileSize);
+
+            expect(screen.getByText(`test.csv`))
+                .toBeInTheDocument();
+
+            expect(props.onFileUpload).not.toHaveBeenCalled();
         });
 
-        const fileSize = 3000;
+        test(`when an unsupported filetype has been dropped`, async () => {
+            const { container } = render({
+                isDryRunEnabled,
+            });
 
-        upload(container, {
-            size: fileSize,
+            upload(container, {
+                data: gif,
+                name: `cat.gif`,
+                type: `image/gif`,
+            });
+
+            await screen.findByLabelText(props.removeButtonTooltip);
+
+            expectPreviewUnavailable();
+
+            expect(screen.getByText(`Unsupported filetype`))
+                .toBeInTheDocument();
+
+            expect(screen.getByText(`cat.gif`))
+                .toBeInTheDocument();
+
+            expect(props.onFileUpload).not.toHaveBeenCalled();
         });
 
-        await screen.findByLabelText(props.removeButtonTooltip);
+        test(`when more than 'maxFiles' files have been dropped`, async () => {
+            const { container } = render();
 
-        expectPreviewUnavailable();
+            upload(container, [
+                {
+                    name: `test1.csv`,
+                },
+                {
+                    name: `test2.csv`,
+                },
+            ]);
 
-        expect(props.exceedsMaxSizeError).toHaveBeenCalledWith(fileSize, props.maxFileSize);
+            await screen.findByLabelText(props.removeButtonTooltip);
 
-        expect(screen.getByText(`test.csv`)).toBeInTheDocument();
+            expectPreviewUnavailable();
 
-        expect(props.onFileUpload).not.toHaveBeenCalled();
+            expect(screen.getByText(`Maximum 1 file uploaded`))
+                .toBeInTheDocument();
+
+            // Filename of the second file (i.e. last element in `acceptedFiles` array) is shown
+            expect(screen.getByText(`test2.csv`))
+                .toBeInTheDocument();
+
+            expect(props.onFileUpload).not.toHaveBeenCalled();
+        });
+
+        test.each([ ``, defaultColumns.join() ])(`when the file contains %s`, async (data) => {
+            const { container } = render();
+
+            upload(container, {
+                data,
+            });
+
+            // Preview component will be rendered (contains the parsing logic)
+            // Before being removed when parsing is complete (and file validation can take place)
+
+            await screen.findByTestId(`preview`);
+
+            await waitForElementToBeRemoved(screen.queryByTestId(`preview`));
+
+            expectPreviewUnavailable();
+
+            expect(props.validationLocalization.emptyFileError)
+                .toHaveBeenCalledWith(`test.csv`);
+
+            expect(screen.getByText(`test.csv is empty`))
+                .toBeInTheDocument();
+
+            expect(props.onFileUpload).not.toHaveBeenCalled();
+        });
+
+        test(`when required columns are missing`, async () => {
+            const { container } = render();
+
+            const data = [
+                [ `Name` ],
+                [ `Joe Bloggs` ],
+                [ `Jane Bloggs` ],
+            ];
+
+            upload(container, {
+                data: toCSV(data),
+            });
+
+            const preview = await screen.findByTestId(`preview`);
+            expect(preview)
+                .toBeInTheDocument();
+
+            await waitForPreviewToParse();
+
+            expect(screen.getByText(`Invalid data`))
+                .toBeInTheDocument();
+            expect(screen.getByText(`1 validations failed`))
+                .toBeInTheDocument();
+            expect(screen.getByText(`Missing column Email`))
+                .toBeInTheDocument();
+            expect(props.validationLocalization.missingColumnError)
+                .toHaveBeenCalledTimes(1);
+
+            const table = document.querySelector(`table`);
+            if (table === null) throw new AssertionError({
+                message: `Preview table not found`,
+            });
+            expectHasErrorIcon(table.rows[0].cells[0], `Missing column Email`);
+
+            expect(props.onFileUpload).not.toHaveBeenCalled();
+        });
+
+        test(`when expected columns are duplicated`, async () => {
+            const { container } = render();
+
+            const data = defaultData.map(row => [ ...row, row[row.length - 1] ]);
+
+            upload(container, {
+                data: toCSV(data),
+            });
+
+            const preview = await screen.findByTestId(`preview`);
+            expect(preview)
+                .toBeInTheDocument();
+
+            await waitForPreviewToParse();
+
+            expect(screen.getByText(`Invalid data`))
+                .toBeInTheDocument();
+            expect(screen.getByText(`1 validations failed`))
+                .toBeInTheDocument();
+            expect(screen.getByText(`Duplicate column Email`))
+                .toBeInTheDocument();
+            expect(props.validationLocalization.duplicateColumnError)
+                .toHaveBeenCalledTimes(1);
+
+            expect(props.onFileUpload).not.toHaveBeenCalled();
+        });
     });
-
-    test(`when an unsupported filetype has been dropped`, async () => {
-        const { container } = render({
-            isDryRunEnabled,
-        });
-
-        upload(container, {
-            data: gif,
-            name: `cat.gif`,
-            type: `image/gif`,
-        });
-
-        await screen.findByLabelText(props.removeButtonTooltip);
-
-        expectPreviewUnavailable();
-
-        expect(screen.getByText(`Unsupported filetype`)).toBeInTheDocument();
-
-        expect(screen.getByText(`cat.gif`)).toBeInTheDocument();
-
-        expect(props.onFileUpload).not.toHaveBeenCalled();
-    });
-
-    test(`when more than 'maxFiles' files have been dropped`, async () => {
-        const { container } = render();
-
-        upload(container, [
-            {
-                name: `test1.csv`,
-            },
-            {
-                name: `test2.csv`,
-            },
-        ]);
-
-        await screen.findByLabelText(props.removeButtonTooltip);
-
-        expectPreviewUnavailable();
-
-        expect(screen.getByText(`Maximum 1 file uploaded`)).toBeInTheDocument();
-
-        // Filename of the second file (i.e. last element in `acceptedFiles` array) is shown
-        expect(screen.getByText(`test2.csv`)).toBeInTheDocument();
-
-        expect(props.onFileUpload).not.toHaveBeenCalled();
-    });
-
-    test.each([ ``, defaultColumns.join() ])(`when the file contains %s`, async (data) => {
-        const { container } = render();
-
-        upload(container, {
-            data,
-        });
-
-        // Preview component will be rendered (contains the parsing logic)
-        // Before being removed when parsing is complete (and file validation can take place)
-
-        await screen.findByTestId(`preview`);
-
-        await waitForElementToBeRemoved(screen.queryByTestId(`preview`));
-
-        expectPreviewUnavailable();
-
-        expect(props.validationLocalization.emptyFileError).toHaveBeenCalledWith(`test.csv`);
-
-        expect(screen.getByText(`test.csv is empty`)).toBeInTheDocument();
-
-        expect(props.onFileUpload).not.toHaveBeenCalled();
-    });
-
-    test(`when required columns are missing`, async () => {
-        const { container } = render();
-
-        const data = [
-            [ `Name` ],
-            [ `Joe Bloggs` ],
-            [ `Jane Bloggs` ],
-        ];
-
-        upload(container, {
-            data: toCSV(data),
-        });
-
-        const preview = await screen.findByTestId(`preview`);
-        expect(preview).toBeInTheDocument();
-
-        await waitForPreviewToParse();
-
-        expect(screen.getByText(`Invalid data`)).toBeInTheDocument();
-        expect(screen.getByText(`1 validations failed`)).toBeInTheDocument();
-        expect(screen.getByText(`Missing column Email`)).toBeInTheDocument();
-        expect(props.validationLocalization.missingColumnError).toHaveBeenCalledTimes(1);
-
-        const table = document.querySelector(`table`);
-        if (table === null) throw new AssertionError({
-            message: `Preview table not found`,
-        });
-        expectHasErrorIcon(table.rows[0].cells[0], `Missing column Email`);
-
-        expect(props.onFileUpload).not.toHaveBeenCalled();
-    });
-
-    test(`when expected columns are duplicated`, async () => {
-        const { container } = render();
-
-        const data = defaultData.map(row => [ ...row, row[row.length - 1] ]);
-
-        upload(container, {
-            data: toCSV(data),
-        });
-
-        const preview = await screen.findByTestId(`preview`);
-        expect(preview).toBeInTheDocument();
-
-        await waitForPreviewToParse();
-
-        expect(screen.getByText(`Invalid data`)).toBeInTheDocument();
-        expect(screen.getByText(`1 validations failed`)).toBeInTheDocument();
-        expect(screen.getByText(`Duplicate column Email`)).toBeInTheDocument();
-        expect(props.validationLocalization.duplicateColumnError).toHaveBeenCalledTimes(1);
-
-        expect(props.onFileUpload).not.toHaveBeenCalled();
-    });
-});
 
 test(`when extra columns are duplicated, validation passes`, async () => {
     const { container } = render();
@@ -566,7 +628,8 @@ test(`when extra columns are duplicated, validation passes`, async () => {
     });
 
     const preview = await screen.findByTestId(`preview`);
-    expect(preview).toBeInTheDocument();
+    expect(preview)
+        .toBeInTheDocument();
 
     await waitForPreviewToParse();
 
@@ -578,18 +641,20 @@ test(`when optional columns are missing, validation passes`, async () => {
         columns: defaultColumns.map(text => {return {
             text,
             required: true,
-        };}).concat([
-            {
-                text: `Optional`,
-                required: false,
-            },
-        ]),
+        };})
+            .concat([
+                {
+                    text: `Optional`,
+                    required: false,
+                },
+            ]),
     });
 
     upload(container);
 
     const preview = await screen.findByTestId(`preview`);
-    expect(preview).toBeInTheDocument();
+    expect(preview)
+        .toBeInTheDocument();
 
     await waitForPreviewToParse();
 
@@ -600,7 +665,8 @@ test(`reverts to an empty filepicker when delete is clicked`, async () => {
     await waitForPreview();
 
     const btn = removeButton();
-    expect(btn).toBeInTheDocument();
+    expect(btn)
+        .toBeInTheDocument();
 
     userEvent.click(btn as HTMLElement);
 
@@ -639,12 +705,14 @@ test(`on failed upload calls the 'onFileUploadError' callback and displays error
     expectValidationFailed();
 
     expectFailedUpload({
-        dryRun :false,
+        dryRun: false,
     });
 
-    expect(screen.getByText(`Invalid data`)).toBeInTheDocument();
+    expect(screen.getByText(`Invalid data`))
+        .toBeInTheDocument();
 
-    expect(uploadButton()).toBeDisabled();
+    expect(uploadButton())
+        .toBeDisabled();
 });
 
 test(`if isDryRunEnabled, uploads immediately after loading a valid spreadsheet`, async () => {
@@ -663,7 +731,8 @@ test(`if isDryRunEnabled, uploads immediately after loading a valid spreadsheet`
     await waitForUploadToFinish();
 
     const preview = await screen.findByTestId(`preview`);
-    expect(preview).toBeInTheDocument();
+    expect(preview)
+        .toBeInTheDocument();
 
     await waitForPreviewToParse();
 
@@ -721,7 +790,8 @@ test(`after a failed dryrun, upload is disabled`, async () => {
         dryRun: true,
     });
 
-    expect(uploadButton()).toBeDisabled();
+    expect(uploadButton())
+        .toBeDisabled();
 });
 
 test(`after a successful dryrun, a manual upload can fail`, async () => {
@@ -730,7 +800,8 @@ test(`after a successful dryrun, a manual upload can fail`, async () => {
         .mockImplementationOnce((file: File, isDryRun?: boolean) => {
             return new Promise(resolve => setTimeout(resolve, 50));
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        }).mockImplementationOnce((file: File, isDryRun?: boolean) => {
+        })
+        .mockImplementationOnce((file: File, isDryRun?: boolean) => {
             throw new CustomError(`Plan to fail`);
         });
 
@@ -766,7 +837,8 @@ test(`after a successful dryrun, a manual upload can fail`, async () => {
         uploadHandler: succeedThenFailFileUpload,
     });
 
-    expect(uploadButton()).toBeDisabled();
+    expect(uploadButton())
+        .toBeDisabled();
 });
 
 test(`on failed dryrun and no SpreadsheetValidationErrors are returned from the error handler, the error's message is shown`, async () => {
@@ -795,5 +867,6 @@ test(`on failed dryrun and no SpreadsheetValidationErrors are returned from the 
         errorHandler: noValidationErrorFileUploadErrorHandler,
     });
 
-    expect(screen.getByText(`Plan to fail`)).toBeInTheDocument();
+    expect(screen.getByText(`Plan to fail`))
+        .toBeInTheDocument();
 });

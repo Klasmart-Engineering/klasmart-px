@@ -38,7 +38,8 @@ export function validateData (data: string[][], localization?: ValidationLocaliz
     }
     const actualColumns = data[0];
 
-    const requiredColumns = new Set(columns.filter(c => c.required).map(c => c.text));
+    const requiredColumns = new Set(columns.filter(c => c.required)
+        .map(c => c.text));
     const expectedColumns = new Set(columns.map(c => c.text));
 
     if (!actualColumns) {
@@ -46,7 +47,9 @@ export function validateData (data: string[][], localization?: ValidationLocaliz
     }
     return [
         // eslint-disable-next-line array-element-newline
-        ...findDuplicateValues(expectedColumns, actualColumns).map(column => new DuplicateColumnError(column, localization?.duplicateColumnError)),
-        ...findMissingValues(requiredColumns, actualColumns).map(column => new MissingColumnError(column, localization?.missingColumnError)),
+        ...findDuplicateValues(expectedColumns, actualColumns)
+            .map(column => new DuplicateColumnError(column, localization?.duplicateColumnError)),
+        ...findMissingValues(requiredColumns, actualColumns)
+            .map(column => new MissingColumnError(column, localization?.missingColumnError)),
     ];
 }

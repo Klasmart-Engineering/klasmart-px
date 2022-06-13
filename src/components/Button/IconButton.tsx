@@ -87,6 +87,7 @@ export interface Props {
     tooltip?: string;
     disabled?: boolean;
     color?: IconButtonColor;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     "data-testid"?: string;
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }

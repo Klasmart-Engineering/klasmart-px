@@ -105,7 +105,11 @@ export default function Select<T> (props: Props<T>) {
     const [ value_, setValue ] = useState(multiple && !Array.isArray(value) ? [ value ] : value);
     const [ error_, setError ] = useState(getErrorText(value, validations));
 
-    const selectAllItems = [ ...items, ...(sections?.filter((section) => !section.ignoreSelectAll).flatMap((section) => section.items) ?? []) ];
+    const selectAllItems = [
+        ...items,
+        ...(sections?.filter((section) => !section.ignoreSelectAll)
+            .flatMap((section) => section.items) ?? []),
+    ];
     const allItems = [ ...items, ...(sections?.flatMap((section) => section.items) ?? []) ];
 
     const getToggleSelectAll = (values: string[]) => values.length !== selectAllItems.length ? selectAllItems.map(itemValue) : [];
@@ -210,7 +214,8 @@ export default function Select<T> (props: Props<T>) {
         menuItems.unshift(...allSectionElements);
     }
     if (multiple && Array.isArray(value_)) {
-        const selectAllSectionItems = (sections?.filter((section) => !section.ignoreSelectAll).flatMap((section) => section.items) ?? []);
+        const selectAllSectionItems = (sections?.filter((section) => !section.ignoreSelectAll)
+            .flatMap((section) => section.items) ?? []);
         const currentSelectAllValues = [ ...items, ...selectAllSectionItems ].filter((item) => !!value_.find((v) => v === itemValue(item)));
         menuItems.unshift(...[
             (

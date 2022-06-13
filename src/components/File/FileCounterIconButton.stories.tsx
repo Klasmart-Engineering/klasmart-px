@@ -28,7 +28,7 @@ CounterButton.args = {
             onDownloadClick: handleDownloadImage,
         },
         {
-            name:`list.pdf`,
+            name: `list.pdf`,
             onDownloadClick: handleDownloadImage,
         },
         {

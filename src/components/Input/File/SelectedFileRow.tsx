@@ -66,7 +66,8 @@ export default function SelectedFileRow (props: Props) {
     const fileSize = (file.size / 1000).toFixed(1);
     const lastModified = Intl.DateTimeFormat(locales, {
         dateStyle: `long`,
-    }).format(new Date(file.lastModified));
+    })
+        .format(new Date(file.lastModified));
     const [ uploadSuccess, setUploadSuccess ] = useState(false);
     const [ uploadError, setUploadError ] = useState(``);
     const [ uploadLoading, setUploadLoading ] = useState(false);
@@ -84,7 +85,8 @@ export default function SelectedFileRow (props: Props) {
         setUploadLoading(false);
     };
 
-    const fileExtension = file.name.split(`.`).slice(-1)[0];
+    const fileExtension = file.name.split(`.`)
+        .slice(-1)[0];
 
     return (
         <Box

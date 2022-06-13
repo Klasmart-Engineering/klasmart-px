@@ -10,25 +10,35 @@ const tests = (regex: (errorMessage?: string | undefined) => (input: any) => str
     });
 
     test(`invalid email with custom error message`, () => {
-        expect(regex(errorMessage)(`test@`)).toBe(errorMessage);
-        expect(regex(errorMessage)(`a@a.a`)).toBe(errorMessage);
-        expect(regex(errorMessage)(`a@a.a`)).toBe(errorMessage);
+        expect(regex(errorMessage)(`test@`))
+            .toBe(errorMessage);
+        expect(regex(errorMessage)(`a@a.a`))
+            .toBe(errorMessage);
+        expect(regex(errorMessage)(`a@a.a`))
+            .toBe(errorMessage);
     });
 
     test(`valid email`, () => {
-        expect(regex()(`a@a.aa`)).toBe(true);
-        expect(regex()(`abc@def.gh`)).toBe(true);
+        expect(regex()(`a@a.aa`))
+            .toBe(true);
+        expect(regex()(`abc@def.gh`))
+            .toBe(true);
     });
 
     test(`valid email with custom error message`, () => {
-        expect(regex(errorMessage)(`abc+1@def.gh`)).toBe(true);
-        expect(regex(errorMessage)(`test@calmid.com`)).toBe(true);
+        expect(regex(errorMessage)(`abc+1@def.gh`))
+            .toBe(true);
+        expect(regex(errorMessage)(`test@calmid.com`))
+            .toBe(true);
     });
 
     test(`empty`, () => {
-        expect(regex()(``)).toBe(true);
-        expect(regex()(undefined)).toBe(true);
-        expect(regex()(null)).toBe(true);
+        expect(regex()(``))
+            .toBe(true);
+        expect(regex()(undefined))
+            .toBe(true);
+        expect(regex()(null))
+            .toBe(true);
     });
 });
 

@@ -94,7 +94,8 @@ function defaultSearch <T> (value: T[Extract<keyof T, string>], searchValue: str
     const values = Array.isArray(value) ? value : [ value ];
     const regexp = new RegExp(escapeRegExp(searchValue.trim()), `gi`);
     return values.some((value) => {
-        const result = String(value).match(regexp);
+        const result = String(value)
+            .match(regexp);
         return !!result;
     });
 }
@@ -215,13 +216,16 @@ export default function BaseTable<T> (props: Props<T>) {
     } = props;
 
     const fallbackGroupBy = hideNoGroupOption ? columns.find((column) => column.groups)?.id : undefined;
-    const persistentColumnIds = columns.filter((c) => c.persistent).map(({ id }) => id);
-    const selectedColumnIds = columns.filter(({ hidden }) => !hidden).map(({ id }) => id);
+    const persistentColumnIds = columns.filter((c) => c.persistent)
+        .map(({ id }) => id);
+    const selectedColumnIds = columns.filter(({ hidden }) => !hidden)
+        .map(({ id }) => id);
     const searchableColumns = columns.filter((c) => !c.disableSearch);
-    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter((c) => c.groups).map(({ id, label }) => ({
-        id,
-        label,
-    }));
+    const groupableColumns: GroupSelectMenuItem<T>[] = columns.filter((c) => c.groups)
+        .map(({ id, label }) => ({
+            id,
+            label,
+        }));
 
     const [ order_, setOrder ] = useState<Order>([ `asc`, `desc` ].includes(order ?? ``) ? order as Order : `desc`);
     const [ orderBy_, setOrderBy ] = useState(columns.find((column) => column.id === orderBy)?.id ?? idField);
@@ -322,8 +326,10 @@ export default function BaseTable<T> (props: Props<T>) {
     };
 
     const customSort = columns[columns.findIndex((c) => c.id === orderBy_)].sort;
-    const filteredColumns = columns.filter(({ id }) => isColumnSelected(id)).filter(({ secret }) => !secret);
-    const filteredSortedRows = total ? rows : stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions)).filter(filterRowsBySearch);
+    const filteredColumns = columns.filter(({ id }) => isColumnSelected(id))
+        .filter(({ secret }) => !secret);
+    const filteredSortedRows = total ? rows : stableSort(rows, getComparator(order_, orderBy_, customSort, locale, collatorOptions))
+        .filter(filterRowsBySearch);
 
     const subgroups_ = useMemo<SubgroupTab[]>(() => {
         const column = columns[columns.findIndex((c) => c.id === groupBy_)];

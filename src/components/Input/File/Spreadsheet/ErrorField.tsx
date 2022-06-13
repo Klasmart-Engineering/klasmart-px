@@ -41,7 +41,9 @@ export default function ErrorField (props: Props) {
             alignItems="center"
         >
             <Typography>{fieldText}</Typography>
-            <WrappedTextTooltip title={errors.map((error) => error.message).join(`\n`)}>
+            <WrappedTextTooltip title={errors.map((error) => error.message)
+                .join(`\n`)}
+            >
                 <ErrorIcon
                     color="error"
                     className={classes.errorIcon}
