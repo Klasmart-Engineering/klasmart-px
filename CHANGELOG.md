@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.3.5](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.5%0Dv2.3.4) (2022-06-16)
+
+
+### ♻️ Chores
+
+* bump @kl-engineering/eslint-config to version 3.0.1 ([b5858a0](https://github.com/KL-Engineering/kidsloop-px/commits/b5858a0df4b0b4978f91086424dfda73aee56400))
+
+
+### 🐛 Bug Fixes
+
+* remove references to unused fonts ([f3f7701](https://github.com/KL-Engineering/kidsloop-px/commits/f3f7701bbec5fb9c2ade23788a99fd50e073ffcf))
+
+
+### 🔨 Build
+
+* npm install with node 16.15.1 ([b162c22](https://github.com/KL-Engineering/kidsloop-px/commits/b162c2254148618d87176405aa84aed03919716f))
+
 ### [2.3.4](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.4%0Dv2.3.3) (2022-06-09)
 
 
