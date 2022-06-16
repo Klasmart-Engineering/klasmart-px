@@ -11,16 +11,6 @@ const fallbackFonts = [
 const buildLocaleTypography = (locale: string): TypographyOptions => {
     const normalizedLocale = normalizeLocale(locale);
     switch (normalizedLocale) {
-    case `ko`:
-        return {
-            fontFamily: [ `NanumSquareRound`, ...fallbackFonts ].join(`,`),
-        };
-    case `zh`:
-    case `zh-cn`:
-    case `zn_cn`:
-        return {
-            fontFamily: [ `Source Han Sans SC`, ...fallbackFonts ].join(`,`),
-        };
     default:
         return {
             fontFamily: [ `Source Sans Pro`, ...fallbackFonts ].join(`,`),

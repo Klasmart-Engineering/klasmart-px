@@ -8,7 +8,14 @@ import {
 } from "@mui/material/styles";
 
 export const normalizeLocale = (locale: string) => {
-    return locale.toLowerCase();
+    try {
+        return locale
+            .toLowerCase()
+            .split(/[_-]/)
+            ?.[0];
+    } catch (err) {
+        return locale;
+    }
 };
 
 export interface BuildThemeOptions {
