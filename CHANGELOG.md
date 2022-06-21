@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.4.0%0Dv2.3.5) (2022-06-21)
+
+
+### ✨ Features
+
+* add widget components (#23) ([f7d5a45](https://github.com/KL-Engineering/kidsloop-px/commits/f7d5a45140f31f8cf6c2ebb7fb94be776a167c56))
+
 ### [2.3.5](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.3.5%0Dv2.3.4) (2022-06-16)
 
 
