@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v3.0.0%0Dv2.4.0) (2022-07-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **table:** redesign table (#24)
+
+### ✨ Features
+
+* add more color icons ([aec8fd9](https://github.com/KL-Engineering/kidsloop-px/commits/aec8fd9cc91c2291e88637283e88029975ab0a7e))
+* **table:** redesign table (#24) ([3602677](https://github.com/KL-Engineering/kidsloop-px/commits/36026770e68fb709b64f90f5fedc0fc527ee672d))
+
 ## [2.4.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v2.4.0%0Dv2.3.5) (2022-06-21)
 
 
