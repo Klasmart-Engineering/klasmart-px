@@ -3,7 +3,8 @@ import { useButtonLoadingStyles } from "../Progress/utils";
 import { SvgIconComponent } from "@mui/icons-material";
 import {
     Box,
-    Button as Btn,
+    Button as MUIButton,
+    ButtonProps,
     colors,
     Theme,
     Tooltip,
@@ -81,6 +82,7 @@ export interface Props {
     color?: string;
     disabled?: boolean;
     tooltip?: string;
+    sx?: ButtonProps["sx"];
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 
@@ -124,7 +126,7 @@ export default function Button (props: Props) {
     return (
         <Tooltip title={tooltip ?? ``}>
             <span>
-                <Btn
+                <MUIButton
                     variant={variant}
                     type={type}
                     style={{
@@ -160,7 +162,7 @@ export default function Button (props: Props) {
                         </Typography>
                     </Box>
                     {loading && <CircularProgress />}
-                </Btn>
+                </MUIButton>
             </span>
         </Tooltip>
     );

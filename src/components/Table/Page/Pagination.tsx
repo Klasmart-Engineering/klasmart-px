@@ -1,4 +1,5 @@
 
+import Select from "../../Input/Select";
 import { PaginationLocalization } from "../Common/Pagination/shared";
 import {
     FirstPage as FirstPageIcon,
@@ -7,25 +8,15 @@ import {
     LastPage as LastPageIcon,
 } from "@mui/icons-material";
 import {
+    Box,
     IconButton,
-    TablePagination,
-    Theme,
+    Stack,
+    Toolbar,
     Tooltip,
+    Typography,
     useTheme,
 } from "@mui/material";
-import {
-    createStyles,
-    makeStyles,
-} from '@mui/styles';
 import { clamp } from "lodash";
-import React from "react";
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    root: {
-        flexShrink: 0,
-        marginLeft: theme.spacing(2.5),
-    },
-}));
 
 interface Props {
     rowsPerPageOptions: Array<number | { value: number; label: string }>;
@@ -47,95 +38,130 @@ export default function PageTablePagination (props: Props) {
         onChangePage,
         onChangeRowsPerPage,
     } = props;
-    const classes = useStyles();
     const theme = useTheme();
 
     const lastPage = Math.ceil(count / rowsPerPage) - 1;
 
-    const actions = () => {
-        const handleFirstPageButtonClick = () => {
-            onChangePage(clamp(0, 0, lastPage));
-        };
+    const handleFirstPageButtonClick = () => {
+        onChangePage(clamp(0, 0, lastPage));
+    };
 
-        const handleBackButtonClick = () => {
-            onChangePage(clamp(page, 0, lastPage) - 1);
-        };
+    const handleBackButtonClick = () => {
+        onChangePage(clamp(page, 0, lastPage) - 1);
+    };
 
-        const handleNextButtonClick = () => {
-            onChangePage(clamp(page, 0, lastPage) + 1);
-        };
+    const handleNextButtonClick = () => {
+        onChangePage(clamp(page, 0, lastPage) + 1);
+    };
 
-        const handleLastPageButtonClick = () => {
-            onChangePage(clamp(lastPage, 0, lastPage));
-        };
-        return (
-            <div className={classes.root}>
-                <Tooltip title={localization?.firstPage ?? `First page`}>
-                    <span>
-                        <IconButton
-                            disabled={page === 0}
-                            aria-label="first page"
-                            size="large"
-                            onClick={handleFirstPageButtonClick}
-                        >
-                            {theme.direction === `rtl` ? <LastPageIcon /> : <FirstPageIcon />}
-                        </IconButton>
-                    </span>
-                </Tooltip>
-                <Tooltip title={localization?.prevPage ?? `Previous page`}>
-                    <span>
-                        <IconButton
-                            disabled={page === 0}
-                            aria-label="previous page"
-                            size="large"
-                            onClick={handleBackButtonClick}
-                        >
-                            {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
-                        </IconButton>
-                    </span>
-                </Tooltip>
-                <Tooltip title={localization?.nextPage ?? `Next page`}>
-                    <span>
-                        <IconButton
-                            disabled={page >= lastPage}
-                            aria-label="next page"
-                            size="large"
-                            onClick={handleNextButtonClick}
-                        >
-                            {theme.direction === `rtl` ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
-                        </IconButton>
-                    </span>
-                </Tooltip>
-                <Tooltip title={localization?.lastPage ?? `Last page`}>
-                    <span>
-                        <IconButton
-                            disabled={page >= lastPage}
-                            aria-label="last page"
-                            size="large"
-                            onClick={handleLastPageButtonClick}
-                        >
-                            {theme.direction === `rtl` ? <FirstPageIcon /> : <LastPageIcon />}
-                        </IconButton>
-                    </span>
-                </Tooltip>
-            </div>
-        );
+    const handleLastPageButtonClick = () => {
+        onChangePage(clamp(lastPage, 0, lastPage));
     };
 
     return (
-        <TablePagination
-            rowsPerPageOptions={rowsPerPageOptions}
-            labelRowsPerPage={localization?.rowsPerPage}
-            labelDisplayedRows={localization?.fromToTotal ? (({
-                from, to, count,
-            }) => localization?.fromToTotal?.(from, to, count)) : undefined}
-            component="div"
-            count={count}
-            rowsPerPage={rowsPerPage}
-            page={clamp(page, 0, lastPage)}
-            ActionsComponent={actions}
-            onPageChange={(event, page) => onChangePage(page)}
-            onRowsPerPageChange={(event) => onChangeRowsPerPage?.(parseInt(event.target.value, 10))}
-        />
+        <Toolbar
+            style={{
+                minHeight: 40,
+                height: `inherit`,
+            }}
+        >
+            <Stack
+                direction="row"
+                justifyContent="space-between"
+                width="100%"
+                alignItems="baseline"
+            >
+                <Box
+                    display="flex"
+                    alignItems="baseline"
+                    justifyContent="start"
+                >
+                    <Typography>{localization?.total?.(count) ?? `Total ${count} result${count !== 1 ? `s` : ``}`}</Typography>
+                </Box>
+                <Box
+                    display="flex"
+                    alignItems="baseline"
+                    justifyContent="center"
+                >
+                    <Tooltip title={localization?.firstPage ?? `First page`}>
+                        <span>
+                            <IconButton
+                                disabled={page === 0}
+                                aria-label={localization?.firstPage ?? `First page`}
+                                size="medium"
+                                onClick={handleFirstPageButtonClick}
+                            >
+                                {theme.direction === `rtl` ? <LastPageIcon /> : <FirstPageIcon />}
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Tooltip title={localization?.prevPage ?? `Previous page`}>
+                        <span>
+                            <IconButton
+                                disabled={page === 0}
+                                aria-label={localization?.prevPage ?? `Previous page`}
+                                size="medium"
+                                onClick={handleBackButtonClick}
+                            >
+                                {theme.direction === `rtl` ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon />}
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Typography>{`${(page + 1)} of ${(lastPage + 1)}`}</Typography>
+                    <Tooltip title={localization?.nextPage ?? `Next page`}>
+                        <span>
+                            <IconButton
+                                disabled={page >= lastPage}
+                                aria-label={localization?.nextPage ?? `Next page`}
+                                size="medium"
+                                onClick={handleNextButtonClick}
+                            >
+                                {theme.direction === `rtl` ? <KeyboardArrowLeftIcon /> : <KeyboardArrowRightIcon />}
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Tooltip title={localization?.lastPage ?? `Last page`}>
+                        <span>
+                            <IconButton
+                                disabled={page >= lastPage}
+                                aria-label={localization?.lastPage ?? `Last page`}
+                                size="medium"
+                                onClick={handleLastPageButtonClick}
+                            >
+                                {theme.direction === `rtl` ? <FirstPageIcon /> : <LastPageIcon />}
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                </Box>
+                <Box
+                    display="flex"
+                    alignItems="baseline"
+                    justifyContent="end"
+                >
+                    <Typography>{localization?.rowsPerPage ?? `Rows per page`}</Typography>
+                    <Select
+                        hideHelperText
+                        size="small"
+                        value={`${rowsPerPage}`}
+                        items={rowsPerPageOptions.map((option) => {
+                            if (typeof option === `number`) return `${option}`;
+                            return {
+                                ...option,
+                                value: `${option.value}`,
+                            };
+                        })}
+                        sx={{
+                            marginLeft: 1,
+                            "& .MuiSelect-select": {
+                                py: 3/8,
+                                pl: 11.5/8,
+                                paddingRight: 2,
+                            },
+                        }}
+                        onChange={onChangeRowsPerPage}
+                    />
+                </Box>
+            </Stack>
+        </Toolbar>
     );
 }

@@ -11,15 +11,8 @@ import {
     PageChange,
 } from "../Common/Pagination/shared";
 import CursorTablePagination from "./Pagination";
-import {
-    createStyles,
-    makeStyles,
-} from '@mui/styles';
 import { isEqual } from "lodash";
-import React,
-{ useState } from "react";
-
-const useStyles = makeStyles((theme) => createStyles({}));
+import { useState } from "react";
 
 export interface CursorTableData<T> extends BaseTableData<T> {
     cursor?: string;
@@ -55,7 +48,6 @@ export default function CursorTable<T> (props: Props<T>) {
         onPageChange,
         ...other
     } = props;
-    const classes = useStyles();
     const [ cursor_, setCursor ] = useState(cursor);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage);
     const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>();
@@ -119,7 +111,14 @@ export default function CursorTable<T> (props: Props<T>) {
                     count={baseTableData?.total ?? 0}
                     rowsPerPage={rowsPerPage_}
                     rowsPerPageOptions={rowsPerPageOptions}
-                    localization={localization?.pagination}
+                    localization={{
+                        firstPage: localization?.firstPage,
+                        lastPage: localization?.lastPage,
+                        nextPage: localization?.nextPage,
+                        prevPage: localization?.prevPage,
+                        rowsPerPage: localization?.rowsPerPage,
+                        total: localization?.total,
+                    }}
                     onChangePage={handlePageChange}
                     onChangeRowsPerPage={handleRowsPerPageChange}
                 />

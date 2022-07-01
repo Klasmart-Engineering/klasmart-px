@@ -1,9 +1,8 @@
 
-import Tabs,
-{ Tab } from "../../Tabs";
+import
+Tabs, { Tab } from "../../Tabs";
 import {
     Box,
-    Divider,
     MenuItem,
     Select,
     SelectChangeEvent,
@@ -14,9 +13,7 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import React,
-{
-    ReactNode,
+import {
     useEffect,
     useMemo,
     useState,
@@ -30,18 +27,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         },
         "& .MuiInput-underline:after": {
             display: `none`,
-        },
-    },
-    select: {
-        minWidth: 150,
-        "& .MuiSelect-root": {
-            padding: theme.spacing(2 + 1/8, 6, 2 + 1/8, 2),
-        },
-        "& .MuiSelect-icon": {
-            marginRight: theme.spacing(2),
-        },
-        "& .MuiSelect-select": {
-            padding: theme.spacing(2),
         },
     },
     selectPlaceholderText: {
@@ -102,7 +87,7 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
         onSelectSubgroup(value);
     };
 
-    const handleGroupChange = (event: SelectChangeEvent<"" | keyof T>, child: ReactNode) => {
+    const handleGroupChange = (event: SelectChangeEvent<"" | keyof T>, child: React.ReactNode) => {
         const value = event.target.value as "" | Extract<keyof T, string>;
         setGroupBy(value);
         const newGroup = value === `` ? undefined : value;
@@ -139,58 +124,133 @@ export default function BaseTableGroupTabs<T> (props: Props<T>) {
     ]);
 
     return (
-        <>
-            <Box
-                display="flex"
-                flexDirection="row"
-                className={classes.root}
-            >
-                {hasValidSubgroupValue
-                    ? (
-                        <Tabs
-                            value={subgroupBy_}
-                            tabs={tabs}
-                            onChange={handleSubgroupChange}
-                        />
-                    ) : (
-                        <Box
-                            display="flex"
-                            flex="1"
-                        />
-                    )}
-                {groups.length > 1 && (
-                    <>
-                        <Divider orientation="vertical" />
-                        <Select
-                            displayEmpty
-                            variant="standard"
-                            value={groupBy_}
-                            className={classes.select}
-                            renderValue={
-                                groupBy_ !== `` ? undefined : () => (
-                                    <Typography
-                                        variant="body1"
-                                        className={classes.selectPlaceholderText}
-                                    >
-                                        {localization?.selectLabel ?? `Group by`}
-                                    </Typography>
-                                )
-                            }
-                            onChange={handleGroupChange}
-                        >
-                            {!hideNoGroupOption && <MenuItem value="">{localization?.selectNone ?? `None`}</MenuItem>}
-                            {groups?.map((group, i) => (
-                                <MenuItem
-                                    key={`group-${i}`}
-                                    value={group.id as Extract<keyof T, "string">}
-                                >
-                                    {group.label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </>
+        <Box
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            mb={1}
+        >
+            {hasValidSubgroupValue
+                ? (
+                    <Tabs
+                        value={subgroupBy_}
+                        tabs={tabs}
+                        onChange={handleSubgroupChange}
+                    />
+                ) : (
+                    <Box
+                        display="flex"
+                        flex="1"
+                    />
                 )}
-            </Box>
-        </>
+            {groups.length > 1 && (
+                <>
+                    <Select
+                        displayEmpty
+                        variant="outlined"
+                        value={groupBy_}
+                        sx={{
+                            minWidth: 203,
+                            borderRadius: 6,
+                            "& .MuiOutlinedInput-notchedOutline": {
+                                borderColor: `primary.main`,
+                            },
+                            "& .MuiOutlinedInput-input": {
+                                paddingY: 1,
+                                paddingX: 2,
+                            },
+                        }}
+                        renderValue={
+                            groupBy_ !== `` ? undefined : () => (
+                                <Typography
+                                    variant="body1"
+                                    className={classes.selectPlaceholderText}
+                                >
+                                    {localization?.selectLabel ?? `Group by`}
+                                </Typography>
+                            )
+                        }
+                        onChange={handleGroupChange}
+                    >
+                        {!hideNoGroupOption && <MenuItem value="">{localization?.selectNone ?? `None`}</MenuItem>}
+                        {groups?.map((group, i) => (
+                            <MenuItem
+                                key={`group-${i}`}
+                                value={group.id as Extract<keyof T, "string">}
+                            >
+                                {group.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </>
+            )}
+        </Box>
     );
 }
+
+// return (
+//     <Box
+//         display="flex"
+//         flexDirection="row"
+//         alignItems="center"
+//         mb={1}
+//     >
+//         {hasValidSubgroupValue
+//             ? tabs.map((tab) => (
+//                 <Chip
+//                     key={tab.value}
+//                     label={tab.text}
+//                     color="primary"
+//                     variant={tab.value === subgroupBy_ ? `filled` : `outlined`}
+//                     sx={{
+//                         marginRight: 1,
+//                     }}
+//                     onClick={() => handleSubgroupChange(tab.value)}
+//                 />
+//             ))
+//             : <Box flex="1" />
+//         }
+//         {groups.length > 1 && (
+//             <>
+//                 <Box flex="1" />
+//                 <Select
+//                     displayEmpty
+//                     variant="outlined"
+//                     value={groupBy_}
+//                     sx={{
+//                         minWidth: 203,
+//                         borderRadius: 6,
+//                         "& .MuiOutlinedInput-notchedOutline": {
+//                             borderColor: `primary.main`,
+//                         },
+//                         "& .MuiOutlinedInput-input": {
+//                             paddingY: 1,
+//                             paddingX: 2,
+//                         },
+//                     }}
+//                     renderValue={
+//                         groupBy_ !== `` ? undefined : () => (
+//                             <Typography
+//                                 variant="body1"
+//                                 className={classes.selectPlaceholderText}
+//                             >
+//                                 {localization?.selectLabel ?? `Group by`}
+//                             </Typography>
+//                         )
+//                     }
+//                     onChange={handleGroupChange}
+//                 >
+//                     {!hideNoGroupOption && <MenuItem value="">{localization?.selectNone ?? `None`}</MenuItem>}
+//                     {groups?.map((group, i) => (
+//                         <MenuItem
+//                             key={`group-${i}`}
+//                             value={group.id as Extract<keyof T, "string">}
+//                         >
+//                             {group.label}
+//                         </MenuItem>
+//                     ))}
+//                 </Select>
+//             </>
+//         )}
+//     </Box>
+// );

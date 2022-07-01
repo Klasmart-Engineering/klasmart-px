@@ -1,3 +1,5 @@
+
+import { config } from "../color";
 import {
     colors,
     Components,
@@ -104,14 +106,27 @@ export const buildComponentStyles = (): Components<Theme> => {
                 },
             },
         },
+        MuiTableContainer: {
+            styleOverrides: {
+                root: {
+                    borderTopLeftRadius: `inherit`,
+                    borderTopRightRadius: `inherit`,
+                },
+            },
+        },
         MuiPaper: {
             styleOverrides: {
                 outlined: {
                     borderRadius: 10,
+                    boxShadow: `none`,
+                    borderColor: `#E4E4E4`,
                 },
                 root: {
                     boxShadow: `0px 2px 6px rgba(0, 0, 0, 0.1)`,
                 },
+            },
+            defaultProps: {
+                variant: `outlined`,
             },
         },
         MuiDrawer: {
@@ -156,5 +171,34 @@ export const buildComponentStyles = (): Components<Theme> => {
                 },
             },
         },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: `#E4E4E4`,
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: config.PRIMARY,
+                    },
+                },
+            },
+        },
+        MuiChip: {
+            styleOverrides: {
+                sizeMedium: {
+                    height: `auto`,
+                    minHeight: 32,
+                },
+                // colorSecondary: `#eef2fd`,
+                // clickableColorSecondary: `#eef2fd`,
+            },
+        },
+        // MuiCheckbox: {
+        //     defaultProps: {
+        //         checkedIcon: <Close />,
+        //         indeterminateIcon: <Remove />,
+        //         icon: <Add />,
+        //     },
+        // },
     };
 };

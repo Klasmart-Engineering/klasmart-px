@@ -23,8 +23,7 @@ import {
 } from '@mui/styles';
 import clsx from "clsx";
 import { isEqual } from "lodash";
-import React,
-{
+import {
     ReactNode,
     useEffect,
     useState,
@@ -255,7 +254,7 @@ export default function Select<T> (props: Props<T>) {
                 // https://github.com/microsoft/TypeScript/issues/28960
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                "data-testid": `${label}SelectTextInput`,
+                "data-testid": `${label ?? ``}SelectTextInput`,
             }}
             InputProps={{
                 readOnly,
@@ -322,6 +321,9 @@ export default function Select<T> (props: Props<T>) {
                         horizontal: `left`,
                     },
                 },
+                style: {
+                    paddingRight: 0,
+                },
                 onBlur,
                 onChange: handleChange,
                 onFocus,
@@ -336,7 +338,8 @@ export default function Select<T> (props: Props<T>) {
                         </ListItemText>
                     </MenuItem>
                 )
-                : menuItems}
+                : menuItems
+            }
         </TextField>
     );
 }

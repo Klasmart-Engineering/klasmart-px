@@ -389,13 +389,17 @@ function expectValidationFailed () {
 const resetOnFileUploadMock = () => (props.onFileUpload as jest.MockedFunction<Props["onFileUpload"]>).mockClear();
 
 const removeButton = () => {
-    const tooltip = screen.queryByLabelText(props.removeButtonTooltip);
+    const tooltip = screen.getByRole(`generic`, {
+        name: props.removeButtonTooltip,
+    });
     if (tooltip === null) return null;
     return tooltip.querySelector(`button`);
 };
 
 const uploadButton = () => {
-    const tooltip = screen.queryByLabelText(props.uploadButtonTooltip);
+    const tooltip = screen.getByRole(`generic`, {
+        name: props.uploadButtonTooltip,
+    });
     if (tooltip === null) return null;
     return tooltip.querySelector(`button`);
 };
@@ -452,7 +456,9 @@ each([ false, true ])
                 size: fileSize,
             });
 
-            await screen.findByLabelText(props.removeButtonTooltip);
+            await screen.findByRole(`generic`, {
+                name: props.removeButtonTooltip,
+            });
 
             expectPreviewUnavailable();
 
@@ -476,7 +482,9 @@ each([ false, true ])
                 type: `image/gif`,
             });
 
-            await screen.findByLabelText(props.removeButtonTooltip);
+            await screen.findByRole(`generic`, {
+                name: props.removeButtonTooltip,
+            });
 
             expectPreviewUnavailable();
 
@@ -501,7 +509,9 @@ each([ false, true ])
                 },
             ]);
 
-            await screen.findByLabelText(props.removeButtonTooltip);
+            await screen.findByRole(`generic`, {
+                name: props.removeButtonTooltip,
+            });
 
             expectPreviewUnavailable();
 

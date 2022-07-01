@@ -13,7 +13,7 @@ import {
     fireEvent,
     screen,
     waitFor,
-} from "@testing-library/react";
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -53,9 +53,7 @@ afterEach(() => {
 describe(`Cursor Table`, () => {
     describe(`Render`, () => {
         test(`default props`, async () => {
-            const component = <CursorTable {...defaultProps} />;
-
-            render(component);
+            render(<CursorTable {...defaultProps} />);
 
             await waitFor(() => {
                 expect(screen.getByText(`John`))
@@ -63,16 +61,12 @@ describe(`Cursor Table`, () => {
             });
         });
         test(`combobox render`, () => {
-            const component = (
-                <CursorTable
-                    {
-                        ...defaultProps
-                    }
-                    filters={comboBoxFilters}
-                />
-            );
+            const props ={
+                ...defaultProps,
+                filters: comboBoxFilters,
+            };
 
-            render(component);
+            render(<CursorTable {...props} />);
 
             userEvent.click(screen.getByText(`Add Filter`));
 
@@ -83,40 +77,35 @@ describe(`Cursor Table`, () => {
 
     describe(`Interact`, () => {
         test(`add filter with Select Menu`, async () => {
-            const component = <CursorTable {...defaultProps} />;
-
-            render(component);
+            render(<CursorTable {...defaultProps} />);
 
             userEvent.click(screen.getByText(`Add Filter`));
 
-            const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`) as HTMLInputElement;
+            const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`);
 
-            userEvent.click(screen.getAllByRole(`button`)[0]);
+            userEvent.click(screen.getAllByRole(`button`)[1]);
 
-            expect(screen.getByRole(`listbox`)).not.toBeNull();
+            expect(screen.getByRole(`listbox`))
+                .toBeInTheDocument();
 
-            const columnOptions = screen.getAllByRole(`option`);
-            userEvent.click(columnOptions[1]); //should select status
+            userEvent.click(screen.getByRole(`option`, {
+                name: `Status`,
+            }));
 
             await waitFor(() => {
-                expect(columnSelectInput.value)
-                    .toBe(`status`);
-            });
-            await waitFor(() => {
-                expect(screen.getAllByText(`Status`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
+                expect(columnSelectInput)
+                    .toHaveValue(`status`);
             });
 
-            const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
-            expect(valueSelectInput.value)
-                .toBe(``);
+            const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`);
+            expect(valueSelectInput)
+                .toHaveValue(``);
 
-            userEvent.click(screen.getAllByRole(`button`)[2]);
+            userEvent.click(screen.getAllByRole(`button`)[3]);
 
             await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toBeNull();
+                expect(screen.getByRole(`listbox`))
+                    .toBeInTheDocument();
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
@@ -129,8 +118,8 @@ describe(`Cursor Table`, () => {
             userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
-                expect(valueSelectInput.value)
-                    .toBe(`active`);
+                expect(valueSelectInput)
+                    .toHaveValue(`active`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
@@ -143,20 +132,17 @@ describe(`Cursor Table`, () => {
 
             await waitFor(() => {
                 expect(screen.getByTestId(`statusChipLabel`))
-                    .toHaveTextContent(`Status equals "Active"`);
+                    .toHaveTextContent(`Status equals Active`);
             });
         });
 
         test(`Add Filter with Combobox Menu`, async () => {
-            const component = (
-                <CursorTable
-                    {
-                        ...defaultProps
-                    }
-                    filters={comboBoxFilters}
-                />
-            );
-            render(component);
+            const props = {
+                ...defaultProps,
+                filters: comboBoxFilters,
+            };
+
+            render(<CursorTable {...props} />);
 
             userEvent.click(screen.getByText(`Add Filter`));
 
@@ -189,60 +175,50 @@ describe(`Cursor Table`, () => {
             userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             expect(await screen.findByRole(`button`, {
-                name: `Organization Roles equals "Test Parent"`,
+                name: `Organization Roles equals Test Parent`,
             }))
                 .toBeInTheDocument();
         });
 
         test(`edit filter`, async () => {
-            const component = <CursorTable {...defaultProps} />;
-
-            render(component);
+            render(<CursorTable {...defaultProps} />);
 
             userEvent.click(screen.getByText(`Add Filter`));
 
-            const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`) as HTMLInputElement;
+            const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`);
 
-            userEvent.click(screen.getAllByRole(`button`)[0]);
+            userEvent.click(screen.getAllByRole(`button`)[1]);
 
-            expect(screen.getByRole(`listbox`)).not.toBeNull();
+            expect(screen.getByRole(`listbox`))
+                .toBeInTheDocument();
 
-            const columnOptions = screen.getAllByRole(`option`);
-            userEvent.click(columnOptions[1]);
-
-            await waitFor(() => {
-                expect(columnSelectInput.value)
-                    .toBe(`status`);
+            const columnOption = screen.getByRole(`option`, {
+                name: `Status`,
             });
+            userEvent.click(columnOption);
+
             await waitFor(() => {
-                expect(screen.queryAllByText(`Status`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
+                expect(columnSelectInput)
+                    .toHaveValue(`status`);
             });
 
-            let valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
-            expect(valueSelectInput.value)
-                .toBe(``);
+            let valueSelectInput = screen.getByTestId(`ValueSelectTextInput`);
+            expect(valueSelectInput)
+                .toHaveValue(``);
 
-            userEvent.click(screen.getAllByRole(`button`)[2]);
+            userEvent.click(screen.getAllByRole(`button`)[3]);
 
             await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toBeNull();
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Active`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
+                expect(screen.getByRole(`listbox`))
+                    .toBeInTheDocument();
             });
 
             let valueOptions = screen.getAllByRole(`option`);
             userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
-                expect(valueSelectInput.value)
-                    .toBe(`active`);
+                expect(valueSelectInput)
+                    .toHaveValue(`active`);
             });
             await waitFor(() => {
                 expect(screen.queryAllByText(`Active`, {
@@ -255,230 +231,144 @@ describe(`Cursor Table`, () => {
 
             await waitFor(() => {
                 expect(screen.getByTestId(`statusChipLabel`))
-                    .toHaveTextContent(`Status equals "Active"`);
+                    .toHaveTextContent(`Status equals Active`);
             });
 
             userEvent.click(screen.getByTestId(`statusChipLabel`));
 
-            expect(valueSelectInput.value)
-                .toBe(`active`);
+            expect(valueSelectInput)
+                .toHaveValue(`active`);
 
-            userEvent.click(screen.getAllByRole(`button`)[2]);
+            userEvent.click(screen.getAllByRole(`button`)[3]);
 
             await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toBeNull();
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Active`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(2);
+                expect(screen.getByRole(`listbox`))
+                    .toBeInTheDocument();
             });
 
             valueOptions = screen.getAllByRole(`option`);
             userEvent.click(valueOptions[1]);
 
-            valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
+            valueSelectInput = screen.getByTestId(`ValueSelectTextInput`);
 
             await waitFor(() => {
-                expect(valueSelectInput.value)
-                    .toBe(`inactive`);
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Inactive`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
+                expect(valueSelectInput)
+                    .toHaveValue(`inactive`);
             });
 
             userEvent.click(screen.getAllByText(`Save Filter`)[0]);
 
-            await waitFor(() => {
-                expect(screen.getByTestId(`statusChipLabel`))
-                    .toHaveTextContent(`Status equals "Inactive"`);
-            });
+            expect(screen.getByTestId(`statusChipLabel`))
+                .toHaveTextContent(`Status equals Inactive`);
         });
 
         test(`remove filter`, async () => {
-            const component = <CursorTable {...defaultProps} />;
-
-            render(component);
+            render(<CursorTable {...defaultProps} />);
 
             userEvent.click(screen.getByText(`Add Filter`));
 
-            const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`) as HTMLInputElement;
+            const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`);
 
-            userEvent.click(screen.getAllByRole(`button`)[0]);
+            userEvent.click(screen.getAllByRole(`button`)[1]);
 
-            expect(screen.getByRole(`listbox`)).not.toBeNull();
+            expect(screen.getByRole(`listbox`))
+                .toBeInTheDocument();
 
             const columnOptions = screen.getAllByRole(`option`);
             userEvent.click(columnOptions[1]);
 
             await waitFor(() => {
-                expect(columnSelectInput.value)
-                    .toBe(`status`);
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Status`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
+                expect(columnSelectInput)
+                    .toHaveValue(`status`);
             });
 
-            const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
-            expect(valueSelectInput.value)
-                .toBe(``);
+            const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`);
+            expect(valueSelectInput)
+                .toHaveValue(``);
 
-            userEvent.click(screen.getAllByRole(`button`)[2]);
+            userEvent.click(screen.getAllByRole(`button`)[3]);
 
             await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toBeNull();
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Active`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
+                expect(screen.getByRole(`listbox`))
+                    .toBeInTheDocument();
             });
 
             const valueOptions = screen.getAllByRole(`option`);
             userEvent.click(valueOptions[0]);
 
             await waitFor(() => {
-                expect(valueSelectInput.value)
-                    .toBe(`active`);
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Active`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
+                expect(valueSelectInput)
+                    .toHaveValue(`active`);
             });
 
             userEvent.click(screen.getAllByText(`Add Filter`)[1]);
 
             await waitFor(() => {
                 expect(screen.getByTestId(`statusChipLabel`))
-                    .toHaveTextContent(`Status equals "Active"`);
+                    .toHaveTextContent(`Status equals Active`);
             });
 
-            const deleteIcon = document.querySelector(`.MuiChip-deleteIcon`) as HTMLElement;
+            userEvent.click(screen.getByRole(`button`, {
+                name: `Clear filters`,
+            }));
 
-            userEvent.click(deleteIcon);
-
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Status`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(0);
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`equals`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(0);
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`"Active"`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(0);
-            });
+            expect(screen.queryByTestId(`statusChipLabel`)).not.toBeInTheDocument();
         });
 
         test(`clear all filters`, async () => {
-            const component = <CursorTable {...defaultProps} />;
-
-            render(component);
+            render(<CursorTable {...defaultProps} />);
 
             userEvent.click(screen.getByText(`Add Filter`));
 
-            const columnSelectInput = screen.getByTestId(`ColumnSelectTextInput`) as HTMLInputElement;
+            userEvent.click(screen.getAllByRole(`button`)[1]);
 
-            userEvent.click(screen.getAllByRole(`button`)[0]);
+            expect(screen.getByRole(`listbox`))
+                .toBeInTheDocument();
 
-            expect(screen.getByRole(`listbox`)).not.toBeNull();
-
-            const columnOptions = screen.getAllByRole(`option`);
-            userEvent.click(columnOptions[1]);
-
-            await waitFor(() => {
-                expect(columnSelectInput.value)
-                    .toBe(`status`);
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Status`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
+            const columnOption = screen.getByRole(`option`, {
+                name: `Status`,
             });
 
-            const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`) as HTMLInputElement;
-            expect(valueSelectInput.value)
-                .toBe(``);
+            userEvent.click(columnOption);
 
-            userEvent.click(screen.getAllByRole(`button`)[2]);
+            expect(await screen.findByTestId(`ColumnSelectTextInput`))
+                .toHaveValue(`status`);
 
-            await waitFor(() => {
-                expect(screen.getByRole(`listbox`)).not.toBeNull();
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Active`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
-            });
+            const valueSelectInput = screen.getByTestId(`ValueSelectTextInput`);
+
+            expect(valueSelectInput)
+                .toHaveValue(``);
+
+            userEvent.click(screen.getAllByRole(`button`)[3]);
+
+            expect(await screen.findByRole(`listbox`))
+                .toBeInTheDocument();
 
             const valueOptions = screen.getAllByRole(`option`);
             userEvent.click(valueOptions[0]);
 
-            await waitFor(() => {
-                expect(valueSelectInput.value)
-                    .toBe(`active`);
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Active`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(1);
-            });
+            expect(valueSelectInput)
+                .toHaveValue(`active`);
 
-            userEvent.click(screen.getAllByText(`Add Filter`)[1]);
+            userEvent.click(screen.getAllByRole(`button`, {
+                name: `Add Filter`,
+                hidden: true,
+            })[1]);
 
-            await waitFor(() => {
-                expect(screen.getByTestId(`statusChipLabel`))
-                    .toHaveTextContent(`Status equals "Active"`);
-            });
+            expect(screen.getByTestId(`statusChipLabel`))
+                .toHaveTextContent(`Status equals Active`);
 
-            userEvent.click(screen.getByTestId(`clearFilters`));
+            userEvent.click(screen.getByRole(`button`, {
+                name: `Clear filters`,
+            }));
 
-            await waitFor(() => {
-                expect(screen.queryAllByText(`Status`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(0);
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`equals`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(0);
-            });
-            await waitFor(() => {
-                expect(screen.queryAllByText(`"Active"`, {
-                    selector: `span`,
-                }))
-                    .toHaveLength(0);
-            });
+            expect(screen.queryByTestId(`statusChipLabel`)).not.toBeInTheDocument();
         });
 
         test(`input search text`, async () => {
-            const component = <CursorTable {...defaultProps} />;
+            render(<CursorTable {...defaultProps} />);
 
-            render(component);
-
-            const searchInput = screen.getByPlaceholderText(`Search`) as HTMLInputElement;
+            const searchInput = screen.getByPlaceholderText(`Search`);
 
             fireEvent.change(searchInput, {
                 target: {
@@ -487,17 +377,15 @@ describe(`Cursor Table`, () => {
             });
 
             await waitFor(() => {
-                expect(searchInput.value)
-                    .toBe(`Mike Portnoy`);
+                expect(searchInput)
+                    .toHaveValue(`Mike Portnoy`);
             });
         });
 
         test(`clear search text`, async () => {
-            const component = <CursorTable {...defaultProps} />;
+            render(<CursorTable {...defaultProps} />);
 
-            render(component);
-
-            const searchInput = screen.getByPlaceholderText(`Search`) as HTMLInputElement;
+            const searchInput = screen.getByPlaceholderText(`Search`);
 
             fireEvent.change(searchInput, {
                 target: {
@@ -506,15 +394,13 @@ describe(`Cursor Table`, () => {
             });
 
             await waitFor(() => {
-                expect(searchInput.value)
-                    .toBe(``);
+                expect(searchInput)
+                    .toHaveValue(``);
             });
         });
 
         test(`sort asc to desc`, async () => {
-            const component = <CursorTable {...defaultProps} />;
-
-            render(component);
+            render(<CursorTable {...defaultProps} />);
 
             let userRowsInTable = screen.getAllByTestId(`tableRow`, {
                 exact: false,
@@ -552,9 +438,7 @@ describe(`Cursor Table`, () => {
                 order: `desc`,
             };
 
-            const component = <CursorTable {...mockedProps} />;
-
-            render(component);
+            render(<CursorTable {...mockedProps} />);
 
             let userRowsInTable = screen.getAllByTestId(`tableRow`, {
                 exact: false,

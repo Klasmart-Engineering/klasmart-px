@@ -12,9 +12,7 @@ const buildLocaleTypography = (locale: string): TypographyOptions => {
     const normalizedLocale = normalizeLocale(locale);
     switch (normalizedLocale) {
     default:
-        return {
-            fontFamily: [ `Source Sans Pro`, ...fallbackFonts ].join(`,`),
-        };
+        return {};
     }
 };
 
@@ -30,6 +28,11 @@ export const buildTypography = (locale: string): TypographyOptions => {
         fontWeightBold: 700,
         allVariants: {
             letterSpacing: -0.5,
+        },
+        fontFamily: [ `Source Sans Pro`, ...fallbackFonts ].join(`,`),
+        body1: {
+            fontSize: 14,
+            fontWeight: 400,
         },
         ...localeTypography,
     };

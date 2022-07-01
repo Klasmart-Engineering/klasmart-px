@@ -8,7 +8,6 @@ import {
 } from './Filters';
 import {
     Chip,
-    Theme,
     Typography,
 } from '@mui/material';
 import {
@@ -18,30 +17,31 @@ import {
 import React,
 { ReactNode } from 'react';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        chip: {
-            margin: theme.spacing(0.5, 0.5),
-            minHeight: 32,
-            height: `inherit`,
-            "& > .MuiChip-label": {
-                padding: theme.spacing(7/8, 1.5),
-            },
+const useStyles = makeStyles((theme) => createStyles({
+    chip: {
+        margin: theme.spacing(0.5, 0.5),
+        backgroundColor: theme.palette.primary.light,
+        "& > .MuiChip-label": {
+            padding: theme.spacing(0.5, 1.5),
         },
-        addChip: {
-            '& .MuiChip-icon': {
-                marginRight: 20,
-                marginLeft: 4,
-            },
+    },
+    addChip: {
+        '& .MuiChip-icon': {
+            marginRight: 20,
+            marginLeft: 4,
         },
-        chipText: {
-            whiteSpace: `break-spaces`,
-            display: `flex`,
-        },
-        chipValueText: {
-            display: `flex`,
-        },
-    }));
+    },
+    chipText: {
+        whiteSpace: `pre`,
+        display: `flex`,
+        alignItems: `baseline`,
+        flexWrap: `wrap`,
+    },
+    chipValueText: {
+        display: `flex`,
+        alignItems: `baseline`,
+    },
+}));
 
 interface Props<T> {
     localization?: FilterLocalization;
@@ -70,11 +70,11 @@ export default function TableFilterChips<T> (props: Props<T>) {
     );
 
     const getValues = (filter: Filter, operator: FilterOperator) => {
-        if (operator.valueComponent === `text-field`) return [ `"${filter.values[0]}"` ];
+        if (operator.valueComponent === `text-field`) return [ filter.values[0] ];
         if (typeof filter.values[0] === `string`) {
-            return filter.values.map((value) => (`"${operator.options?.find((option) => option.value === value)?.label}"`));
+            return filter.values.map((value) => operator.options?.find((option) => option.value === value)?.label);
         }
-        return (filter.values as FilterValueOption[]).map((value) => `"${value.label}"`); // TODO: remove casting when select items are changed to object values
+        return (filter.values as FilterValueOption[]).map((value) => value.label); // TODO: remove casting when select items are changed to object values
     };
 
     return (
@@ -102,13 +102,19 @@ export default function TableFilterChips<T> (props: Props<T>) {
                     >
                         {values.map((value, index, values) => (
                             <React.Fragment key={`${value}-${index}`}>
-                                {value}
+                                <Typography
+                                    color="primary"
+                                    variant="inherit"
+                                    component="span"
+                                >
+                                    {value}
+                                </Typography>
                                 {/* all items before second last index */}
                                 {index < values.length - 2 && (
                                     <Typography
                                         color="textSecondary"
                                         variant="inherit"
-                                        component={`span`}
+                                        component="span"
                                     >
                                         {`, `}
                                     </Typography>
@@ -118,7 +124,7 @@ export default function TableFilterChips<T> (props: Props<T>) {
                                     <Typography
                                         color="textSecondary"
                                         variant="inherit"
-                                        component={`span`}
+                                        component="span"
                                     >
                                         {localization?.chipLabelValueOr ?? ` or `}
                                     </Typography>
@@ -136,7 +142,7 @@ export default function TableFilterChips<T> (props: Props<T>) {
                                 className={classes.chipText}
                                 color="textSecondary"
                                 variant="inherit"
-                                component={`span`}
+                                component="span"
                             >
                                 {operator?.chipLabel?.(columnText, valueText) ?? onChipLabelFallback(columnText, operator!.label, valueText)}
                             </Typography>

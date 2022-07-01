@@ -1,36 +1,8 @@
 import {
-    Tab as MaterialTab,
-    Tabs as MaterialTabs,
+    Tab as MUITab,
+    Tabs as MUITabs,
 } from "@mui/material";
-import {
-    createStyles,
-    makeStyles,
-} from '@mui/styles';
-import clsx from "clsx";
 import React from "react";
-
-const useStyles = makeStyles((theme) => createStyles({
-    tabRoot: {
-        minWidth: `inherit`,
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-    },
-    tabIndicator: {
-        height: 4,
-        borderTopLeftRadius: 4,
-        borderTopRightRadius: 4,
-    },
-    tabsContainer: {
-        flex: 1,
-        backgroundColor: `transparent !important`,
-        "& .MuiTabs-flexContainer": {
-            height: `100%`,
-        },
-        "& .MuiTab-root": {
-            backgroundColor: `transparent !important`,
-        },
-    },
-}));
 
 export interface Tab {
     text: string;
@@ -53,33 +25,59 @@ export default function Tabs (props: Props) {
         valuesAsPaths,
         onChange,
     } = props;
-    const classes = useStyles();
 
     const handleChange = (event: React.ChangeEvent<{}>, value: any) => {
         onChange?.(value !== 0 ? value : undefined);
     };
 
     return (
-        <MaterialTabs
+        <MUITabs
             value={tabs.find((tab) => tab.value === value)?.value ?? 0}
             TabIndicatorProps={{
-                className: classes.tabIndicator,
+                sx: {
+                    height: `100%`,
+                    borderRadius: 18,
+                    zIndex: -1,
+                },
             }}
             indicatorColor="primary"
             variant="scrollable"
             scrollButtons="auto"
-            className={clsx(classes.tabsContainer, className)}
+            className={className}
+            sx={{
+                minHeight: 36,
+                height: 36,
+                flex: 1,
+                backgroundColor: `transparent !important`,
+                "& .MuiTabs-flexContainer": {
+                    height: `100%`,
+                },
+                "& .MuiTab-root": {
+                    backgroundColor: `transparent !important`,
+                },
+            }}
             onChange={handleChange}
         >
-            {tabs.map((tab, i) => (
-                <MaterialTab
-                    key={`tab-${i}`}
-                    className={classes.tabRoot}
+            {tabs.map((tab) => (
+                <MUITab
+                    key={tab.value}
                     label={`${tab.text}`}
                     href={valuesAsPaths ? `#${tab.value}` : ``}
                     value={tab.value}
+                    sx={{
+                        minHeight: 36,
+                        borderRadius: 4,
+                        minWidth: `inherit`,
+                        paddingLeft: 2,
+                        paddingRight: 2,
+                        color: `primary.main`,
+                        transition: `color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms`,
+                        "&.Mui-selected": {
+                            color: `primary.contrastText`,
+                        },
+                    }}
                 />
             ))}
-        </MaterialTabs>
+        </MUITabs>
     );
 }

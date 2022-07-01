@@ -12,7 +12,6 @@ interface TableRow {
 
 const defaultProps: TableFilterMenuProps<TableRow> = {
     anchorEl: document.createElement(`div`),
-    isOpen: true,
     onClose: jest.fn(),
     tableFilters: [],
 };
@@ -121,7 +120,8 @@ afterEach(() => {
 describe(`Menu`, () => {
     test(`Add single combo box filter`, () => {
         const columnId = `email`;
-        const operatorValue = `contains`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
         const filterItem = options[0];
 
         const props: TableFilterMenuProps<TableRow> = {
@@ -132,7 +132,12 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
+                            label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
                             label: `contains`,
                             valueComponent: `combo-box`,
                             options: options,
@@ -143,7 +148,7 @@ describe(`Menu`, () => {
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         render(<TableFilterMenu {...props} />);
 
@@ -200,7 +205,8 @@ describe(`Menu`, () => {
 
     test(`Edit single combo box filter`, () => {
         const columnId = `email`;
-        const operatorValue = `contains`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
         const filterItem = options[0];
         const newFilterItem = options[2];
 
@@ -212,7 +218,12 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
+                            label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
                             label: `contains`,
                             valueComponent: `combo-box`,
                             options: options,
@@ -222,13 +233,13 @@ describe(`Menu`, () => {
             ],
             editingFilter: {
                 columnId,
-                operatorValue,
+                operatorValue: operatorValue2,
                 values: [ filterItem ],
             },
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         render(<TableFilterMenu {...props} />);
 
@@ -247,7 +258,8 @@ describe(`Menu`, () => {
 
     test(`Add multi combo box filter`, () => {
         const columnId = `email`;
-        const operatorValue = `contains`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
         const filterValues = [ options[0], options[2] ];
 
         const props: TableFilterMenuProps<TableRow> = {
@@ -258,7 +270,12 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
+                            label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
                             label: `contains`,
                             multipleValues: true,
                             valueComponent: `combo-box`,
@@ -270,7 +287,7 @@ describe(`Menu`, () => {
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         render(<TableFilterMenu {...props} />);
 
@@ -332,7 +349,8 @@ describe(`Menu`, () => {
 
     test(`Edit multi combo box filter`, () => {
         const columnId = `email`;
-        const operatorValue = `eq`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
         const filterValues = [ options[0], options[2] ];
         const newFilterValues = [ options[1] ];
 
@@ -344,8 +362,13 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
                             label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
+                            label: `contains`,
                             multipleValues: true,
                             valueComponent: `combo-box`,
                             options: options,
@@ -355,13 +378,13 @@ describe(`Menu`, () => {
             ],
             editingFilter: {
                 columnId,
-                operatorValue,
+                operatorValue: operatorValue2,
                 values: filterValues,
             },
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         render(<TableFilterMenu {...props} />);
 
@@ -382,7 +405,8 @@ describe(`Menu`, () => {
 
     test(`Add single select filter`, () => {
         const columnId = `email`;
-        const operatorValue = `contains`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
         const filterItem = options[0];
 
         const props: TableFilterMenuProps<TableRow> = {
@@ -393,7 +417,12 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
+                            label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
                             label: `contains`,
                             valueComponent: `select`,
                             options: options,
@@ -404,7 +433,7 @@ describe(`Menu`, () => {
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         render(<TableFilterMenu {...props} />);
 
@@ -463,7 +492,8 @@ describe(`Menu`, () => {
 
     test(`Edit single select filter`, () => {
         const columnId = `email`;
-        const operatorValue = `contains`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
         const filterItem = options[0];
         const newFilterItem = options[2];
 
@@ -475,7 +505,12 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
+                            label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
                             label: `contains`,
                             valueComponent: `select`,
                             options: options,
@@ -485,13 +520,13 @@ describe(`Menu`, () => {
             ],
             editingFilter: {
                 columnId,
-                operatorValue,
+                operatorValue: operatorValue2,
                 values: [ filterItem ],
             },
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         render(<TableFilterMenu {...props} />);
 
@@ -510,7 +545,8 @@ describe(`Menu`, () => {
 
     test(`Add multi select filter`, () => {
         const columnId = `email`;
-        const operatorValue = `contains`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
         const filterValues = [ options[0], options[2] ];
 
         const props: TableFilterMenuProps<TableRow> = {
@@ -521,7 +557,12 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
+                            label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
                             label: `contains`,
                             multipleValues: true,
                             valueComponent: `select`,
@@ -533,7 +574,7 @@ describe(`Menu`, () => {
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         render(<TableFilterMenu {...props} />);
 
@@ -597,7 +638,8 @@ describe(`Menu`, () => {
 
     test(`Edit multi select filter`, () => {
         const columnId = `email`;
-        const operatorValue = `contains`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
         const filterValues = [ options[0], options[2] ];
         const newFilterValues = [ options[1] ];
 
@@ -609,7 +651,12 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
+                            label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
                             label: `contains`,
                             multipleValues: true,
                             valueComponent: `select`,
@@ -620,13 +667,13 @@ describe(`Menu`, () => {
             ],
             editingFilter: {
                 columnId,
-                operatorValue,
+                operatorValue: operatorValue2,
                 values: filterValues,
             },
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         render(<TableFilterMenu {...props} />);
 
@@ -650,7 +697,8 @@ describe(`Menu`, () => {
     test(`Add text field filter`, () => {
         const filterValue = `test@kidsloop.live`;
         const columnId = `email`;
-        const operatorValue = `contains`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
 
         const props: TableFilterMenuProps<TableRow> = {
             ...defaultProps,
@@ -660,7 +708,12 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
+                            label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
                             label: `contains`,
                             valueComponent: `text-field`,
                         },
@@ -670,7 +723,7 @@ describe(`Menu`, () => {
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         render(<TableFilterMenu {...props} />);
 
@@ -727,7 +780,8 @@ describe(`Menu`, () => {
     test(`Edit text field filter`, () => {
         const filterValue = `test@kidsloop.live`;
         const columnId = `email`;
-        const operatorValue = `contains`;
+        const operatorValue1 = `equals`;
+        const operatorValue2 = `contains`;
 
         const props: TableFilterMenuProps<TableRow> = {
             ...defaultProps,
@@ -737,7 +791,12 @@ describe(`Menu`, () => {
                     label: `Email`,
                     operators: [
                         {
-                            value: operatorValue,
+                            value: operatorValue1,
+                            label: `equals`,
+                            valueComponent: `text-field`,
+                        },
+                        {
+                            value: operatorValue2,
                             label: `contains`,
                             valueComponent: `text-field`,
                         },
@@ -746,13 +805,13 @@ describe(`Menu`, () => {
             ],
             editingFilter: {
                 columnId: columnId,
-                operatorValue: operatorValue,
+                operatorValue: operatorValue2,
                 values: [ filterValue ],
             },
         };
 
         const tableFilter = props.tableFilters[0];
-        const operator = tableFilter.operators[0];
+        const operator = tableFilter.operators[1];
 
         const newUserEmail = `new@kidsloop.live`;
 

@@ -10,7 +10,8 @@ import CircularProgress from "../Progress/CircularProgress";
 import { useButtonLoadingStyles } from "../Progress/utils";
 import { SvgIconComponent } from "@mui/icons-material";
 import {
-    IconButton as IconBtn,
+    IconButton as MUIIconButton,
+    IconButtonProps,
     Theme,
     Tooltip,
     useTheme,
@@ -89,6 +90,7 @@ export interface Props {
     color?: IconButtonColor;
     // eslint-disable-next-line @typescript-eslint/naming-convention
     "data-testid"?: string;
+    sx?: IconButtonProps[`sx`];
     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void> | void;
 }
 
@@ -103,6 +105,7 @@ export default function IconButton (props: Props) {
         className,
         size,
         "data-testid": dataTestId,
+        ...rest
     } = props;
     const classes = useStyles();
     const loadingClasses = useButtonLoadingStyles();
@@ -127,7 +130,8 @@ export default function IconButton (props: Props) {
     return (
         <Tooltip title={tooltip ?? ``}>
             <span className={classes.tooltip}>
-                <IconBtn
+                <MUIIconButton
+                    aria-label={tooltip}
                     disabled={disabled}
                     className={clsx(className, {
                         [loadingClasses.buttonLoading]: loading,
@@ -136,6 +140,7 @@ export default function IconButton (props: Props) {
                     data-testid={dataTestId}
                     onClick={handleClick}
                     {...styling}
+                    {...rest}
                 >
                     <Icon
                         fontSize={iconSize}
@@ -144,7 +149,7 @@ export default function IconButton (props: Props) {
                         })}
                     />
                     {loading && <CircularProgress />}
-                </IconBtn>
+                </MUIIconButton>
             </span>
         </Tooltip>
     );

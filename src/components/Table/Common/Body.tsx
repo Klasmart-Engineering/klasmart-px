@@ -12,19 +12,9 @@ import {
     TableCell,
     TableRow,
 } from "@mui/material";
-import {
-    createStyles,
-    makeStyles,
-} from '@mui/styles';
 import React from "react";
 
-const useStyles = makeStyles((theme) => createStyles({
-    row: {
-        height: 53,
-    },
-}));
-
-export interface BodyLocalization {
+export interface BodyLocalization extends MoreMenuLocalization {
     noData?: string;
 }
 
@@ -39,7 +29,6 @@ interface Props<T> {
     rows: T[];
     selectedRows: T[Extract<keyof T, string>][];
     localization?: BodyLocalization;
-    rowMoreMenuLocalization?: MoreMenuLocalization;
     onRowSelect: (event: React.MouseEvent<unknown>, rowId: T[Extract<keyof T, string>]) => void;
 }
 
@@ -55,10 +44,8 @@ export default function BaseTableBody<T> (props: Props<T>) {
         rows,
         selectedRows,
         localization,
-        rowMoreMenuLocalization,
         onRowSelect,
     } = props;
-    const classes = useStyles();
 
     const isRowSelected = (idFieldValue: T[Extract<keyof T, string>]) => selectedRows.indexOf(idFieldValue) !== -1;
 
@@ -75,15 +62,17 @@ export default function BaseTableBody<T> (props: Props<T>) {
                         </TableCell>
                     </TableRow>
                 }
-                {rows.map((row, i) => {
+                {rows.map((row) => {
                     const isSelected = isRowSelected(row[idField]);
-                    const labelId = `enhanced-table-checkbox-${i}`;
+                    const labelId = `enhanced-table-checkbox-${row[idField]}`;
                     return (
                         <TableRow
                             key={row[idField] as Extract<T[Extract<keyof T, string>], string>}
                             hover
                             tabIndex={-1}
-                            className={classes.row}
+                            sx={{
+                                height: 53,
+                            }}
                             data-testid="tableRow"
                         >
                             {showSelectables &&
@@ -111,12 +100,12 @@ export default function BaseTableBody<T> (props: Props<T>) {
                                     }
                                 </TableCell>
                             }
-                            {columns.map((column, j) => {
+                            {columns.map((column) => {
                                 const render = column.render?.(row);
                                 const element = render ?? row[column.id];
                                 return (
                                     <TableCell
-                                        key={`rowCell-${i}-${j}`}
+                                        key={`rowCell-${column.id}-${row[idField]}`}
                                         id={labelId}
                                         scope="row"
                                         align={column.align}
@@ -130,7 +119,9 @@ export default function BaseTableBody<T> (props: Props<T>) {
                                     <MoreMenu
                                         item={row}
                                         actions={rowActions(row)}
-                                        localization={rowMoreMenuLocalization}
+                                        localization={{
+                                            moreMenuButton: localization?.moreMenuButton,
+                                        }}
                                     />
                                 )}
                             </TableCell>

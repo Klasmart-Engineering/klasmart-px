@@ -1,5 +1,6 @@
 
 import Button from '../../../Button/Button';
+import IconButton from '../../../Button/IconButton';
 import ComboBox from '../../../Input/ComboBox';
 import Select from '../../../Input/Select';
 import TextField from '../../../Input/TextField';
@@ -9,10 +10,13 @@ import {
     FilterValueOption,
     TableFilter,
 } from './Filters';
+import { Close } from '@mui/icons-material';
 import {
+    Box,
     Grid,
     Popover,
     Theme,
+    Typography,
 } from '@mui/material';
 import {
     createStyles,
@@ -34,8 +38,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         width: `100%`,
     },
     menuContainer: {
-        padding: theme.spacing(2),
-        paddingTop: theme.spacing(3),
+        padding: theme.spacing(3),
     },
     valueComponent: {
         width: `100%`,
@@ -60,8 +63,9 @@ export type ValueComponent = `select` | `combo-box` | `text-field`;
 export type FilterValueInputEventHandler = (columnId: string, operator: string, value: string) => void;
 export interface FilterMenuLocalization {
     addFilter?: string;
-    cancel?: string;
     saveFilter?: string;
+    filter?: string;
+    cancel?: string;
     column?: string;
     operator?: string;
     value?: string;
@@ -71,7 +75,6 @@ export interface FilterMenuLocalization {
 
 export interface TableFilterMenuProps<T> {
     anchorEl: HTMLElement | null;
-    isOpen: boolean;
     editingFilter?: Filter;
     tableFilters: TableFilter<T>[];
     localization?: FilterMenuLocalization;
@@ -83,7 +86,6 @@ export interface TableFilterMenuProps<T> {
 export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
     const {
         anchorEl,
-        isOpen,
         editingFilter,
         tableFilters,
         localization,
@@ -97,6 +99,10 @@ export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
         operatorValue: ``,
         values: [],
     };
+
+    const isOpen = Boolean(anchorEl);
+    const isCreateFilter = !editingFilter;
+
     const { width = 0, ref } = useResizeDetector();
 
     const [ filter, setFilter ] = useState<Filter>(editingFilter ?? startFilter);
@@ -195,8 +201,8 @@ export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
         onFilterInputValueChange?.(filter.columnId, filter.operatorValue, textValue);
     };
 
-    const getValueComponent = (operator: FilterOperator) => {
-        switch (operator.valueComponent) {
+    const getValueComponent = (operator: FilterOperator | undefined) => {
+        switch (operator?.valueComponent) {
         case `combo-box`: return (
             <ComboBox
                 multiple={operator.multipleValues}
@@ -255,7 +261,7 @@ export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
                     className={classes.valueComponent}
                     type="text"
                     autoFocus={!editingFilter}
-                    validations={operator.validations}
+                    validations={operator?.validations}
                     onChange={handleFreeTextValueChange}
                     onValidate={setValidValues}
                 />
@@ -305,7 +311,7 @@ export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
             operatorValue: operator.value,
             values: operator.valueComponent !== `text-field` && operator.options.length ? allValues : [ firstValue ],
         });
-    }, [ editingFilter, isOpen ]);
+    }, [ editingFilter, anchorEl ]);
 
     return (
         <Popover
@@ -319,19 +325,36 @@ export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
                 style: {
                     maxWidth: CONTAINER_MAX_WIDTH,
                 },
+                sx: {
+                    borderColor: `primary.main`,
+                },
             }}
             open={isOpen}
             anchorOrigin={{
                 vertical: `bottom`,
-                horizontal: `left`,
+                horizontal: isCreateFilter ? `right` : `left`,
             }}
             transformOrigin={{
                 vertical: `top`,
-                horizontal: `left`,
+                horizontal: isCreateFilter ? `right` : `left`,
             }}
             onClose={() => onClose()}
         >
             <div className={classes.menuContainer}>
+                <Box
+                    display="flex"
+                    flexDirection="row"
+                    alignItems="center"
+                    mb={2}
+                >
+                    <Typography variant="h6">{localization?.filter ?? `Filter`}</Typography>
+                    <Box flex="1" />
+                    <IconButton
+                        icon={Close}
+                        tooltip={localization?.cancel ?? `Cancel`}
+                        onClick={() => onClose()}
+                    />
+                </Box>
                 <Grid
                     container
                     direction={width < CONTENT_MAX_WIDTH ? `column` : `row`}
@@ -356,6 +379,7 @@ export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
                         xs={width < CONTENT_MAX_WIDTH ? 12 : 6}
                     >
                         <Select
+                            disabled={operators.length === 1}
                             value={filter.operatorValue}
                             items={operators}
                             className={classes.valueComponent}
@@ -366,7 +390,7 @@ export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
                         />
                     </Grid>
                 </Grid>
-                {operator && getValueComponent(operator)}
+                {getValueComponent(operator)}
                 <Grid
                     container
                     spacing={1}
@@ -375,16 +399,8 @@ export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
                 >
                     <Grid item>
                         <Button
-                            className={classes.actionButton}
-                            color="primary"
-                            label={localization?.cancel ?? `Cancel`}
-                            onClick={() => onClose()}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Button
                             disabled={!validValues}
-                            variant="contained"
+                            variant="text"
                             color="primary"
                             label={!editingFilter ? (localization?.addFilter ?? `Add Filter`) : (localization?.saveFilter ?? `Save Filter`)}
                             onClick={() => {

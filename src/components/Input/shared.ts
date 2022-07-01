@@ -1,20 +1,23 @@
 import { Validator } from "../../validations";
-import { ReactNode } from "react";
+import { BaseTextFieldProps } from "@mui/material";
 
 export interface Input {
     value: unknown;
-    label?: string;
+    label?: BaseTextFieldProps[`label`];
     hideHelperText?: boolean;
-    disabled?: boolean;
+    disabled?: BaseTextFieldProps[`disabled`];
     readOnly?: boolean;
-    prependInner?: ReactNode;
-    appendInner?: ReactNode;
-    fullWidth?: boolean;
-    variant?: "filled" | "standard" | "outlined";
-    autoFocus?: boolean;
+    prependInner?: React.ReactNode;
+    appendInner?: React.ReactNode;
+    fullWidth?: BaseTextFieldProps[`fullWidth`];
+    variant?: BaseTextFieldProps[`variant`];
+    autoFocus?: BaseTextFieldProps[`autoFocus`];
     placeholder?: string;
     validations?: Validator[];
     id?: string;
+    size?: BaseTextFieldProps[`size`];
+    sx?: BaseTextFieldProps[`sx`];
+    style?: React.CSSProperties;
     onBlur?: () => void;
     onChange?: (value: any) => void;
     onFocus?: () => void;

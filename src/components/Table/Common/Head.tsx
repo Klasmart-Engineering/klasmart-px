@@ -1,11 +1,5 @@
 
 import IconButton from "../../Button/IconButton";
-import { SelectMode } from "./BaseTable";
-import BaseTableCheckboxDropdown,
-{
-    CheckboxDropdownLocalization,
-    CheckboxDropdownValue,
-} from "./CheckboxDropdown";
 import BaseTableColumnSelector,
 { ColumnSelectorLocalization } from "./ColumnSelector";
 import { SubgroupTab } from "./GroupTabs";
@@ -16,7 +10,6 @@ import {
     Lock as LockIcon,
 } from "@mui/icons-material";
 import {
-    alpha,
     Box,
     TableCell,
     TableCellProps,
@@ -36,19 +29,20 @@ import React,
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     container: {
-        backgroundColor: theme.palette.mode === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
+        borderRadius: `inherit`,
+        backgroundColor: `#FAF9F9`,
     },
-    hoverHeader: {
-        height: 53,
+    header: {
+        height: 40,
         padding: theme.spacing(0, 2),
         "&:hover": {
-            backgroundColor: theme.palette.mode === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
+            backgroundColor: `#FAF9F9`,
         },
     },
     removeButton: {
         opacity: 0,
         transition: `opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms`,
-        "$hoverHeader:hover &": {
+        "$header:hover &": {
             opacity: 1,
         },
     },
@@ -86,45 +80,27 @@ export interface HeadLocalization {
 }
 
 interface Props<T> {
-    selectMode?: SelectMode;
-    numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => void;
-    onSelectAllClick: (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => void;
-    onSelectAllPageClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
-    rowCount: number;
     selected: (keyof T)[];
     columns: TableColumn<T>[];
-    loading?: boolean;
-    showSelectables: boolean;
-    hasGroups: boolean;
-    hideSelectAll?: boolean;
-    checkboxDropdownLocalization?: CheckboxDropdownLocalization;
     columnSelectorLocalization?: ColumnSelectorLocalization;
     localization?: HeadLocalization;
+    showSelectables: boolean;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: Extract<keyof T, string>) => void;
     onColumnChange: (columnId: Extract<keyof T, string>) => void;
 }
 
 export default function BaseTableHead<T> (props: Props<T>) {
     const {
-        selectMode,
         order,
         orderBy,
-        numSelected,
-        rowCount,
-        onRequestSort,
         columns,
         selected,
-        loading,
-        showSelectables,
-        hasGroups,
-        checkboxDropdownLocalization,
         columnSelectorLocalization,
-        hideSelectAll,
         localization,
-        onSelectAllClick,
-        onSelectAllPageClick,
+        showSelectables,
+        onRequestSort,
         onColumnChange,
     } = props;
     const classes = useStyles();
@@ -136,27 +112,12 @@ export default function BaseTableHead<T> (props: Props<T>) {
     return (
         <TableHead>
             <TableRow className={classes.container}>
-                {showSelectables &&
-                    <TableCell padding="checkbox">
-                        {selectMode === `multiple` && (
-                            <BaseTableCheckboxDropdown
-                                hasGroups={hasGroups}
-                                hideSelectAll={hideSelectAll}
-                                disabled={loading}
-                                indeterminate={numSelected > 0 && numSelected < rowCount}
-                                checked={rowCount > 0 && numSelected === rowCount}
-                                localization={checkboxDropdownLocalization}
-                                onSelectAllPageClick={onSelectAllPageClick}
-                                onSelectAllClick={onSelectAllClick}
-                            />
-                        )}
-                    </TableCell>
-                }
+                {showSelectables && <TableCell />}
                 {columns
                     .filter((column) => selected.indexOf(column.id) !== -1)
                     .filter((column) => !column.secret)
                     .map((column) => {
-                        const paddingStyle = column.align === `right`
+                        const cellStyle = column.align === `right`
                             ? {
                                 paddingLeft: 0,
                             } : {
@@ -169,12 +130,13 @@ export default function BaseTableHead<T> (props: Props<T>) {
                                 key={column.id}
                                 align={column.align}
                                 sortDirection={orderBy === column.id ? order : false}
-                                className={classes.hoverHeader}
-                                style={paddingStyle}
+                                className={classes.header}
+                                style={cellStyle}
                             >
                                 <Box
                                     display="flex"
                                     justifyContent="space-between"
+                                    alignItems="center"
                                     flexDirection={flexDirection}
                                 >
                                     {isAlignCenter && (

@@ -1,51 +1,29 @@
 
+import Button from '../../../Button/Button';
 import {
     Filter,
     FilterLocalization,
 } from './Filters';
-import { Add as AddIcon } from '@mui/icons-material';
+import { FilterList as FilterListIcon } from '@mui/icons-material';
 import {
-    Chip,
-    Theme,
+    ButtonProps,
     Tooltip,
 } from '@mui/material';
-import {
-    createStyles,
-    makeStyles,
-} from '@mui/styles';
-import React from 'react';
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    chip: {
-        margin: theme.spacing(0.5, 0.5),
-    },
-    addChip: {
-        marginLeft: 4,
-        '& .MuiChip-icon': {
-            marginRight: -20,
-            marginLeft: 4,
-        },
-    },
-    chipText: {
-        whiteSpace: `break-spaces`,
-    },
-}));
 
 interface Props {
     disabled: boolean;
     localization?: FilterLocalization;
     filters: Filter[];
-    onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+    onClick: ButtonProps[`onClick`];
 }
 
-export default function AddButton (props: Props) {
+export default function FilterAddButton (props: Props) {
     const {
         localization,
         filters,
         disabled,
         onClick,
     } = props;
-    const classes = useStyles();
 
     return (
         <Tooltip
@@ -59,17 +37,16 @@ export default function AddButton (props: Props) {
             }
         >
             <span>
-                <Chip
+                <Button
+                    rounded
                     disabled={disabled}
-                    className={
-                        filters.length > 0
-                            ? classes.addChip
-                            : classes.chip
-                    }
-                    icon={<AddIcon color="action" />}
-                    label={
-                        filters.length > 0 ? `` : (localization?.filterMenu?.addFilter ?? `Add Filter`)
-                    }
+                    variant="text"
+                    color="primary"
+                    icon={FilterListIcon}
+                    label={localization?.filterMenu?.addFilter ?? `Add Filter`}
+                    sx={{
+                        marginRight: 1,
+                    }}
                     onClick={onClick}
                 />
             </span>

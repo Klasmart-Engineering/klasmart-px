@@ -114,7 +114,14 @@ export default function PageTable<T> (props: Props<T>) {
                     count={total ?? baseTableData?.total ?? 0}
                     rowsPerPage={rowsPerPage_}
                     page={page_}
-                    localization={localization?.pagination}
+                    localization={{
+                        firstPage: localization?.firstPage,
+                        lastPage: localization?.lastPage,
+                        nextPage: localization?.nextPage,
+                        prevPage: localization?.prevPage,
+                        rowsPerPage: localization?.rowsPerPage,
+                        total: localization?.total,
+                    }}
                     onChangePage={handlePageChange}
                     onChangeRowsPerPage={handleRowsPerPageChange}
                 />

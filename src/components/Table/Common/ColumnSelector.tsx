@@ -1,4 +1,5 @@
 
+import Checkbox from "../../Checkbox";
 import { TableColumn } from "./Head";
 import {
     Add as AddIcon,
@@ -6,7 +7,6 @@ import {
 } from "@mui/icons-material";
 import {
     alpha,
-    Checkbox,
     Divider,
     IconButton,
     List,
@@ -22,7 +22,6 @@ import {
     createStyles,
     makeStyles,
 } from '@mui/styles';
-import clsx from "clsx";
 import React, {
     Fragment,
     useState,
@@ -32,7 +31,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles ({
     toolbar: {
         paddingTop: 0,
         paddingBottom: 0,
-        minHeight: 56,
+        height: 40,
+        minHeight: 40,
         backgroundColor: theme.palette.mode === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
     },
     title: {
@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles ({
     columnItemContainer: {
         paddingTop: 0,
         paddingBottom: 0,
+        paddingLeft: 0,
     },
     persistentText: {
         color: theme.palette.grey[600],
@@ -92,7 +93,7 @@ export default function BaseTableColumnSelector<T> (props: Props<T>) {
                 <IconButton
                     aria-label={localization?.addButton ?? `Add columns`}
                     aria-haspopup="true"
-                    size="large"
+                    size="medium"
                     onClick={handleClick}
                 >
                     <AddIcon />
@@ -121,36 +122,31 @@ export default function BaseTableColumnSelector<T> (props: Props<T>) {
                     </Typography>
                 </Toolbar>
                 <List className={classes.list}>
-                    <Divider />
                     {columns.filter((column) => !column.secret)
                         .map((column, i) => (
                             <Fragment key={`list-item-${i}`}>
-                                {i !== 0 && <Divider />}
-                                <ListItem
-                                    className={classes.columnItemContainer}
-                                    onClick={!column.persistent ? () => onColumnChange(column.id) : undefined}
-                                >
+                                <Divider />
+                                <ListItem className={classes.columnItemContainer}>
                                     <Checkbox
                                         role="checkbox"
+                                        label={column.persistent
+                                            ? (
+                                                <>
+                                                    {column.label}
+                                                    <ListItemSecondaryAction>
+                                                        <LockIcon
+                                                            className={classes.persistentIcon}
+                                                            fontSize="small"
+                                                        />
+                                                    </ListItemSecondaryAction>
+                                                </>
+                                            )
+                                            : column.label
+                                        }
                                         checked={isSelected(column.id)}
                                         disabled={column.persistent}
+                                        onClick={!column.persistent ? () => onColumnChange(column.id) : undefined}
                                     />
-                                    <Typography
-                                        variant="body2"
-                                        className={clsx({
-                                            [classes.persistentText]: column.persistent,
-                                        })}
-                                    >
-                                        {column.label}
-                                    </Typography>
-                                    {column.persistent &&
-                                <ListItemSecondaryAction>
-                                    <LockIcon
-                                        className={classes.persistentIcon}
-                                        fontSize="small"
-                                    />
-                                </ListItemSecondaryAction>
-                                    }
                                 </ListItem>
                             </Fragment>
                         ))}

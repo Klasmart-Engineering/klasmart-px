@@ -1,4 +1,5 @@
 /* eslint-disable react/no-multi-comp */
+import { OrganizationIcon } from '../../../icons';
 import { sleep } from '../../../utils';
 import {
     max,
@@ -16,16 +17,12 @@ import {
     TableFilter,
 } from './Filter/Filters';
 import {
+    Add,
     Check,
     Close,
 } from '@mui/icons-material';
 import { Chip } from '@mui/material';
 import {
-    createStyles,
-    makeStyles,
-} from '@mui/styles';
-import React,
-{
     useEffect,
     useState,
 } from 'react';
@@ -372,6 +369,13 @@ export const PageTableServer = () => {
     return (
         <PageTable
             hideNoGroupOption
+            selectActions={[
+                {
+                    label: `Woop`,
+                    icon: OrganizationIcon,
+                    onClick: (ids) => console.log(ids),
+                },
+            ]}
             idField="id"
             loading={loadingData || loadingGroups}
             columns={columns}
@@ -387,7 +391,11 @@ export const PageTableServer = () => {
             rowsPerPageOptions={[ ROWS_PER_PAGE ]}
             primaryAction={{
                 label: `Next Page`,
+                icon: Add,
                 onClick: updatePage,
+            }}
+            localization={{
+                title: `Star Wars Movies`,
             }}
             onChange={(tableData) => {
                 setPage(tableData.page);
@@ -467,7 +475,6 @@ export const PageTableLocal = () => {
     return (
         <PageTable
             hideNoGroupOption
-            hideSelectAll
             showSelectables
             idField="id"
             columns={columns}
@@ -720,6 +727,26 @@ export const CursorTableServer = () => {
             orderBy={orderBy}
             rowsPerPage={ROWS_PER_PAGE}
             rowsPerPageOptions={[ ROWS_PER_PAGE ]}
+            primaryAction={{
+                label: `This is a primary action`,
+                icon: OrganizationIcon,
+                onClick: () => {return;},
+            }}
+            selectActions={[
+                {
+                    icon: OrganizationIcon,
+                    label: `Select Action 1`,
+                    onClick: () => {return;},
+                },
+                {
+                    icon: OrganizationIcon,
+                    label: `Select Action 2`,
+                    onClick: () => {return;},
+                },
+            ]}
+            localization={{
+                title: `Star Wars Movies`,
+            }}
             onChange={(tableData) => {
                 setOrder(tableData.order);
                 setSubgroupBy(tableData.subgroupBy);
@@ -732,13 +759,6 @@ export const CursorTableServer = () => {
         />
     );
 };
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            width: `100%`,
-        },
-    }));
 
 const programsRows = [
     {
@@ -1410,7 +1430,6 @@ const customFilterOnServer = async (columnId: string, operatorValue: string, inp
 };
 
 export const PageTableServerFilter = () => {
-    const classes = useStyles();
     const [ filterValueLoading, setFilterValueLoading ] = useState(false);
     const [ page, setPage ] = useState(0);
     const [ loadingData, setLoadingData ] = useState(false);

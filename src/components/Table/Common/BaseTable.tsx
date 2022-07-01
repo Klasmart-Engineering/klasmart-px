@@ -5,16 +5,17 @@ import {
 } from "../../MoreMenu";
 import BaseTableBody,
 { BodyLocalization } from "./Body";
-import {
-    CheckboxDropdownLocalization,
-    CheckboxDropdownValue,
-} from "./CheckboxDropdown";
+import { CheckboxDropdownLocalization } from "./CheckboxDropdown";
 import { ColumnSelectorLocalization } from "./ColumnSelector";
-import BaseTableFilter,
+import
 {
     Filter,
+    FilterLocalization,
     TableFilter,
 } from './Filter/Filters';
+import
+{ SearchLocalization } from "./Filter/Search";
+import TableFilterSection from "./Filter/Section";
 import BaseTableGroupTabs,
 {
     GroupSelectMenuItem,
@@ -34,15 +35,13 @@ import {
     DEFAULT_SORT_ORDER,
     PaginationLocalization,
 } from "./Pagination/shared";
-import BaseTableSearch,
-{ SearchLocalization } from "./Search";
 import BaseTableToolbar, {
     ToolbarAction,
     ToolbarLocalization,
     ToolbarSelectAction,
 } from "./Toolbar";
 import {
-    Divider,
+    Paper,
     Table,
     TableContainer,
 } from "@mui/material";
@@ -60,7 +59,7 @@ import React,
     useState,
 } from "react";
 
-function descendingComparator<T> (a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) {
+const descendingComparator = <T,>(a: T[keyof T], b: T[keyof T], locale?: string, collatorOptions?: Intl.CollatorOptions) => {
     if ((typeof a === `string` && typeof b === `string`) || (a instanceof String && b instanceof String)) {
         const aValue = a as Extract<T[keyof T], string>;
         const bValue = b as Extract<T[keyof T], string>;
@@ -70,7 +69,7 @@ function descendingComparator<T> (a: T[keyof T], b: T[keyof T], locale?: string,
         if (b > a) return 1;
     }
     return 0;
-}
+};
 
 function getComparator<T> (order: Order, orderBy: keyof T, customSort?: CustomSort<T>, locale?: string, collatorOptions?: Intl.CollatorOptions): (a: T, b: T) => number {
     const reverseOrder = order === `desc` ? 1 : -1;
@@ -109,17 +108,18 @@ const isValidSubgroup = (subgroup: string, subgroups: SubgroupTab[]) => subgroup
 
 export type SelectMode = `single` | `multiple`;
 
-export interface TableLocalization {
-    toolbar?: ToolbarLocalization;
-    search?: SearchLocalization;
-    groupTabs?: GroupTabsLocalization;
-    head?: HeadLocalization;
-    columnSelector?: ColumnSelectorLocalization;
-    checkboxDropdown?: CheckboxDropdownLocalization;
-    body?: BodyLocalization;
-    rowMoreMenu?: MoreMenuLocalization;
-    pagination?: PaginationLocalization;
-}
+export interface TableLocalization extends
+    ToolbarLocalization,
+    SearchLocalization,
+    GroupTabsLocalization,
+    HeadLocalization,
+    ColumnSelectorLocalization,
+    CheckboxDropdownLocalization,
+    BodyLocalization,
+    MoreMenuLocalization,
+    PaginationLocalization,
+    FilterLocalization {
+    }
 
 export interface BaseTableData<T> {
     columns: (keyof T)[];
@@ -154,7 +154,6 @@ export interface BaseProps<T> {
     selectActions?: ToolbarSelectAction<T>[];
     loading?: boolean;
     filterValueLoading?: boolean;
-    hideSelectAll?: boolean;
     hideAllGroupTab?: boolean;
     hideNoGroupOption?: boolean;
     localization?: TableLocalization;
@@ -198,7 +197,6 @@ export default function BaseTable<T> (props: Props<T>) {
         secondaryActions,
         selectActions,
         loading,
-        hideSelectAll,
         hideAllGroupTab,
         hideNoGroupOption,
         localization,
@@ -243,33 +241,9 @@ export default function BaseTable<T> (props: Props<T>) {
         setOrderBy(property);
     };
 
-    const handleSelectAllRowsClick = (event: React.MouseEvent<HTMLLIElement>, value: CheckboxDropdownValue) => {
-        switch (value) {
-        case CheckboxDropdownValue.ALL: {
-            const newSelecteds = filteredSortedRows.map((n) => n[idField]);
-            setSelectedRowIds(newSelecteds);
-            return;
-        }
-        case CheckboxDropdownValue.ALL_PAGES: {
-            const newSelecteds = filteredSortedGroupedRows.map((n) => n[idField]);
-            setSelectedRowIds(selectedRowIds_.concat(newSelecteds));
-            return;
-        }
-        case CheckboxDropdownValue.NONE: {
-            setSelectedRowIds([]);
-            return;
-        }
-        case CheckboxDropdownValue.PAGE: {
-            const pageRows = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
-            setSelectedRowIds(union(selectedRowIds_, pageRows));
-            return;
-        }
-        }
-    };
-
-    const handleSelectAllRowsPageClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectAllRowsClick = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
         const pageRowIds = filteredSortedGroupedSlicedRows.map((n) => n[idField]);
-        if (!event.target.checked) {
+        if (!checked) {
             setSelectedRowIds(selectedRowIds_.filter((rowId) => !(pageRowIds).includes(rowId)));
             return;
         }
@@ -359,7 +333,7 @@ export default function BaseTable<T> (props: Props<T>) {
     const hasGroups = !!groupableColumns?.length;
     const columnCount = columns.length + (showSelectables_ ? 1 : 0) + 1; // +1 for row actions column
 
-    const showToolbar = !!localization?.toolbar?.title || !!primaryAction || !!secondaryActions?.length || !!selectActions?.length;
+    const showToolbar = !!localization?.title || !!primaryAction || !!secondaryActions?.length || hasSearchColumns;
 
     useEffect(() => {
         setSearch(search ?? ``);
@@ -425,99 +399,89 @@ export default function BaseTable<T> (props: Props<T>) {
     return (
         <>
             {showToolbar && (
-                <>
-                    <BaseTableToolbar
-                        hideSelectStatus={hideSelectStatus}
-                        primaryAction={primaryAction}
-                        secondaryActions={secondaryActions}
-                        selectActions={selectActions}
-                        selectedRows={selectedRowIds_}
-                        localization={localization?.toolbar}
-                    />
-                    <Divider />
-                </>
-            )}
-            {hasSearchColumns && (
-                <>
-                    <BaseTableSearch
-                        value={search_}
-                        localization={localization?.search}
-                        onChange={handleChangeSearch}
-                    />
-                    <Divider />
-                </>
-            )}
-            {filters?.length && (
-                <>
-                    <BaseTableFilter
-                        filters={filters}
-                        filterValueLoading={filterValueLoading}
-                        onChange={setFilters}
-                        onFilterInputValueChange={onFilterInputValueChange}
-                    />
-                    <Divider />
-                </>
+                <BaseTableToolbar
+                    hideSelectStatus={hideSelectStatus}
+                    primaryAction={primaryAction}
+                    secondaryActions={secondaryActions}
+                    selectedRows={selectedRowIds_}
+                    localization={{
+                        numSelected: localization?.numSelected,
+                        title: localization?.title,
+                    }}
+                />
             )}
             {hasGroups && (
-                <>
-                    <BaseTableGroupTabs
-                        allCount={noGroupTotal ?? filteredSortedRows.length}
-                        hideAllGroupTab={hideAllGroupTab}
-                        hideNoGroupOption={hideNoGroupOption}
-                        groupBy={groupBy_}
-                        groups={groupableColumns}
-                        subgroupBy={subgroupBy_}
-                        subgroups={subgroups_}
-                        localization={localization?.groupTabs}
-                        onSelectGroup={handleSelectGroup}
-                        onSelectSubgroup={handleSelectSubgroup}
-                    />
-                    <Divider />
-                </>
+                <BaseTableGroupTabs
+                    allCount={noGroupTotal ?? filteredSortedRows.length}
+                    hideAllGroupTab={hideAllGroupTab}
+                    hideNoGroupOption={hideNoGroupOption}
+                    groupBy={groupBy_}
+                    groups={groupableColumns}
+                    subgroupBy={subgroupBy_}
+                    subgroups={subgroups_}
+                    localization={{
+                        selectLabel: localization?.selectLabel,
+                        selectNone: localization?.selectNone,
+                        tabAll: localization?.tabAll,
+                    }}
+                    onSelectGroup={handleSelectGroup}
+                    onSelectSubgroup={handleSelectSubgroup}
+                />
             )}
-            <TableContainer>
-                <Table>
-                    <BaseTableHead
-                        selectMode={selectMode}
-                        numSelected={filteredSortedGroupedSlicedSelectedRows.length}
-                        order={order_}
-                        orderBy={orderBy_}
-                        rowCount={filteredSortedGroupedSlicedRows.length}
-                        columns={columns}
-                        loading={loading}
-                        selected={selectedColumnIds_}
-                        showSelectables={showSelectables_}
-                        hasGroups={hasGroups}
-                        hideSelectAll={hideSelectAll}
-                        localization={localization?.head}
-                        checkboxDropdownLocalization={localization?.checkboxDropdown}
-                        columnSelectorLocalization={localization?.columnSelector}
-                        onSelectAllClick={handleSelectAllRowsClick}
-                        onSelectAllPageClick={handleSelectAllRowsPageClick}
-                        onRequestSort={handleRequestSort}
-                        onColumnChange={handleColumnSelectClick}
-                    />
-                    <BaseTableLoading
-                        loading={loading}
-                        columnCount={columnCount}
-                    />
-                    <BaseTableBody
-                        selectMode={selectMode}
-                        columns={filteredColumns}
-                        columnCount={columnCount}
-                        showSelectables={showSelectables_}
-                        idField={idField}
-                        loading={loading}
-                        rows={filteredSortedGroupedSlicedRows}
-                        rowActions={rowActions}
-                        selectedRows={selectedRowIds_}
-                        localization={localization?.body}
-                        rowMoreMenuLocalization={localization?.rowMoreMenu}
-                        onRowSelect={handleRowSelectClick}
-                    />
-                </Table>
-            </TableContainer>
-            {PaginationComponent && PaginationComponent}
+            <TableFilterSection
+                selectMode={selectMode}
+                numSelected={filteredSortedGroupedSlicedSelectedRows.length}
+                rowCount={filteredSortedGroupedSlicedRows.length}
+                searchValue={search_}
+                filters={filters}
+                selectedRows={selectedRowIds_}
+                selectedFilters={filters_}
+                selectActions={selectActions}
+                filterValueLoading={filterValueLoading}
+                onSearchChange={handleChangeSearch}
+                onFilterChange={setFilters}
+                onFilterInputValueChange={onFilterInputValueChange}
+                onSelectAllClick={handleSelectAllRowsClick}
+            />
+            <Paper>
+                <TableContainer>
+                    <Table>
+                        <BaseTableHead
+                            order={order_}
+                            orderBy={orderBy_}
+                            columns={columns}
+                            selected={selectedColumnIds_}
+                            localization={{
+                                hideColumnButton: localization?.hideColumnButton,
+                            }}
+                            showSelectables={showSelectables_}
+                            onRequestSort={handleRequestSort}
+                            onColumnChange={handleColumnSelectClick}
+                        />
+                        <BaseTableLoading
+                            loading={loading}
+                            columnCount={columnCount}
+                        />
+                        <BaseTableBody
+                            selectMode={selectMode}
+                            columns={filteredColumns}
+                            columnCount={columnCount}
+                            showSelectables={showSelectables_}
+                            idField={idField}
+                            loading={loading}
+                            rows={filteredSortedGroupedSlicedRows}
+                            rowActions={rowActions}
+                            selectedRows={selectedRowIds_}
+                            localization={{
+                                moreMenuButton: localization?.moreMenuButton,
+                                noData: localization?.noData,
+                            }}
+                            onRowSelect={handleRowSelectClick}
+                        />
+                    </Table>
+                </TableContainer>
+                {PaginationComponent}
+            </Paper>
         </>
     );
 }
