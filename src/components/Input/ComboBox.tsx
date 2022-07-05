@@ -128,6 +128,7 @@ export default function ComboBox (props: Props) {
             clearOnBlur={false}
             value={multiple ? selectValue : (selectValue?.[0] ?? null)}
             inputValue={inputValue}
+            isOptionEqualToValue={(option, value) => option.value === value.value}
             size={size}
             id={id}
             options={options}
