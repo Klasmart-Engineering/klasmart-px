@@ -1,3 +1,6 @@
 export const config = {
-    PRIMARY: `#5A86EE`,
+    PRIMARY: {
+        MAIN: `#5A86EE`,
+        LIGHT: `#F1FBFF`,
+    },
 };

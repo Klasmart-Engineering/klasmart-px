@@ -443,7 +443,7 @@ export default function BaseTable<T> (props: Props<T>) {
                 onFilterInputValueChange={onFilterInputValueChange}
                 onSelectAllClick={handleSelectAllRowsClick}
             />
-            <Paper>
+            <Paper variant="outlined">
                 <TableContainer>
                     <Table>
                         <BaseTableHead

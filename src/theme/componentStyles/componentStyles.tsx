@@ -59,7 +59,7 @@ export const buildComponentStyles = (): Components<Theme> => {
         MuiTable: {
             styleOverrides: {
                 root: {
-                    backgroundColor: `#fff`,
+                    backgroundColor: colors.common.white,
                 },
             },
         },
@@ -73,7 +73,7 @@ export const buildComponentStyles = (): Components<Theme> => {
         MuiTabs: {
             styleOverrides: {
                 root: {
-                    backgroundColor: `#FFF`,
+                    backgroundColor: colors.common.white,
                 },
             },
         },
@@ -88,10 +88,10 @@ export const buildComponentStyles = (): Components<Theme> => {
             styleOverrides: {
                 root: {
                     color: `#1B365D`,
-                    backgroundColor: `#FFF`,
+                    backgroundColor: colors.common.white,
                     "&:hover": {
                         "-webkit-transition": `all .4s ease`,
-                        color: `#FFF`,
+                        color: colors.common.white,
                         backgroundColor: `#1B365D`,
                         "box-shadow": `0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08)`,
                         transition: `all .4s ease`,
@@ -124,9 +124,6 @@ export const buildComponentStyles = (): Components<Theme> => {
                 root: {
                     boxShadow: `0px 2px 6px rgba(0, 0, 0, 0.1)`,
                 },
-            },
-            defaultProps: {
-                variant: `outlined`,
             },
         },
         MuiDrawer: {
@@ -178,7 +175,7 @@ export const buildComponentStyles = (): Components<Theme> => {
                         borderColor: `#E4E4E4`,
                     },
                     "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: config.PRIMARY,
+                        borderColor: config.PRIMARY.MAIN,
                     },
                 },
             },

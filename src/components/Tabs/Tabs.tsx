@@ -9,7 +9,7 @@ export interface Tab {
     value: string | undefined;
 }
 
-interface Props {
+export interface TabsProps {
     className?: string;
     tabs: Tab[];
     value?: string;
@@ -17,7 +17,7 @@ interface Props {
     onChange?: (value: string) => void;
 }
 
-export default function Tabs (props: Props) {
+export default function Tabs (props: TabsProps) {
     const {
         className,
         tabs,
@@ -37,7 +37,7 @@ export default function Tabs (props: Props) {
                 sx: {
                     height: `100%`,
                     borderRadius: 18,
-                    zIndex: -1,
+                    zIndex: 0,
                 },
             }}
             indicatorColor="primary"
@@ -45,6 +45,7 @@ export default function Tabs (props: Props) {
             scrollButtons="auto"
             className={className}
             sx={{
+                marginY: 0.5,
                 minHeight: 36,
                 height: 36,
                 flex: 1,
@@ -61,10 +62,11 @@ export default function Tabs (props: Props) {
             {tabs.map((tab) => (
                 <MUITab
                     key={tab.value}
-                    label={`${tab.text}`}
+                    label={tab.text}
                     href={valuesAsPaths ? `#${tab.value}` : ``}
                     value={tab.value}
                     sx={{
+                        zIndex: 1,
                         minHeight: 36,
                         borderRadius: 4,
                         minWidth: `inherit`,

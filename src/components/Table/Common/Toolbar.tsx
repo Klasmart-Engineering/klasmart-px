@@ -85,7 +85,6 @@ export default function BaseTableToolbar<T> (props: Props<T>) {
             {secondaryActions?.map((action, i) => (
                 <Button
                     key={`secondary-action-${i}`}
-                    color="primary"
                     icon={action.icon}
                     label={action.label}
                     disabled={action.disabled}

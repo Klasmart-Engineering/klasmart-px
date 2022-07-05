@@ -2,7 +2,6 @@ import { config } from "../color";
 import {
     colors,
     darken,
-    lighten,
     PaletteOptions,
 } from "@mui/material";
 
@@ -15,12 +14,12 @@ export const buildPalette = (): PaletteOptions => {
         },
         primary: {
             contrastText: colors.common.white,
-            main: config.PRIMARY,
-            light: lighten(config.PRIMARY, 0.9),
-            dark: darken(config.PRIMARY, 0.75),
+            main: config.PRIMARY.MAIN,
+            light: config.PRIMARY.LIGHT,
+            dark: darken(config.PRIMARY.MAIN, 0.75),
         },
         secondary: {
-            main: config.PRIMARY,
+            main: config.PRIMARY.MAIN,
         },
         error: {
             contrastText: colors.common.white,

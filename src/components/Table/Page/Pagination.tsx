@@ -137,29 +137,37 @@ export default function PageTablePagination (props: Props) {
                     display="flex"
                     alignItems="baseline"
                     justifyContent="end"
+                    flexWrap="wrap"
                 >
-                    <Typography>{localization?.rowsPerPage ?? `Rows per page`}</Typography>
-                    <Select
-                        hideHelperText
-                        size="small"
-                        value={`${rowsPerPage}`}
-                        items={rowsPerPageOptions.map((option) => {
-                            if (typeof option === `number`) return `${option}`;
-                            return {
-                                ...option,
-                                value: `${option.value}`,
-                            };
-                        })}
-                        sx={{
-                            marginLeft: 1,
-                            "& .MuiSelect-select": {
-                                py: 3/8,
-                                pl: 11.5/8,
-                                paddingRight: 2,
-                            },
-                        }}
-                        onChange={onChangeRowsPerPage}
-                    />
+                    {rowsPerPageOptions.length > 0
+                        ? (
+                            <>
+                                <Typography>{localization?.rowsPerPage ?? `Rows per page`}</Typography>
+                                <Select
+                                    hideHelperText
+                                    size="small"
+                                    value={`${rowsPerPage}`}
+                                    items={rowsPerPageOptions.map((option) => {
+                                        if (typeof option === `number`) return `${option}`;
+                                        return {
+                                            ...option,
+                                            value: `${option.value}`,
+                                        };
+                                    })}
+                                    sx={{
+                                        marginLeft: 1,
+                                        "& .MuiSelect-select": {
+                                            py: 3/8,
+                                            pl: 11.5/8,
+                                            paddingRight: 2,
+                                        },
+                                    }}
+                                    onChange={onChangeRowsPerPage}
+                                />
+                            </>
+                        )
+                        : <Box flex="1" />
+                    }
                 </Box>
             </Stack>
         </Toolbar>

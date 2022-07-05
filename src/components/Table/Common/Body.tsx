@@ -72,6 +72,7 @@ export default function BaseTableBody<T> (props: Props<T>) {
                             tabIndex={-1}
                             sx={{
                                 height: 53,
+                                backgroundColor: isSelected ? `primary.light` : undefined,
                             }}
                             data-testid="tableRow"
                         >

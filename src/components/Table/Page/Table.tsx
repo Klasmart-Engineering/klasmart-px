@@ -8,17 +8,10 @@ import { Order } from "../Common/Head";
 import { DEFAULT_ROWS_PER_PAGE } from "../Common/Pagination/shared";
 import PageTablePagination from "./Pagination";
 import {
-    createStyles,
-    makeStyles,
-} from '@mui/styles';
-import {
     clamp,
     isEqual,
 } from "lodash";
-import React,
-{ useState } from "react";
-
-const useStyles = makeStyles((theme) => createStyles({}));
+import { useState } from "react";
 
 export interface PageTableData<T> extends BaseTableData<T> {
     page: number;
@@ -45,7 +38,6 @@ export default function PageTable<T> (props: Props<T>) {
         ...other
     } = props;
 
-    const classes = useStyles();
     const [ page_, setPage ] = useState(page);
     const [ rowsPerPage_, setRowsPerPage ] = useState(rowsPerPage);
     const [ baseTableData, setBaseTableData ] = useState<BaseTableData<T>>({

@@ -40,7 +40,7 @@ const getTextColor = (color: string | undefined, variant: Variant | undefined, t
         return theme.palette[color as Color].main;
     }
 
-    if (!color) return `black`;
+    if (!color) return theme.palette.action.active;
     if (COLORS.includes(color as Color)) return theme.palette[color as Color].main;
     return color;
 };

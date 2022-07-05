@@ -732,6 +732,18 @@ export const CursorTableServer = () => {
                 icon: OrganizationIcon,
                 onClick: () => {return;},
             }}
+            secondaryActions={[
+                {
+                    icon: OrganizationIcon,
+                    label: `Secondary Action 1`,
+                    onClick: () => {return;},
+                },
+                {
+                    icon: OrganizationIcon,
+                    label: `Secondary Action 2`,
+                    onClick: () => {return;},
+                },
+            ]}
             selectActions={[
                 {
                     icon: OrganizationIcon,
