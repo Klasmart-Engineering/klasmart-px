@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.2](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v3.0.2%0Dv3.0.1) (2022-07-05)
+
+
+### 🐛 Bug Fixes
+
+* add logic to compare the select with option using isOptionEqualToValue (#25) ([c89209e](https://github.com/KL-Engineering/kidsloop-px/commits/c89209ea264aa6edfe7e80a8ba7c402f8b13114d))
+
 ### [3.0.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v3.0.1%0Dv3.0.0) (2022-07-05)
 
 
