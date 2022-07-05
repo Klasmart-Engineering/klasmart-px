@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v3.0.1%0Dv3.0.0) (2022-07-05)
+
+
+### 🐛 Bug Fixes
+
+* paper border radius on various components ([f196cba](https://github.com/KL-Engineering/kidsloop-px/commits/f196cba495e7bbc6f282f396c474b2ff688804d8))
+
 ## [3.0.0](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v3.0.0%0Dv2.4.0) (2022-07-01)
 
 
