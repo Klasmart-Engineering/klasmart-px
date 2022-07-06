@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.3](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v3.0.3%0Dv3.0.2) (2022-07-06)
+
+
+### 💎 Style
+
+* **table:** add filter menu border ([2986bdf](https://github.com/KL-Engineering/kidsloop-px/commits/2986bdf97e18bca205bb57a11525e870f6d27039))
+
 ### [3.0.2](https://github.com/KL-Engineering/kidsloop-px/branches/compare/v3.0.2%0Dv3.0.1) (2022-07-05)
 
 
