@@ -13,7 +13,6 @@ import {
     ListItem,
     ListItemSecondaryAction,
     Popover,
-    Theme,
     Toolbar,
     Tooltip,
     Typography,
@@ -27,13 +26,13 @@ import React, {
     useState,
 } from "react";
 
-const useStyles = makeStyles((theme: Theme) => createStyles ({
+const useStyles = makeStyles((theme) => createStyles ({
     toolbar: {
         paddingTop: 0,
         paddingBottom: 0,
         height: 40,
         minHeight: 40,
-        backgroundColor: theme.palette.mode === `light` ? alpha(`#000000`, 0.04) : alpha(`#FFFFFF`, 0.08),
+        backgroundColor: alpha(`#000000`, 0.04),
     },
     title: {
         fontWeight: 600,
@@ -105,11 +104,14 @@ export default function BaseTableColumnSelector<T> (props: Props<T>) {
                 open={open}
                 anchorOrigin={{
                     vertical: `bottom`,
-                    horizontal: `left`,
+                    horizontal: `right`,
                 }}
                 transformOrigin={{
                     vertical: `top`,
-                    horizontal: `left`,
+                    horizontal: `right`,
+                }}
+                PaperProps={{
+                    variant: `outlined`,
                 }}
                 onClose={handleClose}
             >

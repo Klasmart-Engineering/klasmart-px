@@ -328,6 +328,7 @@ export default function TableFilterMenu<T> (props: TableFilterMenuProps<T>) {
                 sx: {
                     borderColor: `primary.main`,
                 },
+                variant: `outlined`,
             }}
             open={isOpen}
             anchorOrigin={{
